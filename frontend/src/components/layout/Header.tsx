@@ -15,7 +15,10 @@ export function Header({ links = fanLinks }: { links?: HeaderLink[] }) {
     <header className="sticky top-0 z-40 border-b border-divider bg-cream/95 backdrop-blur-sm">
       <div className="mx-auto flex h-[80px] max-w-container items-center justify-between px-4 sm:px-6 lg:px-8">
         <div className="flex items-center gap-4 sm:gap-6">
-          <Link to="/" className="font-serif text-2xl font-medium tracking-tight sm:text-3xl focus-ring">
+          <Link
+            to="/"
+            className="inline-flex min-h-[44px] items-center font-serif text-2xl font-medium tracking-tight sm:text-3xl focus-ring"
+          >
             Maya Atelier
           </Link>
           <span className="inline-flex items-center rounded border border-divider bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted sm:text-xs">
@@ -32,7 +35,7 @@ export function Header({ links = fanLinks }: { links?: HeaderLink[] }) {
                 end
                 className={({ isActive }) =>
                   cn(
-                    'text-sm font-medium transition-colors duration-160 hover:text-muted focus-ring',
+                    'inline-flex min-h-[44px] items-center text-sm font-medium transition-colors duration-160 hover:text-muted focus-ring',
                     isActive && 'text-rose-deep',
                   )
                 }
@@ -40,7 +43,11 @@ export function Header({ links = fanLinks }: { links?: HeaderLink[] }) {
                 {link.label}
               </NavLink>
             ) : (
-              <span key={link.label} aria-disabled className="text-sm font-medium text-muted/60">
+              <span
+                key={link.label}
+                aria-disabled
+                className="inline-flex min-h-[44px] items-center text-sm font-medium text-muted/60"
+              >
                 {link.label}
               </span>
             ),

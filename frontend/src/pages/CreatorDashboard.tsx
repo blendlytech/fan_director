@@ -83,13 +83,13 @@ export function CreatorDashboard() {
             <p className="text-sm text-muted">Review incoming commissions and manage approvals.</p>
           </div>
 
-          <div className="flex items-center gap-4">
-            <div className="relative">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
+            <div className="relative w-full min-w-0 sm:w-auto">
               <select
                 aria-label="Filter by status"
                 value={statusFilter}
                 onChange={(event) => setStatusFilter(event.target.value as StatusFilter)}
-                className="cursor-pointer appearance-none rounded-card border border-divider bg-panel py-2 pl-4 pr-10 text-sm text-espresso transition-colors duration-160 focus:border-espresso focus:outline-none focus-ring"
+                className="min-h-[44px] w-full cursor-pointer appearance-none rounded-card border border-divider bg-panel py-2 pl-4 pr-10 text-sm text-espresso transition-colors duration-160 focus:border-espresso focus:outline-none focus-ring sm:w-auto"
               >
                 {statusFilterOptions.map((option) => (
                   <option key={option.value} value={option.value}>
@@ -104,12 +104,12 @@ export function CreatorDashboard() {
               />
             </div>
 
-            <div className="relative">
+            <div className="relative w-full min-w-0 sm:w-auto">
               <select
                 aria-label="Sort requests"
                 value={sort}
                 onChange={(event) => setSort(event.target.value as SortOption)}
-                className="cursor-pointer appearance-none rounded-card border border-divider bg-panel py-2 pl-4 pr-10 text-sm text-espresso transition-colors duration-160 focus:border-espresso focus:outline-none focus-ring"
+                className="min-h-[44px] w-full cursor-pointer appearance-none rounded-card border border-divider bg-panel py-2 pl-4 pr-10 text-sm text-espresso transition-colors duration-160 focus:border-espresso focus:outline-none focus-ring sm:w-auto"
               >
                 {sortOptions.map((option) => (
                   <option key={option.value} value={option.value}>

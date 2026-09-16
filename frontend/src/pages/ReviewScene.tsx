@@ -20,7 +20,7 @@ export function ReviewScene() {
         <div className="mb-10 flex flex-col items-start justify-between gap-4 md:flex-row md:items-center">
           <Link
             to="/ai-director"
-            className="inline-flex items-center gap-2 text-sm text-muted transition-colors duration-160 hover:text-espresso focus-ring"
+            className="inline-flex min-h-[44px] items-center gap-2 text-sm text-muted transition-colors duration-160 hover:text-espresso focus-ring"
           >
             <Icon icon="lucide:arrow-left" width={18} />
             Back to Details

@@ -168,6 +168,7 @@ export function BoutiqueEntrance() {
                     size="sm"
                     className="w-full"
                     onClick={() => beginWith(card.setting)}
+                    aria-label={`Begin Your Vision — ${card.title}`}
                   >
                     Begin Your Vision
                   </Button>

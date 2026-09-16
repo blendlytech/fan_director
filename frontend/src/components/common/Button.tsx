@@ -6,8 +6,11 @@ import { Icon } from './Icon'
 type Variant = 'primary' | 'secondary' | 'destructive'
 type Size = 'sm' | 'md' | 'lg'
 
+// shrink-0 plus a min-height rather than a fixed height: inside the modals'
+// flex columns a fixed height was being compressed, squashing 48px buttons to
+// 24px and dropping them under the 44px minimum target size.
 const base =
-  'rounded-card font-medium transition-colors duration-160 focus-ring inline-flex items-center justify-center gap-2'
+  'rounded-card font-medium transition-colors duration-160 focus-ring inline-flex shrink-0 items-center justify-center gap-2'
 
 const variants: Record<Variant, string> = {
   primary: 'bg-rose text-espresso hover:bg-rose-hover shadow-sm',
@@ -16,9 +19,9 @@ const variants: Record<Variant, string> = {
 }
 
 const sizes: Record<Size, string> = {
-  sm: 'px-6 h-[44px] text-sm',
-  md: 'px-8 h-[48px] text-base',
-  lg: 'px-10 h-[52px] text-lg',
+  sm: 'px-6 min-h-[44px] text-sm',
+  md: 'px-8 min-h-[48px] text-base',
+  lg: 'px-10 min-h-[52px] text-lg',
 }
 
 type BaseProps = {

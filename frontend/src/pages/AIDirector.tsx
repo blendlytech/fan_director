@@ -392,7 +392,7 @@ export function AIDirector() {
                       type="button"
                       onClick={undo}
                       disabled={!canUndo}
-                      className="flex min-h-[44px] items-center gap-1.5 rounded-lg border border-transparent px-3 text-[11px] font-medium text-muted transition-colors duration-160 hover:border-divider hover:bg-panel hover:text-espresso focus-ring disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-transparent disabled:hover:bg-transparent disabled:hover:text-muted"
+                      className="flex min-h-[44px] min-w-[44px] items-center gap-1.5 rounded-lg border border-transparent px-3 text-[11px] font-medium text-muted transition-colors duration-160 hover:border-divider hover:bg-panel hover:text-espresso focus-ring disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-transparent disabled:hover:bg-transparent disabled:hover:text-muted"
                     >
                       <Icon icon="lucide:undo-2" width={14} />
                       <span className="hidden sm:inline">Undo</span>
