@@ -35,7 +35,7 @@ export function ReviewScene() {
             Review Your Commission
           </h1>
           <p className="text-base text-muted">
-            Please review the details of your Scene Card before sending it to Maya for approval.
+            Please review the details of your Scene Card. Every price is an estimate until Maya approves it.
           </p>
         </div>
 
@@ -147,8 +147,9 @@ export function ReviewScene() {
         {/* Final Action Area */}
         <div className="mx-auto mb-20 mt-10 max-w-[600px] text-center">
           <p className="mb-8 text-sm text-muted">
-            <span className="font-medium text-espresso">Almost done!</span> Once you send this, Maya will review and
-            approve within 24-48 hours. You&rsquo;ll be notified when it&rsquo;s ready for payment.
+            <span className="font-medium text-espresso">Almost done!</span> In the real studio, sending this would ask
+            Maya to review it within 24-48 hours; she could approve, adjust or decline it. This is a demo with no
+            backend, so nothing will actually be sent, and you won&rsquo;t be notified or asked to pay.
           </p>
 
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
