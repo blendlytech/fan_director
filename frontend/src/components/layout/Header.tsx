@@ -1,7 +1,9 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
+import { authEnabled } from '../../auth/clerk'
 import { cn } from '../../lib/cn'
 import { Icon } from '../common/Icon'
+import { AuthControls } from './AuthControls'
 
 // `to` is omitted for sections the prototype does not implement; those render inert.
 export type HeaderLink = { label: string; to?: string }
@@ -77,7 +79,7 @@ export function Header({ links = fanLinks }: { links?: HeaderLink[] }) {
             Maya Atelier
           </Link>
           <span className="inline-flex items-center rounded border border-divider bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted sm:text-xs">
-            Demo
+            {authEnabled ? 'Staging' : 'Demo'}
           </span>
         </div>
 
@@ -107,6 +109,7 @@ export function Header({ links = fanLinks }: { links?: HeaderLink[] }) {
               </span>
             ),
           )}
+          <AuthControls variant="desktop" />
         </nav>
 
         <button
@@ -174,6 +177,7 @@ export function Header({ links = fanLinks }: { links?: HeaderLink[] }) {
             </li>
           ))}
         </ul>
+        <AuthControls variant="menu" />
         <p className="flex items-center gap-2 px-4 py-4 text-xs text-muted sm:px-6">
           <Icon icon="lucide:info" width={16} className="shrink-0" />
           Demo — nothing you make here is saved or sent.
