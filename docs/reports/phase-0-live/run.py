@@ -9,6 +9,7 @@ Usage (from the repo root):
   python docs/reports/phase-0-live/run.py --budget 1.50 --repeats 2
 """
 import argparse
+import http.client
 import json
 import re
 import sys
@@ -107,8 +108,9 @@ def call(key, budget, body, reserve=0.02, retries=3):
         except urllib.error.HTTPError as err:
             detail = err.read().decode("utf-8", "replace")[:500]
             payload = {"error": {"status": err.code, "detail": detail}}
-        except (urllib.error.URLError, TimeoutError) as err:
-            payload = {"error": {"status": "network", "detail": str(err)[:300]}}
+        except (urllib.error.URLError, TimeoutError, http.client.HTTPException, ConnectionError, OSError, ValueError) as err:
+            # ValueError covers a truncated or non-JSON body; HTTPException covers IncompleteRead.
+            payload = {"error": {"status": "network", "detail": f"{type(err).__name__}: {str(err)[:280]}"}}
         latency = round(time.time() - started, 2)
         budget.calls += 1
         cost = float(((payload.get("usage") or {}).get("cost")) or 0)

@@ -70,3 +70,59 @@ What reading the replies showed:
 - Single pinned host per model; host metrics were not measured beyond these calls.
 - No prompt-injection testing against a real provider (OpenRouter terms, §5.3.3). Injection is covered by the mocked-provider tests Astra built.
 - Provider confirmations of adult use (OpenRouter, NextBit, DeepInfra, Groq) and NextBit's special-category data addendum remain **launch** requirements.
+
+---
+
+# Round 2: redesigned Director task on stronger models
+
+Same 12 cases, 3 runs each, 7 models, **$0.12**. The task changed (see `round2.py`):
+
+- The model only says **what the fan wants**, as catalog item ids locked by an enum in the response schema, so an invented or misspelled item can't come back.
+- **The server does the rest:** swaps within choose-one groups, adds required items (`explicit_couple` brings `with_leo`), attaches ask-me flags, and hides hard-no items from the model entirely.
+- The model's own text is limited to one short note; in the product, **the fan-facing sentence is written by the server** from fixed wording.
+- Temperature 0.2, two worked examples in the prompt, **one automatic retry** with the server's error message. Hosts not pinned (`allow_fallbacks: true`), so no rate-limit failures this time.
+
+"Useful" = after the server's checks and at most one retry, the fan gets what they asked (a valid option containing the requested items, a correct "not offered" for hard-no requests, a custom request captured, or a clarifying question). "Strict" additionally fails any reply that added adult items when the fan hadn't asked for anything intimate.
+
+| Model | Useful | Strict | Valid first try | Adult items the fan didn't ask for | Median latency | Spend (36 requests) |
+| --- | --- | --- | --- | --- | --- | --- |
+| **Qwen3 235B Instruct 2507** | 34/36 (94%) | **34/36 (94%)** | 34 | **0** | 3.4s | $0.005 |
+| DeepSeek V3.2 | 33/36 (92%) | 31/36 (86%) | 33 | 2 | 3.1s | $0.010 |
+| Llama 3.3 70B Instruct | 35/36 (97%) | 30/36 (83%) | 35 | 5 | 4.2s | $0.007 |
+| gpt-oss-120b | 29/36 (81%) | 28/36 (78%) | 30 | 4 | 6.2s | $0.006 |
+| Mistral Large 3 (2512) | 35/36 (97%) | 25/36 (69%) | 30 | **11** | 2.4s | $0.013 |
+| Mistral Small 3.2 (round 1 baseline) | 25/36 (69%) | 25/36 (69%) | 27 | 0 | 2.9s | $0.007 |
+| GLM 4.7 | 6/36 (17%) | 6/36 | 4 | 0 | 15.3s | $0.074 |
+
+What the replies showed:
+
+- **The redesign fixed most failures.** Mistral Small went from 56% fully correct (round 1) to 69% useful, and four models reached 86–94% strict. Selection-rule breaks, invented items and money in the text largely disappeared because the model no longer handles them.
+- **No model refused legal explicit requests**, and every one correctly declined the hard-no cases (outdoors, slapping) with a short note.
+- **Qwen3 235B is the best fit:** most accurate under strict scoring, never escalated to adult items uninvited, cheapest per request. Its two misses were both the couple POV case, where its option couldn't be built on the second try.
+- **Mistral Large 3 and Llama 3.3 70B escalate:** for "surprise me", a budget question or an anniversary greeting they added explicit scenes, lingerie or Leo. The server can strip adult items unless the fan's message was classified as intimate, but a model that doesn't do it at all is better.
+- **Notes sometimes promise things only the creator can decide** ("Maya can hold up a sign with your name") in 3 of 36 runs for most models. This confirms that fan-facing text must come from server templates, not the model.
+- **GLM 4.7** mostly returned non-JSON output through this route (its reasoning output is likely consuming the response); not a verdict on the model, but unusable as configured.
+
+**Recommendation (replaces round 1's):** use **Qwen3 235B Instruct 2507** for the Director with the round 2 design, with **DeepSeek V3.2** as the fallback model, both with several hosts allowed. Before Phase 3: confirm the hosts' terms for adult content, add the server rule that strips adult items unless the fan's message is intimate, and re-run at Gate 3 with the ≥30 conversations doc 11 requires.
+
+# Round 3: explicit script writing
+
+6 models × 3 approved Scene Cards × 2 samples = **36 complete scripts**, about **$0.10** (see `round3_scripts.py`). Scene Cards: a couple POV scene with the verified partner (Vintage Lounge, lingerie, massage oil), a solo bedroom scene with a vibrator and close-ups for a birthday, and a solo nurse-costume POV scene. All with Maya's limits (no pain, slapping or choking; face never shown; indoors only) and the platform hard list.
+
+The scripts are saved as complete files under `results/scripts/` (gitignored, never committed) for **the owner to read and judge as whole pieces**. They were not read or quoted by Claude; only automatic checks ran.
+
+| Model | Written | Refused | Avg. words | Automatic warnings |
+| --- | --- | --- | --- | --- |
+| Euryale L3.3 70B | 6/6 | 0 | 408 | "face" mentions in 5 |
+| Magnum v4 72B | 6/6 | 0 | 427 | "face" mentions in 3 |
+| Mistral Large 3 | 6/6 | 0 | 462 | "face" mentions in 3 |
+| DeepSeek V3.2 | 6/6 | 0 | 419 | "face" mentions in 2 |
+| Qwen3 235B 2507 | 6/6 | 0 | 587 | "face" mentions in 5 |
+| GLM 4.7 | 6/6 | 0 | 573 | "face" mentions in 5 |
+
+- **No model refused.** One GLM script came back empty during a power cut and was regenerated.
+- **No red-flag words** in any script: nothing about youth, school, pain, going outdoors, intoxication, sleep, animals or money. The "family role" keyword hits were all "steps"/"stepping".
+- **"Face" mentions need reading in context**: "the camera never shows her face" is fine; an actual face shot breaks Maya's limit.
+- **Quality, tone and shootability are the owner's call.** Pending that judgement, no model is selected for script writing.
+
+**Total key spend across all Phase 0 runs: $0.23 of the $8 ceiling** (from OpenRouter's key usage, including runs interrupted by a power cut).
