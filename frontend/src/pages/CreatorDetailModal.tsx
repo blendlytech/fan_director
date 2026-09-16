@@ -5,7 +5,7 @@ import { Icon } from '../components/common/Icon'
 import { Modal } from '../components/common/Modal'
 import { SceneImage } from '../components/common/SceneImage'
 import { cn } from '../lib/cn'
-import { getRequestById } from '../data/requests'
+import { getRequestById, type Request } from '../data/requests'
 
 const currency = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' })
 
@@ -22,21 +22,9 @@ export function CreatorDetailModal() {
   const navigate = useNavigate()
   const request = getRequestById(id)
 
-  const [approved, setApproved] = useState(false)
-  const [proposeOpen, setProposeOpen] = useState(false)
-  const [proposalSent, setProposalSent] = useState(false)
-  const [newTotal, setNewTotal] = useState('')
-  const [proposalMessage, setProposalMessage] = useState('')
-
   useEffect(() => {
     if (!request) navigate('/creator/requests', { replace: true })
   }, [request, navigate])
-
-  // Reset the "New Total" field whenever the underlying request's total is known, so the
-  // Propose Changes form always starts from the actual current total rather than a stale one.
-  useEffect(() => {
-    if (request) setNewTotal(currency.format(request.total))
-  }, [request])
 
   if (!request) return null
 
@@ -202,139 +190,157 @@ export function CreatorDetailModal() {
               </div>
             </div>
 
-            <div className="space-y-4">
-              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted">Creator Decision</h3>
-
-              {approved ? (
-                <div className="rounded-xl border border-success/30 bg-success/10 p-5">
-                  <div className="mb-2 flex items-center gap-2 text-sm font-medium text-success">
-                    <Icon icon="lucide:check-circle-2" width={18} />
-                    Marked as approved
-                  </div>
-                  <p className="text-xs leading-relaxed text-muted">
-                    This is a demo: no payment has been charged and {request.fanHandle} has not actually been
-                    notified. In the full product, approving sends the fan a payment request and production begins
-                    once they pay.
-                  </p>
-                  <Button variant="secondary" size="sm" className="mt-4 w-full" onClick={closeToQueue}>
-                    Back to Queue
-                  </Button>
-                </div>
-              ) : proposalSent ? (
-                <div className="rounded-xl border border-divider bg-cream p-5">
-                  <div className="mb-2 flex items-center gap-2 text-sm font-medium text-rose-deep">
-                    <Icon icon="lucide:check-circle-2" width={18} />
-                    Proposal drafted
-                  </div>
-                  <p className="text-xs leading-relaxed text-muted">
-                    This is a demo: the new total of {newTotal || currency.format(request.total)} and your message
-                    were not actually sent to {request.fanHandle}. In the full product, proposing changes asks the
-                    fan to approve the new estimate before production begins.
-                  </p>
-                  <Button variant="secondary" size="sm" className="mt-4 w-full" onClick={closeToQueue}>
-                    Back to Queue
-                  </Button>
-                </div>
-              ) : (
-                <>
-                  <Button
-                    variant="primary"
-                    icon="lucide:check-circle-2"
-                    className="w-full"
-                    onClick={() => setApproved(true)}
-                  >
-                    Approve Commission
-                  </Button>
-
-                  {!proposeOpen ? (
-                    <button
-                      type="button"
-                      onClick={() => setProposeOpen(true)}
-                      className="flex h-[48px] w-full select-none items-center justify-center gap-2 rounded-card border border-divider bg-cream font-medium text-espresso transition-all duration-160 hover:border-espresso hover:bg-cream/80 focus-ring"
-                    >
-                      <Icon icon="lucide:pen-tool" width={18} />
-                      Propose Changes
-                    </button>
-                  ) : (
-                    <div className="mt-2 animate-slide-up rounded-xl border border-divider bg-cream p-5">
-                      <h4 className="mb-4 flex items-center gap-2 text-sm font-medium">
-                        <Icon icon="lucide:arrow-right-left" width={16} className="text-rose" />
-                        Adjust Estimate
-                      </h4>
-                      <div className="mb-4 grid grid-cols-2 gap-4">
-                        <div>
-                          <span className="mb-1 block text-xs text-muted">Original Total</span>
-                          <div className="rounded-lg border border-divider bg-panel p-2 text-sm text-muted line-through">
-                            {currency.format(request.total)}
-                          </div>
-                        </div>
-                        <div>
-                          <label htmlFor="new-total" className="mb-1 block text-xs font-medium text-espresso">
-                            New Total
-                          </label>
-                          <input
-                            id="new-total"
-                            type="text"
-                            inputMode="decimal"
-                            value={newTotal}
-                            onChange={(event) => setNewTotal(event.target.value)}
-                            className="w-full rounded-lg border border-espresso bg-panel p-2 text-sm text-espresso focus:outline-none focus:ring-1 focus:ring-rose focus-ring"
-                          />
-                        </div>
-                      </div>
-                      <label htmlFor="proposal-message" className="mb-1 block text-xs font-medium text-espresso">
-                        Message to Fan
-                      </label>
-                      <textarea
-                        id="proposal-message"
-                        rows={2}
-                        value={proposalMessage}
-                        onChange={(event) => setProposalMessage(event.target.value)}
-                        placeholder="Explain the changes..."
-                        className="mb-4 w-full resize-none rounded-lg border border-divider bg-panel p-3 text-sm focus:border-espresso focus:outline-none focus-ring"
-                      />
-                      <div className="flex gap-3">
-                        <button
-                          type="button"
-                          onClick={() => setProposeOpen(false)}
-                          className="h-[40px] flex-1 rounded-lg border border-divider bg-panel text-sm font-medium text-espresso transition-colors duration-160 hover:bg-cream focus-ring"
-                        >
-                          Cancel
-                        </button>
-                        <button
-                          type="button"
-                          disabled={!newTotal.trim() || !proposalMessage.trim()}
-                          onClick={() => setProposalSent(true)}
-                          className="h-[40px] flex-1 rounded-lg bg-espresso text-sm font-medium text-cream transition-colors duration-160 hover:bg-espresso/90 focus-ring disabled:cursor-not-allowed disabled:opacity-50"
-                        >
-                          Send Proposal
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  <div className="grid grid-cols-2 gap-4 pt-2">
-                    <Button variant="secondary" size="sm" icon="lucide:message-circle-question" to={`/creator/requests/${request.id}/ask`}>
-                      Ask Question
-                    </Button>
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      icon="lucide:x-circle"
-                      to={`/creator/requests/${request.id}/decline`}
-                      className="text-alert hover:bg-alert/10"
-                    >
-                      Decline
-                    </Button>
-                  </div>
-                </>
-              )}
-            </div>
+            <RequestDecisionPanel key={request.id} request={request} closeToQueue={closeToQueue} />
           </div>
         </div>
       </Modal>
 
       <Outlet />
     </>
+  )
+}
+
+/**
+ * Holds the Approve / Propose Changes / Decline decision state for one request. Keyed by
+ * request.id in the parent so that React Router's reuse of the CreatorDetailModal instance
+ * across /creator/requests/:id navigations doesn't leak one request's in-progress decision
+ * (approved, proposalSent, the draft new total/message) into the next request viewed.
+ */
+function RequestDecisionPanel({ request, closeToQueue }: { request: Request; closeToQueue: () => void }) {
+  const [approved, setApproved] = useState(false)
+  const [proposeOpen, setProposeOpen] = useState(false)
+  const [proposalSent, setProposalSent] = useState(false)
+  const [newTotal, setNewTotal] = useState(() => currency.format(request.total))
+  const [proposalMessage, setProposalMessage] = useState('')
+
+  return (
+    <div className="space-y-4">
+      <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted">Creator Decision</h3>
+
+      {approved ? (
+        <div className="rounded-xl border border-success/30 bg-success/10 p-5">
+          <div className="mb-2 flex items-center gap-2 text-sm font-medium text-success">
+            <Icon icon="lucide:check-circle-2" width={18} />
+            Marked as approved
+          </div>
+          <p className="text-xs leading-relaxed text-muted">
+            This is a demo: no payment has been charged and {request.fanHandle} has not actually been
+            notified. In the full product, approving sends the fan a payment request and production begins
+            once they pay.
+          </p>
+          <Button variant="secondary" size="sm" className="mt-4 w-full" onClick={closeToQueue}>
+            Back to Queue
+          </Button>
+        </div>
+      ) : proposalSent ? (
+        <div className="rounded-xl border border-divider bg-cream p-5">
+          <div className="mb-2 flex items-center gap-2 text-sm font-medium text-rose-deep">
+            <Icon icon="lucide:check-circle-2" width={18} />
+            Proposal drafted
+          </div>
+          <p className="text-xs leading-relaxed text-muted">
+            This is a demo: the new total of {newTotal || currency.format(request.total)} and your message
+            were not actually sent to {request.fanHandle}. In the full product, proposing changes asks the
+            fan to approve the new estimate before production begins.
+          </p>
+          <Button variant="secondary" size="sm" className="mt-4 w-full" onClick={closeToQueue}>
+            Back to Queue
+          </Button>
+        </div>
+      ) : (
+        <>
+          <Button
+            variant="primary"
+            icon="lucide:check-circle-2"
+            className="w-full"
+            onClick={() => setApproved(true)}
+          >
+            Approve Commission
+          </Button>
+
+          {!proposeOpen ? (
+            <button
+              type="button"
+              onClick={() => setProposeOpen(true)}
+              className="flex h-[48px] w-full select-none items-center justify-center gap-2 rounded-card border border-divider bg-cream font-medium text-espresso transition-all duration-160 hover:border-espresso hover:bg-cream/80 focus-ring"
+            >
+              <Icon icon="lucide:pen-tool" width={18} />
+              Propose Changes
+            </button>
+          ) : (
+            <div className="mt-2 animate-slide-up rounded-xl border border-divider bg-cream p-5">
+              <h4 className="mb-4 flex items-center gap-2 text-sm font-medium">
+                <Icon icon="lucide:arrow-right-left" width={16} className="text-rose" />
+                Adjust Estimate
+              </h4>
+              <div className="mb-4 grid grid-cols-2 gap-4">
+                <div>
+                  <span className="mb-1 block text-xs text-muted">Original Total</span>
+                  <div className="rounded-lg border border-divider bg-panel p-2 text-sm text-muted line-through">
+                    {currency.format(request.total)}
+                  </div>
+                </div>
+                <div>
+                  <label htmlFor="new-total" className="mb-1 block text-xs font-medium text-espresso">
+                    New Total
+                  </label>
+                  <input
+                    id="new-total"
+                    type="text"
+                    inputMode="decimal"
+                    value={newTotal}
+                    onChange={(event) => setNewTotal(event.target.value)}
+                    className="w-full rounded-lg border border-espresso bg-panel p-2 text-sm text-espresso focus:outline-none focus:ring-1 focus:ring-rose focus-ring"
+                  />
+                </div>
+              </div>
+              <label htmlFor="proposal-message" className="mb-1 block text-xs font-medium text-espresso">
+                Message to Fan
+              </label>
+              <textarea
+                id="proposal-message"
+                rows={2}
+                value={proposalMessage}
+                onChange={(event) => setProposalMessage(event.target.value)}
+                placeholder="Explain the changes..."
+                className="mb-4 w-full resize-none rounded-lg border border-divider bg-panel p-3 text-sm focus:border-espresso focus:outline-none focus-ring"
+              />
+              <div className="flex gap-3">
+                <button
+                  type="button"
+                  onClick={() => setProposeOpen(false)}
+                  className="h-[40px] flex-1 rounded-lg border border-divider bg-panel text-sm font-medium text-espresso transition-colors duration-160 hover:bg-cream focus-ring"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  disabled={!newTotal.trim() || !proposalMessage.trim()}
+                  onClick={() => setProposalSent(true)}
+                  className="h-[40px] flex-1 rounded-lg bg-espresso text-sm font-medium text-cream transition-colors duration-160 hover:bg-espresso/90 focus-ring disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  Send Proposal
+                </button>
+              </div>
+            </div>
+          )}
+
+          <div className="grid grid-cols-2 gap-4 pt-2">
+            <Button variant="secondary" size="sm" icon="lucide:message-circle-question" to={`/creator/requests/${request.id}/ask`}>
+              Ask Question
+            </Button>
+            <Button
+              variant="secondary"
+              size="sm"
+              icon="lucide:x-circle"
+              to={`/creator/requests/${request.id}/decline`}
+              className="text-alert hover:bg-alert/10"
+            >
+              Decline
+            </Button>
+          </div>
+        </>
+      )}
+    </div>
   )
 }
