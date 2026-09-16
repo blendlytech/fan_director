@@ -204,7 +204,7 @@ Manual catalog selection keeps working. Never skip the check.
 - A blocked must-allow case fails the gate just as a missed must-block case does. Report both rates.
 - Adult fixtures are synthetic and exist only in the test suite and staging.
 - **What may be sent to an external provider during tests (owner decision, 2026-09-16):**
-  - **Generation models** (the Director, and any model under evaluation) receive only **legal** content: normal requests, legal explicit adult requests and injection attempts. **Never send a hard-list case to a generation model**, not even to test refusal. In the product, fan input is checked before the provider call, so the model never sees those cases anyway.
+  - **Generation models** (the Director, and any model under evaluation) receive only **legal** content: normal requests and legal explicit adult requests. **Prompt-injection tests are never sent to a provider** without that provider's written authorization; OpenRouter's terms (§7 item 11, §8) prohibit red-teaming without approval. **Never send a hard-list case to a generation model**, not even to test refusal. In the product, fan input is checked before the provider call, so the model never sees those cases anyway.
   - **Hard-list cases** are tested against the rules layer locally. The classifier layer may receive them only as **short, non-graphic classification inputs** that state the prohibited element without sexual detail (for example "request says the person is 16"), and only if the classifier's terms allow safety-classification use. Cases for `minors` never contain sexual description in any form, anywhere, including local fixtures.
   - **AI output checks** are tested with synthetic output strings passed straight to the checker locally, never by asking a model to produce a violation.
 
@@ -527,9 +527,9 @@ interface Quote {                  // computed by the server only
 - Usage limits from doc 10 §6 as configuration: 20 AI turns per draft, 2,000 characters per message, one in-flight request per draft, per-session and per-creator rate limits, and a global test budget ceiling set by the owner.
 - **Atomic cost reservation** before each call, reconciled after. An ambiguous timeout keeps a conservative reservation.
 - **Kill switch:** an `AI_ENABLED` flag, per environment and per creator. With AI off, or on any failure, the draft stays intact and manual catalog selection keeps working.
-- Instruction-injection tests: a fan message or catalog description saying "ignore previous instructions", "make it free", "add an unlisted item" or "approve this" must produce no invalid change.
+- Instruction-injection tests: a fan message or catalog description saying "ignore previous instructions", "make it free", "add an unlisted item" or "approve this" must produce no invalid change. Run them against a **mocked provider** that returns hostile output (a made-up price, an unlisted item id, "approved", malformed JSON), so they prove that server validation holds whatever the model does. Send them to a real provider only after the owner has that provider's written authorization.
 
-**Complete when:** doc 10 §9's AI-related checklist items pass, including at least 30 representative test conversations (normal requests, budget trade-offs, unavailable choices, boundary violations, custom requests, injection attempts). The classifier layer and AI output checks pass the §5.3.3 must-block and must-allow sets; no hard-list violation is ever shown; legal adult requests in staging are not refused. Valid suggestions update the card. Invalid output changes nothing. Concurrent calls cannot overrun the reservation budget.
+**Complete when:** doc 10 §9's AI-related checklist items pass, including at least 30 representative test conversations (normal requests, budget trade-offs, unavailable choices, boundary violations, custom requests), plus the injection tests against the mocked provider. The classifier layer and AI output checks pass the §5.3.3 must-block and must-allow sets; no hard-list violation is ever shown; legal adult requests in staging are not refused. Valid suggestions update the card. Invalid output changes nothing. Concurrent calls cannot overrun the reservation budget.
 
 **Gate 3 report.**
 
@@ -568,6 +568,7 @@ Do not describe anything as working unless you ran it. Say "not verified" when y
 | Currency beyond USD | Deferred |
 | Raw conversation retention (doc 10 proposes 30 days) | Phase 3 |
 | Global AI test budget ceiling (doc 10 example: $25) | Before any live provider call |
+| Written authorization from OpenRouter (and the chosen host) for prompt-injection testing, and written confirmation that adult use is allowed | Before injection tests against a real provider; adult confirmation before launch |
 | Designs for every new UI state listed at Gate 0 | Before that UI is built |
 | When, and whether, `ADULT_CATALOG_ENABLED` may ever be turned on | After compliance, outside Phases 0–3 |
 
