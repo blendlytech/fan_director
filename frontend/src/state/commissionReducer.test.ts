@@ -249,7 +249,7 @@ describe('note', () => {
     const before = frozen(INITIAL_STATE)
     const after = commissionReducer(before, { type: 'note', text: '  Make it 80s  \n' })
 
-    expect(after.draft.notes).toEqual([{ id: NOW.getTime(), text: 'Make it 80s' }])
+    expect(after.draft.notes).toEqual([{ id: 1, text: 'Make it 80s' }])
     expect(after.draft).toEqual({ ...INITIAL_DRAFT, notes: after.draft.notes })
     expect(after.history).toEqual([before.draft])
   })
@@ -260,14 +260,14 @@ describe('note', () => {
     const two = commissionReducer(deepFreeze(one), { type: 'note', text: 'Second' })
 
     expect(two.draft.notes).toEqual([
-      { id: NOW.getTime(), text: 'First' },
-      { id: NOW.getTime() + 1, text: 'Second' },
+      { id: 1, text: 'First' },
+      { id: 2, text: 'Second' },
     ])
     expect(two.history).toHaveLength(2)
 
     const undone = commissionReducer(deepFreeze(two), { type: 'undo' })
     expect(undone.draft).toEqual(one.draft)
-    expect(undone.draft.notes).toEqual([{ id: NOW.getTime(), text: 'First' }])
+    expect(undone.draft.notes).toEqual([{ id: 1, text: 'First' }])
     expect(undone.history).toHaveLength(1)
   })
 
@@ -294,9 +294,27 @@ describe('note', () => {
     expect(totalOf(withNote.draft)).toBe(205)
   })
 
-  it.todo(
-    'gives distinct ids to two notes added in the same millisecond (currently both get Date.now(), so ids collide)',
-  )
+  it('gives distinct ids to two notes added in the same millisecond', () => {
+    // The clock is frozen at NOW for this whole test.
+    const two = run(structuredClone(INITIAL_STATE), [
+      { type: 'note', text: 'First' },
+      { type: 'note', text: 'Second' },
+    ])
+    const ids = two.draft.notes.map((note) => note.id)
+    expect(new Set(ids).size).toBe(2)
+  })
+
+  it('keeps ids unique after an undo followed by a new note', () => {
+    const state = run(structuredClone(INITIAL_STATE), [
+      { type: 'note', text: 'First' },
+      { type: 'note', text: 'Second' },
+      { type: 'undo' },
+      { type: 'note', text: 'Replacement' },
+    ])
+    const ids = state.draft.notes.map((note) => note.id)
+    expect(state.draft.notes.map((note) => note.text)).toEqual(['First', 'Replacement'])
+    expect(new Set(ids).size).toBe(ids.length)
+  })
 })
 
 /* reset --------------------------------------------------------------------- */

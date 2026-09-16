@@ -43,10 +43,13 @@ export function commissionReducer(
     case 'note': {
       const text = action.text.trim()
       if (!text) return state
+      // Ids only need to be unique within the list (they key React rows), and
+      // must not depend on the clock: two notes in one millisecond would collide.
+      const id = Math.max(0, ...state.draft.notes.map((note) => note.id)) + 1
       return {
         draft: {
           ...state.draft,
-          notes: [...state.draft.notes, { id: Date.now(), text }],
+          notes: [...state.draft.notes, { id, text }],
         },
         history: [...state.history, state.draft],
       }
