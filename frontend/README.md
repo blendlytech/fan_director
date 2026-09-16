@@ -38,9 +38,9 @@ These are load-bearing for the project's honesty, not style preferences:
   `03-developer-handoff.md` are reliable and worth reading before touching
   copy, pricing, or styling.
 - `docs/specs/04-api-specification.md`, `05-database-schema.md`,
-  `06-postman-collection.md`, `07-github-actions.md`, and
-  `09-pdf-export-package.md` describe a backend, database, and CI pipeline
-  that **do not exist**. They're speculative drafts from an earlier planning
+  `06-postman-collection.md`, `07-github-actions.md`,
+  `08-implementation-checklist.md`, and `09-pdf-export-package.md` describe a
+  backend, database, and CI pipeline that **do not exist**. They're speculative drafts from an earlier planning
   pass — don't build against them without a product decision first.
 - One deliberate departure from the drafts: this build's confirmation screen
   says nothing was sent, instead of showing draft 08's (`08-send-confirmation.html`)
