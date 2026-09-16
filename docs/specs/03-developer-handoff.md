@@ -1,5 +1,13 @@
 # Fan Director Studio — Developer Handoff Guide
 
+> **Partly replaced (2026-09-16).** The visual, component, page-behaviour and
+> accessibility guidance here still stands. Every backend, API, data-model and
+> deployment section is **replaced** by
+> [10-Fan-Director-Implementation-Plan.md](10-Fan-Director-Implementation-Plan.md)
+> (Cloudflare Pages + Worker + D1 + R2, server-authoritative pricing, versioned
+> Scene Cards). Those sections are marked **[REPLACED]** below, and the
+> per-page "API Calls" lists are illustrative only. Don't build against them.
+
 ## Project Overview
 
 **Fan Director Studio** is a fictional demonstration of a boutique creator commission platform. Maya Atelier (demo creator) uses this to collaboratively plan custom commissions with fans through an AI Director interface, followed by creator approval workflows.
@@ -18,7 +26,7 @@
 - **State Management**: React Context or Pinia (Vue)
 - **Routing**: React Router or Vue Router (full page navigation)
 
-### Backend (Future)
+### Backend (Future) [REPLACED — see 10-Fan-Director-Implementation-Plan.md]
 - **API Framework**: Express.js, Django, or FastAPI
 - **Database**: PostgreSQL for orders, users, creator boundaries
 - **Payment Processing**: Stripe, Square (NOT implemented in prototype)
@@ -620,7 +628,7 @@ export function Modal({ isOpen, onClose, title, size = 'md', children }) {
 
 ---
 
-## Data Models
+## Data Models [REPLACED — see 10-Fan-Director-Implementation-Plan.md §5]
 
 ### Request Object
 ```typescript
@@ -684,7 +692,7 @@ interface User {
 
 ---
 
-## API Endpoints (Backend)
+## API Endpoints (Backend) [REPLACED — see 10-Fan-Director-Implementation-Plan.md §3–5]
 
 ### Fan Journey
 ```
@@ -841,7 +849,7 @@ GET    /api/auth/me                     # Current user
 
 ---
 
-## Deployment
+## Deployment [REPLACED — see 10-Fan-Director-Implementation-Plan.md §7–8]
 
 ### Frontend (Vercel/Netlify)
 ```bash
