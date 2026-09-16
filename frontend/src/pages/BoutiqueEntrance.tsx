@@ -1,10 +1,14 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { Header } from '../components/layout/Header'
 import { Button } from '../components/common/Button'
 import { Icon } from '../components/common/Icon'
 import { SceneImage } from '../components/common/SceneImage'
+import { useCommission } from '../state/commission'
+import type { SettingId } from '../domain/sceneCard'
 
 type ThemeCard = {
+  /** Which catalog setting this card starts the fan's draft on. */
+  setting: SettingId
   image: string
   alt: string
   title: string
@@ -16,6 +20,7 @@ const themeCards: ThemeCard[] = [
   {
     image:
       'https://images.unsplash.com/photo-1551028150-64b9e398f678?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    setting: 'vintage',
     alt: 'Vintage Lounge',
     title: 'Vintage Lounge Greeting',
     description:
@@ -25,6 +30,7 @@ const themeCards: ThemeCard[] = [
   {
     image:
       'https://images.unsplash.com/photo-1563241527-2004cb630db0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    setting: 'floral',
     alt: 'Floral Studio',
     title: 'Floral Studio Scene',
     description:
@@ -34,6 +40,7 @@ const themeCards: ThemeCard[] = [
   {
     image:
       'https://images.unsplash.com/photo-1517457224219-c60317e3df1c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    setting: 'backstage',
     alt: 'Backstage Moment',
     title: 'Intimate Backstage',
     description:
@@ -43,6 +50,16 @@ const themeCards: ThemeCard[] = [
 ]
 
 export function BoutiqueEntrance() {
+  const navigate = useNavigate()
+  const { commit } = useCommission()
+
+  // Starting from a curated scene seeds the draft, so the Director opens on the
+  // setting the fan actually picked rather than always on the first one.
+  function beginWith(setting: SettingId) {
+    commit({ setting })
+    navigate('/ai-director')
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
@@ -147,7 +164,11 @@ export function BoutiqueEntrance() {
                   <div className="mb-6 flex items-center justify-between">
                     <span className="text-sm font-medium text-espresso">{card.priceRange}</span>
                   </div>
-                  <Button to="/ai-director" size="sm" className="w-full">
+                  <Button
+                    size="sm"
+                    className="w-full"
+                    onClick={() => beginWith(card.setting)}
+                  >
                     Begin Your Vision
                   </Button>
                 </div>

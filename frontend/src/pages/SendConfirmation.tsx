@@ -5,38 +5,53 @@ import { ProgressTrail } from '../components/layout/ProgressTrail'
 import { Button } from '../components/common/Button'
 import { Icon } from '../components/common/Icon'
 import { cn } from '../lib/cn'
-
-const orderDetails = [
-  { icon: 'lucide:calculator', label: 'Estimated Price', value: '$145.00', note: 'Subject to approval' },
-  { icon: 'lucide:wallet', label: 'Budget Remaining', value: '$5.00', note: 'Under $150 budget' },
-  { icon: 'lucide:calendar-clock', label: 'Est. Delivery', value: 'Dec 19', note: '7 days post-payment' },
-]
-
-const nextSteps = [
-  {
-    title: '1. Creator Reviews',
-    body: "Maya will review your request within 24-48 hours. She may approve it, propose slight adjustments, or ask for clarification to ensure it's perfect.",
-    active: true,
-  },
-  {
-    title: '2. Payment Confirmation',
-    body: "Once approved, you'll receive a link to securely complete your payment of $145.00.",
-    active: false,
-  },
-  {
-    title: '3. Production Begins',
-    body: 'Maya records your custom greeting in the studio.',
-    active: false,
-  },
-  {
-    title: '4. Delivery',
-    body: 'Your final video is delivered securely, typically within 7 days of payment.',
-    active: false,
-  },
-]
+import { useCommission } from '../state/commission'
+import { BUDGET, DELIVERY_DAYS, currency, settingOf } from '../domain/sceneCard'
 
 export function SendConfirmation() {
   const [saved, setSaved] = useState(false)
+  const { draft, total, difference, overBudget } = useCommission()
+
+  const orderDetails = [
+    { icon: 'lucide:calculator', label: 'Estimated Price', value: currency.format(total), note: 'Subject to approval' },
+    overBudget
+      ? {
+          icon: 'lucide:alert-triangle',
+          label: 'Over Budget',
+          value: currency.format(Math.abs(difference)),
+          note: `Over ${currency.format(BUDGET)} budget`,
+        }
+      : {
+          icon: 'lucide:wallet',
+          label: 'Budget Remaining',
+          value: currency.format(difference),
+          note: `Under ${currency.format(BUDGET)} budget`,
+        },
+    { icon: 'lucide:calendar-clock', label: 'Est. Delivery', value: 'Dec 19', note: `${DELIVERY_DAYS} days post-payment` },
+  ]
+
+  const nextSteps = [
+    {
+      title: '1. Creator Reviews',
+      body: "Maya will review your request within 24-48 hours. She may approve it, propose slight adjustments, or ask for clarification to ensure it's perfect.",
+      active: true,
+    },
+    {
+      title: '2. Payment Confirmation',
+      body: `Once approved, you'll receive a link to securely complete your payment of ${currency.format(total)}.`,
+      active: false,
+    },
+    {
+      title: '3. Production Begins',
+      body: 'Maya records your custom greeting in the studio.',
+      active: false,
+    },
+    {
+      title: '4. Delivery',
+      body: 'Your final video is delivered securely, typically within 7 days of payment.',
+      active: false,
+    },
+  ]
 
   return (
     <div className="flex min-h-screen flex-col bg-cream">
@@ -79,7 +94,7 @@ export function SendConfirmation() {
           </div>
 
           <div className="p-8">
-            <h2 className="mb-6 font-serif text-2xl font-medium text-espresso">Vintage Lounge Greeting</h2>
+            <h2 className="mb-6 font-serif text-2xl font-medium text-espresso">{settingOf(draft).sceneTitle}</h2>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
               {orderDetails.map((detail) => (

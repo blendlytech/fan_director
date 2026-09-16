@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '../components/common/Button'
@@ -7,214 +7,20 @@ import { SceneImage } from '../components/common/SceneImage'
 import { Header } from '../components/layout/Header'
 import { ProgressTrail } from '../components/layout/ProgressTrail'
 import { cn } from '../lib/cn'
-
-/* -------------------------------------------------------------------------- */
-/*  Catalog — deterministic prices, mirroring Maya's approved catalog.         */
-/*  Local to this page on purpose: no shared data module at this stage.        */
-/* -------------------------------------------------------------------------- */
-
-const BUDGET = 150
-const BASE_VIDEO_PRICE = 90
-const BASE_MINUTES = 3
-const PER_EXTRA_MINUTE = 40
-const PERSONALIZED_GREETING_PRICE = 20
-
-type SettingId = 'vintage' | 'floral' | 'backstage'
-type FocusId = 'richer' | 'longer'
-
-type SettingOption = {
-  id: SettingId
-  name: string
-  blurb: string
-  price: number
-  image: string
-  alt: string
-  sceneTitle: string
-  lineLabel: string
-}
-
-const SETTINGS: readonly SettingOption[] = [
-  {
-    id: 'vintage',
-    name: 'Vintage Lounge',
-    blurb: 'Cozy, intimate evening',
-    price: 35,
-    image:
-      'https://images.unsplash.com/photo-1551028150-64b9e398f678?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    alt: 'Warmly lit vintage lounge with velvet seating and soft lamps',
-    sceneTitle: 'Vintage Lounge Greeting',
-    lineLabel: 'Vintage Lounge Setup',
-  },
-  {
-    id: 'floral',
-    name: 'Floral Studio',
-    blurb: 'Bright & celebratory',
-    price: 45,
-    image:
-      'https://images.unsplash.com/photo-1563241527-2004cb630db0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    alt: 'Bright studio table arranged with fresh cut flowers',
-    sceneTitle: 'Floral Studio Greeting',
-    lineLabel: 'Floral Studio Setup',
-  },
-  {
-    id: 'backstage',
-    name: 'Backstage',
-    blurb: 'Raw & authentic',
-    price: 15,
-    image:
-      'https://images.unsplash.com/photo-1517457224219-c60317e3df1c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    alt: 'Backstage dressing area with mirror lights and hanging garments',
-    sceneTitle: 'Backstage Greeting',
-    lineLabel: 'Backstage Setup',
-  },
-] as const
-
-type FocusOption = {
-  id: FocusId
-  name: string
-  blurb: string
-  icon: string
-}
-
-const FOCUS_OPTIONS: readonly FocusOption[] = [
-  {
-    id: 'richer',
-    name: 'Richer Setting',
-    blurb: 'Keep 3 mins, add detailed personalized greeting',
-    icon: 'lucide:sparkles',
-  },
-  {
-    id: 'longer',
-    name: 'Longer Video',
-    blurb: 'Extend to 4 mins, standard greeting',
-    icon: 'lucide:clock',
-  },
-] as const
-
-/* -------------------------------------------------------------------------- */
-/*  Scene card model                                                          */
-/* -------------------------------------------------------------------------- */
-
-type LineItemId = 'video' | 'runtime' | 'setup' | 'greeting'
-
-type LineItem = {
-  id: LineItemId
-  label: string
-  detail: string
-  /** Amount in whole dollars. The estimated total is always the sum of these. */
-  amount: number
-  /** Renders the rose "Added" badge for options the fan chose. */
-  added: boolean
-  /** Only optional add-ons can be removed; required components cannot. */
-  removable: boolean
-  /** Which conversation control edits this line. */
-  edits: EditTarget
-}
-
-type EditTarget = 'setting' | 'focus'
-
-type FanNote = { id: number; text: string }
-
-type Draft = {
-  setting: SettingId
-  focus: FocusId
-  extraMinute: boolean
-  notes: FanNote[]
-}
-
-const INITIAL_DRAFT: Draft = {
-  setting: 'vintage',
-  focus: 'richer',
-  extraMinute: false,
-  notes: [],
-}
-
-function settingOf(draft: Draft): SettingOption {
-  // SETTINGS is exhaustive over SettingId, so this is always defined.
-  return SETTINGS.find((option) => option.id === draft.setting) ?? SETTINGS[0]
-}
-
-function focusOf(draft: Draft): FocusOption {
-  return FOCUS_OPTIONS.find((option) => option.id === draft.focus) ?? FOCUS_OPTIONS[0]
-}
-
-/** Extra minutes beyond the 3-minute base, from the focus choice and the add-on. */
-function extraMinutesOf(draft: Draft): number {
-  return (draft.focus === 'longer' ? 1 : 0) + (draft.extraMinute ? 1 : 0)
-}
-
-function buildLineItems(draft: Draft): LineItem[] {
-  const setting = settingOf(draft)
-  const extraMinutes = extraMinutesOf(draft)
-  const items: LineItem[] = [
-    {
-      id: 'video',
-      label: `${BASE_MINUTES}-Minute Video`,
-      detail: 'Standard base rate',
-      amount: BASE_VIDEO_PRICE,
-      added: false,
-      removable: false,
-      edits: 'focus',
-    },
-  ]
-
-  if (extraMinutes > 0) {
-    items.push({
-      id: 'runtime',
-      label: `Extra Runtime (+${extraMinutes} min)`,
-      detail: `$${PER_EXTRA_MINUTE} per additional minute · ${BASE_MINUTES + extraMinutes} minutes total`,
-      amount: extraMinutes * PER_EXTRA_MINUTE,
-      added: true,
-      removable: true,
-      edits: 'focus',
-    })
-  }
-
-  items.push({
-    id: 'setup',
-    label: setting.lineLabel,
-    detail: 'Set dressing & lighting',
-    amount: setting.price,
-    added: true,
-    removable: false,
-    edits: 'setting',
-  })
-
-  items.push(
-    draft.focus === 'richer'
-      ? {
-          id: 'greeting',
-          label: 'Personalized Greeting',
-          detail: 'Detailed opening & closing',
-          amount: PERSONALIZED_GREETING_PRICE,
-          added: true,
-          removable: false,
-          edits: 'focus',
-        }
-      : {
-          id: 'greeting',
-          label: 'Standard Greeting',
-          detail: 'Included with every commission',
-          amount: 0,
-          added: false,
-          removable: false,
-          edits: 'focus',
-        },
-  )
-
-  return items
-}
-
-function sumOf(items: readonly LineItem[]): number {
-  return items.reduce((running, item) => running + item.amount, 0)
-}
-
-/** Total for a hypothetical draft — used to price the choice cards honestly. */
-function previewTotal(draft: Draft, changes: Partial<Draft>): number {
-  return sumOf(buildLineItems({ ...draft, ...changes }))
-}
-
-const money = (amount: number) => `$${amount}`
+import { useCommission } from '../state/commission'
+import {
+  BASE_MINUTES,
+  BUDGET,
+  FOCUS_OPTIONS,
+  PER_EXTRA_MINUTE,
+  SETTINGS,
+  extraMinutesOf,
+  focusOf,
+  money,
+  previewTotal,
+  settingOf,
+  type EditTarget,
+} from '../domain/sceneCard'
 
 /* -------------------------------------------------------------------------- */
 /*  Composer prompt starters — canned text, never sent automatically.          */
@@ -232,8 +38,11 @@ const PROMPT_STARTERS: readonly string[] = [
 /* -------------------------------------------------------------------------- */
 
 export function AIDirector() {
-  const [draft, setDraft] = useState<Draft>(INITIAL_DRAFT)
-  const [history, setHistory] = useState<Draft[]>([])
+  // The draft, its line items and its total live in the fan-journey context so
+  // the Review and Confirmation screens read the same numbers this page shows.
+  const { draft, lineItems, total, difference, overBudget, canUndo, commit, addNote, undo } =
+    useCommission()
+
   const [message, setMessage] = useState('')
   const [starterIndex, setStarterIndex] = useState(0)
   const [savedLocally, setSavedLocally] = useState(false)
@@ -243,10 +52,6 @@ export function AIDirector() {
   const threadEndRef = useRef<HTMLDivElement>(null)
   const composerRef = useRef<HTMLTextAreaElement>(null)
 
-  const lineItems = useMemo(() => buildLineItems(draft), [draft])
-  const total = useMemo(() => sumOf(lineItems), [lineItems])
-  const difference = BUDGET - total
-  const overBudget = difference < 0
   const setting = settingOf(draft)
   const focus = focusOf(draft)
   const minutes = BASE_MINUTES + extraMinutesOf(draft)
@@ -256,17 +61,6 @@ export function AIDirector() {
     ? `${money(Math.abs(difference))} over budget`
     : `${money(difference)} under budget`
 
-  function commit(changes: Partial<Draft>) {
-    setHistory((past) => [...past, draft])
-    setDraft((current) => ({ ...current, ...changes }))
-  }
-
-  function undo() {
-    if (history.length === 0) return
-    setDraft(history[history.length - 1])
-    setHistory((past) => past.slice(0, -1))
-  }
-
   function focusGroup(target: EditTarget) {
     const container = target === 'setting' ? settingGroupRef.current : focusGroupRef.current
     if (!container) return
@@ -275,13 +69,8 @@ export function AIDirector() {
   }
 
   function sendMessage() {
-    const text = message.trim()
-    if (!text) return
-    setHistory((past) => [...past, draft])
-    setDraft((current) => ({
-      ...current,
-      notes: [...current.notes, { id: Date.now(), text }],
-    }))
+    if (!message.trim()) return
+    addNote(message)
     setMessage('')
     window.requestAnimationFrame(() => {
       threadEndRef.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
@@ -602,13 +391,13 @@ export function AIDirector() {
                     <button
                       type="button"
                       onClick={undo}
-                      disabled={history.length === 0}
+                      disabled={!canUndo}
                       className="flex min-h-[44px] items-center gap-1.5 rounded-lg border border-transparent px-3 text-[11px] font-medium text-muted transition-colors duration-160 hover:border-divider hover:bg-panel hover:text-espresso focus-ring disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-transparent disabled:hover:bg-transparent disabled:hover:text-muted"
                     >
                       <Icon icon="lucide:undo-2" width={14} />
                       <span className="hidden sm:inline">Undo</span>
                       <span className="sr-only">
-                        {history.length === 0 ? 'Nothing to undo' : 'Undo last change'}
+                        {canUndo ? 'Undo last change' : 'Nothing to undo'}
                       </span>
                     </button>
                   </div>
