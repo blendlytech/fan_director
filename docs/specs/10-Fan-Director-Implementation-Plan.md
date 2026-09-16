@@ -28,9 +28,9 @@ This is a build plan, not a statement that those services are configured. The at
 | Commission transactions | External payment and delivery | Integrated checkout and private commission-video hosting |
 | Media | Product demo, public boutique previews, posters and captions | Large private media libraries |
 | Creator subscriptions | Pilot access granted administratively; record entitlements | Automated recurring billing until pricing and processor fit are settled |
-| Content scope | Nonexplicit planning and catalog choices matching the source document | Any expanded content scope requires provider and product review |
+| Content scope | Pilot launches nonexplicit. Explicit content between consenting adults is in scope on the gated path in [doc 11](11-Developer-Handoff-Phases-0-3.md) §5.3–5.4 (owner decision, 2026-09-16) | Turning adult content on, which waits for the compliance record, provider terms and a suitable payment processor |
 
-Bring-your-own-key is not a workaround for provider restrictions. Before selecting an AI provider, test the intended use case and review its current terms, privacy settings, retention, and account requirements. Do not claim compatibility with explicit conversations based on a nonexplicit demo.
+Bring-your-own-key is not a workaround for provider restrictions. Before selecting an AI provider, test the intended use case, including legal explicit adult content (doc 11 Phase 0), and review its current terms, privacy settings, retention, and account requirements. Do not claim compatibility with explicit conversations based on a nonexplicit demo.
 
 ## 3. Architecture and responsibilities
 
@@ -177,7 +177,7 @@ Track errors, latency, usage reservations, actual charges, database growth and m
 | --- | --- | --- |
 | AI provider/model | One economical model behind a replaceable adapter | Intended-content fit, structured-output quality, privacy, measured latency and cost |
 | Authentication | Maintained runtime-compatible solution | Creator/fan sign-in and recovery flow, email delivery and total cost |
-| Initial creator catalog | One curated nonexplicit pilot catalog | Creator-owned options, actual prices, boundaries and delivery rules |
+| Initial creator catalog | One curated nonexplicit pilot catalog; adult categories modelled but off (doc 11 §5.4) | Creator-owned options, actual prices, boundaries and delivery rules |
 | Pilot budget | Small explicit ceiling; example $25 | Selected model rates and tested reservation logic |
 | Subscription and allowance | Set after pilot data | High-usage cost, conversion, support effort and creator feedback |
 | Commercial subscription collection | Separate from fan commission payments | Processor suitability and entitlement/billing workflow |
