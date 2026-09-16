@@ -1,0 +1,116 @@
+{
+  "_note": "Synthetic Phase 0 test catalog. Adult categories are enabled only inside this test run (doc 11 §5.6 decision 3). Leo is a synthetic performer (isSynthetic: true). Not a production seed.",
+  "creator": "Maya Atelier",
+  "performers": [
+    { "id": "perf_maya", "displayName": "Maya", "kind": "creator", "isSynthetic": true },
+    { "id": "perf_leo", "displayName": "Leo", "kind": "partner", "isSynthetic": true }
+  ],
+  "categories": [
+    {
+      "key": "length_format", "label": "Length & format", "contentRating": "general",
+      "groups": [
+        { "key": "base", "min": 1, "max": 1 },
+        { "key": "extra_minutes", "min": 0, "max": 1 },
+        { "key": "orientation", "min": 1, "max": 1 }
+      ],
+      "items": [
+        { "id": "base_3min", "group": "base", "label": "Base video, 3 minutes", "price_cents": 9000 },
+        { "id": "extra_minute", "group": "extra_minutes", "label": "Extra minute", "price_cents_per_unit": 4000, "maxQty": 2 },
+        { "id": "vertical", "group": "orientation", "label": "Vertical", "price_cents": 0 },
+        { "id": "horizontal", "group": "orientation", "label": "Horizontal", "price_cents": 0 }
+      ]
+    },
+    {
+      "key": "setting", "label": "Setting / set", "contentRating": "general", "selection": { "min": 1, "max": 1 },
+      "items": [
+        { "id": "vintage_lounge", "label": "Vintage Lounge", "price_cents": 3500 },
+        { "id": "floral_studio", "label": "Floral Studio", "price_cents": 4500 },
+        { "id": "backstage", "label": "Backstage", "price_cents": 1500 },
+        { "id": "bedroom_set", "label": "Bedroom set", "price_cents": 4000 }
+      ]
+    },
+    {
+      "key": "wardrobe", "label": "Wardrobe & look", "contentRating": "general", "selection": { "min": 0, "max": 1 },
+      "items": [
+        { "id": "creator_choice", "label": "Creator's choice", "price_cents": 0 },
+        { "id": "lingerie_set", "label": "Lingerie set", "price_cents": 2500, "contentRating": "adult" },
+        { "id": "nurse_costume", "label": "Nurse costume", "price_cents": 3000, "contentRating": "adult" },
+        { "id": "police_costume", "label": "Police officer costume", "price_cents": 3000, "contentRating": "adult" }
+      ]
+    },
+    {
+      "key": "personalization_delivery", "label": "Personalization & delivery", "contentRating": "general",
+      "groups": [
+        { "key": "greeting", "min": 1, "max": 1 },
+        { "key": "delivery", "min": 0, "max": 1 }
+      ],
+      "items": [
+        { "id": "standard_greeting", "group": "greeting", "label": "Standard greeting", "price_cents": 0 },
+        { "id": "detailed_greeting", "group": "greeting", "label": "Detailed greeting, says your name", "price_cents": 2000 },
+        { "id": "standard_delivery", "group": "delivery", "label": "Standard delivery, 7 days from payment", "price_cents": 0 }
+      ]
+    },
+    {
+      "key": "participants", "label": "Solo or with a partner", "contentRating": "adult", "selection": { "min": 1, "max": 1 },
+      "items": [
+        { "id": "solo", "label": "Solo", "price_cents": 0 },
+        { "id": "with_leo", "label": "With Leo (verified partner)", "price_cents": 6000 }
+      ]
+    },
+    {
+      "key": "encounter_type", "label": "Type of intimate scene", "contentRating": "adult", "selection": { "min": 1, "max": 1 },
+      "items": [
+        { "id": "sensual_tease", "label": "Sensual tease, no nudity", "price_cents": 0 },
+        { "id": "explicit_solo", "label": "Explicit solo scene", "price_cents": 5000 },
+        { "id": "explicit_couple", "label": "Explicit couple scene (requires With Leo)", "price_cents": 9000, "requires": ["with_leo"] }
+      ]
+    },
+    {
+      "key": "posing", "label": "Posing & camera", "contentRating": "adult", "selection": { "min": 0, "max": 2 },
+      "items": [
+        { "id": "pov_first_person", "label": "First-person POV, speaks to you by name", "price_cents": 0 },
+        { "id": "close_up_shots", "label": "Close-up shots", "price_cents": 1500 }
+      ]
+    },
+    {
+      "key": "props", "label": "Props & toys", "contentRating": "adult", "selection": { "min": 0, "max": 2 },
+      "items": [
+        { "id": "toy_vibrator", "label": "Vibrator", "price_cents": 1500 },
+        { "id": "massage_oil", "label": "Massage oil", "price_cents": 1000 },
+        { "id": "fan_chosen_prop", "label": "A prop you choose", "price_cents": 2000 }
+      ]
+    }
+  ],
+  "boundaries": {
+    "platformProhibited": [
+      { "key": "minors", "label": "Anyone under 18, or anything that suggests it" },
+      { "key": "prohibited_roles", "label": "School, student, childlike, family or step-family roles" },
+      { "key": "incest", "label": "Sex between relatives" },
+      { "key": "non_consent", "label": "Anything without clear consent, including pretend, drunk or asleep" },
+      { "key": "bestiality", "label": "Anything involving animals" },
+      { "key": "real_third_parties", "label": "Real people other than Maya, Maya's verified partners and you" },
+      { "key": "unverified_performers", "label": "Anyone on camera who isn't verified as an adult" },
+      { "key": "solicitation", "label": "Meeting in person, or paying for sex off camera" },
+      { "key": "illegal_acts", "label": "Anything else that would be illegal in real life" },
+      { "key": "hate_harassment", "label": "Hate or harassment" }
+    ],
+    "limits": [
+      { "ref": "custom:c1", "text": "Pain, slapping or choking", "mode": "hard_no" },
+      { "ref": "custom:c2", "text": "Showing my face", "mode": "hard_no" },
+      { "ref": "custom:c3", "text": "Filming outdoors", "mode": "hard_no" },
+      { "ref": "checklist:no_political_content", "text": "Anything political", "mode": "hard_no" },
+      { "ref": "custom:c4", "text": "Scenes with my partner, Leo", "mode": "ask_me", "items": ["with_leo", "explicit_couple"] },
+      { "ref": "custom:c5", "text": "Costumes, like a nurse or police uniform", "mode": "ask_me", "items": ["nurse_costume", "police_costume"] },
+      { "ref": "custom:c6", "text": "Props you choose yourself", "mode": "ask_me", "items": ["fan_chosen_prop"] }
+    ]
+  },
+  "startingDraft": {
+    "selections": [
+      { "itemId": "base_3min", "qty": 1 }, { "itemId": "vertical", "qty": 1 }, { "itemId": "vintage_lounge", "qty": 1 },
+      { "itemId": "creator_choice", "qty": 1 }, { "itemId": "standard_greeting", "qty": 1 }, { "itemId": "standard_delivery", "qty": 1 },
+      { "itemId": "solo", "qty": 1 }, { "itemId": "sensual_tease", "qty": 1 }
+    ],
+    "budget_cents": 15000,
+    "fanDisplayName": "Sam"
+  }
+}
