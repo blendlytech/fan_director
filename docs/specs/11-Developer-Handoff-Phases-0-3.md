@@ -41,7 +41,7 @@ Routes: the fan side has `/`, `/ai-director`, `/review`, `/confirmation` and `/s
 
 The "AI Director" today is scripted UI. It has two canned choices ("Richer Setting" and "Longer Video"), and fan notes are recorded but never answered.
 
-Visual ground truth lives in `docs/design-html/`: 01 is the component library, 02–09 are the original screens, 10 is saved ideas, 11 is the mobile menu, 12 is page not found. PDFs are in `docs/design-pdfs/`.
+Visual ground truth lives in `docs/design-html/`: 01 is the component library, 02–09 are the original screens, 10 is saved ideas, 11 is the mobile menu, 12 is page not found, 13 is creator limits (staging design for §5.3). PDFs are in `docs/design-pdfs/`.
 
 ---
 
@@ -142,20 +142,20 @@ Personal formats are encouraged. For example:
 
 #### 5.3.2 The platform hard list
 
-The hard list is fixed by the platform. Creators, fans and the AI cannot edit, remove or hide it. It is always enforced and always shown to fans. It is stored as data (`Boundaries.platformProhibited`) with these stable keys. The owner approves the fan-facing labels (§10).
+The hard list is fixed by the platform. Creators, fans and the AI cannot edit, remove or hide it. It is always enforced and always shown to fans. It is stored as data (`Boundaries.platformProhibited`) with these stable keys. The fan-facing labels are fixed in design 13 and listed in the last column.
 
-| Key | Blocks |
-| --- | --- |
-| `minors` | Anyone under 18, or anything suggesting it: stated ages under 18, school grades, "teen", "barely legal", childlike framing, age play |
-| `prohibited_roles` | Any role in the "not allowed" list in §5.3.1: roles implying anyone under 18 (student, pupil, school uniform or setting, childlike costume or behaviour, "young" age roles), family roles including step-relations, named media characters, and any role used to create a scenario that would be a sexual crime if real. Generic adult status roles (nurse, doctor, police officer and similar) are **allowed** and must not be blocked |
-| `incest` | Sexual content between relatives, real or implied |
-| `non_consent` | Non-consent, including pretend or "consensual non-consent" scenarios; anyone asleep, unconscious, drugged, intoxicated or otherwise unable to consent; coercion or blackmail |
-| `bestiality` | Any sexual content involving animals |
-| `real_third_parties` | Any real, identifiable person other than the creator, the fan and the creator's verified performers: celebrities, exes, coworkers, anyone named or described. This includes impersonation, lookalikes and deepfakes |
-| `unverified_performers` | Anyone appearing who is not a verified adult with a consent record |
-| `solicitation` | Meeting in person, exchanging contact details for an offline encounter, or payment for sex outside the recorded content |
-| `illegal_acts` | Any other act that would be illegal if it really happened, such as drug use or serious injury |
-| `hate_harassment` | Hate speech, or harassment of the creator or anyone else |
+| Key | Blocks | Fan-facing label |
+| --- | --- | --- |
+| `minors` | Anyone under 18, or anything suggesting it: stated ages under 18, school grades, "teen", "barely legal", childlike framing, age play | Anyone under 18, or anything that suggests it |
+| `prohibited_roles` | Any role in the "not allowed" list in §5.3.1: roles implying anyone under 18 (student, pupil, school uniform or setting, childlike costume or behaviour, "young" age roles), family roles including step-relations, named media characters, and any role used to create a scenario that would be a sexual crime if real. Generic adult status roles (nurse, doctor, police officer and similar) are **allowed** and must not be blocked | School, student, childlike, family or step-family roles |
+| `incest` | Sexual content between relatives, real or implied | Sex between relatives |
+| `non_consent` | Non-consent, including pretend or "consensual non-consent" scenarios; anyone asleep, unconscious, drugged, intoxicated or otherwise unable to consent; coercion or blackmail | Anything without clear consent, including pretend, drunk or asleep |
+| `bestiality` | Any sexual content involving animals | Anything involving animals |
+| `real_third_parties` | Any real, identifiable person other than the creator, the fan and the creator's verified performers: celebrities, exes, coworkers, anyone named or described. This includes impersonation, lookalikes and deepfakes | Real people other than [creator], [creator]'s verified partners and you |
+| `unverified_performers` | Anyone appearing who is not a verified adult with a consent record | Anyone on camera who isn't verified as an adult |
+| `solicitation` | Meeting in person, exchanging contact details for an offline encounter, or payment for sex outside the recorded content | Meeting in person, or paying for sex off camera |
+| `illegal_acts` | Any other act that would be illegal if it really happened, such as drug use or serious injury | Anything else that would be illegal in real life |
+| `hate_harassment` | Hate speech, or harassment of the creator or anyone else | Hate or harassment |
 
 #### 5.3.3 Enforcing the hard list
 
@@ -249,7 +249,7 @@ One function renders the fan-facing boundaries text from this object: the hard l
 - Show them **before** the fan starts planning or talks to the AI Director, and again on the review screen before submission. They must not be hidden behind a link, collapsed by default or truncated.
 - One limit per line, as a short sentence a fan understands at a glance: "Maya does not do: …" for hard-no limits, and "Ask Maya first: …" for ask-me limits. Never show internal keys, codes or jargon.
 - Aim for plain everyday wording (roughly a grade 6–8 reading level). A creator's custom limit is shown in the creator's own words.
-- The exact layout needs an owner-approved design (§3 rule 5).
+- **Layout: design 13** (`docs/design-html/13-creator-limits.html`, approved by the owner 2026-09-16, who delegated the design). It covers the entrance panel (A), the AI Director card (B), the in-chat Ask me flag, Hard no notice and hard-list block (C1–C3), the review step (D1–D2) and the creator's flag (E). The hard list is shown in full on the entrance; in the Director it sits behind a link, while the creator's own limits are always in full.
 
 ### 5.4 Adult content: designed for it, launched non-explicit
 
@@ -415,7 +415,7 @@ interface Quote {                  // computed by the server only
 
    Run at least 10 sample conversations against the pilot catalog with the §8 Phase 3 schema (use the owner's test key only if provided; otherwise design the harness and mark it blocked).
 6. Evaluate **hard-list classifiers** (§5.3.3) the same way: custom-category support, terms for adult text, retention, latency, price, and a first run against a draft of the must-block and must-allow sets.
-7. List every UI state Phases 1–3 need that has no design. At minimum: sign-in, "saved" states, AI pending, AI suggestion shown / accepted / rejected, AI unavailable or usage exhausted with the manual fallback, stale quote needing acceptance, custom request pending, hard-list block message, "Ask me" flag (fan and creator views), "Hard no" notice, the plain-English creator limits display, the fan suspension notice, and the safety-case reviewer screen.
+7. List every UI state Phases 1–3 need that has no design. At minimum: sign-in, "saved" states, AI pending, AI suggestion shown / accepted / rejected, AI unavailable or usage exhausted with the manual fallback, stale quote needing acceptance, custom request pending, the fan suspension notice, and the safety-case reviewer screen. (The limits display, Ask me flag, Hard no notice and hard-list block message are already designed in design 13.)
 
 **Gate 0 report:** findings, recommendations with sources, the migration map, the list of needed designs, and open questions.
 
@@ -554,7 +554,6 @@ Do not describe anything as working unless you ran it. Say "not verified" when y
 | AI provider and model | Gate 0 |
 | Auth provider | Gate 0 |
 | AI hard-list classifier | Gate 0 |
-| Fan-facing labels for the hard-list keys (§5.3.2), and the "Ask me" / "Hard no" wording | Phase 2 |
 | Adult creator-limit checklist entries (§5.3.4) | Before adult content is enabled |
 | Hard-list block threshold per fan session (default 3 in 24 hours) | Phase 2 |
 | Counsel review of the child-exploitation reporting process: authorities by country, US NCMEC duties, preservation periods, terms and privacy-policy wording | Before any live fan traffic |
