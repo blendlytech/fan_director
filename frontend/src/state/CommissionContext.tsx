@@ -1,13 +1,8 @@
 import { useCallback, useMemo, useReducer } from 'react'
 import type { ReactNode } from 'react'
 import { CommissionContext, type CommissionValue } from './commission'
-import {
-  BUDGET,
-  INITIAL_DRAFT,
-  buildLineItems,
-  sumOf,
-  type Draft,
-} from '../domain/sceneCard'
+import { BUDGET, buildLineItems, sumOf, type Draft } from '../domain/sceneCard'
+import { INITIAL_STATE, commissionReducer } from './commissionReducer'
 
 /* -------------------------------------------------------------------------- */
 /*  Shared state for the fan journey.                                          */
@@ -17,58 +12,14 @@ import {
 /*  Edit" trip back again. Router state would lose the draft on a refresh or   */
 /*  a direct visit to /review, and would not survive the backwards leg.        */
 /*                                                                            */
-/*  Draft and undo history move together through one reducer, so a change and  */
-/*  the history entry that records it can never fall out of step.              */
+/*  Draft and undo history move together through one reducer — see             */
+/*  commissionReducer.ts.                                                      */
 /*                                                                            */
 /*  This is in-memory only. Nothing is persisted; nothing is sent anywhere.    */
 /* -------------------------------------------------------------------------- */
 
-type CommissionState = {
-  draft: Draft
-  /** Previous drafts, oldest first. The last entry is what undo restores. */
-  history: Draft[]
-}
-
-type Action =
-  | { type: 'commit'; changes: Partial<Draft> }
-  | { type: 'note'; text: string }
-  | { type: 'undo' }
-  | { type: 'reset' }
-
-const INITIAL_STATE: CommissionState = { draft: INITIAL_DRAFT, history: [] }
-
-function reducer(state: CommissionState, action: Action): CommissionState {
-  switch (action.type) {
-    case 'commit':
-      return {
-        draft: { ...state.draft, ...action.changes },
-        history: [...state.history, state.draft],
-      }
-    case 'note': {
-      const text = action.text.trim()
-      if (!text) return state
-      return {
-        draft: {
-          ...state.draft,
-          notes: [...state.draft.notes, { id: Date.now(), text }],
-        },
-        history: [...state.history, state.draft],
-      }
-    }
-    case 'undo': {
-      if (state.history.length === 0) return state
-      return {
-        draft: state.history[state.history.length - 1],
-        history: state.history.slice(0, -1),
-      }
-    }
-    case 'reset':
-      return INITIAL_STATE
-  }
-}
-
 export function CommissionProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
+  const [state, dispatch] = useReducer(commissionReducer, INITIAL_STATE)
 
   const commit = useCallback(
     (changes: Partial<Draft>) => dispatch({ type: 'commit', changes }),
