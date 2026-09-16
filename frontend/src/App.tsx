@@ -5,6 +5,7 @@ import { AIDirector } from './pages/AIDirector'
 import { ReviewScene } from './pages/ReviewScene'
 import { SendConfirmation } from './pages/SendConfirmation'
 import { SavedIdeas } from './pages/SavedIdeas'
+import { NotFound } from './pages/NotFound'
 import { CreatorDashboard } from './pages/CreatorDashboard'
 import { CreatorDetailModal } from './pages/CreatorDetailModal'
 import { AskQuestionModal } from './pages/AskQuestionModal'
@@ -37,6 +38,7 @@ export default function App() {
             <Route path="decline" element={<DeclineConfirmationModal />} />
           </Route>
         </Route>
+        <Route path="*" element={<NotFound />} />
       </Routes>
     </BrowserRouter>
   )

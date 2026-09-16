@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page not found - Maya Atelier</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { serif: ['Cormorant Garamond', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+      colors: { cream: '#FDF8F3', panel: '#FFFFFF', secondary: '#F5F0EB', espresso: '#302720', muted: '#70625C', rose: '#E4A4BD', rosehover: '#D595AE', deeprose: '#84485D', divider: '#DED3CB' },
+      transitionDuration: { '160': '160ms' }
+    }
+  }
+}
+</script>
+<style>
+  body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin: 0; }
+  html { background-color: #FDF8F3; }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
+  .focus-ring:focus-visible { outline: 2px solid #302720; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="bg-cream font-sans text-espresso min-h-screen flex flex-col">
+
+  <!-- Header: same as the shipped fan header. No link is current on this page. -->
+  <header class="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-divider">
+    <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 h-[80px] flex items-center justify-between">
+      <div class="flex items-center gap-4 sm:gap-6">
+        <a href="#collection" id="nav-home-link" class="inline-flex min-h-[44px] items-center font-serif text-2xl sm:text-3xl font-medium tracking-tight focus-ring">Maya Atelier</a>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-secondary text-muted border border-divider">Demo</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#collection" id="nav-collection-link" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Collection</a>
+        <a href="#studio" id="nav-studio-link" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Your studio</a>
+        <a href="#saved" id="nav-saved-link" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Saved ideas</a>
+      </nav>
+      <button type="button" aria-expanded="false" class="md:hidden inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-[12px] px-3 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
+        <iconify-icon icon="lucide:menu" width="18"></iconify-icon>
+        Menu
+      </button>
+    </div>
+  </header>
+
+  <main class="flex-1 w-full max-w-[640px] mx-auto px-4 sm:px-6 py-16 lg:py-24 text-center">
+
+    <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
+      <iconify-icon icon="lucide:map-pin-off" width="28" class="text-deeprose"></iconify-icon>
+    </div>
+
+    <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">Page not found</p>
+    <h1 class="mb-5 text-4xl sm:text-5xl font-semibold leading-tight tracking-tight">This page isn&rsquo;t part of the demo</h1>
+    <p class="mx-auto mb-6 max-w-[520px] text-base leading-relaxed text-muted">
+      There&rsquo;s nothing at this address. Maya Atelier is a design demo with a fixed set of screens, so a mistyped or outdated link ends up here.
+    </p>
+
+    <!-- The address that was requested, so the fan can see what went wrong -->
+    <div class="mx-auto mb-10 inline-flex max-w-full flex-wrap items-baseline justify-center gap-x-2 gap-y-1 rounded-[12px] border border-divider bg-panel px-4 py-2.5">
+      <span class="text-xs text-muted shrink-0">You asked for</span>
+      <code class="font-mono text-sm text-espresso break-all">/creator/request/sarah-smiles</code>
+    </div>
+
+    <div class="flex flex-col sm:flex-row justify-center gap-3 mb-12">
+      <a href="#collection" id="btn-back-to-collection" class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-[12px] bg-rose hover:bg-rosehover px-8 text-base font-medium shadow-sm transition-colors duration-160 focus-ring">
+        Back to collection
+        <iconify-icon icon="lucide:arrow-right" width="18"></iconify-icon>
+      </a>
+      <a href="#studio" id="btn-open-director" class="inline-flex min-h-[48px] items-center justify-center gap-2 rounded-[12px] border border-divider hover:bg-panel px-8 text-base font-medium transition-colors duration-160 focus-ring">
+        Open the Director
+      </a>
+    </div>
+
+    <!-- Other real places, so nobody has to guess an address -->
+    <div class="border-t border-divider pt-8 text-left sm:text-center">
+      <h2 class="mb-4 font-sans text-xs font-semibold uppercase tracking-wider text-muted">Other places in the demo</h2>
+      <ul class="flex flex-col sm:flex-row sm:justify-center gap-1 sm:gap-8">
+        <li>
+          <a href="#saved" id="link-saved-ideas" class="inline-flex min-h-[44px] items-center gap-2 text-sm font-medium underline decoration-divider underline-offset-4 hover:decoration-espresso focus-ring">
+            <iconify-icon icon="lucide:bookmark" width="16" class="text-deeprose"></iconify-icon>
+            Saved ideas
+          </a>
+        </li>
+        <li>
+          <a href="#creator-requests" id="link-creator-queue" class="inline-flex min-h-[44px] items-center gap-2 text-sm font-medium underline decoration-divider underline-offset-4 hover:decoration-espresso focus-ring">
+            <iconify-icon icon="lucide:inbox" width="16" class="text-deeprose"></iconify-icon>
+            Creator request queue
+          </a>
+        </li>
+      </ul>
+      <p class="mt-6 flex items-start sm:items-center sm:justify-center gap-2 text-xs text-muted">
+        <iconify-icon icon="lucide:info" width="14" class="shrink-0 mt-0.5 sm:mt-0"></iconify-icon>
+        Opening an address directly starts a fresh draft. Nothing from before was saved.
+      </p>
+    </div>
+  </main>
+</div>
+</body>
+</html>

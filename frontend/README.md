@@ -30,10 +30,11 @@ These are load-bearing for the project's honesty, not style preferences:
 
 ## Ground truth
 
-- `docs/design-html/` is the visual spec — a component library plus eight HTML
-  drafts of the actual screens (boutique entrance, AI Director, review, send
-  confirmation, creator dashboard, modals). When in doubt about layout or
-  copy, this is what to match.
+- `docs/design-html/` is the visual spec — a component library (01) plus HTML
+  drafts of every screen: boutique entrance, AI Director, review, send
+  confirmation, creator dashboard and modals (02–09), saved ideas (10), the
+  mobile menu (11) and page not found (12). When in doubt about layout or copy,
+  this is what to match.
 - `docs/specs/01-design-context.md` and `02-design-system.md` are reliable and
   worth reading before touching copy, pricing, or styling. `03-developer-handoff.md`
   is reliable for design and page behaviour, but its backend/API/deployment
@@ -92,14 +93,18 @@ Creator side (separate data, no shared draft):
 | `/creator/requests/:id/ask` | Ask a question (modal over detail) |
 | `/creator/requests/:id/decline` | Decline confirmation (modal over detail) |
 
+Any other path (`*`) renders **Page not found** (design `12-page-not-found.html`),
+showing the exact address that was requested and links back into the demo.
+
 ## Hosted demo
 
 <https://fan-director-studio.scmillsc0809.workers.dev> — a static build on
 Cloudflare Workers Static Assets. There is no Worker script and no backend; every
 demo disclaimer ships unchanged. `wrangler.jsonc` sets
 `not_found_handling: "single-page-application"`, so deep links such as
-`/creator/requests/:id/ask` load directly. The fan draft lives in memory, so a
-direct load of `/review` or `/saved` shows the default draft.
+`/creator/requests/:id/ask` load directly, and a genuinely unknown path renders the
+app's own Page not found screen rather than Cloudflare's. The fan draft lives in
+memory, so a direct load of `/review` or `/saved` shows the default draft.
 
 ```bash
 npx wrangler login      # once, interactive
