@@ -4,12 +4,21 @@ import { Header } from '../components/layout/Header'
 import { ProgressTrail } from '../components/layout/ProgressTrail'
 import { Button } from '../components/common/Button'
 import { Icon } from '../components/common/Icon'
-import { cn } from '../lib/cn'
 import { useCommission } from '../state/commission'
 import { BUDGET, DELIVERY_DAYS, currency, settingOf } from '../domain/sceneCard'
 
+/* -------------------------------------------------------------------------- */
+/*  The end of the fan journey — in a demo with no backend.                    */
+/*                                                                            */
+/*  Design draft 08 shows a success screen ("Commission Submitted              */
+/*  Successfully!", an order number, email updates). None of that happens     */
+/*  here, so the screen says plainly that nothing was sent, saved, charged or  */
+/*  assigned a reference. Do not reintroduce a success state without a server  */
+/*  that actually performs the action.                                        */
+/* -------------------------------------------------------------------------- */
+
 export function SendConfirmation() {
-  const [saved, setSaved] = useState(false)
+  const [saveAttempted, setSaveAttempted] = useState(false)
   const { draft, total, difference, overBudget } = useCommission()
 
   const orderDetails = [
@@ -27,29 +36,26 @@ export function SendConfirmation() {
           value: currency.format(difference),
           note: `Under ${currency.format(BUDGET)} budget`,
         },
-    { icon: 'lucide:calendar-clock', label: 'Est. Delivery', value: 'Dec 19', note: `${DELIVERY_DAYS} days post-payment` },
+    // No payment exists, so there is no date to count from — only the rule.
+    { icon: 'lucide:calendar-clock', label: 'Est. Delivery', value: `${DELIVERY_DAYS} days`, note: 'After payment confirmation' },
   ]
 
   const nextSteps = [
     {
       title: '1. Creator Reviews',
-      body: "Maya will review your request within 24-48 hours. She may approve it, propose slight adjustments, or ask for clarification to ensure it's perfect.",
-      active: true,
+      body: "Maya would review your request within 24-48 hours. She could approve it, propose slight adjustments, or ask for clarification.",
     },
     {
       title: '2. Payment Confirmation',
-      body: `Once approved, you'll receive a link to securely complete your payment of ${currency.format(total)}.`,
-      active: false,
+      body: `Only once approved would you receive a link to pay ${currency.format(total)}. This demo takes no payment.`,
     },
     {
       title: '3. Production Begins',
-      body: 'Maya records your custom greeting in the studio.',
-      active: false,
+      body: 'Maya would record your custom greeting in the studio.',
     },
     {
       title: '4. Delivery',
-      body: 'Your final video is delivered securely, typically within 7 days of payment.',
-      active: false,
+      body: `Your final video would be delivered securely, typically within ${DELIVERY_DAYS} days of payment.`,
     },
   ]
 
@@ -63,32 +69,31 @@ export function SendConfirmation() {
         </div>
 
         {/* Header Section */}
-        <div className="mb-12 flex w-full animate-bounce-in flex-col items-center text-center">
-          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-rose/20">
-            <Icon icon="lucide:check" width={36} className="text-rose-deep" />
+        <div className="mb-12 flex w-full flex-col items-center text-center">
+          <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-secondary">
+            <Icon icon="lucide:info" width={36} className="text-espresso" />
           </div>
-          <h1 className="mb-4 font-serif text-[44px] leading-tight text-espresso">
-            Commission Submitted Successfully!
+          <h1 className="mb-4 font-serif text-[36px] leading-tight text-espresso sm:text-[44px]">
+            Nothing was sent to Maya
           </h1>
           <p className="max-w-lg text-base leading-relaxed text-muted">
-            Maya will review your request and confirm final details. You&rsquo;ll receive updates via email when
-            your Scene Card is approved.
+            This is a design demo with no backend. Your Scene Card was not submitted, saved or charged, it has
+            no reference number, and you will not receive any email. Here is what you planned, and what would
+            happen next in the real studio.
           </p>
         </div>
 
-        {/* Order Details Card */}
+        {/* Scene Card summary */}
         <div className="mb-12 w-full overflow-hidden rounded-card border border-divider bg-panel shadow-sm">
           <div className="flex flex-col justify-between gap-4 border-b border-divider bg-cream/30 px-8 py-5 sm:flex-row sm:items-center">
             <div>
               <p className="mb-1 text-xs font-medium uppercase tracking-wider text-muted">Request Reference</p>
-              <p className="inline-block rounded border border-divider bg-cream px-2 py-1 font-mono text-sm text-espresso">
-                Order #MA-2024-001847
-              </p>
+              <p className="text-sm text-espresso">None — this request was not submitted</p>
             </div>
             <div className="sm:text-right">
               <span className="inline-flex items-center gap-1.5 rounded-full border border-divider bg-cream px-3 py-1 text-xs font-medium text-muted">
-                <Icon icon="lucide:clock" width={10} />
-                Awaiting Review
+                <Icon icon="lucide:file-pen-line" width={10} />
+                Draft only · Not sent
               </span>
             </div>
           </div>
@@ -111,23 +116,17 @@ export function SendConfirmation() {
           </div>
         </div>
 
-        {/* Next Steps Timeline */}
+        {/* What the real product would do next */}
         <div className="mx-auto mb-16 w-full max-w-2xl">
-          <h3 className="mb-8 text-center font-serif text-2xl font-medium text-espresso">What happens next?</h3>
+          <h3 className="mb-8 text-center font-serif text-2xl font-medium text-espresso">
+            What would happen next in the real studio
+          </h3>
 
           <div className="relative ml-3 space-y-8 border-l border-divider pb-4 sm:ml-6">
             {nextSteps.map((step) => (
-              <div key={step.title} className={cn('relative pl-8', !step.active && 'opacity-60')}>
-                <div
-                  className={cn(
-                    'absolute -left-[9px] top-1 h-4 w-4 rounded-full border-4',
-                    step.active ? 'border-cream bg-rose' : 'border-divider bg-panel',
-                  )}
-                />
-                <h4 className={cn('mb-1 text-base text-espresso', step.active ? 'font-semibold' : 'font-medium')}>
-                  {step.title}
-                  {!step.active && <span className="sr-only"> (upcoming)</span>}
-                </h4>
+              <div key={step.title} className="relative pl-8">
+                <div className="absolute -left-[9px] top-1 h-4 w-4 rounded-full border-4 border-divider bg-panel" />
+                <h4 className="mb-1 text-base font-medium text-espresso">{step.title}</h4>
                 <p className="text-sm leading-relaxed text-muted">{step.body}</p>
               </div>
             ))}
@@ -138,12 +137,17 @@ export function SendConfirmation() {
         <div className="flex w-full max-w-sm flex-col gap-4">
           <Button
             variant="primary"
-            icon={saved ? 'lucide:bookmark-check' : 'lucide:bookmark'}
-            aria-pressed={saved}
-            onClick={() => setSaved((current) => !current)}
+            icon="lucide:bookmark"
+            aria-describedby="save-status"
+            onClick={() => setSaveAttempted(true)}
           >
-            {saved ? 'Saved to Profile' : 'Save Idea to Profile'}
+            Save Idea to Profile
           </Button>
+          <p id="save-status" role="status" className="text-center text-sm text-muted">
+            {saveAttempted
+              ? 'Not saved — this demo has no profile or storage.'
+              : ''}
+          </p>
           <Link
             to="/"
             className="flex h-[48px] w-full items-center justify-center rounded-card font-medium text-espresso transition-colors duration-160 hover:bg-black/5 focus-ring"

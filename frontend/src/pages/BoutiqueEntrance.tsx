@@ -4,7 +4,7 @@ import { Button } from '../components/common/Button'
 import { Icon } from '../components/common/Icon'
 import { SceneImage } from '../components/common/SceneImage'
 import { useCommission } from '../state/commission'
-import type { SettingId } from '../domain/sceneCard'
+import { money, priceRangeOf, type SettingId } from '../domain/sceneCard'
 
 type ThemeCard = {
   /** Which catalog setting this card starts the fan's draft on. */
@@ -13,7 +13,6 @@ type ThemeCard = {
   alt: string
   title: string
   description: string
-  priceRange: string
 }
 
 const themeCards: ThemeCard[] = [
@@ -25,7 +24,6 @@ const themeCards: ThemeCard[] = [
     title: 'Vintage Lounge Greeting',
     description:
       "A cozy, cinematic atmosphere with warm lighting. Perfect for personalized messages and intimate announcements.",
-    priceRange: 'From $90 – $150',
   },
   {
     image:
@@ -35,7 +33,6 @@ const themeCards: ThemeCard[] = [
     title: 'Floral Studio Scene',
     description:
       'Bright, airy, and surrounded by seasonal blooms. Ideal for cheerful celebrations and uplifting messages.',
-    priceRange: 'From $120 – $180',
   },
   {
     image:
@@ -45,9 +42,14 @@ const themeCards: ThemeCard[] = [
     title: 'Intimate Backstage',
     description:
       'Raw, candid, and authentic. A glimpse behind the scenes for a more personal, unpolished connection.',
-    priceRange: 'From $80 – $130',
   },
 ]
+
+/** "From $145 – $205": the cheapest and dearest build the Director allows. */
+function formatRange(setting: SettingId) {
+  const { min, max } = priceRangeOf(setting)
+  return `From ${money(min)} – ${money(max)}`
+}
 
 export function BoutiqueEntrance() {
   const navigate = useNavigate()
@@ -162,7 +164,9 @@ export function BoutiqueEntrance() {
                   </h3>
                   <p className="mb-6 flex-1 text-sm text-muted">{card.description}</p>
                   <div className="mb-6 flex items-center justify-between">
-                    <span className="text-sm font-medium text-espresso">{card.priceRange}</span>
+                    <span className="text-sm font-medium text-espresso">
+                      {formatRange(card.setting)}
+                    </span>
                   </div>
                   <Button
                     size="sm"

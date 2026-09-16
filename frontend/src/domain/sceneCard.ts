@@ -249,6 +249,26 @@ export function previewTotal(draft: Draft, changes: Partial<Draft>): number {
   return sumOf(buildLineItems({ ...draft, ...changes }))
 }
 
+/** Every draft a fan can actually build on one setting: each focus, with and
+ *  without the extra minute. Notes never change the price. */
+export function draftsFor(setting: SettingId): Draft[] {
+  return FOCUS_OPTIONS.flatMap((focus) =>
+    [false, true].map((extraMinute) => ({
+      ...INITIAL_DRAFT,
+      setting,
+      focus: focus.id,
+      extraMinute,
+    })),
+  )
+}
+
+/** Cheapest and dearest buildable total for a setting — the entrance cards'
+ *  price range, derived rather than written as copy. */
+export function priceRangeOf(setting: SettingId): { min: number; max: number } {
+  const totals = draftsFor(setting).map((draft) => sumOf(buildLineItems(draft)))
+  return { min: Math.min(...totals), max: Math.max(...totals) }
+}
+
 /* ---------------------------- Presentation -------------------------------- */
 
 /** Whole dollars: the Director's live chips and budget pills read "$145". */
