@@ -1,2 +1,8 @@
 .superdesign
 .claude/scheduled_tasks.lock
+
+# Local secrets: never commit (doc 11 §3 rule 7)
+.dev.vars
+.dev.vars.*
+.env
+.env.*
