@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safety case review - Maya Atelier</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { serif: ['Cormorant Garamond', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+      colors: {
+        cream: '#FDF8F3', panel: '#FFFFFF', secondary: '#F5F0EB', espresso: '#302720', muted: '#70625C',
+        rose: '#E4A4BD', deeprose: '#84485D', divider: '#DED3CB',
+        alertbg: '#FBECE9', alertborder: '#EFC2BA', alertink: '#9E3B2C',
+        pendbg: '#F8EFE4', pendborder: '#E3C8A6', pendink: '#7A5530',
+        okbg: '#EEF4EC', okborder: '#C4D9BF', okink: '#4F7A48'
+      },
+      transitionDuration: { '160': '160ms' }
+    }
+  }
+}
+</script>
+<style>
+  body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin: 0; }
+  html { background-color: #FDF8F3; }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
+  .focus-ring:focus-visible { outline: 2px solid #302720; outline-offset: 2px; }
+  .hidden-text { filter: blur(6px); user-select: none; }
+</style>
+</head>
+<body>
+<div class="bg-cream font-sans text-espresso min-h-screen">
+
+  <!--
+    DESIGN 15: Safety case review (doc 11 §5.3.3). Platform staff only, never
+    creators. Access-restricted, and every view is written to the case's audit trail.
+
+    Rules this design encodes:
+    - Case text is hidden until the reviewer chooses to show it, for reviewer wellbeing.
+      Showing it is logged.
+    - The detector's hit is never enough: either decision needs the reviewer to have
+      shown and read the full text.
+    - "Dismiss" needs a reason, and restores the fan's access.
+    - Sending a report is OFF until counsel signs off. The screen says so plainly
+      and never implies a report was sent.
+    - No real case text appears in this design. Placeholders only.
+  -->
+
+  <header class="sticky top-0 z-40 bg-espresso text-cream">
+    <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 h-[64px] flex items-center justify-between gap-4">
+      <div class="flex items-center gap-3 sm:gap-4 min-w-0">
+        <span class="font-serif text-xl sm:text-2xl font-medium tracking-tight">Maya Atelier</span>
+        <span class="hidden sm:inline text-cream/60">/</span>
+        <span class="hidden sm:inline text-sm font-medium">Safety review</span>
+        <span class="inline-flex items-center gap-1 rounded px-2 py-0.5 text-[10px] sm:text-xs font-medium bg-cream/10 border border-cream/20">
+          <iconify-icon icon="lucide:lock" width="12" aria-hidden="true"></iconify-icon>Restricted
+        </span>
+      </div>
+      <span class="text-xs sm:text-sm text-cream/80 shrink-0">Signed in as Reviewer 1</span>
+    </div>
+  </header>
+
+  <main class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 py-8 lg:py-10">
+
+    <div class="mb-6">
+      <h1 class="text-3xl sm:text-4xl font-semibold tracking-tight">Safety cases</h1>
+      <p class="mt-1 text-sm text-muted">Cases opened when a request may involve a child. A person decides every case.</p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-6">
+
+      <!-- ============================ QUEUE ============================ -->
+      <aside aria-label="Case queue">
+        <div role="tablist" class="mb-4 flex gap-1 rounded-[12px] bg-secondary p-1 text-sm">
+          <button role="tab" aria-selected="true" class="flex-1 min-h-[40px] rounded-[10px] bg-panel font-medium shadow-sm focus-ring">Open <span class="text-muted">2</span></button>
+          <button role="tab" aria-selected="false" class="flex-1 min-h-[40px] rounded-[10px] text-muted hover:text-espresso focus-ring">Confirmed</button>
+          <button role="tab" aria-selected="false" class="flex-1 min-h-[40px] rounded-[10px] text-muted hover:text-espresso focus-ring">Dismissed</button>
+        </div>
+
+        <ul class="space-y-3">
+          <li>
+            <a href="#case" aria-current="true" class="block rounded-[12px] border-2 border-espresso bg-panel p-4 focus-ring">
+              <div class="mb-2 flex items-center justify-between">
+                <span class="font-mono text-sm font-medium">SC-0142</span>
+                <span class="text-xs text-muted">18 min ago</span>
+              </div>
+              <p class="mb-2 text-sm font-medium">Anyone under 18</p>
+              <div class="flex flex-wrap gap-2 text-xs">
+                <span class="rounded-full border border-alertborder bg-alertbg px-2 py-0.5 text-alertink">Open</span>
+                <span class="rounded-full border border-divider bg-secondary px-2 py-0.5 text-muted">Fan paused</span>
+                <span class="rounded-full border border-divider bg-secondary px-2 py-0.5 text-muted">Rules layer</span>
+              </div>
+            </a>
+          </li>
+          <li>
+            <a href="#case" class="block rounded-[12px] border border-divider bg-panel p-4 hover:shadow-md transition-shadow duration-160 focus-ring">
+              <div class="mb-2 flex items-center justify-between">
+                <span class="font-mono text-sm font-medium">SC-0141</span>
+                <span class="text-xs text-muted">2 h ago</span>
+              </div>
+              <p class="mb-2 text-sm font-medium">Anyone under 18</p>
+              <div class="flex flex-wrap gap-2 text-xs">
+                <span class="rounded-full border border-alertborder bg-alertbg px-2 py-0.5 text-alertink">Open</span>
+                <span class="rounded-full border border-divider bg-secondary px-2 py-0.5 text-muted">Fan paused</span>
+                <span class="rounded-full border border-divider bg-secondary px-2 py-0.5 text-muted">Classifier</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+        <p class="mt-4 text-xs text-muted">Oldest cases first. Fans stay paused until their case is decided.</p>
+      </aside>
+
+      <!-- ============================ CASE ============================ -->
+      <section id="case" aria-labelledby="case-title" class="space-y-6 min-w-0">
+
+        <div class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
+          <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+            <div>
+              <h2 id="case-title" class="font-mono text-xl font-medium">SC-0142</h2>
+              <p class="text-sm text-muted">Opened automatically on 16 Sep 2026 at 14:02 UTC</p>
+            </div>
+            <span class="self-start rounded-full border border-alertborder bg-alertbg px-3 py-1 text-sm font-medium text-alertink">Open · needs a decision</span>
+          </div>
+          <p class="mt-4 flex items-start gap-2 text-sm">
+            <iconify-icon icon="lucide:archive" width="16" class="mt-0.5 shrink-0 text-muted" aria-hidden="true"></iconify-icon>
+            Evidence is preserved. Nothing in this case can be deleted while it is open.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
+          <!-- What triggered it -->
+          <div class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
+            <h3 class="mb-4 font-sans text-base font-semibold">What opened this case</h3>
+            <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+              <dt class="text-muted">Rule</dt><dd>Anyone under 18 <span class="font-mono text-xs text-muted">minors</span></dd>
+              <dt class="text-muted">Caught by</dt><dd>Rules layer <span class="font-mono text-xs text-muted">v2026.09.1</span></dd>
+              <dt class="text-muted">Pattern</dt><dd>A stated age under 18 next to an age word</dd>
+              <dt class="text-muted">Where</dt><dd>Message to the AI Director</dd>
+              <dt class="text-muted">Creator</dt><dd>Maya Atelier. Never received it.</dd>
+            </dl>
+          </div>
+
+          <!-- Fan -->
+          <div class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
+            <h3 class="mb-4 font-sans text-base font-semibold">Fan</h3>
+            <dl class="grid grid-cols-[auto_1fr] gap-x-4 gap-y-2 text-sm">
+              <dt class="text-muted">Account</dt><dd class="font-mono text-xs break-all">fan_7Q2K9M4X</dd>
+              <dt class="text-muted">Joined</dt><dd>3 Sep 2026</dd>
+              <dt class="text-muted">Age check</dt><dd>Verified with ID</dd>
+              <dt class="text-muted">Location</dt><dd>Ohio, United States <span class="text-muted">(from IP address)</span></dd>
+              <dt class="text-muted">IP address</dt><dd class="font-mono text-xs">203.0.113.24</dd>
+              <dt class="text-muted">History</dt><dd>No earlier cases. 1 earlier block (family roles, 9 Sep).</dd>
+              <dt class="text-muted">Status</dt><dd>Paused since 14:02 UTC</dd>
+            </dl>
+          </div>
+        </div>
+
+        <!-- Case text, hidden by default -->
+        <div class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
+          <div class="mb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <h3 class="font-sans text-base font-semibold">Request and conversation</h3>
+            <span class="text-xs text-muted">6 messages · flagged message marked</span>
+          </div>
+
+          <div class="relative overflow-hidden rounded-[12px] border border-divider bg-secondary">
+            <div class="hidden-text space-y-3 p-5 text-sm" aria-hidden="true">
+              <p>Placeholder conversation line one for layout only.</p>
+              <p>Placeholder conversation line two for layout only.</p>
+              <p class="border-l-4 border-alertborder pl-3">Placeholder flagged message for layout only.</p>
+              <p>Placeholder conversation line four for layout only.</p>
+            </div>
+            <div class="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-secondary/70 p-4 text-center">
+              <iconify-icon icon="lucide:eye-off" width="24" aria-hidden="true"></iconify-icon>
+              <p class="max-w-[420px] text-sm">This text may be disturbing. It stays hidden until you choose to show it. Showing it is recorded.</p>
+              <button type="button" class="inline-flex min-h-[44px] items-center gap-2 rounded-[12px] bg-espresso px-5 text-sm font-medium text-cream hover:bg-black transition-colors duration-160 focus-ring">
+                <iconify-icon icon="lucide:eye" width="16" aria-hidden="true"></iconify-icon>
+                Show case text
+              </button>
+            </div>
+          </div>
+          <p class="mt-3 text-xs text-muted">Take a break whenever you need one. Cases wait; the fan stays paused.</p>
+        </div>
+
+        <!-- Decision -->
+        <form class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6" aria-labelledby="decide-title">
+          <h3 id="decide-title" class="mb-1 font-sans text-base font-semibold">Your decision</h3>
+          <p class="mb-5 text-sm text-muted">Near-misses happen, such as an adult mentioning a birthday or a school they went to. Read the whole conversation before deciding.</p>
+
+          <fieldset class="space-y-3">
+            <legend class="sr-only">Decision</legend>
+            <label class="flex items-start gap-3 rounded-[12px] border border-divider p-4 cursor-pointer hover:bg-secondary transition-colors duration-160">
+              <input type="radio" name="decision" class="mt-1 h-4 w-4 accent-espresso">
+              <span>
+                <span class="block text-sm font-semibold">Confirm: this asks for a child, or for someone to act as a child</span>
+                <span class="block text-sm text-muted">The fan&rsquo;s account is closed and a report is prepared.</span>
+              </span>
+            </label>
+            <label class="flex items-start gap-3 rounded-[12px] border-2 border-espresso p-4 cursor-pointer">
+              <input type="radio" name="decision" checked class="mt-1 h-4 w-4 accent-espresso">
+              <span>
+                <span class="block text-sm font-semibold">Dismiss: not a violation</span>
+                <span class="block text-sm text-muted">The fan&rsquo;s access comes back and they see &ldquo;Your account is active again&rdquo;.</span>
+              </span>
+            </label>
+          </fieldset>
+
+          <!-- shown when Dismiss is chosen -->
+          <div class="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label for="reason" class="mb-1 block text-sm font-medium">Reason <span class="text-muted font-normal">(required)</span></label>
+              <select id="reason" class="w-full min-h-[44px] rounded-[12px] border border-divider bg-panel px-3 text-sm focus-ring">
+                <option>Choose a reason</option>
+                <option>Near-miss: an adult&rsquo;s age or a past event</option>
+                <option>Detector mistake</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="note" class="mb-1 block text-sm font-medium">Note <span class="text-muted font-normal">(optional)</span></label>
+              <input id="note" type="text" class="w-full min-h-[44px] rounded-[12px] border border-divider bg-panel px-3 text-sm focus-ring" placeholder="Anything the next reviewer should know">
+            </div>
+          </div>
+
+          <label class="mt-5 flex items-start gap-3 text-sm">
+            <input type="checkbox" disabled class="mt-0.5 h-4 w-4 accent-espresso">
+            <span class="text-muted">I have read the full case text. <span class="block text-xs">Available after you choose &ldquo;Show case text&rdquo;.</span></span>
+          </label>
+
+          <button type="button" disabled class="mt-5 inline-flex w-full sm:w-auto min-h-[48px] items-center justify-center rounded-[12px] bg-secondary px-6 text-base font-medium text-muted cursor-not-allowed">
+            Record decision
+          </button>
+        </form>
+
+        <!-- Audit trail -->
+        <div class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
+          <h3 class="mb-4 font-sans text-base font-semibold">Case history</h3>
+          <ol class="space-y-2 text-sm">
+            <li class="grid grid-cols-[88px_1fr] gap-3"><span class="font-mono text-xs text-muted pt-0.5">14:02 UTC</span>Case opened automatically by the rules layer</li>
+            <li class="grid grid-cols-[88px_1fr] gap-3"><span class="font-mono text-xs text-muted pt-0.5">14:02 UTC</span>Fan paused; the creator was not sent anything</li>
+            <li class="grid grid-cols-[88px_1fr] gap-3"><span class="font-mono text-xs text-muted pt-0.5">14:20 UTC</span>Reviewer 1 opened the case</li>
+          </ol>
+        </div>
+      </section>
+    </div>
+
+    <!-- ============================================================
+         AFTER CONFIRMING: the report panel replaces the decision form.
+         ============================================================ -->
+    <section aria-labelledby="after-label" class="mt-16 lg:ml-[344px]">
+      <p id="after-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">State 2 · After &ldquo;Confirm&rdquo;, the report panel replaces the decision form</p>
+
+      <div class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
+        <div class="mb-5 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3">
+          <div>
+            <h3 class="font-sans text-base font-semibold">Report</h3>
+            <p class="text-sm text-muted">Confirmed by Reviewer 1 at 14:31 UTC. The fan&rsquo;s account is closed.</p>
+          </div>
+          <span class="self-start rounded-full border border-pendborder bg-pendbg px-3 py-1 text-sm font-medium text-pendink">Not sent</span>
+        </div>
+
+        <div class="mb-5 flex items-start gap-3 rounded-[12px] border border-pendborder bg-pendbg p-4" role="note">
+          <iconify-icon icon="lucide:scale" width="20" class="mt-0.5 shrink-0 text-pendink" aria-hidden="true"></iconify-icon>
+          <p class="text-sm leading-relaxed"><span class="font-semibold">Sending is turned off.</span> Reports can&rsquo;t be sent until a lawyer has approved the reporting process. The report below is saved and ready.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">Send to</p>
+            <ul class="space-y-2 text-sm">
+              <li class="flex items-start gap-2"><iconify-icon icon="lucide:building-2" width="16" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>Local authorities for Ohio, United States</li>
+              <li class="flex items-start gap-2"><iconify-icon icon="lucide:shield" width="16" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon><span>NCMEC CyberTipline <span class="text-muted">(US; required if the law applies)</span></span></li>
+            </ul>
+          </div>
+          <div>
+            <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">Included</p>
+            <ul class="space-y-2 text-sm">
+              <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="mt-0.5 shrink-0 text-okink" aria-hidden="true"></iconify-icon>The fantasy request and full conversation</li>
+              <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="mt-0.5 shrink-0 text-okink" aria-hidden="true"></iconify-icon>Account, age-check result and join date</li>
+              <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="mt-0.5 shrink-0 text-okink" aria-hidden="true"></iconify-icon>IP address, browser details and timestamps</li>
+              <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="mt-0.5 shrink-0 text-okink" aria-hidden="true"></iconify-icon>Case history</li>
+            </ul>
+          </div>
+        </div>
+
+        <button type="button" disabled class="mt-6 inline-flex w-full sm:w-auto min-h-[48px] items-center justify-center gap-2 rounded-[12px] bg-secondary px-6 text-base font-medium text-muted cursor-not-allowed">
+          <iconify-icon icon="lucide:send" width="18" aria-hidden="true"></iconify-icon>
+          Send report
+        </button>
+      </div>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>

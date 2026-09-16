@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Account paused - Maya Atelier</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { serif: ['Cormorant Garamond', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+      colors: { cream: '#FDF8F3', panel: '#FFFFFF', secondary: '#F5F0EB', espresso: '#302720', muted: '#70625C', rose: '#E4A4BD', rosehover: '#D595AE', deeprose: '#84485D', divider: '#DED3CB', okink: '#4F7A48', okbg: '#EEF4EC', okborder: '#C4D9BF' },
+      transitionDuration: { '160': '160ms' }
+    }
+  }
+}
+</script>
+<style>
+  body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin: 0; }
+  html { background-color: #FDF8F3; }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
+  .focus-ring:focus-visible { outline: 2px solid #302720; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="bg-cream font-sans text-espresso min-h-screen">
+
+  <!--
+    DESIGN 14: Fan account paused / restored / closed (doc 11 §5.3.3).
+    Staging design. A `minors` hit suspends the fan's AI access and submissions
+    until a person reviews the safety case (design 15).
+
+    Copy rules this design encodes:
+    - Calm and factual. Never accuse, never quote or describe what was sent.
+    - Never mention reporting or authorities. Whether a fan is told about a report
+      is a counsel decision (doc 11 §10). The terms of service say reporting happens.
+    - Never promise a review time.
+    - Say plainly what still works and that nothing reached the creator.
+  -->
+
+  <header class="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-divider">
+    <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 h-[80px] flex items-center justify-between">
+      <div class="flex items-center gap-4 sm:gap-6">
+        <a href="#collection" class="inline-flex min-h-[44px] items-center font-serif text-2xl sm:text-3xl font-medium tracking-tight focus-ring">Maya Atelier</a>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-secondary text-muted border border-divider">Staging design</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#collection" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Collection</a>
+        <a href="#studio" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Your studio</a>
+        <a href="#saved" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Saved ideas</a>
+      </nav>
+      <button type="button" aria-expanded="false" class="md:hidden inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-[12px] px-3 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
+        <iconify-icon icon="lucide:menu" width="18"></iconify-icon>
+        Menu
+      </button>
+    </div>
+  </header>
+
+  <!-- ============================================================
+       B. PAGE BANNER: on every fan page while paused, directly under the
+       header. Not dismissible. Shown here in place, as it would appear.
+       ============================================================ -->
+  <div role="status" class="border-b border-divider bg-secondary">
+    <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 py-3 flex items-start sm:items-center gap-3 text-sm">
+      <iconify-icon icon="lucide:pause-circle" width="18" class="mt-0.5 sm:mt-0 shrink-0" aria-hidden="true"></iconify-icon>
+      <p><span class="font-semibold">Your account is paused while something you sent is reviewed.</span> You can browse, but you can&rsquo;t use the AI Director or send requests for now.</p>
+    </div>
+  </div>
+
+  <main class="max-w-[1120px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-20">
+
+    <p class="font-mono text-xs uppercase tracking-wider text-muted">B · The banner above appears on every fan page while the account is paused</p>
+
+    <!-- ============================================================
+         A. AI DIRECTOR: immediately after the blocked message.
+         The chat input is replaced by this panel. Earlier messages stay
+         visible above it; the draft Scene Card stays, read-only.
+         ============================================================ -->
+    <section aria-labelledby="a-label">
+      <p id="a-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A · AI Director, in place of the message box</p>
+
+      <div class="max-w-[640px] rounded-[12px] border border-divider bg-panel p-6 sm:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+        <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
+          <iconify-icon icon="lucide:pause" width="22" class="text-deeprose" aria-hidden="true"></iconify-icon>
+        </div>
+        <h2 class="mb-3 text-3xl sm:text-4xl font-semibold leading-tight tracking-tight">Your account is paused</h2>
+        <p class="mb-6 text-base leading-relaxed text-muted">
+          Something you sent needs to be checked against the rules for everyone on Maya Atelier. A person will review it. Nothing was shared with Maya.
+        </p>
+
+        <div class="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="rounded-[12px] bg-secondary p-4">
+            <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">Paused for now</p>
+            <ul class="space-y-2 text-sm">
+              <li class="flex items-start gap-2"><iconify-icon icon="lucide:minus-circle" width="16" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>Talking to the AI Director</li>
+              <li class="flex items-start gap-2"><iconify-icon icon="lucide:minus-circle" width="16" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>Sending requests to creators</li>
+            </ul>
+          </div>
+          <div class="rounded-[12px] bg-secondary p-4">
+            <p class="mb-2 text-xs font-semibold uppercase tracking-wider text-muted">Still works</p>
+            <ul class="space-y-2 text-sm">
+              <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="mt-0.5 shrink-0 text-okink" aria-hidden="true"></iconify-icon>Browsing the collection</li>
+              <li class="flex items-start gap-2"><iconify-icon icon="lucide:check" width="16" class="mt-0.5 shrink-0 text-okink" aria-hidden="true"></iconify-icon>Your saved ideas are kept</li>
+            </ul>
+          </div>
+        </div>
+
+        <p class="mb-6 text-sm leading-relaxed">
+          <span class="font-semibold">You don&rsquo;t need to do anything.</span> If the review finds no problem, your account comes back on its own and we&rsquo;ll tell you here.
+        </p>
+
+        <div class="flex flex-col sm:flex-row gap-3">
+          <a href="#collection" class="inline-flex min-h-[48px] items-center justify-center rounded-[12px] border border-divider hover:bg-secondary px-6 text-base font-medium transition-colors duration-160 focus-ring">Back to collection</a>
+          <a href="#rules" class="inline-flex min-h-[48px] items-center justify-center gap-2 px-2 text-base font-medium underline decoration-divider underline-offset-4 hover:decoration-espresso focus-ring">Read the rules for everyone</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- A2. Review Scene Card while paused -->
+    <section aria-labelledby="a2-label">
+      <p id="a2-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A2 · Review Scene Card while paused, in place of the send area</p>
+      <div class="max-w-[420px] rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
+        <button type="button" disabled aria-describedby="a2-why" class="flex w-full min-h-[48px] items-center justify-center rounded-[12px] bg-secondary px-6 text-base font-medium text-muted cursor-not-allowed">
+          Send to Creator
+        </button>
+        <p id="a2-why" class="mt-3 flex items-start gap-2 text-sm text-muted">
+          <iconify-icon icon="lucide:pause-circle" width="16" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>
+          Sending is paused while your account is reviewed. This Scene Card is kept.
+        </p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         C. RESTORED: shown once, on the next visit after a dismissed case.
+         ============================================================ -->
+    <section aria-labelledby="c-label">
+      <p id="c-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">C · Review found no problem, shown once on the next visit</p>
+      <div role="status" class="max-w-[640px] flex items-start gap-4 rounded-[12px] border border-okborder bg-okbg p-5 sm:p-6">
+        <iconify-icon icon="lucide:circle-check" width="24" class="mt-0.5 shrink-0 text-okink" aria-hidden="true"></iconify-icon>
+        <div>
+          <h2 class="mb-1 font-sans text-base font-semibold">Your account is active again</h2>
+          <p class="mb-4 text-sm leading-relaxed">We checked what you sent and found no problem. You can use the AI Director and send requests again. Sorry for the wait.</p>
+          <a href="#studio" class="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[12px] bg-rose hover:bg-rosehover px-5 text-sm font-medium shadow-sm transition-colors duration-160 focus-ring">
+            Back to your studio
+            <iconify-icon icon="lucide:arrow-right" width="16" aria-hidden="true"></iconify-icon>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         D. CLOSED: after a confirmed case. Full page, replaces all fan pages.
+         ============================================================ -->
+    <section aria-labelledby="d-label">
+      <p id="d-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">D · Review confirmed a violation, full page on every fan route</p>
+      <div class="max-w-[640px] rounded-[12px] border border-divider bg-panel p-6 sm:p-10 text-center">
+        <div class="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-secondary">
+          <iconify-icon icon="lucide:lock" width="26" class="text-espresso" aria-hidden="true"></iconify-icon>
+        </div>
+        <h2 class="mb-4 text-3xl sm:text-4xl font-semibold leading-tight tracking-tight">Your account has been closed</h2>
+        <p class="mx-auto mb-6 max-w-[480px] text-base leading-relaxed text-muted">
+          A review found that something you sent broke the rules for everyone on Maya Atelier. You can no longer use the AI Director or send requests.
+        </p>
+        <a href="#terms" class="inline-flex min-h-[44px] items-center text-sm font-medium underline decoration-divider underline-offset-4 hover:decoration-espresso focus-ring">Read the terms of service</a>
+      </div>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>

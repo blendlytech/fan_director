@@ -41,7 +41,7 @@ Routes: the fan side has `/`, `/ai-director`, `/review`, `/confirmation` and `/s
 
 The "AI Director" today is scripted UI. It has two canned choices ("Richer Setting" and "Longer Video"), and fan notes are recorded but never answered.
 
-Visual ground truth lives in `docs/design-html/`: 01 is the component library, 02–09 are the original screens, 10 is saved ideas, 11 is the mobile menu, 12 is page not found, 13 is creator limits (staging design for §5.3). PDFs are in `docs/design-pdfs/`.
+Visual ground truth lives in `docs/design-html/`: 01 is the component library, 02–09 are the original screens, 10 is saved ideas, 11 is the mobile menu, 12 is page not found, 13 is creator limits, 14 is the fan's paused, restored and closed account states, 15 is the safety-case review screen (13–15 are staging designs for §5.3). PDFs are in `docs/design-pdfs/`.
 
 ---
 
@@ -195,7 +195,7 @@ Manual catalog selection keeps working. Never skip the check.
   4. A confirmed case is reported to the fan's local authorities with the request. In the US, apparent child sexual abuse material also carries a legal duty to report to NCMEC's CyberTipline and to preserve the material. Counsel confirms the channels, preservation periods and country-by-country process before live traffic (§10).
   5. The fan terms of service and privacy policy must say plainly that this happens.
 
-  In Phases 0–3, build the `safety_case` record, the suspension and the tests. The reviewer screen needs a design first (§3 rule 5). Sending reports is out of scope until counsel signs off.
+  In Phases 0–3, build the `safety_case` record, the suspension and the tests. The fan-facing states follow design 14, and the reviewer screen follows design 15. Sending reports is out of scope until counsel signs off.
 
 **Tests** (rules layer at Gate 2, classifier and AI output at Gate 3):
 
@@ -415,7 +415,7 @@ interface Quote {                  // computed by the server only
 
    Run at least 10 sample conversations against the pilot catalog with the §8 Phase 3 schema (use the owner's test key only if provided; otherwise design the harness and mark it blocked).
 6. Evaluate **hard-list classifiers** (§5.3.3) the same way: custom-category support, terms for adult text, retention, latency, price, and a first run against a draft of the must-block and must-allow sets.
-7. List every UI state Phases 1–3 need that has no design. At minimum: sign-in, "saved" states, AI pending, AI suggestion shown / accepted / rejected, AI unavailable or usage exhausted with the manual fallback, stale quote needing acceptance, custom request pending, the fan suspension notice, and the safety-case reviewer screen. (The limits display, Ask me flag, Hard no notice and hard-list block message are already designed in design 13.)
+7. List every UI state Phases 1–3 need that has no design. At minimum: sign-in, "saved" states, AI pending, AI suggestion shown / accepted / rejected, AI unavailable or usage exhausted with the manual fallback, stale quote needing acceptance, custom request pending, and anything else Phase 0 finds. (Already designed: the limits display, Ask me flag, Hard no notice and hard-list block message in design 13; the paused, restored and closed account states in design 14; the safety-case review screen in design 15.)
 
 **Gate 0 report:** findings, recommendations with sources, the migration map, the list of needed designs, and open questions.
 
@@ -557,6 +557,7 @@ Do not describe anything as working unless you ran it. Say "not verified" when y
 | Adult creator-limit checklist entries (§5.3.4) | Before adult content is enabled |
 | Hard-list block threshold per fan session (default 3 in 24 hours) | Phase 2 |
 | Counsel review of the child-exploitation reporting process: authorities by country, US NCMEC duties, preservation periods, terms and privacy-policy wording | Before any live fan traffic |
+| Whether a fan is ever told about a report (design 14 deliberately says nothing about reporting) | Before any live fan traffic |
 | Fan identity needed to report a case (fan accounts, age or ID verification) | Before any live fan traffic |
 | Wording of the unified boundaries text | Phase 2 |
 | Pilot creator, real prices and budget handling (is a fan budget required?) | Phase 2 |
