@@ -1,0 +1,114 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ask Question Modal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        cream: '#FDF8F3',
+                        panel: '#FFFFFF',
+                        espresso: '#302720',
+                        muted: '#70625C',
+                        rose: '#E4A4BD',
+                        deeprose: '#84485D',
+                        divider: '#DED3CB'
+                    },
+                    transitionDuration: {
+                        '160': '160ms',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-cream font-sans text-espresso overflow-hidden">
+    
+    <!-- Background Simulating Dashboard Dashboard (Blurred out) -->
+    <div class="min-h-screen p-8 flex items-start justify-center" data-sd-id="1">
+        <div class="w-full max-w-[1320px] grid grid-cols-1 md:grid-cols-2 gap-6 opacity-30 blur-[2px] pointer-events-none" data-sd-id="2">
+            <div class="h-64 bg-white rounded-[12px] border border-divider shadow-sm" data-sd-id="3"></div>
+            <div class="h-64 bg-white rounded-[12px] border border-divider shadow-sm" data-sd-id="4"></div>
+            <div class="h-64 bg-white rounded-[12px] border border-divider shadow-sm" data-sd-id="5"></div>
+            <div class="h-64 bg-white rounded-[12px] border border-divider shadow-sm" data-sd-id="6"></div>
+        </div>
+    </div>
+
+    <!-- Modal Overlay Backdrop -->
+    <div class="fixed inset-0 bg-espresso/30 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 sm:p-6" data-sd-id="7">
+        
+        <!-- Modal Container -->
+        <div class="bg-panel w-full max-w-[600px] rounded-[12px] shadow-[0_20px_60px_rgba(0,0,0,0.08)] relative overflow-hidden flex flex-col animate-[fadeIn_200ms_ease-out]" data-sd-id="8">
+            
+            <!-- Header -->
+            <div class="px-8 pt-8 pb-6 border-b border-divider flex items-center justify-between" data-sd-id="9">
+                <h2 class="font-serif text-3xl font-semibold text-espresso" data-sd-id="10">
+                    Ask a Question
+                </h2>
+                <a href="https://p.superdesign.dev/draft/c6e6d108-a7c9-4d51-90b2-4090ebce1a93" id="close-modal-link" class="w-10 h-10 flex items-center justify-center rounded-full bg-cream hover:bg-divider/50 text-muted hover:text-espresso transition-colors duration-160" data-sd-id="11">
+                    <iconify-icon icon="lucide:x" width="24"></iconify-icon>
+                </a>
+            </div>
+
+            <!-- Content Body -->
+            <div class="p-8 flex-1" data-sd-id="12">
+                
+                <!-- Context Block -->
+                <div class="bg-cream border border-divider rounded-xl p-5 mb-8 flex gap-4 items-start" data-sd-id="13">
+                    <div class="w-10 h-10 rounded-full bg-panel border border-divider flex items-center justify-center text-sm font-medium text-espresso shrink-0 mt-0.5" data-sd-id="14">
+                        SS
+                    </div>
+                    <div data-sd-id="15">
+                        <p class="text-xs text-muted uppercase tracking-wider mb-1" data-sd-id="16">Regarding request</p>
+                        <p class="text-base font-medium text-espresso mb-1" data-sd-id="17">
+                            Vintage Lounge Greeting
+                        </p>
+                        <p class="text-sm text-muted" data-sd-id="18">
+                            From Sarah Smiles (@sarah_smiles) · Estimated $145.00
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Message Form -->
+                <div class="mb-2" data-sd-id="19">
+                    <label for="question-input" class="block text-sm font-medium text-espresso mb-2" data-sd-id="20">
+                        Message to Fan
+                    </label>
+                    <textarea id="question-input" class="w-full h-32 p-4 bg-panel border border-divider rounded-xl text-sm text-espresso placeholder:text-muted/60 focus:outline-none focus:border-rose focus:ring-1 focus:ring-rose resize-none transition-all duration-160" placeholder="Ask your question about the request details, wardrobe, or script..." data-sd-id="21">Hi Sarah, thanks for the request! Just to clarify, when you say you want the standard vintage armchair setup, did you want the side table with the floral arrangement included, or kept minimal?</textarea>
+                </div>
+                
+                <!-- Character Counter -->
+                <div class="flex justify-end mb-8" data-sd-id="22">
+                    <span class="text-xs font-medium text-muted" data-sd-id="23">
+                        218 / 500 characters
+                    </span>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-4" data-sd-id="24">
+                    <button class="flex-1 h-[48px] flex items-center justify-center gap-2 bg-cream border border-divider text-espresso font-medium rounded-xl hover:bg-cream/80 hover:border-espresso transition-all duration-160" data-sd-id="25">
+                        Cancel
+                    </button>
+                    <button class="flex-1 h-[48px] flex items-center justify-center gap-2 bg-rose text-espresso font-medium rounded-xl hover:bg-[#D595AE] transition-all duration-160 shadow-sm" data-sd-id="26">
+                        <iconify-icon icon="lucide:send" width="18"></iconify-icon>
+                        Send Message
+                    </button>
+                </div>
+
+            </div>
+            
+        </div>
+    </div>
+
+
+</body></html>

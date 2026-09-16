@@ -1,0 +1,477 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Storybook — Fan Director Studio</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+        :root {
+            --color-bg: #FDF8F3;
+            --color-panel: #FFFFFF;
+            --color-secondary: #F5F0EB;
+            --color-espresso: #302720;
+            --color-muted: #70625C;
+            --color-divider: #DED3CB;
+            --color-rose: #E4A4BD;
+            --color-deeprose: #84485D;
+            --color-alert: #E37A6A;
+            --color-success: #8EB486;
+            --color-status-new: #4B9FE3;
+            --color-status-pending: #D4A574;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-espresso);
+            margin: 0;
+        }
+
+        .font-serif { font-family: 'Cormorant Garamond', serif; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+
+        .focus-ring:focus {
+            outline: 2px solid var(--color-espresso);
+            outline-offset: 2px;
+        }
+
+        .sidebar-link {
+            transition: all 160ms ease-out;
+        }
+        .sidebar-link:hover {
+            background-color: white;
+            padding-left: 1.25rem;
+        }
+
+        .component-section {
+            scroll-margin-top: 100px;
+        }
+
+        pre {
+            background: #F5F0EB;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            overflow-x: auto;
+        }
+
+        .shadow-subtle {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.04);
+        }
+
+        .shadow-modal {
+            box-shadow: 0 20px 60px rgba(0,0,0,0.08);
+        }
+    </style>
+</head>
+<body>
+    <div class="flex min-h-screen" data-sd-id="1">
+        <!-- Sidebar Navigation -->
+        <aside class="fixed top-0 left-0 h-screen w-64 bg-secondary border-r border-divider z-50 overflow-y-auto hidden lg:block" data-sd-id="2">
+            <div class="p-8" data-sd-id="3">
+                <h1 class="font-serif text-2xl font-bold tracking-tight mb-2" data-sd-id="4">Maya Atelier</h1>
+                <span class="text-[10px] uppercase tracking-widest text-muted font-semibold bg-white/50 px-2 py-1 rounded" data-sd-id="5">Storybook v1.0</span>
+            </div>
+            <nav class="px-4 pb-12 space-y-1" data-sd-id="6">
+                <div class="text-[10px] font-bold uppercase tracking-widest text-muted px-4 py-2" data-sd-id="7">Foundation</div>
+                <a href="#colors" class="sidebar-link block px-4 py-2 text-sm font-medium rounded-lg" data-sd-id="8">Colors</a>
+                <a href="#typography" class="sidebar-link block px-4 py-2 text-sm font-medium rounded-lg" data-sd-id="9">Typography</a>
+                
+                <div class="text-[10px] font-bold uppercase tracking-widest text-muted px-4 py-2 mt-8" data-sd-id="10">Basic UI</div>
+                <a href="#buttons" class="sidebar-link block px-4 py-2 text-sm font-medium rounded-lg" data-sd-id="11">Buttons</a>
+                <a href="#inputs" class="sidebar-link block px-4 py-2 text-sm font-medium rounded-lg" data-sd-id="12">Inputs</a>
+                <a href="#badges" class="sidebar-link block px-4 py-2 text-sm font-medium rounded-lg" data-sd-id="13">Status Badges</a>
+
+                <div class="text-[10px] font-bold uppercase tracking-widest text-muted px-4 py-2 mt-8" data-sd-id="14">Components</div>
+                <a href="#request-cards" class="sidebar-link block px-4 py-2 text-sm font-medium rounded-lg" data-sd-id="15">Request Cards</a>
+                <a href="#scene-card" class="sidebar-link block px-4 py-2 text-sm font-medium rounded-lg" data-sd-id="16">Scene Card Panel</a>
+                <a href="#stepper" class="sidebar-link block px-4 py-2 text-sm font-medium rounded-lg" data-sd-id="17">Progress Trail</a>
+                <a href="#timeline" class="sidebar-link block px-4 py-2 text-sm font-medium rounded-lg" data-sd-id="18">Timeline</a>
+
+                <div class="text-[10px] font-bold uppercase tracking-widest text-muted px-4 py-2 mt-8" data-sd-id="19">Layout</div>
+                <a href="#modals" class="sidebar-link block px-4 py-2 text-sm font-medium rounded-lg" data-sd-id="20">Modals</a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 lg:ml-64 p-4 sm:p-8 lg:p-12 max-w-[1320px] mx-auto" data-sd-id="21">
+            
+            <header class="mb-16" data-sd-id="22">
+                <h2 class="font-serif text-5xl font-bold tracking-tight mb-4" data-sd-id="23">Component Library</h2>
+                <p class="text-muted max-w-2xl text-lg leading-relaxed" data-sd-id="24">The definitive reference for Fan Director Studio’s design system. Purpose-built for developers implementing Maya Atelier’s boutique experience.</p>
+            </header>
+
+            <!-- 1. Color Palette -->
+            <section id="colors" class="component-section mb-24" data-sd-id="25">
+                <h3 class="font-serif text-3xl font-semibold mb-8 pb-4 border-b border-divider" data-sd-id="26">Color Palette</h3>
+                <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6" data-sd-id="27">
+                    <div class="space-y-3" data-sd-id="28">
+                        <div class="h-24 w-full rounded-xl border border-divider bg-[#FDF8F3]" data-sd-id="29"></div>
+                        <div data-sd-id="30">
+                            <p class="text-sm font-bold" data-sd-id="31">Cream (Background)</p>
+                            <code class="text-xs text-muted">#FDF8F3</code>
+                        </div>
+                    </div>
+                    <div class="space-y-3" data-sd-id="32">
+                        <div class="h-24 w-full rounded-xl border border-divider bg-white shadow-sm" data-sd-id="33"></div>
+                        <div data-sd-id="34">
+                            <p class="text-sm font-bold" data-sd-id="35">Panel White</p>
+                            <code class="text-xs text-muted">#FFFFFF</code>
+                        </div>
+                    </div>
+                    <div class="space-y-3" data-sd-id="36">
+                        <div class="h-24 w-full rounded-xl border border-divider bg-[#F5F0EB]" data-sd-id="37"></div>
+                        <div data-sd-id="38">
+                            <p class="text-sm font-bold" data-sd-id="39">Secondary Beige</p>
+                            <code class="text-xs text-muted">#F5F0EB</code>
+                        </div>
+                    </div>
+                    <div class="space-y-3" data-sd-id="40">
+                        <div class="h-24 w-full rounded-xl bg-[#302720]" data-sd-id="41"></div>
+                        <div data-sd-id="42">
+                            <p class="text-sm font-bold" data-sd-id="43">Espresso (Primary Text)</p>
+                            <code class="text-xs text-muted">#302720</code>
+                        </div>
+                    </div>
+                    <div class="space-y-3" data-sd-id="44">
+                        <div class="h-24 w-full rounded-xl bg-[#E4A4BD]" data-sd-id="45"></div>
+                        <div data-sd-id="46">
+                            <p class="text-sm font-bold" data-sd-id="47">Rose (Accent)</p>
+                            <code class="text-xs text-muted">#E4A4BD</code>
+                        </div>
+                    </div>
+                    <div class="space-y-3" data-sd-id="48">
+                        <div class="h-24 w-full rounded-xl bg-[#84485D]" data-sd-id="49"></div>
+                        <div data-sd-id="50">
+                            <p class="text-sm font-bold" data-sd-id="51">Deep Rose</p>
+                            <code class="text-xs text-muted">#84485D</code>
+                        </div>
+                    </div>
+                    <div class="space-y-3" data-sd-id="52">
+                        <div class="h-24 w-full rounded-xl bg-[#E37A6A]" data-sd-id="53"></div>
+                        <div data-sd-id="54">
+                            <p class="text-sm font-bold" data-sd-id="55">Alert Red</p>
+                            <code class="text-xs text-muted">#E37A6A</code>
+                        </div>
+                    </div>
+                    <div class="space-y-3" data-sd-id="56">
+                        <div class="h-24 w-full rounded-xl bg-[#8EB486]" data-sd-id="57"></div>
+                        <div data-sd-id="58">
+                            <p class="text-sm font-bold" data-sd-id="59">Success Green</p>
+                            <code class="text-xs text-muted">#8EB486</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Typography -->
+            <section id="typography" class="component-section mb-24" data-sd-id="60">
+                <h3 class="font-serif text-3xl font-semibold mb-8 pb-4 border-b border-divider" data-sd-id="61">Typography</h3>
+                <div class="bg-panel rounded-2xl p-8 border border-divider shadow-subtle space-y-12" data-sd-id="62">
+                    <div data-sd-id="63">
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-muted mb-4" data-sd-id="64">Headings — Cormorant Garamond</p>
+                        <div class="space-y-4" data-sd-id="65">
+                            <h1 class="font-serif text-5xl font-bold tracking-tight" data-sd-id="66">Heading 1 (56px)</h1>
+                            <h2 class="font-serif text-4xl font-semibold tracking-tight" data-sd-id="67">Heading 2 (36px)</h2>
+                            <h3 class="font-serif text-3xl font-semibold tracking-tight" data-sd-id="68">Heading 3 (28px)</h3>
+                        </div>
+                    </div>
+                    <div data-sd-id="69">
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-muted mb-4" data-sd-id="70">Body &amp; UI — Inter</p>
+                        <div class="space-y-4 max-w-2xl" data-sd-id="71">
+                            <p class="text-lg leading-relaxed" data-sd-id="72">Body Large: Intimate, sophisticated atmospheres for your personal greetings.</p>
+                            <p class="text-base leading-relaxed" data-sd-id="73">Body Regular: Our AI Director helps clarify your idea and suggests creator-approved catalog choices.</p>
+                            <p class="text-sm text-muted" data-sd-id="74">UI Small: Within listed options. Reference imagery only.</p>
+                        </div>
+                    </div>
+                    <div data-sd-id="75">
+                        <p class="text-[10px] font-bold uppercase tracking-widest text-muted mb-4" data-sd-id="76">Monospace — JetBrains Mono</p>
+                        <div class="space-y-2 font-mono" data-sd-id="77">
+                            <p class="text-sm" data-sd-id="78">Order ID: #MA-2024-0812</p>
+                            <p class="text-xs" data-sd-id="79">Transaction Hash: 0x71C941A...249</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Buttons -->
+            <section id="buttons" class="component-section mb-24" data-sd-id="80">
+                <h3 class="font-serif text-3xl font-semibold mb-8 pb-4 border-b border-divider" data-sd-id="81">Buttons</h3>
+                <div class="space-y-12" data-sd-id="82">
+                    <div class="bg-panel rounded-2xl p-8 border border-divider shadow-subtle" data-sd-id="83">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-12" data-sd-id="84">
+                            <div class="space-y-6" data-sd-id="85">
+                                <p class="text-xs font-bold text-muted uppercase tracking-widest" data-sd-id="86">Variants</p>
+                                <div class="flex flex-wrap gap-4" data-sd-id="87">
+                                    <button class="px-8 h-[48px] rounded-[12px] bg-rose text-espresso font-medium hover:bg-[#D595AE] transition-all shadow-sm active:scale-95 focus-ring" data-sd-id="88">Primary Action</button>
+                                    <button class="px-8 h-[48px] rounded-[12px] border border-divider bg-transparent text-espresso font-medium hover:bg-secondary transition-all active:scale-95 focus-ring" data-sd-id="89">Secondary Action</button>
+                                </div>
+                            </div>
+                            <div class="space-y-6" data-sd-id="90">
+                                <p class="text-xs font-bold text-muted uppercase tracking-widest" data-sd-id="91">Sizes</p>
+                                <div class="flex flex-wrap items-center gap-4" data-sd-id="92">
+                                    <button class="px-6 h-[40px] text-sm rounded-[10px] bg-rose text-espresso font-medium" data-sd-id="93">Small (40px)</button>
+                                    <button class="px-8 h-[48px] rounded-[12px] bg-rose text-espresso font-medium" data-sd-id="94">Medium (48px)</button>
+                                    <button class="px-10 h-[56px] text-lg rounded-[14px] bg-rose text-espresso font-medium" data-sd-id="95">Large (56px)</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-panel rounded-2xl p-8 border border-divider shadow-subtle space-y-6" data-sd-id="96">
+                        <p class="text-xs font-bold text-muted uppercase tracking-widest" data-sd-id="97">States &amp; Icons</p>
+                        <div class="flex flex-wrap gap-4" data-sd-id="98">
+                            <button class="px-8 h-[48px] rounded-[12px] bg-rose text-espresso font-medium flex items-center gap-2" data-sd-id="99">
+                                Send to Creator
+                                <iconify-icon icon="lucide:send" width="18"></iconify-icon>
+                            </button>
+                            <button class="px-8 h-[48px] rounded-[12px] bg-rose/50 text-espresso/50 font-medium cursor-not-allowed" disabled="" data-sd-id="100">Disabled State</button>
+                            <button class="w-12 h-12 rounded-full border border-divider flex items-center justify-center hover:bg-secondary transition-colors" data-sd-id="101">
+                                <iconify-icon icon="lucide:more-horizontal" width="20"></iconify-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Request Cards -->
+            <section id="request-cards" class="component-section mb-24" data-sd-id="102">
+                <h3 class="font-serif text-3xl font-semibold mb-8 pb-4 border-b border-divider" data-sd-id="103">Request Cards</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8" data-sd-id="104">
+                    <!-- New Request -->
+                    <div class="bg-panel border border-divider rounded-[12px] p-6 shadow-sm hover:shadow-md transition-all group cursor-pointer" data-sd-id="105">
+                        <div class="flex justify-between items-start mb-4" data-sd-id="106">
+                            <div class="flex items-center gap-3" data-sd-id="107">
+                                <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-xs font-bold" data-sd-id="108">SS</div>
+                                <span class="text-sm font-medium text-muted" data-sd-id="109">@sarah_smiles</span>
+                            </div>
+                            <div class="flex items-center gap-2" data-sd-id="110">
+                                <span class="text-xs font-medium text-[#4B9FE3]" data-sd-id="111">New</span>
+                                <iconify-icon icon="lucide:circle-dot" class="text-[#4B9FE3]" width="18"></iconify-icon>
+                            </div>
+                        </div>
+                        <h4 class="font-serif text-2xl font-bold mb-2 group-hover:text-deeprose transition-colors" data-sd-id="112">Vintage Lounge Greeting</h4>
+                        <p class="text-sm text-muted mb-6 line-clamp-2" data-sd-id="113">Birthday message for my sister. 3-minute video with cozy evening lighting...</p>
+                        <hr class="border-t border-divider mb-4">
+                        <div class="flex justify-between items-end" data-sd-id="114">
+                            <div data-sd-id="115">
+                                <p class="text-[10px] uppercase tracking-widest text-muted mb-1" data-sd-id="116">Estimate</p>
+                                <p class="text-lg font-bold" data-sd-id="117">$145.00</p>
+                            </div>
+                            <div class="text-right" data-sd-id="118">
+                                <p class="text-[10px] uppercase tracking-widest text-muted mb-1" data-sd-id="119">Delivery</p>
+                                <p class="text-sm font-medium" data-sd-id="120">Dec 12</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pending Request -->
+                    <div class="bg-panel border border-divider rounded-[12px] p-6 shadow-sm" data-sd-id="121">
+                        <div class="flex justify-between items-start mb-4" data-sd-id="122">
+                            <div class="flex items-center gap-3" data-sd-id="123">
+                                <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center text-xs font-bold" data-sd-id="124">JM</div>
+                                <span class="text-sm font-medium text-muted" data-sd-id="125">@john_m</span>
+                            </div>
+                            <div class="flex items-center gap-2" data-sd-id="126">
+                                <span class="text-xs font-medium text-[#D4A574]" data-sd-id="127">Awaiting Reply</span>
+                                <iconify-icon icon="lucide:clock" class="text-[#D4A574]" width="18"></iconify-icon>
+                            </div>
+                        </div>
+                        <h4 class="font-serif text-2xl font-bold mb-2" data-sd-id="128">Cinematic Backstage</h4>
+                        <p class="text-sm text-muted mb-6" data-sd-id="129">Custom setup requested. Waiting for fan to approve revised budget...</p>
+                        <hr class="border-t border-divider mb-4">
+                        <div class="flex justify-between" data-sd-id="130">
+                            <p class="text-lg font-bold" data-sd-id="131">$210.00</p>
+                            <p class="text-sm font-medium" data-sd-id="132">Jan 05</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Scene Card Panel -->
+            <section id="scene-card" class="component-section mb-24" data-sd-id="133">
+                <h3 class="font-serif text-3xl font-semibold mb-8 pb-4 border-b border-divider" data-sd-id="134">Scene Card Panel</h3>
+                <div class="bg-panel rounded-[12px] border border-divider shadow-subtle overflow-hidden max-w-4xl" data-sd-id="135">
+                    <div class="p-10 border-b border-divider" data-sd-id="136">
+                        <h4 class="font-serif text-3xl font-bold mb-3" data-sd-id="137">Vintage Lounge Greeting</h4>
+                        <p class="text-muted" data-sd-id="138">Cinematic personal greeting set in a sophisticated vintage lounge with warm, cozy lighting.</p>
+                    </div>
+                    <div class="p-10 border-b border-divider" data-sd-id="139">
+                        <h5 class="text-[10px] font-bold uppercase tracking-widest text-muted mb-6" data-sd-id="140">Included Components</h5>
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4" data-sd-id="141">
+                            <div class="p-4 rounded-xl border border-divider" data-sd-id="142">
+                                <div class="flex items-center gap-2 mb-2" data-sd-id="143">
+                                    <iconify-icon icon="lucide:clock" class="text-rose"></iconify-icon>
+                                    <span class="text-xs font-bold" data-sd-id="144">Duration</span>
+                                </div>
+                                <p class="text-sm" data-sd-id="145">3-Minute Video</p>
+                            </div>
+                            <div class="p-4 rounded-xl border border-divider" data-sd-id="146">
+                                <div class="flex items-center gap-2 mb-2" data-sd-id="147">
+                                    <iconify-icon icon="lucide:home" class="text-rose"></iconify-icon>
+                                    <span class="text-xs font-bold" data-sd-id="148">Setting</span>
+                                </div>
+                                <p class="text-sm" data-sd-id="149">Vintage Lounge</p>
+                            </div>
+                            <div class="p-4 rounded-xl border border-divider" data-sd-id="150">
+                                <div class="flex items-center gap-2 mb-2" data-sd-id="151">
+                                    <iconify-icon icon="lucide:user" class="text-rose"></iconify-icon>
+                                    <span class="text-xs font-bold" data-sd-id="152">Greeting</span>
+                                </div>
+                                <p class="text-sm" data-sd-id="153">Personalized</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-10 bg-secondary flex flex-col md:flex-row justify-between items-start md:items-center gap-6" data-sd-id="154">
+                        <div data-sd-id="155">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-muted mb-2" data-sd-id="156">Estimated Price</p>
+                            <p class="font-serif text-4xl font-bold" data-sd-id="157">$145.00</p>
+                        </div>
+                        <div class="flex items-center gap-2 px-4 py-2 bg-green-50 border border-green-100 rounded-lg text-green-700 text-sm font-medium" data-sd-id="158">
+                            <iconify-icon icon="lucide:check-circle"></iconify-icon>
+                            $5.00 under budget
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Stepper -->
+            <section id="stepper" class="component-section mb-24" data-sd-id="159">
+                <h3 class="font-serif text-3xl font-semibold mb-8 pb-4 border-b border-divider" data-sd-id="160">Progress Trail</h3>
+                <div class="bg-panel p-8 rounded-2xl border border-divider shadow-sm" data-sd-id="161">
+                    <div class="flex items-center gap-3 text-sm text-muted" data-sd-id="162">
+                        <span class="px-2 py-1" data-sd-id="163">Idea</span>
+                        <iconify-icon icon="lucide:chevron-right" class="text-xs opacity-40"></iconify-icon>
+                        <span class="font-bold text-espresso bg-rose/20 px-3 py-1.5 rounded-lg" data-sd-id="164">Details</span>
+                        <iconify-icon icon="lucide:chevron-right" class="text-xs opacity-40"></iconify-icon>
+                        <span class="px-2 py-1" data-sd-id="165">Review</span>
+                        <iconify-icon icon="lucide:chevron-right" class="text-xs opacity-40"></iconify-icon>
+                        <span class="px-2 py-1" data-sd-id="166">Send</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 7. Inputs -->
+            <section id="inputs" class="component-section mb-24" data-sd-id="167">
+                <h3 class="font-serif text-3xl font-semibold mb-8 pb-4 border-b border-divider" data-sd-id="168">Input Fields</h3>
+                <div class="bg-panel p-8 rounded-2xl border border-divider shadow-subtle max-w-2xl space-y-8" data-sd-id="169">
+                    <div class="space-y-2" data-sd-id="170">
+                        <label class="text-xs font-bold uppercase tracking-widest text-muted" data-sd-id="171">Full Name</label>
+                        <input type="text" placeholder="Maya Atelier" class="w-full h-[48px] px-4 border border-divider rounded-[12px] bg-secondary/30 focus:bg-white focus:border-espresso outline-none transition-all" data-sd-id="172">
+                    </div>
+                    <div class="space-y-2" data-sd-id="173">
+                        <label class="text-xs font-bold uppercase tracking-widest text-muted" data-sd-id="174">Commission Details</label>
+                        <textarea placeholder="Describe your vision..." class="w-full min-h-[120px] p-4 border border-divider rounded-[12px] bg-secondary/30 focus:bg-white focus:border-espresso outline-none transition-all resize-none" data-sd-id="175"></textarea>
+                        <p class="text-right text-[10px] text-muted" data-sd-id="176">0 / 500 characters</p>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4" data-sd-id="177">
+                        <div class="space-y-2" data-sd-id="178">
+                            <label class="text-xs font-bold uppercase tracking-widest text-muted" data-sd-id="179">Video Length</label>
+                            <div class="relative" data-sd-id="180">
+                                <select class="w-full h-[48px] px-4 appearance-none border border-divider rounded-[12px] bg-secondary/30 focus:bg-white outline-none" data-sd-id="181">
+                                    <option data-sd-id="182">3-Minute Video</option>
+                                    <option data-sd-id="183">5-Minute Video</option>
+                                    <option data-sd-id="184">10-Minute Video</option>
+                                </select>
+                                <iconify-icon icon="lucide:chevron-down" class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none"></iconify-icon>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 8. Status Badges -->
+            <section id="badges" class="component-section mb-24" data-sd-id="185">
+                <h3 class="font-serif text-3xl font-semibold mb-8 pb-4 border-b border-divider" data-sd-id="186">Status Badges</h3>
+                <div class="bg-panel p-8 rounded-2xl border border-divider shadow-sm flex flex-wrap gap-8" data-sd-id="187">
+                    <div class="flex items-center gap-2 px-3 py-1 bg-blue-50 text-[#4B9FE3] rounded-full text-xs font-bold border border-blue-100" data-sd-id="188">
+                        <iconify-icon icon="lucide:circle-dot"></iconify-icon>
+                        New Request
+                    </div>
+                    <div class="flex items-center gap-2 px-3 py-1 bg-amber-50 text-[#D4A574] rounded-full text-xs font-bold border border-amber-100" data-sd-id="189">
+                        <iconify-icon icon="lucide:clock"></iconify-icon>
+                        Pending Response
+                    </div>
+                    <div class="flex items-center gap-2 px-3 py-1 bg-red-50 text-[#E37A6A] rounded-full text-xs font-bold border border-red-100" data-sd-id="190">
+                        <iconify-icon icon="lucide:alert-triangle"></iconify-icon>
+                        Changes Needed
+                    </div>
+                    <div class="flex items-center gap-2 px-3 py-1 bg-green-50 text-[#8EB486] rounded-full text-xs font-bold border border-green-100" data-sd-id="191">
+                        <iconify-icon icon="lucide:check-circle"></iconify-icon>
+                        Approved
+                    </div>
+                </div>
+            </section>
+
+            <!-- 9. Timeline -->
+            <section id="timeline" class="component-section mb-24" data-sd-id="192">
+                <h3 class="font-serif text-3xl font-semibold mb-8 pb-4 border-b border-divider" data-sd-id="193">Timeline</h3>
+                <div class="bg-panel p-10 rounded-2xl border border-divider shadow-subtle max-w-2xl" data-sd-id="194">
+                    <div class="space-y-12 relative" data-sd-id="195">
+                        <div class="absolute left-[11px] top-2 bottom-2 w-px bg-divider" data-sd-id="196"></div>
+                        
+                        <!-- Step 1 (Completed) -->
+                        <div class="relative flex gap-6" data-sd-id="197">
+                            <div class="w-6 h-6 rounded-full bg-espresso flex items-center justify-center z-10 border-4 border-white" data-sd-id="198">
+                                <iconify-icon icon="lucide:check" class="text-white text-xs"></iconify-icon>
+                            </div>
+                            <div data-sd-id="199">
+                                <h5 class="text-sm font-bold" data-sd-id="200">Request Submitted</h5>
+                                <p class="text-xs text-muted" data-sd-id="201">Dec 01, 2023 at 10:45 AM</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 2 (Active) -->
+                        <div class="relative flex gap-6" data-sd-id="202">
+                            <div class="w-6 h-6 rounded-full bg-rose z-10 border-4 border-white" data-sd-id="203"></div>
+                            <div data-sd-id="204">
+                                <h5 class="text-sm font-bold" data-sd-id="205">Creator Review</h5>
+                                <p class="text-sm text-muted" data-sd-id="206">Maya is currently reviewing your scene card. Expect a response within 48 hours.</p>
+                            </div>
+                        </div>
+
+                        <!-- Step 3 (Pending) -->
+                        <div class="relative flex gap-6 opacity-40" data-sd-id="207">
+                            <div class="w-6 h-6 rounded-full bg-secondary z-10 border-4 border-white" data-sd-id="208"></div>
+                            <div data-sd-id="209">
+                                <h5 class="text-sm font-bold" data-sd-id="210">Production</h5>
+                                <p class="text-xs text-muted" data-sd-id="211">Pending approval</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 10. Modals (Simulated) -->
+            <section id="modals" class="component-section mb-40" data-sd-id="212">
+                <h3 class="font-serif text-3xl font-semibold mb-8 pb-4 border-b border-divider" data-sd-id="213">Modals</h3>
+                <div class="bg-secondary/30 rounded-2xl p-12 border border-divider flex items-center justify-center min-h-[400px]" data-sd-id="214">
+                    <div class="bg-white rounded-2xl shadow-modal w-full max-w-md overflow-hidden relative" data-sd-id="215">
+                        <button class="absolute top-4 right-4 w-8 h-8 rounded-full bg-secondary/50 flex items-center justify-center hover:bg-secondary" data-sd-id="216">
+                            <iconify-icon icon="lucide:x" width="18"></iconify-icon>
+                        </button>
+                        <div class="p-8 border-b border-divider" data-sd-id="217">
+                            <h4 class="font-serif text-2xl font-bold" data-sd-id="218">Ask a Question</h4>
+                        </div>
+                        <div class="p-8 space-y-6" data-sd-id="219">
+                            <p class="text-sm text-muted" data-sd-id="220">Maya will receive an email notification and respond as soon as she's available.</p>
+                            <textarea placeholder="What would you like to clarify?" class="w-full h-32 p-4 border border-divider rounded-xl bg-secondary/20 outline-none focus:border-espresso transition-all resize-none" data-sd-id="221"></textarea>
+                        </div>
+                        <div class="p-8 bg-secondary/20 flex justify-end gap-4" data-sd-id="222">
+                            <button class="px-6 h-10 text-sm font-medium" data-sd-id="223">Cancel</button>
+                            <button class="px-6 h-10 bg-espresso text-white rounded-lg text-sm font-medium" data-sd-id="224">Send Message</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <footer class="mt-32 pb-16 text-center border-t border-divider pt-12" data-sd-id="225">
+                <p class="font-serif text-xl" data-sd-id="226">Fan Director Studio Design System</p>
+                <p class="text-xs text-muted mt-2 uppercase tracking-widest font-bold" data-sd-id="227">Designed for Excellence</p>
+            </footer>
+        </main>
+    </div>
+
+</body></html>

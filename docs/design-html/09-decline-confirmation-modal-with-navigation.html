@@ -1,0 +1,111 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Detail Modal - Decline Confirmation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        cream: '#FDF8F3',
+                        panel: '#FFFFFF',
+                        espresso: '#302720',
+                        muted: '#70625C',
+                        rose: '#E4A4BD',
+                        deeprose: '#84485D',
+                        divider: '#DED3CB',
+                        alert: '#E37A6A'
+                    },
+                    transitionDuration: {
+                        '160': '160ms',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <!-- Simulated Dashboard Background -->
+    <div class="min-h-screen bg-cream font-sans text-espresso p-8 flex items-start justify-center" data-sd-id="1">
+        <!-- Fake content behind modal -->
+        <div class="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-6 opacity-30 blur-sm pointer-events-none" data-sd-id="2">
+            <div class="h-48 bg-panel rounded-[12px] border border-divider" data-sd-id="3"></div>
+            <div class="h-48 bg-panel rounded-[12px] border border-divider" data-sd-id="4"></div>
+            <div class="h-48 bg-panel rounded-[12px] border border-divider" data-sd-id="5"></div>
+            <div class="h-48 bg-panel rounded-[12px] border border-divider" data-sd-id="6"></div>
+        </div>
+    </div>
+
+    <!-- Modal Overlay Backdrop -->
+    <div class="fixed inset-0 bg-espresso/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 sm:p-6" data-sd-id="7">
+        
+        <!-- Modal Container -->
+        <div class="bg-panel rounded-[12px] shadow-[0_20px_60px_rgba(0,0,0,0.08)] w-full max-w-[480px] flex flex-col relative overflow-hidden" data-sd-id="8">
+            
+            <!-- Close Button -->
+            <a href="https://p.superdesign.dev/draft/c6e6d108-a7c9-4d51-90b2-4090ebce1a93" id="close-modal-link" class="absolute top-4 right-4 w-10 h-10 flex items-center justify-center rounded-full text-muted hover:bg-cream hover:text-espresso transition-colors duration-160" data-sd-id="9">
+                <iconify-icon icon="lucide:x" width="20"></iconify-icon>
+            </a>
+
+            <div class="p-8 sm:p-10" data-sd-id="10">
+                
+                <!-- Header Icon -->
+                <div class="w-12 h-12 rounded-full bg-alert/10 flex items-center justify-center text-alert mb-6" data-sd-id="11">
+                    <iconify-icon icon="lucide:alert-triangle" width="24"></iconify-icon>
+                </div>
+
+                <!-- Heading -->
+                <h2 class="font-serif text-3xl font-semibold mb-3 text-espresso leading-tight" data-sd-id="12">
+                    Decline this request?
+                </h2>
+
+                <!-- Explanatory Message -->
+                <p class="text-base text-muted mb-6 leading-relaxed" data-sd-id="13">
+                    This fan will be notified that the request cannot be fulfilled at this time. They can always submit a new request later.
+                </p>
+
+                <!-- Request Context Box -->
+                <div class="bg-cream rounded-xl p-4 border border-divider mb-6 flex items-center gap-4" data-sd-id="14">
+                    <div class="w-10 h-10 rounded-full bg-panel border border-divider flex items-center justify-center text-sm font-medium text-espresso shrink-0" data-sd-id="15">
+                        SS
+                    </div>
+                    <div data-sd-id="16">
+                        <p class="text-sm font-semibold text-espresso" data-sd-id="17">Vintage Lounge Greeting</p>
+                        <p class="text-xs text-muted" data-sd-id="18">@sarah_smiles</p>
+                    </div>
+                </div>
+
+                <!-- Optional Reason Input -->
+                <div class="mb-8" data-sd-id="19">
+                    <label for="decline-reason" class="block text-sm font-medium text-espresso mb-2" data-sd-id="20">
+                        Internal Note <span class="text-muted font-normal" data-sd-id="21">(optional, not shown to fan)</span>
+                    </label>
+                    <textarea id="decline-reason" rows="3" class="w-full p-4 bg-panel border border-divider rounded-xl text-sm focus:outline-none focus:border-espresso focus:ring-1 focus:ring-espresso transition-colors duration-160 resize-none" placeholder="E.g., Schedule too tight this week..." data-sd-id="22"></textarea>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t border-divider" data-sd-id="23">
+                    <a href="https://p.superdesign.dev/draft/c6e6d108-a7c9-4d51-90b2-4090ebce1a93" id="cancel-decline-link" class="w-full sm:w-1/2 flex items-center justify-center gap-2 h-[48px] bg-panel border border-divider text-espresso font-medium rounded-xl hover:bg-cream transition-colors duration-160 order-2 sm:order-1" data-sd-id="24">
+                        <iconify-icon icon="lucide:arrow-left" width="18"></iconify-icon>
+                        Cancel
+                    </a>
+                    <button id="confirm-decline-btn" class="w-full sm:w-1/2 flex items-center justify-center gap-2 h-[48px] bg-alert text-panel font-medium rounded-xl hover:bg-[#D66A5A] transition-colors duration-160 shadow-sm order-1 sm:order-2" data-sd-id="25">
+                        <iconify-icon icon="lucide:x-circle" width="18"></iconify-icon>
+                        Confirm Decline
+                    </button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</body></html>

@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Send Confirmation - Maya Atelier</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;family=JetBrains+Mono:wght@400;500&amp;display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        cream: '#FDF8F3',
+                        panel: '#FFFFFF',
+                        espresso: '#302720',
+                        muted: '#70625C',
+                        rose: '#E4A4BD',
+                        divider: '#DED3CB',
+                        success: '#84485D' /* Using deep rose for success to match brand */
+                    },
+                    transitionDuration: {
+                        '160': '160ms',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes bounce-in-soft {
+            0% { transform: scale(0.9); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-bounce-in {
+            animation: bounce-in-soft 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+        }
+    </style>
+</head>
+<body class="bg-cream font-sans text-espresso min-h-screen flex flex-col">
+
+    <!-- Top Navigation -->
+    <header class="w-full bg-cream/95 backdrop-blur-sm border-b border-divider px-8 py-4 sticky top-0 z-40" data-sd-id="1">
+        <div class="max-w-[1320px] mx-auto flex items-center justify-between" data-sd-id="2">
+            <div class="flex items-center gap-6" data-sd-id="3">
+                <a href="#" id="nav-home" class="font-serif text-3xl font-medium tracking-tight hover:opacity-80 transition-opacity" data-sd-id="4">
+                    Maya Atelier
+                </a>
+                <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-cream border border-divider text-muted" data-sd-id="5">
+                    Demo
+                </span>
+            </div>
+            <nav class="hidden md:flex items-center gap-8" data-sd-id="6">
+                <a href="#collection" id="nav-collection" class="text-sm font-medium text-muted hover:text-espresso transition-colors duration-160" data-sd-id="7">Collection</a>
+                <a href="#studio" id="nav-studio" class="text-sm font-medium text-espresso border-b-2 border-espresso pb-1" data-sd-id="8">Your studio</a>
+                <a href="#saved" id="nav-saved" class="text-sm font-medium text-muted hover:text-espresso transition-colors duration-160" data-sd-id="9">Saved ideas</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-1 flex flex-col items-center py-16 px-6 sm:px-8 w-full max-w-[800px] mx-auto" data-sd-id="10">
+        
+        <!-- Header Section -->
+        <div class="flex flex-col items-center text-center w-full mb-12 animate-bounce-in" data-sd-id="11">
+            <div class="w-20 h-20 bg-rose/20 rounded-full flex items-center justify-center mb-6" data-sd-id="12">
+                <iconify-icon icon="lucide:check" class="text-success text-4xl"></iconify-icon>
+            </div>
+            <h1 class="font-serif text-[44px] leading-tight mb-4 text-espresso" data-sd-id="13">
+                Commission Submitted Successfully!
+            </h1>
+            <p class="text-base text-muted max-w-lg leading-relaxed" data-sd-id="14">
+                Maya will review your request and confirm final details. You'll receive updates via email when your Scene Card is approved.
+            </p>
+        </div>
+
+        <!-- Order Details Card -->
+        <div class="w-full bg-panel border border-divider rounded-[12px] shadow-sm overflow-hidden mb-12" data-sd-id="15">
+            <!-- Card Header -->
+            <div class="px-8 py-5 border-b border-divider bg-cream/30 flex flex-col sm:flex-row sm:items-center justify-between gap-4" data-sd-id="16">
+                <div data-sd-id="17">
+                    <p class="text-xs uppercase tracking-wider text-muted font-medium mb-1" data-sd-id="18">Request Reference</p>
+                    <p class="font-mono text-sm text-espresso bg-cream px-2 py-1 rounded border border-divider inline-block" data-sd-id="19">
+                        Order #MA-2024-001847
+                    </p>
+                </div>
+                <div class="sm:text-right" data-sd-id="20">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-cream border border-divider text-muted" data-sd-id="21">
+                        <iconify-icon icon="lucide:clock" class="text-[10px]"></iconify-icon>
+                        Awaiting Review
+                    </span>
+                </div>
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-8" data-sd-id="22">
+                <h2 class="font-serif text-2xl font-medium mb-6 text-espresso" data-sd-id="23">
+                    Vintage Lounge Greeting
+                </h2>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6" data-sd-id="24">
+                    <!-- Estimate -->
+                    <div class="p-4 rounded-xl border border-divider bg-cream/30" data-sd-id="25">
+                        <div class="flex items-center gap-2 mb-2" data-sd-id="26">
+                            <iconify-icon icon="lucide:calculator" class="text-rose text-lg"></iconify-icon>
+                            <h3 class="text-sm font-medium text-muted" data-sd-id="27">Estimated Price</h3>
+                        </div>
+                        <p class="text-xl font-semibold text-espresso" data-sd-id="28">$145.00</p>
+                        <p class="text-xs text-muted mt-1" data-sd-id="29">Subject to approval</p>
+                    </div>
+
+                    <!-- Budget -->
+                    <div class="p-4 rounded-xl border border-divider bg-cream/30" data-sd-id="30">
+                        <div class="flex items-center gap-2 mb-2" data-sd-id="31">
+                            <iconify-icon icon="lucide:wallet" class="text-rose text-lg"></iconify-icon>
+                            <h3 class="text-sm font-medium text-muted" data-sd-id="32">Budget Remaining</h3>
+                        </div>
+                        <p class="text-xl font-semibold text-espresso" data-sd-id="33">$5.00</p>
+                        <p class="text-xs text-muted mt-1" data-sd-id="34">Under $150 budget</p>
+                    </div>
+
+                    <!-- Timeline -->
+                    <div class="p-4 rounded-xl border border-divider bg-cream/30" data-sd-id="35">
+                        <div class="flex items-center gap-2 mb-2" data-sd-id="36">
+                            <iconify-icon icon="lucide:calendar-clock" class="text-rose text-lg"></iconify-icon>
+                            <h3 class="text-sm font-medium text-muted" data-sd-id="37">Est. Delivery</h3>
+                        </div>
+                        <p class="text-lg font-medium text-espresso" data-sd-id="38">Dec 19</p>
+                        <p class="text-xs text-muted mt-1" data-sd-id="39">7 days post-payment</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Next Steps Timeline -->
+        <div class="w-full max-w-2xl mx-auto mb-16" data-sd-id="40">
+            <h3 class="font-serif text-2xl font-medium text-espresso mb-8 text-center" data-sd-id="41">
+                What happens next?
+            </h3>
+            
+            <div class="relative border-l border-divider ml-3 sm:ml-6 space-y-8 pb-4" data-sd-id="42">
+                
+                <!-- Step 1 (Active) -->
+                <div class="relative pl-8" data-sd-id="43">
+                    <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-rose border-4 border-cream" data-sd-id="44"></div>
+                    <h4 class="text-base font-semibold text-espresso mb-1" data-sd-id="45">1. Creator Reviews</h4>
+                    <p class="text-sm text-muted leading-relaxed" data-sd-id="46">
+                        Maya will review your request within 24-48 hours. She may approve it, propose slight adjustments, or ask for clarification to ensure it's perfect.
+                    </p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="relative pl-8 opacity-60" data-sd-id="47">
+                    <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-panel border-4 border-divider" data-sd-id="48"></div>
+                    <h4 class="text-base font-medium text-espresso mb-1" data-sd-id="49">2. Payment Confirmation</h4>
+                    <p class="text-sm text-muted leading-relaxed" data-sd-id="50">
+                        Once approved, you'll receive a link to securely complete your payment of $145.00.
+                    </p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative pl-8 opacity-60" data-sd-id="51">
+                    <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-panel border-4 border-divider" data-sd-id="52"></div>
+                    <h4 class="text-base font-medium text-espresso mb-1" data-sd-id="53">3. Production Begins</h4>
+                    <p class="text-sm text-muted leading-relaxed" data-sd-id="54">
+                        Maya records your custom greeting in the studio.
+                    </p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="relative pl-8 opacity-60" data-sd-id="55">
+                    <div class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-panel border-4 border-divider" data-sd-id="56"></div>
+                    <h4 class="text-base font-medium text-espresso mb-1" data-sd-id="57">4. Delivery</h4>
+                    <p class="text-sm text-muted leading-relaxed" data-sd-id="58">
+                        Your final video is delivered securely, typically within 7 days of payment.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Call to Action -->
+        <div class="w-full max-w-sm flex flex-col gap-4" data-sd-id="59">
+            <button id="btn-save-idea" class="w-full h-[48px] rounded-[12px] bg-rose text-espresso font-medium hover:bg-[#D595AE] transition-colors duration-160 focus:outline-none focus:ring-2 focus:ring-espresso focus:ring-offset-2 focus:ring-offset-cream flex items-center justify-center gap-2" data-sd-id="60">
+                <iconify-icon icon="lucide:bookmark"></iconify-icon>
+                Save Idea to Profile
+            </button>
+            <a href="https://p.superdesign.dev/draft/82277dd9-3db3-4c9d-8e8c-272cff83b5fe" id="link-back-collection" class="w-full h-[48px] rounded-[12px] bg-transparent text-espresso font-medium hover:bg-black/5 transition-colors duration-160 flex items-center justify-center" data-sd-id="61">
+                Back to Collection
+            </a>
+        </div>
+
+    </main>
+
+
+</body></html>

@@ -1,0 +1,520 @@
+<!DOCTYPE html><html lang="en" class="antialiased">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Maya Atelier — Studio Workspace</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
+    
+    :root {
+      --color-bg: #FDF8F3;
+      --color-panel: #FFFFFF;
+      --color-secondary: #F5F0EB;
+      --color-text-primary: #302720;
+      --color-text-muted: #70625C;
+      --color-dusty-rose: #E4A4BD;
+      --color-deep-rose: #84485D;
+      --color-rules: #DED3CB;
+    }
+    
+    html {
+      background-color: var(--color-bg);
+      scroll-behavior: smooth;
+    }
+    
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    
+    .font-serif {
+      font-family: 'Cormorant Garamond', serif;
+    }
+    
+    .font-sans {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .border-rule {
+      border-color: var(--color-rules);
+    }
+    
+    .text-primary {
+      color: var(--color-text-primary);
+    }
+    
+    .text-muted {
+      color: var(--color-text-muted);
+    }
+    
+    .bg-panel {
+      background-color: var(--color-panel);
+    }
+    
+    .bg-secondary {
+      background-color: var(--color-secondary);
+    }
+    
+    .bg-dusty-rose {
+      background-color: var(--color-dusty-rose);
+    }
+    
+    .text-deep-rose {
+      color: var(--color-deep-rose);
+    }
+    
+    .focus-ring:focus-visible {
+      outline: 2px solid var(--color-text-primary);
+      outline-offset: 2px;
+    }
+
+    .animate-flash {
+      animation: flash-rose 2s ease-out;
+    }
+
+    @keyframes flash-rose {
+      0% { background-color: var(--color-panel); }
+      10% { background-color: rgba(228, 164, 189, 0.2); }
+      100% { background-color: var(--color-panel); }
+    }
+
+    .animate-bounce-in {
+      animation: bounce-in 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    @keyframes bounce-in {
+      0% { transform: scale(0.8); opacity: 0; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    /* Mobile sticky scene card tricks */
+    @media (max-width: 1023px) {
+      .mobile-scene-summary {
+        display: flex;
+      }
+      .desktop-scene-full {
+        display: none;
+      }
+    }
+    @media (min-width: 1024px) {
+      .mobile-scene-summary {
+        display: none;
+      }
+      .desktop-scene-full {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="min-h-screen flex flex-col font-sans text-primary selection:bg-[var(--color-dusty-rose)] selection:text-primary relative pb-24 lg:pb-0">
+    
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-[var(--color-bg)]/95 backdrop-blur-sm border-b border-rule">
+      <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 h-[80px] flex items-center justify-between">
+        <div class="flex items-center gap-4 sm:gap-6">
+          <a href="#" id="nav-home-link" class="font-serif text-2xl sm:text-3xl font-medium tracking-tight focus-ring">
+            Maya Atelier
+          </a>
+          <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-secondary text-muted border border-rule">
+            Demo
+          </span>
+        </div>
+        <nav class="hidden md:flex items-center gap-8">
+          <a href="#collection" id="nav-collection-link" class="text-sm font-medium hover:text-muted transition-colors focus-ring">Collection</a>
+          <a href="#studio" id="nav-studio-link" class="text-sm font-medium hover:text-muted transition-colors focus-ring">Your studio</a>
+          <a href="#saved" id="nav-saved-link" class="text-sm font-medium hover:text-muted transition-colors focus-ring">Saved ideas</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="flex-1 max-w-[1320px] mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 lg:py-12 relative">
+      
+      <!-- Top Navigation & Title -->
+      <div class="mb-8 lg:mb-12">
+        <a href="https://p.superdesign.dev/draft/82277dd9-3db3-4c9d-8e8c-272cff83b5fe" id="back-collection-link" class="inline-flex items-center gap-2 text-sm text-muted hover:text-primary transition-colors focus-ring mb-6">
+          <iconify-icon icon="lucide:arrow-left" class="text-lg"></iconify-icon>
+          Back to collection
+        </a>
+        
+        <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6">
+          <div class="max-w-2xl">
+            <h1 class="font-serif text-3xl sm:text-[44px] leading-tight mb-3">A little inspiration. Entirely yours.</h1>
+            <p class="text-muted text-sm sm:text-base leading-relaxed">
+              The AI Director is helping plan your commission. All suggestions are from Maya's approved catalog.
+            </p>
+          </div>
+          
+          <!-- Progress Trail -->
+          <div class="flex items-center gap-1 sm:gap-2 text-[11px] sm:text-sm overflow-x-auto pb-2 lg:pb-0">
+            <div class="flex items-center gap-1.5 text-primary opacity-60">
+              <iconify-icon icon="lucide:check-circle-2" class="text-sm"></iconify-icon>
+              <span class="hidden sm:inline">Idea</span>
+              <span class="sm:hidden">1</span>
+            </div>
+            <div class="w-4 sm:w-6 h-px bg-rules mx-1"></div>
+            <div class="flex items-center gap-1.5 text-primary font-medium">
+              <div class="w-4 h-4 rounded-full bg-dusty-rose flex items-center justify-center text-[10px] shrink-0">
+                <iconify-icon icon="lucide:pen-tool"></iconify-icon>
+              </div>
+              <span class="hidden sm:inline">Details</span>
+              <span class="sm:hidden">2</span>
+            </div>
+            <div class="w-4 sm:w-6 h-px bg-rules mx-1"></div>
+            <div class="flex items-center gap-1.5 text-muted opacity-40">
+              <div class="w-4 h-4 rounded-full border border-rule flex items-center justify-center text-[10px] shrink-0">3</div>
+              <span class="hidden sm:inline">Review</span>
+            </div>
+            <div class="w-4 sm:w-6 h-px bg-rules mx-1"></div>
+            <div class="flex items-center gap-1.5 text-muted opacity-40">
+              <div class="w-4 h-4 rounded-full border border-rule flex items-center justify-center text-[10px] shrink-0">4</div>
+              <span class="hidden sm:inline">Send</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Two Column Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12">
+        
+        <!-- Column 1: Conversation (7 cols) -->
+        <div class="lg:col-span-7 flex flex-col">
+          
+          <!-- Chat History -->
+          <div class="flex-1 space-y-8 mb-8">
+            
+            <!-- Turn 1: Fan Message -->
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center shrink-0 border border-rule">
+                <iconify-icon icon="lucide:user" class="text-muted"></iconify-icon>
+              </div>
+              <div class="pt-1">
+                <p class="text-sm sm:text-base leading-relaxed">
+                  I'd love a cinematic personal greeting for my anniversary. Something atmospheric, budget is under $150.
+                </p>
+              </div>
+            </div>
+
+            <!-- Turn 2: Director Response -->
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-[var(--color-text-primary)] text-[var(--color-bg)] flex items-center justify-center shrink-0">
+                <iconify-icon icon="lucide:sparkles" class="text-sm"></iconify-icon>
+              </div>
+              <div class="pt-1 space-y-4 w-full">
+                <p class="text-sm sm:text-base leading-relaxed">
+                  Which vibe resonates—vintage lounge (cozy, intimate), floral studio (bright, celebratory), or backstage (raw, authentic)?
+                </p>
+                
+                <!-- Choice Cards (Large) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  <!-- Selected Choice -->
+                  <button id="choice-vintage-btn" class="group relative rounded-[12px] bg-panel border-2 border-[var(--color-dusty-rose)] p-3 text-left focus-ring shadow-sm overflow-hidden flex flex-col sm:block">
+                    <div class="absolute top-2 right-2 z-10 text-[var(--color-text-primary)] bg-[var(--color-dusty-rose)] rounded-full w-5 h-5 flex items-center justify-center animate-bounce-in">
+                      <iconify-icon icon="lucide:check" class="text-xs"></iconify-icon>
+                    </div>
+                    <div class="h-20 sm:h-24 bg-secondary rounded-lg mb-3 border border-rule overflow-hidden">
+                      <img src="https://images.unsplash.com/photo-1551028150-64b9e398f678?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Vintage Lounge" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-sm mb-0.5">Vintage Lounge</h4>
+                      <p class="text-[11px] text-muted line-clamp-1">Cozy, intimate evening</p>
+                      <p class="text-[11px] font-medium mt-1">+$35 setup</p>
+                    </div>
+                  </button>
+                  
+                  <!-- Unselected Choices -->
+                  <button id="choice-floral-btn" class="group rounded-[12px] bg-panel border border-rule hover:border-[var(--color-text-muted)] hover:shadow-md p-3 text-left focus-ring transition-all duration-200 flex flex-col sm:block">
+                    <div class="h-20 sm:h-24 bg-secondary rounded-lg mb-3 border border-rule overflow-hidden">
+                      <img src="https://images.unsplash.com/photo-1563241527-2004cb630db0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Floral Studio" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-sm mb-0.5">Floral Studio</h4>
+                      <p class="text-[11px] text-muted line-clamp-1">Bright & celebratory</p>
+                      <p class="text-[11px] text-muted mt-1">+$45 setup</p>
+                    </div>
+                  </button>
+
+                  <button id="choice-backstage-btn" class="group rounded-[12px] bg-panel border border-rule hover:border-[var(--color-text-muted)] hover:shadow-md p-3 text-left focus-ring transition-all duration-200 flex flex-col sm:block">
+                    <div class="h-20 sm:h-24 bg-secondary rounded-lg mb-3 border border-rule overflow-hidden">
+                      <img src="https://images.unsplash.com/photo-1517457224219-c60317e3df1c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Backstage" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                    </div>
+                    <div>
+                      <h4 class="font-medium text-sm mb-0.5">Backstage</h4>
+                      <p class="text-[11px] text-muted line-clamp-1">Raw & authentic</p>
+                      <p class="text-[11px] text-muted mt-1">+$15 setup</p>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Turn 3: Fan Selection -->
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center shrink-0 border border-rule">
+                <iconify-icon icon="lucide:user" class="text-muted"></iconify-icon>
+              </div>
+              <div class="pt-1">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-[12px] bg-panel border border-rule mb-2">
+                  <div class="w-2 h-2 rounded-full bg-dusty-rose"></div>
+                  <span class="text-xs font-medium">Selected: Vintage Lounge</span>
+                </div>
+                <p class="text-sm sm:text-base leading-relaxed">
+                  Let's do the Vintage Lounge. My partner loves 80s aesthetics.
+                </p>
+              </div>
+            </div>
+
+            <!-- Turn 4: Director clarifies tradeoff -->
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-[var(--color-text-primary)] text-[var(--color-bg)] flex items-center justify-center shrink-0">
+                <iconify-icon icon="lucide:sparkles" class="text-sm"></iconify-icon>
+              </div>
+              <div class="pt-1 space-y-4 w-full">
+                <p class="text-sm sm:text-base leading-relaxed">
+                  Perfect. Would you prefer a longer video (+$40/min) to tell more of your story, or focus on a richer setting with detailed greeting within your budget?
+                </p>
+                
+                <!-- Visual Choices -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-2">
+                  <!-- Selected Option -->
+                  <button id="choice-richer-setting-btn" class="rounded-[12px] bg-[rgba(228,164,189,0.1)] border-2 border-[var(--color-text-primary)] p-4 text-left cursor-pointer focus-ring shadow-sm relative overflow-hidden transition-all duration-200">
+                    <div class="absolute top-3 right-3 text-primary animate-bounce-in">
+                      <iconify-icon icon="lucide:check-circle-2" class="text-xl"></iconify-icon>
+                    </div>
+                    <div class="flex items-center gap-3 mb-2">
+                      <div class="w-10 h-10 rounded-full bg-panel flex items-center justify-center border border-rule shadow-sm">
+                        <iconify-icon icon="lucide:sparkles" class="text-lg text-dusty-rose"></iconify-icon>
+                      </div>
+                      <h4 class="font-medium text-sm">Richer Setting</h4>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-muted mb-2">Keep 3 mins, add detailed personalized greeting</p>
+                    <div class="inline-block px-2 py-1 rounded-md bg-panel border border-rule text-[10px] font-medium">
+                      Total: $145 ✓ (Under budget)
+                    </div>
+                  </button>
+                  
+                  <!-- Unselected Option -->
+                  <button id="choice-longer-video-btn" class="rounded-[12px] bg-panel border border-rule hover:border-[var(--color-text-muted)] hover:shadow-md p-4 text-left cursor-pointer focus-ring transition-all duration-200">
+                    <div class="flex items-center gap-3 mb-2">
+                      <div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center border border-rule">
+                        <iconify-icon icon="lucide:clock" class="text-lg text-muted"></iconify-icon>
+                      </div>
+                      <h4 class="font-medium text-sm text-muted">Longer Video</h4>
+                    </div>
+                    <p class="text-[11px] sm:text-xs text-muted mb-2">Extend to 4 mins, standard greeting</p>
+                    <div class="inline-block px-2 py-1 rounded-md bg-secondary border border-rule text-[10px] text-muted font-medium">
+                      Total: $165 (Exceeds budget)
+                    </div>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            <!-- Turn 5: Fan Selection -->
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center shrink-0 border border-rule">
+                <iconify-icon icon="lucide:user" class="text-muted"></iconify-icon>
+              </div>
+              <div class="pt-1">
+                <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-[12px] bg-panel border border-rule mb-2">
+                  <div class="w-2 h-2 rounded-full bg-dusty-rose"></div>
+                  <span class="text-xs font-medium">Selected: Richer Setting</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Turn 6: Director Confirmation -->
+            <div class="flex gap-4">
+              <div class="w-8 h-8 rounded-full bg-[var(--color-text-primary)] text-[var(--color-bg)] flex items-center justify-center shrink-0">
+                <iconify-icon icon="lucide:sparkles" class="text-sm"></iconify-icon>
+              </div>
+              <div class="pt-1 space-y-4 w-full">
+                <p class="text-sm sm:text-base leading-relaxed">
+                  Excellent. That's $145 total—vintage setup, 3-minute video, personalized greeting. $5 under budget. Ready to review your Scene Card?
+                </p>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Composer Sticky Bottom -->
+          <div class="sticky bottom-24 lg:bottom-4 z-30 bg-[var(--color-bg)] pt-2 lg:pt-4">
+            <div class="bg-panel rounded-[12px] border border-rule shadow-md overflow-hidden focus-within:ring-1 focus-within:ring-primary transition-shadow">
+              <textarea class="w-full bg-transparent border-0 p-4 sm:p-5 text-sm sm:text-base resize-none focus:ring-0 placeholder:text-[var(--color-text-muted)] min-h-[100px]" placeholder="Tell the Director what you have in mind or ask for suggestions..."></textarea>
+              <div class="px-3 py-3 sm:px-4 bg-secondary border-t border-rule flex items-center justify-between">
+                <div class="flex items-center gap-1 sm:gap-2">
+                  <button id="btn-suggest-idea" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-muted hover:text-primary hover:bg-panel rounded-lg border border-transparent hover:border-rule transition-colors focus-ring">
+                    <iconify-icon icon="lucide:wand-2"></iconify-icon>
+                    Suggest idea
+                  </button>
+                  <button id="btn-undo" class="p-2 sm:px-3 sm:py-1.5 text-[11px] font-medium text-muted hover:text-primary hover:bg-panel rounded-lg border border-transparent hover:border-rule transition-colors focus-ring flex items-center gap-1.5">
+                    <iconify-icon icon="lucide:undo-2"></iconify-icon>
+                    <span class="hidden sm:inline">Undo</span>
+                  </button>
+                </div>
+                <button id="btn-send-message" class="h-[44px] sm:h-10 px-6 sm:px-8 rounded-[12px] bg-[var(--color-text-primary)] text-[var(--color-bg)] text-sm font-medium hover:bg-black transition-colors focus-ring flex items-center gap-2 shadow-sm">
+                  Send
+                  <iconify-icon icon="lucide:send" class="text-xs"></iconify-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Column 2: Scene Card (5 cols) -->
+        <div class="lg:col-span-5">
+          <div class="desktop-scene-full sticky top-[104px]">
+            
+            <div class="bg-panel rounded-[12px] border border-rule shadow-sm overflow-hidden animate-flash">
+              
+              <!-- Card Header -->
+              <div class="p-6 border-b border-rule bg-secondary">
+                <div class="flex items-center justify-between mb-4">
+                  <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-panel border border-[var(--color-dusty-rose)] text-primary shadow-sm">
+                    <span class="w-1.5 h-1.5 rounded-full bg-dusty-rose mr-1.5"></span>
+                    Status: Draft
+                  </span>
+                  <button id="btn-save-idea-desktop" class="text-xs text-muted hover:text-primary font-medium focus-ring flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-panel">
+                    <iconify-icon icon="lucide:bookmark"></iconify-icon>
+                    Save idea
+                  </button>
+                </div>
+                <h2 class="font-serif text-[28px] leading-tight mb-2">Vintage Lounge Greeting</h2>
+                <p class="text-sm text-muted">
+                  A cinematic personalized message for your anniversary.
+                </p>
+              </div>
+
+              <!-- Line Items -->
+              <div class="p-6 space-y-6 border-b border-rule">
+                
+                <div class="flex justify-between items-start group">
+                  <div>
+                    <div class="flex items-center gap-2 mb-1">
+                      <h4 class="text-sm font-medium">3-Minute Video</h4>
+                      <button id="edit-video-btn" class="w-6 h-6 rounded flex items-center justify-center bg-secondary text-muted hover:text-primary opacity-0 group-hover:opacity-100 transition-all focus-ring">
+                        <iconify-icon icon="lucide:pencil" class="text-[10px]"></iconify-icon>
+                      </button>
+                    </div>
+                    <p class="text-xs text-muted">Standard base rate</p>
+                  </div>
+                  <span class="text-sm font-medium">$90</span>
+                </div>
+
+                <div class="flex justify-between items-start group">
+                  <div>
+                    <div class="flex items-center gap-2 mb-1">
+                      <div class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest bg-[var(--color-dusty-rose)] text-primary mr-1">
+                        Added
+                      </div>
+                      <h4 class="text-sm font-medium">Vintage Lounge Setup</h4>
+                      <button id="edit-setup-btn" class="w-6 h-6 rounded flex items-center justify-center bg-secondary text-muted hover:text-primary opacity-0 group-hover:opacity-100 transition-all focus-ring">
+                        <iconify-icon icon="lucide:pencil" class="text-[10px]"></iconify-icon>
+                      </button>
+                    </div>
+                    <p class="text-xs text-muted">Set dressing &amp; lighting</p>
+                  </div>
+                  <span class="text-sm font-medium">$35</span>
+                </div>
+
+                <div class="flex justify-between items-start group">
+                  <div>
+                    <div class="flex items-center gap-2 mb-1">
+                      <div class="px-1.5 py-0.5 rounded text-[9px] font-bold uppercase tracking-widest bg-[var(--color-dusty-rose)] text-primary mr-1">
+                        Added
+                      </div>
+                      <h4 class="text-sm font-medium">Personalized Greeting</h4>
+                      <button id="edit-greeting-btn" class="w-6 h-6 rounded flex items-center justify-center bg-secondary text-muted hover:text-primary opacity-0 group-hover:opacity-100 transition-all focus-ring">
+                        <iconify-icon icon="lucide:pencil" class="text-[10px]"></iconify-icon>
+                      </button>
+                    </div>
+                    <p class="text-xs text-muted">Detailed opening &amp; closing</p>
+                  </div>
+                  <span class="text-sm font-medium">$20</span>
+                </div>
+
+              </div>
+
+              <!-- Totals -->
+              <div class="p-6 bg-secondary relative overflow-hidden">
+                <!-- Subtle accent bg -->
+                <div class="absolute top-0 right-0 w-32 h-32 bg-[var(--color-dusty-rose)] opacity-10 rounded-bl-full blur-2xl pointer-events-none"></div>
+                
+                <div class="flex justify-between items-end mb-2 relative z-10">
+                  <span class="text-sm font-medium uppercase tracking-wider text-muted">Estimated Total</span>
+                  <span class="text-2xl font-serif font-bold tracking-tight text-primary">$145</span>
+                </div>
+                <div class="flex justify-between items-center text-xs text-muted pt-3 border-t border-rule relative z-10">
+                  <span>Budget limit: $150</span>
+                  <span class="inline-flex items-center gap-1 text-emerald-700 font-medium bg-emerald-50 px-2 py-1 rounded border border-emerald-200">
+                    <iconify-icon icon="lucide:check-circle-2" class="text-[10px]"></iconify-icon>
+                    $5 under budget ✓
+                  </span>
+                </div>
+              </div>
+
+              <!-- Terms & Delivery -->
+              <div class="p-6 border-t border-rule space-y-5">
+                <div class="flex gap-3 text-sm">
+                  <div class="w-8 h-8 rounded-full bg-secondary flex items-center justify-center shrink-0 border border-rule">
+                    <iconify-icon icon="lucide:truck" class="text-muted"></iconify-icon>
+                  </div>
+                  <div>
+                    <p class="font-medium mb-0.5">Standard Delivery</p>
+                    <p class="text-muted text-xs leading-relaxed">
+                      Estimated 7 days after payment confirmation. Subject to creator approval.
+                    </p>
+                  </div>
+                </div>
+                
+                <div class="flex gap-3 text-sm bg-secondary/50 p-3 rounded-lg border border-rule">
+                  <iconify-icon icon="lucide:shield-check" class="text-muted shrink-0 pt-0.5"></iconify-icon>
+                  <div class="text-[11px] text-muted leading-relaxed space-y-1">
+                    <p class="font-medium text-primary mb-1">Creator Boundaries Apply</p>
+                    <p>All options are selected from Maya's approved catalog. Wardrobe and setting adhere to non-explicit guidelines.</p>
+                    <p>Final scope, price, and delivery date require creator review before any payment is taken.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- CTA -->
+              <div class="p-6 pt-0">
+                <a href="https://p.superdesign.dev/draft/48723685-c114-4cee-b2c5-6b27b89fc2de" id="btn-review-scene-desktop" class="w-full h-[48px] rounded-[12px] bg-[var(--color-text-primary)] text-[var(--color-bg)] text-base font-medium hover:bg-black transition-colors focus-ring flex items-center justify-center gap-2 shadow-md hover:shadow-lg">
+                  Review Scene Card
+                  <iconify-icon icon="lucide:arrow-right"></iconify-icon>
+                </a>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </main>
+    
+    <!-- Mobile Sticky Scene Card Summary (Hidden on Desktop) -->
+    <div class="mobile-scene-summary fixed bottom-0 left-0 right-0 z-40 bg-panel border-t border-rule shadow-[0_-4px_20px_rgba(0,0,0,0.05)] p-4 flex-col gap-3 animate-flash">
+      <div class="flex items-center justify-between">
+        <div>
+          <h4 class="font-serif text-lg font-bold">Scene Estimate</h4>
+          <div class="flex items-center gap-2">
+            <span class="text-xl font-bold tracking-tight">$145</span>
+            <span class="text-[10px] text-emerald-700 font-medium bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">$5 under</span>
+          </div>
+        </div>
+        <a href="https://p.superdesign.dev/draft/48723685-c114-4cee-b2c5-6b27b89fc2de" id="btn-review-scene-mobile" class="h-[44px] px-6 rounded-[12px] bg-[var(--color-text-primary)] text-[var(--color-bg)] text-sm font-medium hover:bg-black transition-colors focus-ring flex items-center justify-center gap-2 shadow-sm">
+          Review
+          <iconify-icon icon="lucide:arrow-right"></iconify-icon>
+        </a>
+      </div>
+      <div class="w-12 h-1 bg-rules mx-auto rounded-full mt-1 opacity-50"></div>
+    </div>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,262 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Detail Modal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        cream: '#FDF8F3',
+                        panel: '#FFFFFF',
+                        espresso: '#302720',
+                        muted: '#70625C',
+                        rose: '#E4A4BD',
+                        deeprose: '#84485D',
+                        divider: '#DED3CB',
+                        alert: '#E37A6A'
+                    },
+                    transitionDuration: {
+                        '160': '160ms',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for modal */
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background-color: #DED3CB;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Simulating Dashboard -->
+    <div class="min-h-screen bg-cream font-sans text-espresso p-8 flex items-start justify-center" data-sd-id="1">
+        <!-- Fake content behind modal to show transparency -->
+        <div class="w-full max-w-6xl grid grid-cols-3 gap-6 opacity-30 blur-sm pointer-events-none" data-sd-id="2">
+            <div class="h-64 bg-white rounded-xl border border-divider" data-sd-id="3"></div>
+            <div class="h-64 bg-white rounded-xl border border-divider" data-sd-id="4"></div>
+            <div class="h-64 bg-white rounded-xl border border-divider" data-sd-id="5"></div>
+        </div>
+    </div>
+
+    <!-- Modal Overlay Backdrop -->
+    <div class="fixed inset-0 bg-espresso/30 backdrop-blur-[2px] z-50 flex items-center justify-center p-4 sm:p-6 lg:p-12 overflow-y-auto custom-scrollbar" data-sd-id="6">
+        
+        <!-- Modal Container -->
+        <div class="bg-panel rounded-[12px] shadow-[0_20px_60px_rgba(0,0,0,0.08)] w-full max-w-[1100px] flex flex-col relative max-h-full overflow-hidden" data-sd-id="7">
+            
+            <!-- Close Button -->
+            <a href="https://p.superdesign.dev/draft/2b65d4ed-45e0-464d-a22b-56a70377752b" id="modal-close-link" class="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-cream/80 hover:bg-cream text-muted hover:text-espresso transition-colors duration-160">
+                <iconify-icon icon="lucide:x" width="24"></iconify-icon>
+            </a>
+
+            <div class="flex flex-col lg:flex-row flex-1 overflow-y-auto custom-scrollbar" data-sd-id="9">
+                
+                <!-- LEFT COLUMN: Scene Card Summary (60%) -->
+                <div class="w-full lg:w-[60%] p-8 lg:p-12 border-b lg:border-b-0 lg:border-r border-divider" data-sd-id="10">
+                    
+                    <!-- Header -->
+                    <div class="flex items-center gap-3 mb-6" data-sd-id="11">
+                        <div class="w-10 h-10 rounded-full bg-cream border border-divider flex items-center justify-center text-sm font-medium text-espresso" data-sd-id="12">
+                            SS
+                        </div>
+                        <div data-sd-id="13">
+                            <p class="text-xs text-muted uppercase tracking-wider mb-0.5" data-sd-id="14">Request from</p>
+                            <p class="text-sm font-medium text-espresso" data-sd-id="15">Sarah Smiles <span class="text-muted font-normal" data-sd-id="16">(@sarah_smiles)</span></p>
+                        </div>
+                    </div>
+
+                    <h2 class="font-serif text-4xl font-semibold mb-8 text-espresso leading-tight" data-sd-id="17">
+                        Vintage Lounge Greeting
+                    </h2>
+
+                    <!-- Reference Image -->
+                    <div class="mb-10" data-sd-id="18">
+                        <div class="rounded-[12px] overflow-hidden border border-divider mb-3 aspect-video relative" data-sd-id="19">
+                            <img src="https://images.unsplash.com/photo-1551028150-64b9e398f678?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Vintage Lounge Reference" class="w-full h-full object-cover" data-sd-id="20">
+                            <div class="absolute top-3 left-3 bg-panel/90 backdrop-blur-md px-3 py-1.5 rounded-full border border-divider" data-sd-id="21">
+                                <span class="text-[11px] font-medium uppercase tracking-widest text-muted" data-sd-id="22">
+                                    Style Reference
+                                </span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-muted flex items-center gap-1.5" data-sd-id="23">
+                            <iconify-icon icon="lucide:info" width="14"></iconify-icon>
+                            Reference imagery, not a preview of your final order.
+                        </p>
+                    </div>
+
+                    <!-- Components Breakdown -->
+                    <div class="mb-10" data-sd-id="24">
+                        <h3 class="text-sm font-semibold uppercase tracking-wider text-muted mb-4" data-sd-id="25">Scene Components</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4" data-sd-id="26">
+                            <div class="p-4 rounded-xl border border-divider bg-cream/50" data-sd-id="27">
+                                <div class="flex items-center gap-2 mb-2" data-sd-id="28">
+                                    <iconify-icon icon="lucide:video" class="text-rose" width="18"></iconify-icon>
+                                    <span class="text-sm font-medium" data-sd-id="29">Duration</span>
+                                </div>
+                                <p class="text-sm text-muted" data-sd-id="30">3-Minute Video</p>
+                            </div>
+                            <div class="p-4 rounded-xl border border-divider bg-cream/50" data-sd-id="31">
+                                <div class="flex items-center gap-2 mb-2" data-sd-id="32">
+                                    <iconify-icon icon="lucide:armchair" class="text-rose" width="18"></iconify-icon>
+                                    <span class="text-sm font-medium" data-sd-id="33">Setting</span>
+                                </div>
+                                <p class="text-sm text-muted" data-sd-id="34">Standard Vintage Armchair</p>
+                            </div>
+                            <div class="p-4 rounded-xl border border-divider bg-cream/50" data-sd-id="35">
+                                <div class="flex items-center gap-2 mb-2" data-sd-id="36">
+                                    <iconify-icon icon="lucide:message-square-heart" class="text-rose" width="18"></iconify-icon>
+                                    <span class="text-sm font-medium" data-sd-id="37">Personalization</span>
+                                </div>
+                                <p class="text-sm text-muted" data-sd-id="38">Birthday Message</p>
+                            </div>
+                            <div class="p-4 rounded-xl border border-divider bg-cream/50" data-sd-id="39">
+                                <div class="flex items-center gap-2 mb-2" data-sd-id="40">
+                                    <iconify-icon icon="lucide:shirt" class="text-rose" width="18"></iconify-icon>
+                                    <span class="text-sm font-medium" data-sd-id="41">Wardrobe</span>
+                                </div>
+                                <p class="text-sm text-muted" data-sd-id="42">Creator's Choice (Standard)</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Financials & Timeline -->
+                    <div class="bg-cream rounded-xl p-6 md:p-8 border border-divider" data-sd-id="43">
+                        <h3 class="text-sm font-semibold uppercase tracking-wider text-muted mb-6" data-sd-id="44">Estimate &amp; Delivery</h3>
+                        
+                        <!-- Itemized List -->
+                        <div class="space-y-3 mb-6" data-sd-id="45">
+                            <div class="flex justify-between items-center text-sm" data-sd-id="46">
+                                <span class="text-muted" data-sd-id="47">Base Video (3-min)</span>
+                                <span data-sd-id="48">$90.00</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm" data-sd-id="49">
+                                <span class="text-muted" data-sd-id="50">Vintage Lounge Setup</span>
+                                <span data-sd-id="51">$35.00</span>
+                            </div>
+                            <div class="flex justify-between items-center text-sm" data-sd-id="52">
+                                <span class="text-muted" data-sd-id="53">Personalized Greeting</span>
+                                <span data-sd-id="54">$20.00</span>
+                            </div>
+                            <div class="pt-3 mt-3 border-t border-divider flex justify-between items-center" data-sd-id="55">
+                                <span class="font-medium" data-sd-id="56">Estimated Total</span>
+                                <span class="font-semibold text-lg" data-sd-id="57">$145.00</span>
+                            </div>
+                        </div>
+
+                        <!-- Badges -->
+                        <div class="flex flex-col sm:flex-row gap-3 pt-6 border-t border-divider" data-sd-id="58">
+                            <div class="flex-1 flex items-start gap-3 bg-panel p-3 rounded-lg border border-divider" data-sd-id="59">
+                                <iconify-icon icon="lucide:wallet" class="text-rose mt-0.5" width="18"></iconify-icon>
+                                <div data-sd-id="60">
+                                    <p class="text-xs font-medium mb-0.5" data-sd-id="61">Budget Remaining</p>
+                                    <p class="text-xs text-muted" data-sd-id="62">$5 remaining of $150</p>
+                                </div>
+                            </div>
+                            <div class="flex-1 flex items-start gap-3 bg-panel p-3 rounded-lg border border-divider" data-sd-id="63">
+                                <iconify-icon icon="lucide:calendar-clock" class="text-rose mt-0.5" width="18"></iconify-icon>
+                                <div data-sd-id="64">
+                                    <p class="text-xs font-medium mb-0.5" data-sd-id="65">Delivery Timeline</p>
+                                    <p class="text-xs text-muted" data-sd-id="66">7 days after payment</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- RIGHT COLUMN: Decision Controls (40%) -->
+                <div class="w-full lg:w-[40%] p-8 lg:p-12 flex flex-col bg-panel" data-sd-id="67">
+                    
+                    <!-- Fan Notes Section -->
+                    <div class="mb-10 flex-1" data-sd-id="68">
+                        <h3 class="text-sm font-semibold uppercase tracking-wider text-muted mb-4 flex items-center gap-2" data-sd-id="69">
+                            <iconify-icon icon="lucide:quote" width="16"></iconify-icon>
+                            Notes from Sarah
+                        </h3>
+                        <div class="bg-cream/40 rounded-xl p-6 border border-divider relative" data-sd-id="70">
+                            <p class="text-sm text-espresso leading-relaxed italic" data-sd-id="71">
+                                "Hi Maya! It's my sister's 30th birthday. She absolutely loves your vintage aesthetic. Could you just wish her a happy birthday and tell her I love her? No specific script needed, just your natural vibe!"
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Action Controls -->
+                    <div class="space-y-4" data-sd-id="72">
+                        <h3 class="text-sm font-semibold uppercase tracking-wider text-muted mb-4" data-sd-id="73">Creator Decision</h3>
+                        
+                        <!-- Primary Approve -->
+                        <button class="w-full flex items-center justify-center gap-2 h-[48px] bg-rose text-espresso font-medium rounded-xl hover:bg-[#D595AE] transition-all duration-160 shadow-sm" data-sd-id="74">
+                            <iconify-icon icon="lucide:check-circle-2" width="20"></iconify-icon>
+                            Approve Commission
+                        </button>
+
+                        <!-- CSS-only toggle for Propose Changes -->
+                        <input type="checkbox" id="propose-toggle" class="peer hidden" data-sd-id="75">
+                        
+                        <label for="propose-toggle" class="w-full flex items-center justify-center gap-2 h-[48px] bg-cream border border-divider text-espresso font-medium rounded-xl hover:border-espresso hover:bg-cream/80 transition-all duration-160 cursor-pointer select-none" data-sd-id="76">
+                            <iconify-icon icon="lucide:pen-tool" width="18"></iconify-icon>
+                            Propose Changes
+                        </label>
+
+                        <!-- Inline Reveal: Propose Changes UI -->
+                        <div class="hidden peer-checked:block bg-cream border border-divider rounded-xl p-5 mt-2 animate-[fadeIn_200ms_ease-out]" data-sd-id="77">
+                            <h4 class="text-sm font-medium mb-4 flex items-center gap-2" data-sd-id="78">
+                                <iconify-icon icon="lucide:arrow-right-left" class="text-rose"></iconify-icon>
+                                Adjust Estimate
+                            </h4>
+                            <div class="grid grid-cols-2 gap-4 mb-4" data-sd-id="79">
+                                <div data-sd-id="80">
+                                    <label class="text-xs text-muted block mb-1" data-sd-id="81">Original Total</label>
+                                    <div class="text-sm p-2 bg-panel border border-divider rounded-lg text-muted line-through" data-sd-id="82">$145.00</div>
+                                </div>
+                                <div data-sd-id="83">
+                                    <label class="text-xs text-espresso font-medium block mb-1" data-sd-id="84">New Total</label>
+                                    <input type="text" value="$185.00" class="w-full text-sm p-2 bg-panel border border-espresso rounded-lg text-espresso focus:outline-none focus:ring-1 focus:ring-rose" data-sd-id="85">
+                                </div>
+                            </div>
+                            <label class="text-xs text-espresso font-medium block mb-1" data-sd-id="86">Message to Fan</label>
+                            <textarea rows="2" class="w-full text-sm p-3 bg-panel border border-divider rounded-lg mb-4 focus:outline-none focus:border-espresso resize-none" placeholder="Explain the changes..." data-sd-id="87">Added 2 minutes for extra storytelling.</textarea>
+                            <button class="w-full h-[40px] bg-espresso text-cream text-sm font-medium rounded-lg hover:bg-espresso/90 transition-colors" data-sd-id="88">
+                                Send Proposal
+                            </button>
+                        </div>
+
+                        <!-- Tertiary Actions -->
+                        <div class="grid grid-cols-2 gap-4 pt-2" data-sd-id="89">
+                            <a href="https://p.superdesign.dev/draft/5d2c9ba0-0041-4771-b9b3-cc7a17bd7463" id="action-ask-question-link" class="w-full flex items-center justify-center gap-2 h-[44px] bg-panel border border-divider text-sm text-espresso font-medium rounded-xl hover:bg-cream transition-all duration-160">
+                                <iconify-icon icon="lucide:message-circle-question" width="16"></iconify-icon>
+                                Ask Question
+                            </a>
+                            <a href="https://p.superdesign.dev/draft/7fc2a528-a81a-46a5-b7f4-b81af52a323a" id="action-decline-link" class="w-full flex items-center justify-center gap-2 h-[44px] bg-panel border border-divider text-sm text-alert font-medium rounded-xl hover:bg-alert/10 transition-all duration-160">
+                                <iconify-icon icon="lucide:x-circle" width="16"></iconify-icon>
+                                Decline
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body></html>

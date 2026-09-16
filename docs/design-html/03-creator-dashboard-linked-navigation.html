@@ -1,0 +1,360 @@
+<!DOCTYPE html><html lang="en"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creator Approval Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['Cormorant Garamond', 'serif'],
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        cream: '#FDF8F3',
+                        panel: '#FFFFFF',
+                        espresso: '#302720',
+                        muted: '#70625C',
+                        rose: '#E4A4BD',
+                        deeprose: '#84485D',
+                        divider: '#DED3CB',
+                        status: {
+                            new: '#4B9FE3',
+                            pending: '#D4A574',
+                            alert: '#E37A6A',
+                            approved: '#8EB486'
+                        }
+                    },
+                    transitionDuration: {
+                        '160': '160ms',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Select Styling */
+        select {
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2370625C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.75rem center;
+            background-size: 1em;
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen bg-cream font-sans text-espresso selection:bg-rose/30" data-sd-id="1">
+        
+        <!-- Top Navigation -->
+        <header class="w-full bg-cream border-b border-divider px-8 py-4 sticky top-0 z-40" data-sd-id="2">
+            <div class="max-w-[1320px] mx-auto flex items-center justify-between" data-sd-id="3">
+                <!-- Logo -->
+                <div class="flex items-center gap-8" data-sd-id="4">
+                    <h1 class="font-serif text-2xl font-medium tracking-tight text-espresso" data-sd-id="5">
+                        Maya Atelier
+                    </h1>
+                    
+                    <!-- Tabs -->
+                    <nav class="hidden md:flex items-center gap-6" data-sd-id="6">
+                        <a href="#requests" id="nav-requests-link" class="text-sm font-medium text-espresso border-b-2 border-espresso pb-1" data-sd-id="7">
+                            Requests
+                        </a>
+                        <a href="#completed" id="nav-completed-link" class="text-sm text-muted hover:text-espresso transition-colors duration-160 pb-1 border-b-2 border-transparent" data-sd-id="8">
+                            Completed
+                        </a>
+                        <a href="#settings" id="nav-settings-link" class="text-sm text-muted hover:text-espresso transition-colors duration-160 pb-1 border-b-2 border-transparent" data-sd-id="9">
+                            Settings
+                        </a>
+                    </nav>
+                </div>
+
+                <!-- Right Actions -->
+                <div class="flex items-center gap-6" data-sd-id="10">
+                    <div class="hidden md:flex items-center gap-2 bg-rose/20 px-3 py-1.5 rounded-full" data-sd-id="11">
+                        <span class="relative flex h-2 w-2" data-sd-id="12">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-deeprose opacity-75" data-sd-id="13"></span>
+                          <span class="relative inline-flex rounded-full h-2 w-2 bg-deeprose" data-sd-id="14"></span>
+                        </span>
+                        <span class="text-xs font-medium text-deeprose" data-sd-id="15">3 pending decisions</span>
+                    </div>
+                    <button class="text-muted hover:text-espresso transition-colors duration-160" data-sd-id="16">
+                        <iconify-icon icon="lucide:user-circle" width="24"></iconify-icon>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="max-w-[1320px] mx-auto px-6 py-10" data-sd-id="17">
+            
+            <!-- Header & Filters -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8" data-sd-id="18">
+                <div data-sd-id="19">
+                    <h2 class="font-serif text-4xl font-medium mb-2" data-sd-id="20">Request Queue</h2>
+                    <p class="text-sm text-muted" data-sd-id="21">Review incoming commissions and manage approvals.</p>
+                </div>
+                
+                <div class="flex items-center gap-4" data-sd-id="22">
+                    <div class="relative" data-sd-id="23">
+                        <select class="bg-panel border border-divider text-sm rounded-[12px] pl-4 pr-10 py-2 focus:outline-none focus:border-espresso transition-colors duration-160 cursor-pointer" data-sd-id="24">
+                            <option data-sd-id="25">Status: All Active</option>
+                            <option data-sd-id="26">New Requests</option>
+                            <option data-sd-id="27">Pending Response</option>
+                            <option data-sd-id="28">Proposed Changes</option>
+                            <option data-sd-id="29">Approved</option>
+                        </select>
+                    </div>
+                    <div class="relative" data-sd-id="30">
+                        <select class="bg-panel border border-divider text-sm rounded-[12px] pl-4 pr-10 py-2 focus:outline-none focus:border-espresso transition-colors duration-160 cursor-pointer" data-sd-id="31">
+                            <option data-sd-id="32">Sort: Date (Newest)</option>
+                            <option data-sd-id="33">Sort: Date (Oldest)</option>
+                            <option data-sd-id="34">Sort: Price (High-Low)</option>
+                            <option data-sd-id="35">Sort: Price (Low-High)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" data-sd-id="36">
+                
+                <!-- Card 1: New -->
+                <a href="https://p.superdesign.dev/draft/c6e6d108-a7c9-4d51-90b2-4090ebce1a93" id="request-card-sarah" class="block bg-panel border border-divider rounded-[12px] p-6 shadow-sm hover:shadow-md transition-all duration-160 cursor-pointer group" data-sd-id="37">
+                    <div class="flex justify-between items-start mb-4" data-sd-id="38">
+                        <div class="flex items-center gap-3" data-sd-id="39">
+                            <div class="w-8 h-8 rounded-full bg-cream border border-divider flex items-center justify-center text-xs font-medium text-espresso" data-sd-id="40">
+                                SS
+                            </div>
+                            <span class="text-sm font-medium text-muted" data-sd-id="41">@sarah_smiles</span>
+                        </div>
+                        <div class="flex items-center gap-2" title="New Request" data-sd-id="42">
+                            <span class="text-xs font-medium text-status-new" data-sd-id="43">New</span>
+                            <iconify-icon icon="lucide:circle-dot" class="text-status-new" width="18"></iconify-icon>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-serif text-2xl font-bold mb-2 group-hover:text-deeprose transition-colors duration-160" data-sd-id="44">
+                        Vintage Lounge Greeting
+                    </h3>
+                    <p class="text-sm text-muted mb-6 line-clamp-2" data-sd-id="45">
+                        Birthday message for my sister. 3-minute video duration with the standard vintage armchair setup. No special wardrobe requests.
+                    </p>
+                    
+                    <hr class="border-t border-divider mb-4">
+                    
+                    <div class="flex items-center justify-between" data-sd-id="46">
+                        <div class="flex flex-col" data-sd-id="47">
+                            <span class="text-xs text-muted mb-1" data-sd-id="48">Estimated Total</span>
+                            <span class="text-base font-semibold" data-sd-id="49">$145.00</span>
+                        </div>
+                        <div class="flex flex-col text-right" data-sd-id="50">
+                            <span class="text-xs text-muted mb-1" data-sd-id="51">Requested Delivery</span>
+                            <span class="text-sm font-medium" data-sd-id="52">Dec 12 (in 5 days)</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 2: Proposed Changes -->
+                <a href="https://p.superdesign.dev/draft/c6e6d108-a7c9-4d51-90b2-4090ebce1a93" id="request-card-alex" class="block bg-panel border border-divider rounded-[12px] p-6 shadow-sm hover:shadow-md transition-all duration-160 cursor-pointer group" data-sd-id="53">
+                    <div class="flex justify-between items-start mb-4" data-sd-id="54">
+                        <div class="flex items-center gap-3" data-sd-id="55">
+                            <div class="w-8 h-8 rounded-full bg-cream border border-divider flex items-center justify-center text-xs font-medium text-espresso" data-sd-id="56">
+                                AL
+                            </div>
+                            <span class="text-sm font-medium text-muted" data-sd-id="57">@alex_lumens</span>
+                        </div>
+                        <div class="flex items-center gap-2" title="Proposed Changes Pending" data-sd-id="58">
+                            <span class="text-xs font-medium text-status-alert" data-sd-id="59">Changes Pending</span>
+                            <iconify-icon icon="lucide:alert-triangle" class="text-status-alert" width="18"></iconify-icon>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-serif text-2xl font-bold mb-2 group-hover:text-deeprose transition-colors duration-160" data-sd-id="60">
+                        Floral Studio Scene
+                    </h3>
+                    <p class="text-sm text-muted mb-6 line-clamp-2" data-sd-id="61">
+                        Anniversary shoutout. Requested extra runtime (5 mins) which increases the base estimate. Awaiting fan approval on new price.
+                    </p>
+                    
+                    <hr class="border-t border-divider mb-4">
+                    
+                    <div class="flex items-center justify-between" data-sd-id="62">
+                        <div class="flex flex-col" data-sd-id="63">
+                            <span class="text-xs text-muted mb-1" data-sd-id="64">Proposed Total</span>
+                            <div class="flex items-center gap-2" data-sd-id="65">
+                                <span class="text-base font-semibold" data-sd-id="66">$185.00</span>
+                                <span class="text-xs text-muted line-through" data-sd-id="67">$120.00</span>
+                            </div>
+                        </div>
+                        <div class="flex flex-col text-right" data-sd-id="68">
+                            <span class="text-xs text-muted mb-1" data-sd-id="69">Requested Delivery</span>
+                            <span class="text-sm font-medium" data-sd-id="70">Dec 15</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 3: Pending Response -->
+                <a href="https://p.superdesign.dev/draft/c6e6d108-a7c9-4d51-90b2-4090ebce1a93" id="request-card-jamie" class="block bg-panel border border-divider rounded-[12px] p-6 shadow-sm hover:shadow-md transition-all duration-160 cursor-pointer group" data-sd-id="71">
+                    <div class="flex justify-between items-start mb-4" data-sd-id="72">
+                        <div class="flex items-center gap-3" data-sd-id="73">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Jamie" alt="Jamie" class="w-8 h-8 rounded-full bg-cream border border-divider" data-sd-id="74">
+                            <span class="text-sm font-medium text-muted" data-sd-id="75">@jamie_writes</span>
+                        </div>
+                        <div class="flex items-center gap-2" title="Awaiting Fan Response" data-sd-id="76">
+                            <span class="text-xs font-medium text-status-pending" data-sd-id="77">Awaiting Reply</span>
+                            <iconify-icon icon="lucide:clock" class="text-status-pending" width="18"></iconify-icon>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-serif text-2xl font-bold mb-2 group-hover:text-deeprose transition-colors duration-160" data-sd-id="78">
+                        Intimate Backstage Moment
+                    </h3>
+                    <p class="text-sm text-muted mb-6 line-clamp-2" data-sd-id="79">
+                        Need clarification on the specific script pronunciation before approving. Sent message 2 hours ago.
+                    </p>
+                    
+                    <hr class="border-t border-divider mb-4">
+                    
+                    <div class="flex items-center justify-between" data-sd-id="80">
+                        <div class="flex flex-col" data-sd-id="81">
+                            <span class="text-xs text-muted mb-1" data-sd-id="82">Estimated Total</span>
+                            <span class="text-base font-semibold" data-sd-id="83">$95.00</span>
+                        </div>
+                        <div class="flex items-center gap-2 bg-cream px-2 py-1 rounded border border-divider" data-sd-id="84">
+                            <iconify-icon icon="lucide:message-circle-question" class="text-muted" width="14"></iconify-icon>
+                            <span class="text-xs font-medium text-muted" data-sd-id="85">1 Unresolved</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 4: New -->
+                <a href="https://p.superdesign.dev/draft/c6e6d108-a7c9-4d51-90b2-4090ebce1a93" id="request-card-maya-fan" class="block bg-panel border border-divider rounded-[12px] p-6 shadow-sm hover:shadow-md transition-all duration-160 cursor-pointer group" data-sd-id="86">
+                    <div class="flex justify-between items-start mb-4" data-sd-id="87">
+                        <div class="flex items-center gap-3" data-sd-id="88">
+                            <div class="w-8 h-8 rounded-full bg-cream border border-divider flex items-center justify-center text-xs font-medium text-espresso" data-sd-id="89">
+                                MK
+                            </div>
+                            <span class="text-sm font-medium text-muted" data-sd-id="90">@maya_fan_88</span>
+                        </div>
+                        <div class="flex items-center gap-2" title="New Request" data-sd-id="91">
+                            <span class="text-xs font-medium text-status-new" data-sd-id="92">New</span>
+                            <iconify-icon icon="lucide:circle-dot" class="text-status-new" width="18"></iconify-icon>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-serif text-2xl font-bold mb-2 group-hover:text-deeprose transition-colors duration-160" data-sd-id="93">
+                        Floral Studio Scene
+                    </h3>
+                    <p class="text-sm text-muted mb-6 line-clamp-2" data-sd-id="94">
+                        Standard 2-minute greeting. Selected the dusty rose backdrop from the approved catalog. Simple, straightforward request.
+                    </p>
+                    
+                    <hr class="border-t border-divider mb-4">
+                    
+                    <div class="flex items-center justify-between" data-sd-id="95">
+                        <div class="flex flex-col" data-sd-id="96">
+                            <span class="text-xs text-muted mb-1" data-sd-id="97">Estimated Total</span>
+                            <span class="text-base font-semibold" data-sd-id="98">$120.00</span>
+                        </div>
+                        <div class="flex flex-col text-right" data-sd-id="99">
+                            <span class="text-xs text-muted mb-1" data-sd-id="100">Requested Delivery</span>
+                            <span class="text-sm font-medium" data-sd-id="101">Dec 18</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 5: Approved -->
+                <a href="https://p.superdesign.dev/draft/c6e6d108-a7c9-4d51-90b2-4090ebce1a93" id="request-card-chris" class="block bg-panel border border-divider rounded-[12px] p-6 shadow-sm hover:shadow-md transition-all duration-160 cursor-pointer group opacity-80 hover:opacity-100" data-sd-id="102">
+                    <div class="flex justify-between items-start mb-4" data-sd-id="103">
+                        <div class="flex items-center gap-3" data-sd-id="104">
+                            <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Chris" alt="Chris" class="w-8 h-8 rounded-full bg-cream border border-divider" data-sd-id="105">
+                            <span class="text-sm font-medium text-muted" data-sd-id="106">@chris_collector</span>
+                        </div>
+                        <div class="flex items-center gap-2" title="Approved" data-sd-id="107">
+                            <span class="text-xs font-medium text-status-approved" data-sd-id="108">Approved</span>
+                            <iconify-icon icon="lucide:check-circle" class="text-status-approved" width="18"></iconify-icon>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-serif text-2xl font-bold mb-2 text-espresso" data-sd-id="109">
+                        Vintage Lounge Greeting
+                    </h3>
+                    <p class="text-sm text-muted mb-6 line-clamp-2" data-sd-id="110">
+                        Request approved. Awaiting fan payment confirmation before production begins. 7-day timeline starts post-payment.
+                    </p>
+                    
+                    <hr class="border-t border-divider mb-4">
+                    
+                    <div class="flex items-center justify-between" data-sd-id="111">
+                        <div class="flex flex-col" data-sd-id="112">
+                            <span class="text-xs text-muted mb-1" data-sd-id="113">Final Total</span>
+                            <span class="text-base font-semibold" data-sd-id="114">$165.00</span>
+                        </div>
+                        <div class="flex flex-col text-right" data-sd-id="115">
+                            <span class="text-xs text-muted mb-1" data-sd-id="116">Status</span>
+                            <span class="text-sm font-medium" data-sd-id="117">Awaiting Payment</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Card 6: New -->
+                <a href="https://p.superdesign.dev/draft/c6e6d108-a7c9-4d51-90b2-4090ebce1a93" id="request-card-ryan" class="block bg-panel border border-divider rounded-[12px] p-6 shadow-sm hover:shadow-md transition-all duration-160 cursor-pointer group" data-sd-id="118">
+                    <div class="flex justify-between items-start mb-4" data-sd-id="119">
+                        <div class="flex items-center gap-3" data-sd-id="120">
+                            <div class="w-8 h-8 rounded-full bg-cream border border-divider flex items-center justify-center text-xs font-medium text-espresso" data-sd-id="121">
+                                RT
+                            </div>
+                            <span class="text-sm font-medium text-muted" data-sd-id="122">@ryan_t_designs</span>
+                        </div>
+                        <div class="flex items-center gap-2" title="New Request" data-sd-id="123">
+                            <span class="text-xs font-medium text-status-new" data-sd-id="124">New</span>
+                            <iconify-icon icon="lucide:circle-dot" class="text-status-new" width="18"></iconify-icon>
+                        </div>
+                    </div>
+                    
+                    <h3 class="font-serif text-2xl font-bold mb-2 group-hover:text-deeprose transition-colors duration-160" data-sd-id="125">
+                        Intimate Backstage
+                    </h3>
+                    <p class="text-sm text-muted mb-6 line-clamp-2" data-sd-id="126">
+                        Just a quick 1-minute casual greeting. No script provided, just asked for "words of encouragement for an artist."
+                    </p>
+                    
+                    <hr class="border-t border-divider mb-4">
+                    
+                    <div class="flex items-center justify-between" data-sd-id="127">
+                        <div class="flex flex-col" data-sd-id="128">
+                            <span class="text-xs text-muted mb-1" data-sd-id="129">Estimated Total</span>
+                            <span class="text-base font-semibold" data-sd-id="130">$80.00</span>
+                        </div>
+                        <div class="flex flex-col text-right" data-sd-id="131">
+                            <span class="text-xs text-muted mb-1" data-sd-id="132">Requested Delivery</span>
+                            <span class="text-sm font-medium" data-sd-id="133">Flexible</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+            
+            <!-- Empty state (hidden by default, included for structure completeness) -->
+            <!-- 
+            <div class="flex flex-col items-center justify-center py-20 text-center">
+                <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center mb-4 border border-divider shadow-sm">
+                    <iconify-icon icon="lucide:inbox" class="text-muted" width="28"></iconify-icon>
+                </div>
+                <h3 class="font-serif text-2xl font-medium mb-2">You're all caught up</h3>
+                <p class="text-sm text-muted">No new requests pending your review at the moment.</p>
+            </div>
+            -->
+
+        </main>
+    </div>
+
+</body></html>

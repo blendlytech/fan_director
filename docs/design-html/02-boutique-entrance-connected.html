@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maya Atelier - Boutique Entrance</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&amp;family=Inter:wght@300;400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+    body {
+        font-family: 'Inter', sans-serif;
+        background-color: #FDF8F3;
+        color: #302720;
+    }
+    h1, h2, h3, h4, h5, h6, .font-serif {
+        font-family: 'Cormorant Garamond', serif;
+    }
+    .bg-cream {
+        background-color: #FDF8F3;
+    }
+    .text-espresso {
+        color: #302720;
+    }
+    .text-muted {
+        color: #70625C;
+    }
+    .bg-rose {
+        background-color: #E4A4BD;
+    }
+    .text-rose {
+        color: #E4A4BD;
+    }
+    .border-divider {
+        border-color: #DED3CB;
+    }
+    .transition-all {
+        transition-property: all;
+        transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        transition-duration: 160ms;
+    }
+</style>
+</head>
+<body>
+    <div class="min-h-screen flex flex-col">
+        <!-- Top Navigation -->
+        <nav class="w-full flex items-center justify-between px-8 py-6 border-b border-divider sticky top-0 bg-[#FDF8F3] z-40">
+            <div class="flex items-center gap-4 sm:gap-8">
+                <a href="#home" id="logo-link" class="text-2xl font-serif text-espresso hover:opacity-80 transition-all">
+                    Maya Atelier
+                </a>
+                <span class="text-xs tracking-widest uppercase border border-divider px-2 py-1 rounded-full text-muted">
+                    Demo
+                </span>
+            </div>
+
+            <!-- Center Nav Links -->
+            <div class="hidden md:flex items-center gap-8">
+                <a href="#collection" id="nav-link-collection" class="text-sm font-medium hover:text-rose transition-all">Collection</a>
+                <a href="#studio" id="nav-link-studio" class="text-sm font-medium hover:text-rose transition-all">Your studio</a>
+                <a href="#saved" id="nav-link-saved" class="text-sm font-medium hover:text-rose transition-all">Saved ideas</a>
+            </div>
+
+            <a href="#collection" id="return-link" class="text-sm text-muted hover:text-espresso transition-all flex items-center gap-2">
+                <iconify-icon icon="lucide:arrow-left" width="16"></iconify-icon>
+                Return to portfolio
+            </a>
+        </nav>
+
+        <!-- Main Content Container -->
+        <main class="flex-1 max-w-[1320px] mx-auto w-full px-8 py-16">
+            
+            <!-- Hero Section -->
+            <section class="mb-20 grid grid-cols-12 gap-8 items-center">
+                <div class="col-span-12 md:col-span-5 pr-8">
+                    <h1 class="text-5xl font-serif mb-6 leading-tight text-espresso tracking-tight">
+                        A little inspiration.<br>Entirely yours.
+                    </h1>
+                    <p class="text-muted text-base leading-relaxed mb-8">
+                        Welcome to the studio. Here we collaboratively plan your custom commission. Start with a curated theme or describe your vision, and our intelligent Director will help you refine the details before Maya's review.
+                    </p>
+                </div>
+                <div class="col-span-12 md:col-span-7">
+                    <div class="w-full h-80 rounded-xl overflow-hidden shadow-sm relative">
+                        <img src="https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=1200&amp;q=80" alt="Vintage lounge still life" class="w-full h-full object-cover">
+                        <div class="absolute inset-0 bg-black/5"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Two Entry Paths -->
+            <section class="mb-20">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div class="p-8 border border-divider rounded-xl bg-white hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-serif mb-3 text-espresso group-hover:text-rose transition-colors">
+                                Explore Curated Themes
+                            </h3>
+                            <p class="text-muted text-sm">
+                                Browse our collection of carefully designed commissions, pre-approved by Maya and ready for your personal touch.
+                            </p>
+                        </div>
+                        <div class="mt-6 flex justify-end">
+                            <iconify-icon icon="lucide:arrow-right" class="text-muted group-hover:text-rose transition-colors" width="24"></iconify-icon>
+                        </div>
+                    </div>
+                    <div class="p-8 border border-divider rounded-xl bg-white hover:shadow-md transition-all cursor-pointer group flex flex-col justify-between">
+                        <div>
+                            <h3 class="text-2xl font-serif mb-3 text-espresso group-hover:text-rose transition-colors">
+                                Tell Us Your Vision
+                            </h3>
+                            <p class="text-muted text-sm">
+                                Have a specific idea in mind? Describe what you're imagining, and we'll help piece together the perfect scene.
+                            </p>
+                        </div>
+                        <div class="mt-6 flex justify-end">
+                            <iconify-icon icon="lucide:arrow-right" class="text-muted group-hover:text-rose transition-colors" width="24"></iconify-icon>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Theme Cards Section -->
+            <section class="mb-24">
+                <h2 class="text-3xl font-serif mb-10 text-espresso text-center tracking-tight">Or begin with a curated scene</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    
+                    <!-- Card 1 -->
+                    <div class="bg-white border border-divider rounded-xl overflow-hidden hover:shadow-lg transition-all flex flex-col">
+                        <div class="h-48 w-full overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1551028150-64b9e398f678?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Vintage Lounge" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+                        </div>
+                        <div class="p-6 flex flex-col flex-1">
+                            <h3 class="text-2xl font-serif font-bold text-espresso mb-2 tracking-tight">
+                                Vintage Lounge Greeting
+                            </h3>
+                            <p class="text-muted text-sm mb-6 flex-1">
+                                A cozy, cinematic atmosphere with warm lighting. Perfect for personalized messages and intimate announcements.
+                            </p>
+                            <div class="flex items-center justify-between mb-6">
+                                <span class="text-sm text-espresso font-medium">
+                                    From $90 – $150
+                                </span>
+                            </div>
+                            <a href="https://p.superdesign.dev/draft/048b6b8a-1e95-4352-b0eb-32e252b1e30f" id="btn-theme-1-link" class="w-full h-[44px] bg-rose text-espresso font-medium rounded-xl hover:bg-[#D595AE] transition-all flex items-center justify-center">
+                                Begin Your Vision
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Card 2 -->
+                    <div class="bg-white border border-divider rounded-xl overflow-hidden hover:shadow-lg transition-all flex flex-col">
+                        <div class="h-48 w-full overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1563241527-2004cb630db0?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Floral Studio" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+                        </div>
+                        <div class="p-6 flex flex-col flex-1">
+                            <h3 class="text-2xl font-serif font-bold text-espresso mb-2 tracking-tight">
+                                Floral Studio Scene
+                            </h3>
+                            <p class="text-muted text-sm mb-6 flex-1">
+                                Bright, airy, and surrounded by seasonal blooms. Ideal for cheerful celebrations and uplifting messages.
+                            </p>
+                            <div class="flex items-center justify-between mb-6">
+                                <span class="text-sm text-espresso font-medium">
+                                    From $120 – $180
+                                </span>
+                            </div>
+                            <a href="https://p.superdesign.dev/draft/048b6b8a-1e95-4352-b0eb-32e252b1e30f" id="btn-theme-2-link" class="w-full h-[44px] bg-rose text-espresso font-medium rounded-xl hover:bg-[#D595AE] transition-all flex items-center justify-center">
+                                Begin Your Vision
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Card 3 -->
+                    <div class="bg-white border border-divider rounded-xl overflow-hidden hover:shadow-lg transition-all flex flex-col">
+                        <div class="h-48 w-full overflow-hidden">
+                            <img src="https://images.unsplash.com/photo-1517457224219-c60317e3df1c?ixlib=rb-4.0.3&amp;auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="Backstage Moment" class="w-full h-full object-cover hover:scale-105 transition-transform duration-700">
+                        </div>
+                        <div class="p-6 flex flex-col flex-1">
+                            <h3 class="text-2xl font-serif font-bold text-espresso mb-2 tracking-tight">
+                                Intimate Backstage
+                            </h3>
+                            <p class="text-muted text-sm mb-6 flex-1">
+                                Raw, candid, and authentic. A glimpse behind the scenes for a more personal, unpolished connection.
+                            </p>
+                            <div class="flex items-center justify-between mb-6">
+                                <span class="text-sm text-espresso font-medium">
+                                    From $80 – $130
+                                </span>
+                            </div>
+                            <a href="https://p.superdesign.dev/draft/048b6b8a-1e95-4352-b0eb-32e252b1e30f" id="btn-theme-3-link" class="w-full h-[44px] bg-rose text-espresso font-medium rounded-xl hover:bg-[#D595AE] transition-all flex items-center justify-center">
+                                Begin Your Vision
+                            </a>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Creator Boundaries Explainer -->
+            <section class="pt-12 border-t border-divider">
+                <h2 class="text-3xl font-serif mb-8 text-espresso tracking-tight">How this works</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-16 gap-y-8">
+                    <div>
+                        <div class="flex items-start gap-4 mb-6">
+                            <div class="mt-1 text-rose">
+                                <iconify-icon icon="lucide:check-circle" width="20"></iconify-icon>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-espresso mb-1">Curated &amp; Pre-approved</h4>
+                                <p class="text-sm text-muted">
+                                    All listed themes, settings, and wardrobe options in the catalog are pre-approved by Maya. Custom requests outside these boundaries require additional review.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1 text-rose">
+                                <iconify-icon icon="lucide:calculator" width="20"></iconify-icon>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-espresso mb-1">Transparent Estimates</h4>
+                                <p class="text-sm text-muted">
+                                    Prices shown are estimates based on your selections. Final pricing is confirmed upon Maya's review and approval of your Scene Card.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-start gap-4 mb-6">
+                            <div class="mt-1 text-rose">
+                                <iconify-icon icon="lucide:clock" width="20"></iconify-icon>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-espresso mb-1">Standard Delivery</h4>
+                                <p class="text-sm text-muted">
+                                    Delivery is typically 7 days <span class="text-rose font-medium">after payment confirmation</span>. Expedited options may be available during the planning phase.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-4">
+                            <div class="mt-1 text-rose">
+                                <iconify-icon icon="lucide:shield-check" width="20"></iconify-icon>
+                            </div>
+                            <div>
+                                <h4 class="font-medium text-espresso mb-1">Content Guidelines</h4>
+                                <p class="text-sm text-muted">
+                                    Wardrobe is strictly creator-curated. No explicit content, political endorsements, or commercial promotions are permitted in these personal commissions.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+</body>
+</html>
