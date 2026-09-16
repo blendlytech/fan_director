@@ -36,7 +36,8 @@ These are load-bearing for the project's honesty, not style preferences:
   mobile menu (11) and page not found (12). When in doubt about layout or copy,
   this is what to match. Designs 13 onward are **staging designs** for the
   backend build (doc 11), not screens in this demo: creator limits (13), paused
-  fan account (14) and safety-case review (15).
+  fan account (14), safety-case review (15), sign-in (16), AI Director live
+  states (17), saving and price changes (18) and the custom request (19).
 - `docs/specs/01-design-context.md` and `02-design-system.md` are reliable and
   worth reading before touching copy, pricing, or styling. `03-developer-handoff.md`
   is reliable for design and page behaviour, but its backend/API/deployment

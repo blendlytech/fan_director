@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Director states - Maya Atelier</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { serif: ['Cormorant Garamond', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+      colors: {
+        cream: '#FDF8F3', panel: '#FFFFFF', secondary: '#F5F0EB', espresso: '#302720', muted: '#70625C',
+        rose: '#E4A4BD', rosehover: '#D595AE', deeprose: '#84485D', divider: '#DED3CB',
+        okbg: '#EEF4EC', okborder: '#C4D9BF', okink: '#4F7A48',
+        pendbg: '#F8EFE4', pendborder: '#E3C8A6', pendink: '#7A5530'
+      },
+      transitionDuration: { '160': '160ms' }
+    }
+  }
+}
+</script>
+<style>
+  body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin: 0; }
+  html { background-color: #FDF8F3; }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
+  .focus-ring:focus-visible { outline: 2px solid #302720; outline-offset: 2px; }
+  @keyframes dot { 0%, 80%, 100% { opacity: .25 } 40% { opacity: 1 } }
+  .dot { animation: dot 1.2s infinite; }
+  .dot:nth-child(2) { animation-delay: .15s } .dot:nth-child(3) { animation-delay: .3s }
+  @media (prefers-reduced-motion: reduce) { .dot { animation: none; opacity: .6 } }
+</style>
+</head>
+<body>
+<div class="bg-cream font-sans text-espresso min-h-screen">
+
+  <!--
+    DESIGN 17: AI Director live states (doc 11 Phase 3). Staging design.
+    Builds on design 04: conversation on the left, Scene Card on the right.
+    Each state below replaces or follows the relevant part of 04's conversation column.
+
+    Rules this design encodes:
+    - Every price comes from the server's quote of a suggestion. The Director's own
+      words never contain a price, total or promise (doc 11 §8 Phase 3).
+    - A suggestion changes nothing until the fan adds it.
+    - If the AI fails or runs out, the Scene Card is untouched and the catalog still works.
+    - Director avatar and message style follow 04: espresso circle with sparkles.
+  -->
+
+  <header class="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-divider">
+    <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 h-[80px] flex items-center justify-between">
+      <div class="flex items-center gap-4 sm:gap-6">
+        <a href="#collection" class="inline-flex min-h-[44px] items-center font-serif text-2xl sm:text-3xl font-medium tracking-tight focus-ring">Maya Atelier</a>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-secondary text-muted border border-divider">Staging design</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#collection" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Collection</a>
+        <a href="#studio" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Your studio</a>
+        <a href="#saved" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Saved ideas</a>
+      </nav>
+      <button type="button" aria-expanded="false" class="md:hidden inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-[12px] px-3 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
+        <iconify-icon icon="lucide:menu" width="18"></iconify-icon>
+        Menu
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-[1120px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-20">
+
+    <!-- ============================================================
+         A. THINKING
+         ============================================================ -->
+    <section aria-labelledby="a-label" class="max-w-[680px]">
+      <p id="a-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A · Waiting for the Director</p>
+
+      <div class="space-y-6">
+        <div class="flex gap-4">
+          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-divider bg-secondary"><iconify-icon icon="lucide:user" class="text-muted" aria-hidden="true"></iconify-icon></div>
+          <p class="pt-1 text-base leading-relaxed">Could we make it feel a bit more special, but stay near my budget?</p>
+        </div>
+        <div class="flex gap-4" role="status" aria-live="polite">
+          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-espresso text-cream"><iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon></div>
+          <div class="flex items-center gap-3 pt-1.5 text-sm text-muted">
+            <span class="flex gap-1" aria-hidden="true"><span class="dot h-2 w-2 rounded-full bg-muted"></span><span class="dot h-2 w-2 rounded-full bg-muted"></span><span class="dot h-2 w-2 rounded-full bg-muted"></span></span>
+            The Director is thinking&hellip;
+          </div>
+        </div>
+      </div>
+
+      <!-- composer while waiting -->
+      <div class="mt-6 overflow-hidden rounded-[12px] border border-divider bg-panel">
+        <label for="a-composer" class="sr-only">Message to the Director</label>
+        <textarea id="a-composer" disabled rows="2" class="w-full resize-none bg-panel p-4 text-base text-muted" placeholder="Wait for the Director to reply&hellip;"></textarea>
+        <div class="flex items-center justify-between border-t border-divider bg-secondary px-4 py-3">
+          <span class="text-xs text-muted">14 replies left for this Scene Card</span>
+          <button type="button" disabled class="inline-flex min-h-[44px] items-center gap-2 rounded-[12px] bg-divider px-6 text-sm font-medium text-muted cursor-not-allowed">Send <iconify-icon icon="lucide:send" width="14" aria-hidden="true"></iconify-icon></button>
+        </div>
+      </div>
+      <p class="mt-2 text-xs text-muted">One message at a time. The replies count is always visible under the message box.</p>
+    </section>
+
+    <!-- ============================================================
+         B. SUGGESTIONS SHOWN (up to 3)
+         ============================================================ -->
+    <section aria-labelledby="b-label" class="max-w-[680px]">
+      <p id="b-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">B · Director reply with suggestions</p>
+
+      <div class="flex gap-4">
+        <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-espresso text-cream"><iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon></div>
+        <div class="w-full space-y-4 pt-1">
+          <p class="text-base leading-relaxed">Two ways to make it feel more special. Pick one, both, or neither.</p>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="rounded-[12px] border border-divider bg-panel p-4">
+              <p class="mb-1 text-xs font-semibold uppercase tracking-wider text-muted">Suggestion</p>
+              <h3 class="mb-2 font-serif text-2xl font-semibold leading-tight">Richer greeting</h3>
+              <ul class="mb-3 space-y-1 text-sm">
+                <li class="flex items-start gap-2"><iconify-icon icon="lucide:plus" width="16" class="mt-0.5 shrink-0 text-deeprose" aria-hidden="true"></iconify-icon>Detailed greeting</li>
+              </ul>
+              <div class="mb-4 rounded-[10px] bg-secondary px-3 py-2 text-sm">
+                <div class="flex justify-between"><span class="text-muted">Adds</span><span class="font-medium">$20</span></div>
+                <div class="flex justify-between"><span class="text-muted">New estimate</span><span class="font-semibold">$145</span></div>
+                <p class="mt-1 text-xs text-okink">$5 under your budget</p>
+              </div>
+              <div class="flex gap-2">
+                <button type="button" class="flex-1 min-h-[44px] rounded-[12px] bg-rose hover:bg-rosehover px-3 text-sm font-medium shadow-sm transition-colors duration-160 focus-ring">Add to Scene Card</button>
+                <button type="button" class="min-h-[44px] rounded-[12px] border border-divider hover:bg-secondary px-3 text-sm font-medium transition-colors duration-160 focus-ring">No thanks</button>
+              </div>
+            </div>
+
+            <div class="rounded-[12px] border border-divider bg-panel p-4">
+              <p class="mb-1 text-xs font-semibold uppercase tracking-wider text-muted">Suggestion</p>
+              <h3 class="mb-2 font-serif text-2xl font-semibold leading-tight">One more minute</h3>
+              <ul class="mb-3 space-y-1 text-sm">
+                <li class="flex items-start gap-2"><iconify-icon icon="lucide:plus" width="16" class="mt-0.5 shrink-0 text-deeprose" aria-hidden="true"></iconify-icon>Extra minute &times; 1</li>
+              </ul>
+              <div class="mb-4 rounded-[10px] bg-secondary px-3 py-2 text-sm">
+                <div class="flex justify-between"><span class="text-muted">Adds</span><span class="font-medium">$40</span></div>
+                <div class="flex justify-between"><span class="text-muted">New estimate</span><span class="font-semibold">$165</span></div>
+                <p class="mt-1 text-xs text-pendink">$15 over your budget</p>
+              </div>
+              <div class="flex gap-2">
+                <button type="button" class="flex-1 min-h-[44px] rounded-[12px] bg-rose hover:bg-rosehover px-3 text-sm font-medium shadow-sm transition-colors duration-160 focus-ring">Add to Scene Card</button>
+                <button type="button" class="min-h-[44px] rounded-[12px] border border-divider hover:bg-secondary px-3 text-sm font-medium transition-colors duration-160 focus-ring">No thanks</button>
+              </div>
+            </div>
+          </div>
+          <p class="flex items-start gap-2 text-xs text-muted"><iconify-icon icon="lucide:calculator" width="14" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>Prices come from Maya&rsquo;s catalog, not from the Director. Nothing changes until you add it.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         C. AFTER A CHOICE
+         ============================================================ -->
+    <section aria-labelledby="c-label" class="max-w-[680px] space-y-4">
+      <p id="c-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">C · After the fan chooses (each card collapses to one line)</p>
+
+      <div role="status" class="flex items-center gap-3 rounded-[12px] border border-okborder bg-okbg px-4 py-1 text-sm">
+        <iconify-icon icon="lucide:circle-check" width="18" class="shrink-0 text-okink" aria-hidden="true"></iconify-icon>
+        <span class="flex-1 py-2"><span class="font-medium">Richer greeting</span> added. Your estimate is now $145.</span>
+        <button type="button" class="shrink-0 inline-flex min-h-[44px] items-center gap-1.5 px-2 font-medium underline underline-offset-4 focus-ring"><iconify-icon icon="lucide:undo-2" width="14" aria-hidden="true"></iconify-icon>Undo</button>
+      </div>
+      <div class="flex items-center gap-3 rounded-[12px] border border-divider bg-secondary px-4 py-3 text-sm text-muted">
+        <iconify-icon icon="lucide:circle-minus" width="18" class="shrink-0" aria-hidden="true"></iconify-icon>
+        <span><span class="font-medium">One more minute</span> not added.</span>
+      </div>
+      <div class="flex items-start gap-3 rounded-[12px] border border-pendborder bg-pendbg px-4 py-3 text-sm">
+        <iconify-icon icon="lucide:history" width="18" class="mt-0.5 shrink-0 text-pendink" aria-hidden="true"></iconify-icon>
+        <span class="flex-1"><span class="font-medium">This suggestion is out of date.</span> Your Scene Card changed after the Director wrote it. Ask again for fresh ideas.</span>
+      </div>
+      <p class="text-xs text-muted">The out-of-date state replaces the Add button when the Scene Card&rsquo;s revision moved on. It is never applied.</p>
+    </section>
+
+    <!-- ============================================================
+         D. DIRECTOR UNAVAILABLE / E. OUT OF REPLIES
+         Both show the catalog fallback (F) directly underneath.
+         ============================================================ -->
+    <section aria-labelledby="d-label" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <div>
+        <p id="d-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">D · Director unavailable (error, timeout or turned off)</p>
+        <div role="alert" class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
+          <div class="mb-3 flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-secondary"><iconify-icon icon="lucide:cloud-off" width="20" aria-hidden="true"></iconify-icon></div>
+            <h3 class="font-sans text-base font-semibold">The Director can&rsquo;t reply right now</h3>
+          </div>
+          <p class="mb-4 text-sm leading-relaxed">Your Scene Card is safe and nothing was changed. You can keep building it from Maya&rsquo;s catalog.</p>
+          <div class="flex flex-col sm:flex-row gap-3">
+            <a href="#catalog" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] bg-espresso text-cream px-5 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Choose from the catalog</a>
+            <button type="button" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-divider hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Try again</button>
+          </div>
+          <p class="mt-3 text-xs text-muted">A failed reply doesn&rsquo;t use one of your replies.</p>
+        </div>
+      </div>
+
+      <div>
+        <p class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">E · Out of Director replies (20 per Scene Card)</p>
+        <div role="status" class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
+          <div class="mb-3 flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-secondary"><iconify-icon icon="lucide:message-square-off" width="20" aria-hidden="true"></iconify-icon></div>
+            <h3 class="font-sans text-base font-semibold">You&rsquo;ve used all 20 Director replies</h3>
+          </div>
+          <p class="mb-4 text-sm leading-relaxed">That&rsquo;s the limit for one Scene Card. You can still change anything from Maya&rsquo;s catalog, and review and send when you&rsquo;re ready.</p>
+          <a href="#catalog" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] bg-espresso text-cream px-5 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Choose from the catalog</a>
+        </div>
+        <p class="mt-3 text-xs text-muted">From 5 replies left, the count under the message box turns tan: &ldquo;5 replies left&rdquo;.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         F. CATALOG FALLBACK: manual choices, always available
+         ============================================================ -->
+    <section id="catalog" aria-labelledby="f-label" class="max-w-[680px]">
+      <p id="f-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">F · Choose from the catalog (opens under the chat; a sheet on mobile)</p>
+
+      <form class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6 space-y-6">
+        <h3 class="font-serif text-2xl font-semibold">Maya&rsquo;s catalog</h3>
+
+        <fieldset>
+          <legend class="mb-2 text-sm font-semibold">Setting <span class="font-normal text-muted">&middot; choose one</span></legend>
+          <div class="space-y-2">
+            <label class="flex min-h-[48px] items-center gap-3 rounded-[12px] border-2 border-espresso px-4 cursor-pointer"><input type="radio" name="setting" checked class="h-4 w-4 accent-espresso"><span class="flex-1 text-sm font-medium">Vintage Lounge</span><span class="text-sm">$35</span></label>
+            <label class="flex min-h-[48px] items-center gap-3 rounded-[12px] border border-divider px-4 cursor-pointer hover:bg-secondary"><input type="radio" name="setting" class="h-4 w-4 accent-espresso"><span class="flex-1 text-sm font-medium">Floral Studio</span><span class="text-sm">$45</span></label>
+            <label class="flex min-h-[48px] items-center gap-3 rounded-[12px] border border-divider px-4 cursor-pointer hover:bg-secondary"><input type="radio" name="setting" class="h-4 w-4 accent-espresso"><span class="flex-1 text-sm font-medium">Backstage</span><span class="text-sm">$15</span></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend class="mb-2 text-sm font-semibold">Greeting <span class="font-normal text-muted">&middot; choose one</span></legend>
+          <div class="space-y-2">
+            <label class="flex min-h-[48px] items-center gap-3 rounded-[12px] border border-divider px-4 cursor-pointer hover:bg-secondary"><input type="radio" name="greeting" class="h-4 w-4 accent-espresso"><span class="flex-1 text-sm font-medium">Standard greeting</span><span class="text-sm text-muted">Included</span></label>
+            <label class="flex min-h-[48px] items-center gap-3 rounded-[12px] border-2 border-espresso px-4 cursor-pointer"><input type="radio" name="greeting" checked class="h-4 w-4 accent-espresso"><span class="flex-1 text-sm font-medium">Detailed greeting</span><span class="text-sm">$20</span></label>
+          </div>
+        </fieldset>
+
+        <div>
+          <p class="mb-2 text-sm font-semibold">Extra minutes <span class="font-normal text-muted">&middot; $40 each, up to 2</span></p>
+          <div class="inline-flex items-center rounded-[12px] border border-divider">
+            <button type="button" aria-label="One fewer minute" disabled class="flex h-11 w-11 items-center justify-center text-muted cursor-not-allowed"><iconify-icon icon="lucide:minus" aria-hidden="true"></iconify-icon></button>
+            <span class="w-10 text-center text-base font-medium" aria-live="polite">0</span>
+            <button type="button" aria-label="One more minute" class="flex h-11 w-11 items-center justify-center hover:bg-secondary rounded-r-[12px] focus-ring"><iconify-icon icon="lucide:plus" aria-hidden="true"></iconify-icon></button>
+          </div>
+        </div>
+
+        <p class="border-t border-divider pt-4 text-xs text-muted">Every change updates the Scene Card with the server&rsquo;s new estimate. Hidden or unavailable items don&rsquo;t appear.</p>
+      </form>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>

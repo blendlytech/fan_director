@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sign in - Maya Atelier</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { serif: ['Cormorant Garamond', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+      colors: {
+        cream: '#FDF8F3', panel: '#FFFFFF', secondary: '#F5F0EB', espresso: '#302720', muted: '#70625C',
+        rose: '#E4A4BD', rosehover: '#D595AE', deeprose: '#84485D', divider: '#DED3CB',
+        okbg: '#EEF4EC', okborder: '#C4D9BF', okink: '#4F7A48',
+        pendbg: '#F8EFE4', pendborder: '#E3C8A6', pendink: '#7A5530',
+        alertbg: '#FBECE9', alertborder: '#EFC2BA', alertink: '#9E3B2C'
+      },
+      transitionDuration: { '160': '160ms' }
+    }
+  }
+}
+</script>
+<style>
+  body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin: 0; }
+  html { background-color: #FDF8F3; }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
+  .focus-ring:focus-visible { outline: 2px solid #302720; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="bg-cream font-sans text-espresso min-h-screen">
+
+  <!--
+    DESIGN 16: Sign-in, sign-up and age verification (doc 11 Phase 1).
+    Staging design. The auth provider and the age-verification partner are chosen
+    at Gate 0, so this design is provider-neutral:
+    - Fans sign in with an emailed link. If the chosen auth uses passwords instead,
+      keep the same card and swap the email step for email + password.
+    - "[Verification partner]" is a placeholder for the partner's name.
+    Copy rules: never claim a time, a retention promise or a result the server
+    hasn't returned. Say "sent" only after the server sent it.
+  -->
+
+  <header class="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-divider">
+    <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 h-[80px] flex items-center justify-between">
+      <div class="flex items-center gap-4 sm:gap-6">
+        <a href="#collection" class="inline-flex min-h-[44px] items-center font-serif text-2xl sm:text-3xl font-medium tracking-tight focus-ring">Maya Atelier</a>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-secondary text-muted border border-divider">Staging design</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#collection" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Collection</a>
+        <a href="#studio" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Your studio</a>
+        <a href="#saved" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Saved ideas</a>
+        <a href="#sign-in" class="inline-flex min-h-[44px] items-center text-sm font-medium underline decoration-espresso underline-offset-4 focus-ring">Sign in</a>
+      </nav>
+      <button type="button" aria-expanded="false" class="md:hidden inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-[12px] px-3 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
+        <iconify-icon icon="lucide:menu" width="18"></iconify-icon>
+        Menu
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-[1120px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-20">
+
+    <!-- ============================================================
+         A. FAN SIGN-IN / SIGN-UP (one form for both)
+         Reached from "Sign in" in the header, or when a signed-out fan
+         tries to talk to the Director, save, or send.
+         ============================================================ -->
+    <section aria-labelledby="a-label">
+      <p id="a-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A · Fan sign-in (also creates an account)</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <div class="rounded-[12px] border border-divider bg-panel p-6 sm:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+          <h1 class="mb-2 text-3xl sm:text-4xl font-semibold leading-tight tracking-tight">Sign in to plan your scene</h1>
+          <p class="mb-6 text-base text-muted">New here? The same email creates your account.</p>
+
+          <form>
+            <label for="fan-email" class="mb-1 block text-sm font-medium">Email</label>
+            <input id="fan-email" type="email" autocomplete="email" class="mb-4 w-full min-h-[48px] rounded-[12px] border border-divider bg-panel px-4 text-base focus-ring" placeholder="you@example.com">
+
+            <label class="mb-6 flex items-start gap-3 text-sm">
+              <input type="checkbox" class="mt-0.5 h-4 w-4 accent-espresso">
+              <span>I&rsquo;m 18 or older, and I agree to the <a href="#terms" class="underline underline-offset-4 focus-ring">terms of service</a> and <a href="#privacy" class="underline underline-offset-4 focus-ring">privacy policy</a>.</span>
+            </label>
+
+            <button type="button" class="flex w-full min-h-[48px] items-center justify-center gap-2 rounded-[12px] bg-espresso text-cream px-6 text-base font-medium shadow-md hover:bg-black transition-colors duration-160 focus-ring">
+              Email me a sign-in link
+              <iconify-icon icon="lucide:arrow-right" width="18" aria-hidden="true"></iconify-icon>
+            </button>
+          </form>
+
+          <p class="mt-6 border-t border-divider pt-4 text-sm text-muted">Are you a creator? <a href="#creator-sign-in" class="font-medium text-espresso underline underline-offset-4 focus-ring">Sign in to the creator studio</a></p>
+        </div>
+
+        <!-- Why an account -->
+        <div class="lg:pt-4">
+          <h2 class="mb-4 text-2xl font-semibold tracking-tight">Why you need an account</h2>
+          <ul class="space-y-4 text-sm leading-relaxed">
+            <li class="flex items-start gap-3"><iconify-icon icon="lucide:bookmark" width="20" class="mt-0.5 shrink-0 text-deeprose" aria-hidden="true"></iconify-icon><span><span class="font-medium">Your Scene Cards are kept.</span> Come back on any device and pick up where you left off.</span></li>
+            <li class="flex items-start gap-3"><iconify-icon icon="lucide:message-square" width="20" class="mt-0.5 shrink-0 text-deeprose" aria-hidden="true"></iconify-icon><span><span class="font-medium">Creators can reply to you.</span> Questions, changes and approvals come back to your account.</span></li>
+            <li class="flex items-start gap-3"><iconify-icon icon="lucide:shield-check" width="20" class="mt-0.5 shrink-0 text-deeprose" aria-hidden="true"></iconify-icon><span><span class="font-medium">Adults only.</span> Before planning an adult scene, you&rsquo;ll confirm your age once.</span></li>
+          </ul>
+          <p class="mt-6 text-sm text-muted">You can browse the collection without signing in.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- A2. Link sent / link problems -->
+    <section aria-labelledby="a2-label">
+      <p id="a2-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A2 · After &ldquo;Email me a sign-in link&rdquo;</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div role="status" class="rounded-[12px] border border-divider bg-panel p-6">
+          <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
+            <iconify-icon icon="lucide:mail-check" width="22" class="text-deeprose" aria-hidden="true"></iconify-icon>
+          </div>
+          <h2 class="mb-2 text-2xl font-semibold tracking-tight">Check your email</h2>
+          <p class="mb-4 text-sm leading-relaxed">We sent a sign-in link to <span class="font-medium">c&bull;&bull;&bull;&bull;@example.com</span>. Open it on this device to continue.</p>
+          <p class="text-sm text-muted">Nothing arrived? Check spam, or <button type="button" class="inline min-h-[44px] font-medium text-espresso underline underline-offset-4 focus-ring">send it again</button>.</p>
+        </div>
+        <div role="alert" class="rounded-[12px] border border-alertborder bg-alertbg p-6">
+          <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-panel">
+            <iconify-icon icon="lucide:link-2-off" width="22" class="text-alertink" aria-hidden="true"></iconify-icon>
+          </div>
+          <h2 class="mb-2 text-2xl font-semibold tracking-tight">This link has expired</h2>
+          <p class="mb-4 text-sm leading-relaxed">Sign-in links only work once and for a short time. Ask for a new one.</p>
+          <a href="#sign-in" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Get a new link</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         B. AGE VERIFICATION: before the first adult planning session,
+         and before any send. Only when adult content is on for the creator.
+         ============================================================ -->
+    <section aria-labelledby="b-label">
+      <p id="b-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">B · Age verification, before planning an adult scene</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <div class="rounded-[12px] border border-divider bg-panel p-6 sm:p-8">
+          <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
+            <iconify-icon icon="lucide:id-card" width="22" class="text-deeprose" aria-hidden="true"></iconify-icon>
+          </div>
+          <h2 class="mb-3 text-3xl font-semibold leading-tight tracking-tight">Confirm you&rsquo;re 18 or older</h2>
+          <p class="mb-5 text-base leading-relaxed text-muted">The law requires this before you can plan an adult scene. You only do it once.</p>
+
+          <ol class="mb-6 space-y-3 text-sm">
+            <li class="flex items-start gap-3"><span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-semibold">1</span><span>You&rsquo;ll go to <span class="font-medium">[Verification partner]</span>, a separate company that checks age.</span></li>
+            <li class="flex items-start gap-3"><span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-semibold">2</span><span>Follow their steps, usually a photo ID.</span></li>
+            <li class="flex items-start gap-3"><span class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-semibold">3</span><span>You come back here once they&rsquo;ve checked.</span></li>
+          </ol>
+
+          <a href="#verify" class="flex w-full min-h-[48px] items-center justify-center gap-2 rounded-[12px] bg-espresso text-cream px-6 text-base font-medium shadow-md hover:bg-black transition-colors duration-160 focus-ring">
+            Continue to [Verification partner]
+            <iconify-icon icon="lucide:external-link" width="18" aria-hidden="true"></iconify-icon>
+          </a>
+          <p class="mt-4 text-sm text-muted"><a href="#privacy-verification" class="underline underline-offset-4 focus-ring">What&rsquo;s shared, and what&rsquo;s kept</a></p>
+        </div>
+
+        <!-- Result states -->
+        <div class="space-y-4">
+          <div role="status" class="flex items-start gap-3 rounded-[12px] border border-pendborder bg-pendbg p-5">
+            <iconify-icon icon="lucide:loader" width="20" class="mt-0.5 shrink-0 text-pendink" aria-hidden="true"></iconify-icon>
+            <div class="text-sm leading-relaxed">
+              <p class="font-semibold">Waiting for [Verification partner]</p>
+              <p>We&rsquo;ll update this page when they&rsquo;ve finished. You can browse in the meantime.</p>
+            </div>
+          </div>
+          <div role="status" class="flex items-start gap-3 rounded-[12px] border border-okborder bg-okbg p-5">
+            <iconify-icon icon="lucide:circle-check" width="20" class="mt-0.5 shrink-0 text-okink" aria-hidden="true"></iconify-icon>
+            <div class="text-sm leading-relaxed">
+              <p class="font-semibold">You&rsquo;re verified</p>
+              <p class="mb-3">Thanks. You can plan and send requests now.</p>
+              <a href="#studio" class="inline-flex min-h-[44px] items-center gap-2 rounded-[12px] bg-rose hover:bg-rosehover px-5 text-sm font-medium shadow-sm transition-colors duration-160 focus-ring">Go to your studio <iconify-icon icon="lucide:arrow-right" width="16" aria-hidden="true"></iconify-icon></a>
+            </div>
+          </div>
+          <div role="alert" class="flex items-start gap-3 rounded-[12px] border border-alertborder bg-alertbg p-5">
+            <iconify-icon icon="lucide:circle-alert" width="20" class="mt-0.5 shrink-0 text-alertink" aria-hidden="true"></iconify-icon>
+            <div class="text-sm leading-relaxed">
+              <p class="font-semibold">We couldn&rsquo;t confirm your age</p>
+              <p class="mb-3">You can try again, for example with a different ID.</p>
+              <a href="#verify" class="inline-flex min-h-[44px] items-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Try again</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         C. CREATOR SIGN-IN: separate entry, /creator/sign-in
+         ============================================================ -->
+    <section aria-labelledby="c-label">
+      <p id="c-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">C · Creator studio sign-in</p>
+
+      <div class="max-w-[480px] rounded-[12px] border border-divider bg-panel p-6 sm:p-8">
+        <p class="mb-2 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-deeprose">
+          <iconify-icon icon="lucide:clapperboard" width="14" aria-hidden="true"></iconify-icon>Creator studio
+        </p>
+        <h2 class="mb-6 text-3xl font-semibold leading-tight tracking-tight">Sign in to your studio</h2>
+        <form>
+          <label for="creator-email" class="mb-1 block text-sm font-medium">Email</label>
+          <input id="creator-email" type="email" autocomplete="email" class="mb-4 w-full min-h-[48px] rounded-[12px] border border-divider bg-panel px-4 text-base focus-ring">
+          <label for="creator-code" class="mb-1 block text-sm font-medium">Code from your authenticator app</label>
+          <input id="creator-code" inputmode="numeric" autocomplete="one-time-code" class="mb-2 w-full min-h-[48px] rounded-[12px] border border-divider bg-panel px-4 font-mono text-base tracking-[0.3em] focus-ring" placeholder="000000">
+          <p class="mb-6 text-xs text-muted">Creator accounts always use a second step, because they hold fans&rsquo; requests and your earnings.</p>
+          <button type="button" class="flex w-full min-h-[48px] items-center justify-center rounded-[12px] bg-espresso text-cream px-6 text-base font-medium shadow-md hover:bg-black transition-colors duration-160 focus-ring">Sign in</button>
+        </form>
+        <p class="mt-6 border-t border-divider pt-4 text-sm text-muted">Want to become a creator? Creator accounts are set up by invitation during the pilot.</p>
+      </div>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>

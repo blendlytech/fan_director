@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Saving and price changes - Maya Atelier</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { serif: ['Cormorant Garamond', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+      colors: {
+        cream: '#FDF8F3', panel: '#FFFFFF', secondary: '#F5F0EB', espresso: '#302720', muted: '#70625C',
+        rose: '#E4A4BD', rosehover: '#D595AE', deeprose: '#84485D', divider: '#DED3CB',
+        okbg: '#EEF4EC', okborder: '#C4D9BF', okink: '#4F7A48',
+        pendbg: '#F8EFE4', pendborder: '#E3C8A6', pendink: '#7A5530',
+        alertbg: '#FBECE9', alertborder: '#EFC2BA', alertink: '#9E3B2C'
+      },
+      transitionDuration: { '160': '160ms' }
+    }
+  }
+}
+</script>
+<style>
+  body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin: 0; }
+  html { background-color: #FDF8F3; }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
+  .focus-ring:focus-visible { outline: 2px solid #302720; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="bg-cream font-sans text-espresso min-h-screen">
+
+  <!--
+    DESIGN 18: Saving states and price changes (doc 11 Phases 1–2). Staging design.
+
+    Rules this design encodes:
+    - "Saved" appears only after the server confirmed the save (doc 11 rule 1).
+    - A fan is never silently re-priced. If the catalog changed after a quote,
+      the fan sees old and new lines and must accept before sending.
+    - A newer revision from another window is never overwritten.
+    The public demo keeps its current "nothing is saved" copy.
+  -->
+
+  <header class="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-divider">
+    <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 h-[80px] flex items-center justify-between">
+      <div class="flex items-center gap-4 sm:gap-6">
+        <a href="#collection" class="inline-flex min-h-[44px] items-center font-serif text-2xl sm:text-3xl font-medium tracking-tight focus-ring">Maya Atelier</a>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-secondary text-muted border border-divider">Staging design</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#collection" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Collection</a>
+        <a href="#studio" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Your studio</a>
+        <a href="#saved" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Saved ideas</a>
+      </nav>
+      <button type="button" aria-expanded="false" class="md:hidden inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-[12px] px-3 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
+        <iconify-icon icon="lucide:menu" width="18"></iconify-icon>
+        Menu
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-[1120px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-20">
+
+    <!-- ============================================================
+         A. SAVE STATUS in the Scene Card header (replaces 04's "Save idea")
+         Drafts save automatically on every change.
+         ============================================================ -->
+    <section aria-labelledby="a-label">
+      <p id="a-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A · Save status, Scene Card header (saves on every change)</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="rounded-[12px] border border-divider bg-secondary p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="inline-flex items-center rounded-full border border-rose bg-panel px-2.5 py-1 text-xs font-medium"><span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-rose"></span>Draft</span>
+            <span role="status" class="inline-flex items-center gap-1.5 text-xs text-muted"><iconify-icon icon="lucide:loader" width="14" aria-hidden="true"></iconify-icon>Saving&hellip;</span>
+          </div>
+          <p class="mt-3 text-xs text-muted">1 · While the server call is in flight</p>
+        </div>
+
+        <div class="rounded-[12px] border border-divider bg-secondary p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="inline-flex items-center rounded-full border border-rose bg-panel px-2.5 py-1 text-xs font-medium"><span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-rose"></span>Draft</span>
+            <span role="status" class="inline-flex items-center gap-1.5 text-xs text-okink"><iconify-icon icon="lucide:cloud-check" width="14" aria-hidden="true"></iconify-icon>Saved to your account</span>
+          </div>
+          <p class="mt-3 text-xs text-muted">2 · After the server confirmed. Hover or focus shows the time: &ldquo;Saved at 14:32&rdquo;</p>
+        </div>
+
+        <div class="rounded-[12px] border border-divider bg-secondary p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="inline-flex items-center rounded-full border border-rose bg-panel px-2.5 py-1 text-xs font-medium"><span class="mr-1.5 h-1.5 w-1.5 rounded-full bg-rose"></span>Draft</span>
+            <span role="alert" class="inline-flex items-center gap-2 text-xs text-alertink">
+              <iconify-icon icon="lucide:cloud-off" width="14" aria-hidden="true"></iconify-icon>Not saved
+              <button type="button" class="min-h-[44px] px-1 font-medium underline underline-offset-4 focus-ring">Try again</button>
+            </span>
+          </div>
+          <p class="mt-3 text-xs text-muted">3 · Save failed. Changes stay on this page until saved; sending is off until they are.</p>
+        </div>
+
+        <div class="rounded-[12px] border border-divider bg-secondary p-5">
+          <div class="flex flex-wrap items-center justify-between gap-2">
+            <span class="inline-flex items-center rounded-full border border-divider bg-panel px-2.5 py-1 text-xs font-medium text-muted">Draft</span>
+            <span class="inline-flex items-center gap-1.5 text-xs text-muted"><iconify-icon icon="lucide:user-round-x" width="14" aria-hidden="true"></iconify-icon><a href="#sign-in" class="min-h-[44px] inline-flex items-center underline underline-offset-4 focus-ring">Sign in to save</a></span>
+          </div>
+          <p class="mt-3 text-xs text-muted">4 · Signed out. Nothing is saved, and the label says so.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         B. CHANGED IN ANOTHER WINDOW (stale revision)
+         ============================================================ -->
+    <section aria-labelledby="b-label" class="max-w-[640px]">
+      <p id="b-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">B · The Scene Card changed in another window</p>
+      <div role="alert" class="flex items-start gap-3 rounded-[12px] border border-pendborder bg-pendbg p-5">
+        <iconify-icon icon="lucide:refresh-cw" width="20" class="mt-0.5 shrink-0 text-pendink" aria-hidden="true"></iconify-icon>
+        <div class="text-sm leading-relaxed">
+          <p class="font-semibold">This Scene Card was changed somewhere else</p>
+          <p class="mb-3">We&rsquo;ve loaded the latest version, so nothing gets overwritten. Your last change here wasn&rsquo;t applied.</p>
+          <div class="flex flex-wrap gap-3">
+            <button type="button" class="inline-flex min-h-[44px] items-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-4 font-medium transition-colors duration-160 focus-ring">See what changed</button>
+            <button type="button" class="inline-flex min-h-[44px] items-center px-2 font-medium underline underline-offset-4 focus-ring">Dismiss</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         C. PRICES CHANGED: accept the new estimate
+         Shown on the Scene Card and at the top of Review. Blocks sending
+         until accepted.
+         ============================================================ -->
+    <section aria-labelledby="c-label">
+      <p id="c-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">C · Maya updated the catalog after this estimate</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-8 items-start">
+        <div class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
+          <div class="mb-5 flex items-start gap-3">
+            <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pendbg"><iconify-icon icon="lucide:tag" width="20" class="text-pendink" aria-hidden="true"></iconify-icon></div>
+            <div>
+              <h2 class="text-2xl sm:text-3xl font-semibold leading-tight tracking-tight">Maya updated prices</h2>
+              <p class="text-sm text-muted">Your Scene Card uses the new prices only if you accept them.</p>
+            </div>
+          </div>
+
+          <div class="overflow-hidden rounded-[12px] border border-divider">
+            <table class="w-full text-sm">
+              <caption class="sr-only">Old and new prices for your Scene Card</caption>
+              <thead class="bg-secondary text-left text-xs uppercase tracking-wider text-muted">
+                <tr><th scope="col" class="px-4 py-2 font-semibold">Item</th><th scope="col" class="px-3 py-2 text-right font-semibold">Before</th><th scope="col" class="px-4 py-2 text-right font-semibold">Now</th></tr>
+              </thead>
+              <tbody class="divide-y divide-divider">
+                <tr><td class="px-4 py-3">3-minute video</td><td class="px-3 py-3 text-right text-muted">$90</td><td class="px-4 py-3 text-right">$90</td></tr>
+                <tr class="bg-pendbg/60"><td class="px-4 py-3"><span class="font-medium">Vintage Lounge</span> <span class="ml-1 rounded bg-panel px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-pendink border border-pendborder">Changed</span></td><td class="px-3 py-3 text-right text-muted line-through">$35</td><td class="px-4 py-3 text-right font-semibold">$40</td></tr>
+                <tr><td class="px-4 py-3">Detailed greeting</td><td class="px-3 py-3 text-right text-muted">$20</td><td class="px-4 py-3 text-right">$20</td></tr>
+              </tbody>
+              <tfoot class="border-t-2 border-divider">
+                <tr><th scope="row" class="px-4 py-3 text-left font-semibold">Estimated total</th><td class="px-3 py-3 text-right text-muted line-through">$145</td><td class="px-4 py-3 text-right font-serif text-xl font-bold">$150</td></tr>
+              </tfoot>
+            </table>
+          </div>
+          <p class="mt-2 text-xs text-muted">Exactly at your $150 budget.</p>
+
+          <div class="mt-6 flex flex-col sm:flex-row gap-3">
+            <button type="button" class="inline-flex min-h-[48px] items-center justify-center rounded-[12px] bg-espresso text-cream px-6 text-base font-medium shadow-md hover:bg-black transition-colors duration-160 focus-ring">Accept new estimate</button>
+            <button type="button" class="inline-flex min-h-[48px] items-center justify-center rounded-[12px] border border-divider hover:bg-secondary px-6 text-base font-medium transition-colors duration-160 focus-ring">Change my choices</button>
+          </div>
+        </div>
+
+        <!-- C2: item no longer offered -->
+        <div>
+          <p class="mb-3 text-sm font-medium">C2 · An item was removed</p>
+          <div role="alert" class="rounded-[12px] border border-alertborder bg-alertbg p-5">
+            <p class="mb-1 flex items-center gap-2 text-sm font-semibold"><iconify-icon icon="lucide:circle-slash" width="18" class="text-alertink" aria-hidden="true"></iconify-icon>Backstage is no longer offered</p>
+            <p class="mb-4 text-sm leading-relaxed">Choose another setting to keep planning. The rest of your Scene Card is unchanged.</p>
+            <a href="#catalog" class="inline-flex min-h-[44px] items-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Choose a setting</a>
+          </div>
+
+          <p class="mb-3 mt-8 text-sm font-medium">C3 · Review, send area while unaccepted</p>
+          <div class="rounded-[12px] border border-divider bg-panel p-5">
+            <button type="button" disabled aria-describedby="c3-why" class="flex w-full min-h-[48px] items-center justify-center rounded-[12px] bg-secondary px-6 text-base font-medium text-muted cursor-not-allowed">Send to Creator</button>
+            <p id="c3-why" class="mt-2 text-center text-xs text-muted">Accept Maya&rsquo;s updated prices first.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>

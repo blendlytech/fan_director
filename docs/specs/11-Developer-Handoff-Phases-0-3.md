@@ -41,7 +41,7 @@ Routes: the fan side has `/`, `/ai-director`, `/review`, `/confirmation` and `/s
 
 The "AI Director" today is scripted UI. It has two canned choices ("Richer Setting" and "Longer Video"), and fan notes are recorded but never answered.
 
-Visual ground truth lives in `docs/design-html/`: 01 is the component library, 02–09 are the original screens, 10 is saved ideas, 11 is the mobile menu, 12 is page not found, 13 is creator limits, 14 is the fan's paused, restored and closed account states, 15 is the safety-case review screen (13–15 are staging designs for §5.3). PDFs are in `docs/design-pdfs/`.
+Visual ground truth lives in `docs/design-html/`: 01 is the component library, 02–09 are the original screens, 10 is saved ideas, 11 is the mobile menu, 12 is page not found, 13 is creator limits, 14 is the fan's paused, restored and closed account states, 15 is the safety-case review screen, 16 is sign-in and age verification, 17 is the AI Director's live states, 18 is saving and price changes, 19 is the unpriced custom request. 13–19 are staging designs for this handoff. PDFs are in `docs/design-pdfs/`.
 
 ---
 
@@ -99,7 +99,7 @@ The owner decided these on 2026-09-16.
 
 - A creator's catalog is a list of **categories**. Each category holds **items**.
 - The platform supplies **starter categories**, prepopulated with **starter items**. The creator can edit, price, hide or delete a starter item, and can add **their own items** and **their own categories**.
-- A fan may add a **custom request**: free text that is **never priced by the system or the AI** and **always requires creator review**. It never appears as a priced line item. It shows as "Custom request, price set by the creator after review."
+- A fan may add a **custom request**: free text of at most 1,000 characters that is **never priced by the system or the AI** and **always requires creator review** (design 19). It never appears as a priced line item. It shows as "Custom request, price set by the creator after review."
 
 ### 5.2 Starter categories
 
@@ -415,14 +415,14 @@ interface Quote {                  // computed by the server only
 
    Run at least 10 sample conversations against the pilot catalog with the §8 Phase 3 schema (use the owner's test key only if provided; otherwise design the harness and mark it blocked).
 6. Evaluate **hard-list classifiers** (§5.3.3) the same way: custom-category support, terms for adult text, retention, latency, price, and a first run against a draft of the must-block and must-allow sets.
-7. List every UI state Phases 1–3 need that has no design. At minimum: sign-in, "saved" states, AI pending, AI suggestion shown / accepted / rejected, AI unavailable or usage exhausted with the manual fallback, stale quote needing acceptance, custom request pending, and anything else Phase 0 finds. (Already designed: the limits display, Ask me flag, Hard no notice and hard-list block message in design 13; the paused, restored and closed account states in design 14; the safety-case review screen in design 15.)
+7. List every UI state Phases 1–3 need that **still** has no design. Already designed: creator limits and boundary notices (13), paused, restored and closed fan accounts (14), safety-case review (15), sign-in and age verification (16), AI thinking, suggestions, accepted, rejected, out of date, unavailable, out of replies and the catalog fallback (17), save status, edits from another window and price changes (18), and the unpriced custom request (19). If the chosen auth or verification provider can't support a design, say so in the report.
 
 **Gate 0 report:** findings, recommendations with sources, the migration map, the list of needed designs, and open questions.
 
 ### Phase 1: Backend foundation
 
 - A staging Worker and D1 schema/migrations for `creator`, `catalog`, `catalog_version`, `fan_session`, `draft`, `ai_request`, `audit_event`, `compliance_status`, `performer` and `safety_case`.
-- Auth as approved; tenant authorization on every private endpoint; CSRF protection suited to the auth choice; input size limits.
+- Auth as approved, following design 16: fans sign in by email link (or email and password, if that's the approved choice), creators always use a second factor, and creator accounts are created by invitation in the pilot. Tenant authorization on every private endpoint; CSRF protection suited to the auth choice; input size limits.
 - Save and reload of a `DraftV2` scoped to its owner.
 - Secrets set by the owner. Prove none appear in the built frontend bundle (scan `dist/`).
 
