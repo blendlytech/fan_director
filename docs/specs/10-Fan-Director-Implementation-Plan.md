@@ -13,6 +13,8 @@ Launch with a platform-owned paid AI account. Include a limited amount of AI usa
 
 Use Cloudflare Pages for the frontend, a Worker for the backend, D1 for application records, and R2 Standard storage for public demo and preview assets. Evaluate Cloudflare Stream only when managed video encoding and adaptive playback justify its cost.
 
+> **Deviation (2026-09-16, owner-approved):** the hosted demo uses **Workers Static Assets** instead of Pages, because Cloudflare now recommends Workers for new sites and a later Worker backend can live in the same project. It is static files only (no Worker script, no bindings) — see `frontend/wrangler.jsonc`. Read "Pages" below as "Workers Static Assets" for the frontend.
+
 This is a build plan, not a statement that those services are configured. The attached design describes a prototype. The current repository was not inspected for this document; Phase 0 must reconcile this plan with actual code and project instructions before implementation.
 
 ## 2. Scope and decisions

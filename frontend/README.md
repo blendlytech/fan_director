@@ -92,6 +92,21 @@ Creator side (separate data, no shared draft):
 | `/creator/requests/:id/ask` | Ask a question (modal over detail) |
 | `/creator/requests/:id/decline` | Decline confirmation (modal over detail) |
 
+## Hosted demo
+
+<https://fan-director-studio.scmillsc0809.workers.dev> — a static build on
+Cloudflare Workers Static Assets. There is no Worker script and no backend; every
+demo disclaimer ships unchanged. `wrangler.jsonc` sets
+`not_found_handling: "single-page-application"`, so deep links such as
+`/creator/requests/:id/ask` load directly. The fan draft lives in memory, so a
+direct load of `/review` or `/saved` shows the default draft.
+
+```bash
+npx wrangler login      # once, interactive
+npm run build
+npx wrangler deploy     # uploads dist/ as the fan-director-studio Worker
+```
+
 ## Project layout
 
 ```text
