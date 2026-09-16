@@ -196,22 +196,42 @@ tailwind.config = {
          C. CREATOR SIGN-IN: separate entry, /creator/sign-in
          ============================================================ -->
     <section aria-labelledby="c-label">
-      <p id="c-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">C · Creator studio sign-in</p>
+      <p id="c-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">C · Creator studio sign-in, two steps (Gate 0 fix)</p>
 
-      <div class="max-w-[480px] rounded-[12px] border border-divider bg-panel p-6 sm:p-8">
-        <p class="mb-2 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-deeprose">
-          <iconify-icon icon="lucide:clapperboard" width="14" aria-hidden="true"></iconify-icon>Creator studio
-        </p>
-        <h2 class="mb-6 text-3xl font-semibold leading-tight tracking-tight">Sign in to your studio</h2>
-        <form>
-          <label for="creator-email" class="mb-1 block text-sm font-medium">Email</label>
-          <input id="creator-email" type="email" autocomplete="email" class="mb-4 w-full min-h-[48px] rounded-[12px] border border-divider bg-panel px-4 text-base focus-ring">
-          <label for="creator-code" class="mb-1 block text-sm font-medium">Code from your authenticator app</label>
-          <input id="creator-code" inputmode="numeric" autocomplete="one-time-code" class="mb-2 w-full min-h-[48px] rounded-[12px] border border-divider bg-panel px-4 font-mono text-base tracking-[0.3em] focus-ring" placeholder="000000">
-          <p class="mb-6 text-xs text-muted">Creator accounts always use a second step, because they hold fans&rsquo; requests and your earnings.</p>
-          <button type="button" class="flex w-full min-h-[48px] items-center justify-center rounded-[12px] bg-espresso text-cream px-6 text-base font-medium shadow-md hover:bg-black transition-colors duration-160 focus-ring">Sign in</button>
-        </form>
-        <p class="mt-6 border-t border-divider pt-4 text-sm text-muted">Want to become a creator? Creator accounts are set up by invitation during the pilot.</p>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
+        <!-- Step 1: first factor -->
+        <div class="rounded-[12px] border border-divider bg-panel p-6 sm:p-8">
+          <p class="mb-2 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-deeprose">
+            <iconify-icon icon="lucide:clapperboard" width="14" aria-hidden="true"></iconify-icon>Creator studio &middot; Step 1 of 2
+          </p>
+          <h2 class="mb-6 text-3xl font-semibold leading-tight tracking-tight">Sign in to your studio</h2>
+          <form>
+            <label for="creator-email" class="mb-1 block text-sm font-medium">Email</label>
+            <input id="creator-email" type="email" autocomplete="username" class="mb-4 w-full min-h-[48px] rounded-[12px] border border-divider bg-panel px-4 text-base focus-ring">
+            <label for="creator-password" class="mb-1 block text-sm font-medium">Password</label>
+            <input id="creator-password" type="password" autocomplete="current-password" class="mb-2 w-full min-h-[48px] rounded-[12px] border border-divider bg-panel px-4 text-base focus-ring">
+            <p class="mb-6 text-sm"><a href="#creator-reset" class="inline-flex min-h-[44px] items-center underline underline-offset-4 focus-ring">Forgot your password?</a></p>
+            <button type="button" class="flex w-full min-h-[48px] items-center justify-center gap-2 rounded-[12px] bg-espresso text-cream px-6 text-base font-medium shadow-md hover:bg-black transition-colors duration-160 focus-ring">Continue <iconify-icon icon="lucide:arrow-right" width="18" aria-hidden="true"></iconify-icon></button>
+          </form>
+          <p class="mt-4 text-xs text-muted">If the approved auth uses an emailed sign-in link instead of a password, this step becomes design 16 A2 (&ldquo;Check your email&rdquo;), then step 2.</p>
+          <p class="mt-6 border-t border-divider pt-4 text-sm text-muted">Want to become a creator? Creator accounts are set up by invitation during the pilot.</p>
+        </div>
+
+        <!-- Step 2: second factor -->
+        <div class="rounded-[12px] border border-divider bg-panel p-6 sm:p-8">
+          <p class="mb-2 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-deeprose">
+            <iconify-icon icon="lucide:shield-check" width="14" aria-hidden="true"></iconify-icon>Step 2 of 2
+          </p>
+          <h2 class="mb-3 text-3xl font-semibold leading-tight tracking-tight">Enter your code</h2>
+          <p class="mb-6 text-sm text-muted">Open your authenticator app and enter the 6-digit code for Maya Atelier.</p>
+          <form>
+            <label for="creator-code" class="mb-1 block text-sm font-medium">Code</label>
+            <input id="creator-code" inputmode="numeric" autocomplete="one-time-code" class="mb-2 w-full min-h-[48px] rounded-[12px] border border-divider bg-panel px-4 font-mono text-base tracking-[0.3em] focus-ring" placeholder="000000">
+            <p class="mb-6 text-xs text-muted">Creator accounts always use this second step, because they hold fans&rsquo; requests and your earnings.</p>
+            <button type="button" class="flex w-full min-h-[48px] items-center justify-center rounded-[12px] bg-espresso text-cream px-6 text-base font-medium shadow-md hover:bg-black transition-colors duration-160 focus-ring">Sign in</button>
+          </form>
+          <p class="mt-4 text-sm"><a href="#creator-backup-code" class="inline-flex min-h-[44px] items-center underline underline-offset-4 focus-ring">Use a backup code instead</a></p>
+        </div>
       </div>
     </section>
 

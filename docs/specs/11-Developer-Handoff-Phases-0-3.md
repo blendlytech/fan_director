@@ -79,7 +79,7 @@ Breaking any of these fails the phase, however good the rest is.
 
 Pricing flows one way: `Draft` → `buildLineItems(draft)` → `sumOf(items)`. `previewTotal` prices hypothetical choices, and `priceRangeOf(setting)` derives the entrance price ranges by listing every buildable draft.
 
-**Reference figures that must still compute after any refactor** (doc 10 §9): $90 + $35 + $20 = **$145**, which leaves $5 of the $150 budget. Adding an extra minute gives **$185**, $35 over budget, and removing it restores $145. Entrance ranges: Vintage $145–$205, Floral $155–$215, Backstage $125–$185.
+**Reference figures that must still compute after any refactor** (doc 10 §9): $90 + $35 + $20 = **$145**, which leaves $5 of the $150 budget. Adding an extra minute gives **$185**, $35 over budget, and removing it restores $145. Entrance ranges **in the demo**: Vintage $145–$205, Floral $155–$215, Backstage $125–$185. These stay as demo tests only. In the staging build, ranges are derived from the catalog's selection groups and will differ (see §5.6, decision 2).
 
 ### 4.2 Boundaries: three inconsistent copies
 
@@ -105,10 +105,10 @@ The owner decided these on 2026-09-16.
 
 | Key | Label | Selection | Examples (pilot) |
 | --- | --- | --- | --- |
-| `length_format` | Length & format | Base item required; add-ons optional | Base video 3 min (required, $90); extra minute ($40 each, max 2); orientation vertical/horizontal ($0) |
+| `length_format` | Length & format | Groups: `base` exactly one; `extra_minutes` optional; `orientation` exactly one | Base video 3 min (required, $90); extra minute ($40 each, max 2); orientation vertical/horizontal ($0) |
 | `setting` | Setting / set | Exactly one | Vintage Lounge $35, Floral Studio $45, Backstage $15 |
 | `wardrobe` | Wardrobe & look | At most one | Creator's choice ($0). Priced wardrobe items are allowed |
-| `personalization_delivery` | Personalization & delivery | Greeting: exactly one; delivery: at most one | Standard greeting $0, detailed greeting $20; standard delivery 7 days from payment ($0) |
+| `personalization_delivery` | Personalization & delivery | Groups: `greeting` exactly one; `delivery` at most one | Standard greeting $0, detailed greeting $20; standard delivery 7 days from payment ($0) |
 
 **Adult-gated starter categories** (§5.4): `props`, `participants` (solo, or with a verified partner performer; §5.3.1), `posing`, `encounter_type`. Their definitions exist in the schema and the seed, **with no items**, `contentRating: "adult"`, and they are **disabled**.
 
@@ -138,11 +138,11 @@ Personal formats are encouraged. For example:
 - a first-person, point-of-view video in which the creator speaks to the fan by name, so the fan can imagine being there;
 - the creator's verified partner performing acts on the creator that the fan asked for, within the creator's limits.
 
-**The test for any scenario:** would it be legal if it really happened, between these exact people? If not, it is on the hard list.
+**The test for any scenario:** would it be legal if it really happened, between these exact people? If not, it is on the hard list. The hard list is that legality test **plus platform exclusions** that apply even where something would be legal, such as school or family roles and named media characters. No test or classifier can guarantee legality in every jurisdiction; the gates measure the fixed test sets.
 
 #### 5.3.2 The platform hard list
 
-The hard list is fixed by the platform. Creators, fans and the AI cannot edit, remove or hide it. It is always enforced and always shown to fans. It is stored as data (`Boundaries.platformProhibited`) with these stable keys. The fan-facing labels are fixed in design 13 and listed in the last column.
+The hard list is fixed by the platform. Creators, fans and the AI cannot edit, remove or hide it. It is always enforced. It is shown to fans in full on the boutique entrance and the review screen; in the AI Director it sits behind a link (design 13), which takes precedence over any wording that says "always shown". It is stored as data (`Boundaries.platformProhibited`) with these stable keys. The fan-facing labels are fixed in design 13 and listed in the last column.
 
 | Key | Blocks | Fan-facing label |
 | --- | --- | --- |
@@ -170,7 +170,7 @@ Enforcement runs on the server and never relies on a model's training. It must *
 
 **Two layers:**
 
-1. **Rules layer (Phase 2).** Deterministic, versioned term and pattern lists for each key. Examples: numbers under 18 near age words, school grades, family and role terms, and known euphemisms. Normalize text first (case, spacing, character substitutions such as "t33n", look-alike characters). Rules are data with tests, not regular expressions scattered through the code. A rule hit blocks.
+1. **Rules layer (Phase 2).** Deterministic, versioned term and pattern lists for each key. Examples: numbers under 18 near age words, school grades, family and role terms, and known euphemisms. Normalize text first (case, spacing, character substitutions such as "t33n", look-alike characters). Rules are data with tests, not regular expressions scattered through the code. **Rules are contextual, not bare word bans**: "school", "sister" or "18" alone never block, and every rule must pass the must-allow set. A rule hit blocks.
 2. **Classifier layer (Phase 3).** A safety classifier that accepts custom category definitions (for example Llama Guard with a custom category list). Configure it with **only** the hard-list keys, and turn its generic "sexual content" category **off**. It catches paraphrases and multi-message setups the rules miss. Evaluate candidates at Gate 0 alongside the AI provider. A false block on legal adult content counts as a failure, just like a miss. The classifier's own terms must allow adult text to be sent to it.
 
 **Fail closed.** If the classifier is unavailable or times out:
@@ -257,7 +257,7 @@ One function renders the fan-facing boundaries text from this object: the hard l
 
 ### 5.4 Adult content: designed for it, launched non-explicit
 
-- **Platform switch:** environment variable `ADULT_CATALOG_ENABLED`, default `false` in every environment. No code path, seed, test fixture or admin tool may set it to `true`. Only the owner changes it, after compliance.
+- **Platform switch:** environment variable `ADULT_CATALOG_ENABLED`, default `false` in every environment. No code path, seed or admin tool may set it to `true` in any deployed environment, staging included. Only the owner changes it there, after compliance. **Exception (Gate 0 decision):** automated tests may enable it **inside the test process only**, by passing configuration to the code under test, never through a deployed environment variable.
 - **Per-creator switch:** `creator.adultContentEnabled`, default `false`. It is effective only when the platform switch is on **and** the compliance record (below) is complete.
 - While either switch is off, anything with `contentRating: "adult"` is **excluded server-side** from:
   - catalog reads,
@@ -268,11 +268,28 @@ One function renders the fan-facing boundaries text from this object: the hard l
 
   Filtering in the browser is not enough. Write tests that prove the exclusion.
 - **Model the compliance prerequisites; don't implement them:** per-performer age and ID verification, including every participant in couple content; consent records; record-keeping obligations for the target market; an age gate on public pages; an AI provider whose current terms permit the use case (see doc 10 §2 and §11); and payment-processor suitability. Represent these as a `complianceStatus` record with a field for each item, all `false`. This document does **not** establish legal compliance.
-- **AI provider (owner decision, 2026-09-16; reverses the earlier "never send adult content to an AI provider" rule):** once both switches are on and the compliance record is complete, adult categories, items and fan requests **may be sent** to the AI provider. The provider must be one whose current terms allow explicit content between consenting adults, and must not refuse it (see Phase 0, item 5). Build and test this path in Phase 3 with synthetic adult fixtures in staging only. While either switch is off, adult content stays out of AI context, as above.
+- **AI provider (owner decision, 2026-09-16; reverses the earlier "never send adult content to an AI provider" rule):** once both switches are on and the compliance record is complete, adult categories, items and fan requests **may be sent** to the AI provider. The provider must be one whose current terms allow explicit content between consenting adults, and must not refuse it (see Phase 0, item 5). Build and test this path in Phase 3 with synthetic adult fixtures, using the test-process exception above. Staging stays switched off. While either switch is off, adult content stays out of AI context, as above.
 
 ### 5.5 Scope
 
 Phases 0, 1, 2 and 3 of doc 10, in order, with a gate after each. Phases 4–6 are out of scope. So is a creator-facing catalog **editor** UI: in Phases 0–3 the catalog is created with seed data or an admin script, and the editor needs a design first (§3 rule 5).
+
+### 5.6 Gate 0 decisions (owner, 2026-09-16)
+
+From the Phase 0 report's findings. Each is also written into the section it affects.
+
+1. **Selection groups.** A category may contain groups, each with its own min and max (§6). `length_format` and `personalization_delivery` use them.
+2. **Staging price ranges are derived** from the catalog and its selection groups, so builds cheaper than the demo's are allowed (for example Vintage from $125). The demo's fixed ranges remain demo tests only. Nothing displays a range that isn't derived.
+3. **Adult switch in tests:** automated tests may enable adult content inside the test process only. Every deployed environment, staging included, stays off (§5.4).
+4. **Rules are contextual** and must pass the must-allow set. The hard list shows in full on the entrance and review; the Director shows it behind a link (§5.3.2–5.3.3).
+5. **The hard list is the legality test plus platform exclusions** (§5.3.1).
+6. **Fans sign in** before using the Director, saving or sending. Unverified identity fields say "Not verified". Reporting criteria, jurisdiction and due process remain with counsel (§7, §10).
+7. **Phase 2 builds `validateForSubmission` only**; there is no submission endpoint before Phase 4 (§8).
+8. **Response contract semantics** are defined in §8 Phase 3.
+9. **Performers in Phases 0–3 are synthetic** (`isSynthetic: true`). Real consent records come with the compliance work.
+10. **Auth: Clerk**, on a plan that supports creator second-factor sign-in, subject to checking Clerk's terms for an adult business before launch. Setup work happens on a branch, not `main`, until Gate 0 is approved.
+11. **Live AI tests** run on the owner's machine within the $8 ceiling, following §5.3.3 on what may be sent to a provider.
+12. **Design 16's creator sign-in** is corrected: email, then a sign-in link or password, then the authenticator code.
 
 ---
 
@@ -303,7 +320,8 @@ interface Category {
   label: string; description?: string
   origin: 'starter' | 'creator'
   contentRating: 'general' | 'adult'
-  selection: { min: number; max: number }   // setting: {1,1}; wardrobe: {0,1}
+  selection: { min: number; max: number }   // for a category without groups: setting {1,1}; wardrobe {0,1}
+  groups?: { key: string; label: string; min: number; max: number }[]  // when present, limits apply per group
   sortOrder: number; hidden: boolean
   items: Item[]
 }
@@ -318,6 +336,7 @@ interface Item {
     | { kind: 'per_unit'; unitLabel: string; amountPerUnit: Cents; minQty: number; maxQty: number }
     | { kind: 'included' }            // $0, shown as "Included"
   effects?: { minutes?: number; deliveryDaysDelta?: number }  // e.g. extra minute: minutes +1 per unit
+  groupKey?: string                  // required when the category has groups
   requires?: string[]; excludes?: string[]  // item ids within the same version
   hidden: boolean; sortOrder: number
 }
@@ -336,7 +355,8 @@ interface Performer {              // everyone who can appear, each playing them
   id: string; creatorId: string
   kind: 'creator' | 'partner'
   displayName: string
-  ageVerified: boolean; consentRecordId: string | null  // both required before the performer can appear anywhere
+  ageVerified: boolean; consentRecordId: string | null  // both required before a real performer can appear anywhere
+  isSynthetic: boolean             // true for made-up test performers; Phases 0–3 use only synthetic performers
 }
 
 interface BoundaryFlag {           // set by the server check; the AI's own flags are advisory
@@ -392,7 +412,7 @@ interface Quote {                  // computed by the server only
   - Quote calculation and validation must be one module, used by the Worker and unit-tested.
   - The browser may use the same module for instant previews, but it must display the server's quote as authoritative and reconcile when they differ.
 - **D1:** use migrations checked into the repo, with separate development/staging databases (doc 10 §3), foreign keys and version checks. Index creator, owner, status and timestamps.
-- **Auth:** choose it in Phase 0 (doc 10 §3). Creator login is mandatory. Fans start with an opaque server-issued session cookie.
+- **Auth:** choose it in Phase 0 (doc 10 §3). Creator login is mandatory, with a second factor (design 16). **Fans must sign in before using the AI Director, saving or sending** (Gate 0 decision); signed-out visitors can only browse, using an opaque server-issued session cookie. Identity fields that aren't verified show "Not verified", never a guess.
 - **Frontend state:**
   - Keep the single-reducer pattern: draft and undo history must move through one pure transition. A nested `setState` inside an updater double-pushed history under React StrictMode once.
   - Server round-trips must not break undo, and stale responses (an older `revision`) must never overwrite newer edits.
@@ -444,15 +464,15 @@ interface Quote {                  // computed by the server only
 - A stale `expectedRevision` returns a conflict response with the current draft and quote.
 - A catalog version change after a draft was quoted marks the quote stale. The fan must accept the new breakdown and is never silently re-priced.
 - Implement the boundaries renderer, and switch all three screens in §4.2 to it (this needs owner approval of the rendered wording).
-- Implement the hard-list **rules layer** and the creator-limit modes (§5.3.3–5.3.4). Run them on draft save, at submission and at catalog publish, and recompute `boundaryFlags` on every save.
+- Implement the hard-list **rules layer** and the creator-limit modes (§5.3.3–5.3.4). Run them on draft save and at catalog publish, and recompute `boundaryFlags` on every save. For submission, build and test a **`validateForSubmission` function only**; there is no submission endpoint until Phase 4 (Gate 0 decision). Catalog publish runs through the admin script, not an editor UI.
 - Migrate the fan screens from constants to catalog data **without visual changes**, driven by the existing designs. The entrance price ranges must still be derived.
 
 **Complete when:**
 
-- the doc 10 §9 figures and the §4.1 entrance ranges compute exactly in cents, in unit tests and through the API;
+- the doc 10 §9 figures compute exactly in cents, and entrance ranges are derived from the catalog's selection groups (not the demo's fixed figures), in unit tests and through the API;
 - a tampered browser request (unknown item, over-limit quantity, hidden item, adult item, edited price) is rejected;
 - the rules layer passes the §5.3.3 must-block and must-allow sets, and both rates are reported;
-- a hard-no request cannot be submitted, and an ask-me request is submitted with its flag;
+- `validateForSubmission` rejects a draft with a hard-no request and accepts an ask-me request with its flag;
 - existing e2e tests pass against staging.
 
 **Gate 2 report.**
@@ -508,7 +528,11 @@ interface Quote {                  // computed by the server only
   }
   ```
 
-- **`reply` must never state a price, total, discount, delivery date or approval.** Validate: reject or strip replies containing currency amounts or those claims. All numbers the fan sees come from the server's quote of each suggestion, rendered by templates.
+- **Semantics of the response contract (Gate 0 decision):**
+  - `add` adds the item with quantity 1 unless `qty` is given; `remove` removes the item and ignores `qty`; `setQty` **requires** `qty` of at least 1 (use `remove` for zero). A `setQty` without `qty` makes that suggestion invalid.
+  - A `boundaryFlags` entry whose `suggestionIndex` doesn't exist, or whose `limitRef` doesn't match a limit in the current version, makes **the whole response invalid**.
+  - Each suggestion is validated against selection groups and limits after all its changes are applied together.
+- **No text field may state a price, total, discount, delivery date or approval.** This covers `reply`, suggestion labels, `clarifyingQuestion` and `unresolved`. Validate: reject responses containing currency amounts or those claims. All numbers the fan sees come from the server's quote of each suggestion, rendered by templates.
 - **Hard list and creator limits on every turn (§5.3.3–5.3.4):**
   - check the fan message before the call, and every text field of the response after it;
   - add the **classifier layer** alongside the rules layer, and fail closed;
@@ -556,7 +580,7 @@ Do not describe anything as working unless you ran it. Say "not verified" when y
 | Decision | Needed by |
 | --- | --- |
 | AI provider and model | Gate 0 |
-| Auth provider | Gate 0 |
+| Clerk plan, fan recovery flow and Clerk terms for an adult business (Clerk chosen at Gate 0, §5.6) | Before Phase 1 sign-in work is merged to main |
 | AI hard-list classifier | Gate 0 |
 | Adult creator-limit checklist entries (§5.3.4) | Before adult content is enabled |
 | Hard-list block threshold per fan session (default 3 in 24 hours) | Phase 2 |
