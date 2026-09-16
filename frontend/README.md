@@ -81,7 +81,7 @@ Fan journey (share one `CommissionProvider`):
 | `/ai-director` | AI Director conversation + live Scene Card |
 | `/review` | Review the Scene Card |
 | `/confirmation` | Send confirmation (nothing is really sent) |
-| `/saved` | Saved ideas — placeholder, undesigned on purpose |
+| `/saved` | Saved ideas — the one live draft, honestly labelled as unsaved (design `10-saved-ideas.html`) |
 
 Creator side (separate data, no shared draft):
 

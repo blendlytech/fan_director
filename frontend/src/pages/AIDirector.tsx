@@ -45,7 +45,10 @@ export function AIDirector() {
 
   const [message, setMessage] = useState('')
   const [starterIndex, setStarterIndex] = useState(0)
-  const [savedLocally, setSavedLocally] = useState(false)
+  // Tracks whether the fan has clicked "Save idea" — not whether anything was
+  // actually saved. This is component-local state that resets on navigation,
+  // and nothing is ever persisted, so the button must never claim otherwise.
+  const [saveAttempted, setSaveAttempted] = useState(false)
 
   const settingGroupRef = useRef<HTMLDivElement>(null)
   const focusGroupRef = useRef<HTMLDivElement>(null)
@@ -427,17 +430,31 @@ export function AIDirector() {
                     </span>
                     <button
                       type="button"
-                      aria-pressed={savedLocally}
-                      onClick={() => setSavedLocally((saved) => !saved)}
+                      onClick={() => setSaveAttempted(true)}
                       className="flex min-h-[44px] items-center gap-1.5 rounded-md px-2 text-xs font-medium text-muted transition-colors duration-160 hover:bg-panel hover:text-espresso focus-ring"
                     >
                       <Icon
-                        icon={savedLocally ? 'lucide:bookmark-check' : 'lucide:bookmark'}
+                        icon={saveAttempted ? 'lucide:bookmark-x' : 'lucide:bookmark'}
                         width={14}
                       />
-                      {savedLocally ? 'Saved for this session' : 'Save idea'}
+                      {saveAttempted ? 'Not saved — demo' : 'Save idea'}
                     </button>
                   </div>
+                  {/* Empty until clicked, so a screen reader announces the change
+                      when it appears rather than reading stale text on load. */}
+                  <p role="status" className="mb-4 text-xs text-muted empty:mb-0">
+                    {saveAttempted && (
+                      <>
+                        This demo can&rsquo;t save ideas.{' '}
+                        <Link
+                          to="/saved"
+                          className="inline-flex min-h-[44px] items-center underline focus-ring"
+                        >
+                          See why
+                        </Link>
+                      </>
+                    )}
+                  </p>
                   <h2 className="mb-2 text-[28px] leading-tight">{setting.sceneTitle}</h2>
                   <p className="text-sm text-muted">
                     A cinematic personalized message for your anniversary.
