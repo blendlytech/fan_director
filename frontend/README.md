@@ -41,7 +41,9 @@ These are load-bearing for the project's honesty, not style preferences:
   sections are marked replaced.
 - `docs/specs/10-Fan-Director-Implementation-Plan.md` is the proposed direction
   for a real app (Cloudflare, platform-paid AI, server-authoritative pricing).
-  Nothing in it is built yet; it starts with a Phase 0 reconciliation. The
+  Nothing in it is built yet; it starts with a Phase 0 reconciliation.
+  `docs/specs/11-Developer-Handoff-Phases-0-3.md` is the approved handoff for
+  Phases 0–3, including the catalog and creator-boundaries model. The
   older backend specs (04–09) contradicted it and were removed; see
   `docs/specs/README.md`.
 - One deliberate departure from the drafts: this build's confirmation screen

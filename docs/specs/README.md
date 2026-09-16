@@ -7,7 +7,8 @@
 | [01-design-context.md](01-design-context.md) | Current: product intent and the no-false-claims constraints |
 | [02-design-system.md](02-design-system.md) | Current: the design tokens the Tailwind config is built from |
 | [03-developer-handoff.md](03-developer-handoff.md) | **Partly replaced.** Design, component and page guidance stands; its backend, API, data-model and deployment sections are replaced by doc 10 |
-| [10-Fan-Director-Implementation-Plan.md](10-Fan-Director-Implementation-Plan.md) | **Current direction** for a real app: Cloudflare Pages + Worker + D1 + R2, platform-paid AI behind an adapter, server-authoritative pricing, versioned Scene Cards. *Proposed*: start with its Phase 0 |
+| [10-Fan-Director-Implementation-Plan.md](10-Fan-Director-Implementation-Plan.md) | **Current direction** for a real app: Workers Static Assets (was Pages) + Worker + D1 + R2, platform-paid AI behind an adapter, server-authoritative pricing, versioned Scene Cards |
+| [11-Developer-Handoff-Phases-0-3.md](11-Developer-Handoff-Phases-0-3.md) | **Approved scope for the next build**: doc 10 Phases 0–3 with review gates, plus the decided catalog model (categories, starter and creator items, unpriced custom requests), creator boundaries (platform-prohibited list, checklist, custom text) and adult-content gating that stays off |
 
 The visual ground truth remains `docs/design-html/` (PDF copies in `docs/design-pdfs/`).
 The PDFs in `docs/specs-pdf/` are snapshots of 01–03 taken before the
