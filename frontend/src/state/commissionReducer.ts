@@ -28,11 +28,18 @@ export function commissionReducer(
   action: CommissionAction,
 ): CommissionState {
   switch (action.type) {
-    case 'commit':
+    case 'commit': {
+      // Re-selecting what is already chosen is not a change: recording it would
+      // leave an undo step that visibly does nothing.
+      const changed = (Object.keys(action.changes) as (keyof Draft)[]).some(
+        (key) => !Object.is(action.changes[key], state.draft[key]),
+      )
+      if (!changed) return state
       return {
         draft: { ...state.draft, ...action.changes },
         history: [...state.history, state.draft],
       }
+    }
     case 'note': {
       const text = action.text.trim()
       if (!text) return state

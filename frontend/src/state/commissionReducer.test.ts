@@ -63,6 +63,55 @@ describe('commit', () => {
   })
 })
 
+/* commit that changes nothing ---------------------------------------------- */
+
+describe('a commit that changes nothing', () => {
+  it('re-selecting the current setting returns the same state and records no undo step', () => {
+    const state = frozen(INITIAL_STATE)
+    expect(commissionReducer(state, { type: 'commit', changes: { setting: 'vintage' } })).toBe(state)
+  })
+
+  it('an empty commit returns the same state', () => {
+    const state = frozen(INITIAL_STATE)
+    expect(commissionReducer(state, { type: 'commit', changes: {} })).toBe(state)
+  })
+
+  it('the "back within budget" commit is a no-op when the draft already matches', () => {
+    const state = frozen(INITIAL_STATE) // already richer, no extra minute
+    const after = commissionReducer(state, {
+      type: 'commit',
+      changes: { focus: 'richer', extraMinute: false },
+    })
+    expect(after).toBe(state)
+  })
+
+  it('a multi-field commit where only one field differs still records exactly one step', () => {
+    const state = frozen(INITIAL_STATE)
+    const after = commissionReducer(state, {
+      type: 'commit',
+      changes: { focus: 'richer', extraMinute: true },
+    })
+    expect(after.draft).toEqual({ ...INITIAL_DRAFT, extraMinute: true })
+    expect(after.history).toEqual([INITIAL_DRAFT])
+    expect(commissionReducer(deepFreeze(after), { type: 'undo' }).draft).toEqual(INITIAL_DRAFT)
+  })
+
+  it('re-selecting after a real change leaves one undo that reverts that change', () => {
+    const changed = commissionReducer(frozen(INITIAL_STATE), {
+      type: 'commit',
+      changes: { setting: 'floral' },
+    })
+    const reclicked = commissionReducer(deepFreeze(changed), {
+      type: 'commit',
+      changes: { setting: 'floral' },
+    })
+    expect(reclicked).toBe(changed)
+    const undone = commissionReducer(reclicked, { type: 'undo' })
+    expect(undone.draft).toEqual(INITIAL_DRAFT)
+    expect(undone.history).toHaveLength(0)
+  })
+})
+
 /* undo ---------------------------------------------------------------------- */
 
 describe('undo', () => {

@@ -103,6 +103,26 @@ test.describe('fan journey', () => {
     await expect(liveTotal(page)).toHaveText('$155')
   })
 
+  test('re-clicking the selected option does not add an undo step', async ({ page }) => {
+    await beginWithBackstage(page) // $125
+
+    const settings = page.getByRole('radiogroup', { name: 'Scene setting' })
+    await settings.getByRole('radio', { name: /Floral Studio/ }).click()
+    await expect(liveTotal(page)).toHaveText('$155')
+
+    // Re-click what is already selected, in both groups. Neither is a change.
+    await settings.getByRole('radio', { name: /Floral Studio/ }).click()
+    await page
+      .getByRole('radiogroup', { name: 'Where to spend the budget' })
+      .getByRole('radio', { name: /Richer Setting/ })
+      .click()
+
+    // One Undo must revert the Floral change. With empty steps recorded, it
+    // would stay at $155.
+    await page.getByRole('button', { name: /Undo last change/ }).click()
+    await expect(liveTotal(page)).toHaveText('$125')
+  })
+
   test('entrance cards show the derived price ranges', async ({ page }) => {
     await page.goto('/')
 
