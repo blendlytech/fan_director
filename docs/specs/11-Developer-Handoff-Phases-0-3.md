@@ -203,6 +203,10 @@ Manual catalog selection keeps working. Never skip the check.
 - **Must-allow set:** at least 100 legal cases. Include explicit acts between the creator, the fan by name and verified partners; point-of-view and first-person formats; status roles such as nurse, doctor and police officer; and common near-misses such as "my 18th birthday", "I'm 42", "my sister recommended you" and "I've been a fan since school".
 - A blocked must-allow case fails the gate just as a missed must-block case does. Report both rates.
 - Adult fixtures are synthetic and exist only in the test suite and staging.
+- **What may be sent to an external provider during tests (owner decision, 2026-09-16):**
+  - **Generation models** (the Director, and any model under evaluation) receive only **legal** content: normal requests, legal explicit adult requests and injection attempts. **Never send a hard-list case to a generation model**, not even to test refusal. In the product, fan input is checked before the provider call, so the model never sees those cases anyway.
+  - **Hard-list cases** are tested against the rules layer locally. The classifier layer may receive them only as **short, non-graphic classification inputs** that state the prohibited element without sexual detail (for example "request says the person is 16"), and only if the classifier's terms allow safety-classification use. Cases for `minors` never contain sexual description in any form, anywhere, including local fixtures.
+  - **AI output checks** are tested with synthetic output strings passed straight to the checker locally, never by asking a model to produce a violation.
 
 #### 5.3.4 Creator limits: "Ask me" or "Hard no"
 
@@ -413,7 +417,7 @@ interface Quote {                  // computed by the server only
    - data retention and training settings,
    - latency and price per million input and output tokens, **with dates and sources**.
 
-   Run at least 10 sample conversations against the pilot catalog with the §8 Phase 3 schema (use the owner's test key only if provided; otherwise design the harness and mark it blocked).
+   Run at least 10 sample conversations against the pilot catalog with the §8 Phase 3 schema (use the owner's test key only if provided; otherwise design the harness and mark it blocked). Follow §5.3.3 on what may be sent to an external provider. The owner has reviewed the terms that matter for testing: OpenRouter's terms and Meta's Llama 3.3 policy don't prohibit legal adult content, so live tests with synthetic legal adult content may run once the key is set. Written confirmation from providers is a **launch** requirement, not a test blocker.
 6. Evaluate **hard-list classifiers** (§5.3.3) the same way: custom-category support, terms for adult text, retention, latency, price, and a first run against a draft of the must-block and must-allow sets.
 7. List every UI state Phases 1–3 need that **still** has no design. Already designed: creator limits and boundary notices (13), paused, restored and closed fan accounts (14), safety-case review (15), sign-in and age verification (16), AI thinking, suggestions, accepted, rejected, out of date, unavailable, out of replies and the catalog fallback (17), save status, edits from another window and price changes (18), and the unpriced custom request (19). If the chosen auth or verification provider can't support a design, say so in the report.
 
