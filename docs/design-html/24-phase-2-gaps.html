@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 2 states - Maya Atelier</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { serif: ['Cormorant Garamond', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+      colors: {
+        cream: '#FDF8F3', panel: '#FFFFFF', secondary: '#F5F0EB', espresso: '#302720', muted: '#70625C',
+        rose: '#E4A4BD', rosehover: '#D595AE', deeprose: '#84485D', divider: '#DED3CB',
+        okbg: '#EEF4EC', okborder: '#C4D9BF', okink: '#4F7A48',
+        askbg: '#F8EFE4', askborder: '#E3C8A6', askink: '#7A5530',
+        alertbg: '#FBECE9', alertborder: '#EFC2BA', alertink: '#9E3B2C'
+      },
+      transitionDuration: { '160': '160ms' }
+    }
+  }
+}
+</script>
+<style>
+  body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin: 0; }
+  html { background-color: #FDF8F3; }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
+  .focus-ring:focus-visible { outline: 2px solid #302720; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="bg-cream font-sans text-espresso min-h-screen">
+
+  <!--
+    DESIGN 24: Phase 2 states Astra's Gate 0 report found missing (report §6 and §8.1).
+    Staging design. Builds on design 20 (commission options) and design 18 (save states).
+
+    A. Creator's pricing note on Review
+    B. The fan's name or nickname (DraftV2.fanDisplayName, <= 40 chars, hard-list checked)
+    C. Adding and removing the fan's own script, with the discard confirmation
+    D. Resale conflict returned by the server (PERSONALISED_VIDEO_RESALE_FORBIDDEN)
+    E. Proposed fan-facing label for prohibited_roles (owner picks; doc 11 §10)
+
+    Rules: amounts are the server's quote. The server never repairs a draft, so a
+    conflict asks the fan to choose; the page never picks for them.
+  -->
+
+  <header class="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-divider">
+    <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 h-[80px] flex items-center justify-between">
+      <div class="flex items-center gap-4 sm:gap-6">
+        <a id="d24-maya-atelier" href="#collection" class="inline-flex min-h-[44px] items-center font-serif text-2xl sm:text-3xl font-medium tracking-tight focus-ring">Maya Atelier</a>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-secondary text-muted border border-divider">Staging design</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-8">
+        <a id="d24-collection" href="#collection" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Collection</a>
+        <a id="d24-your-studio" href="#studio" class="inline-flex min-h-[44px] items-center text-sm font-medium underline decoration-espresso underline-offset-4 focus-ring">Your studio</a>
+        <a id="d24-saved-ideas" href="#saved" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Saved ideas</a>
+      </nav>
+      <button type="button" aria-expanded="false" class="md:hidden inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-[12px] px-3 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
+        <iconify-icon icon="lucide:menu" width="18"></iconify-icon>
+        Menu
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-[1120px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-20">
+
+    <!-- ============================================================
+         A. PRICING NOTE ON REVIEW
+         ============================================================ -->
+    <section aria-labelledby="a-label" class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <div>
+        <p id="a-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A · Review: total, resale notice, then Maya&rsquo;s pricing note</p>
+        <div class="overflow-hidden rounded-[12px] border border-divider bg-panel">
+          <div class="space-y-4 border-b border-divider p-5 sm:p-6">
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">3-minute video</span><span class="font-medium">$90</span></div>
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">Backstage</span><span class="font-medium">$15</span></div>
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">No name</span><span class="text-muted">Included</span></div>
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">Maya may resell it later</span><span class="text-muted">Included</span></div>
+          </div>
+          <div class="bg-secondary p-5 sm:p-6">
+            <div class="flex items-end justify-between">
+              <span class="text-sm font-medium uppercase tracking-wider text-muted">Estimated total</span>
+              <span class="font-serif text-2xl font-bold">$105</span>
+            </div>
+            <p class="mt-3 flex items-start gap-2 rounded-[10px] border border-askborder bg-askbg px-3 py-2 text-xs text-askink">
+              <iconify-icon icon="lucide:store" width="14" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>
+              Maya may sell this video to other fans later. Choose &ldquo;Just for you&rdquo; to keep it private.
+            </p>
+          </div>
+          <div class="flex items-start gap-3 border-t border-divider p-5 sm:p-6">
+            <iconify-icon icon="lucide:message-square-quote" width="20" class="mt-0.5 shrink-0 text-deeprose" aria-hidden="true"></iconify-icon>
+            <div>
+              <p class="mb-1 text-sm font-semibold">Why Maya prices it this way</p>
+              <p class="text-sm leading-relaxed">&ldquo;Every video is filmed just for you. A few minutes on screen takes me about an hour to set up, film and edit, so I price by the minute.&rdquo;</p>
+              <p class="mt-2 text-xs text-muted">In Maya&rsquo;s own words.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="space-y-3 text-sm text-muted lg:pt-10">
+        <p class="font-semibold text-espresso">Rules for this state</p>
+        <ul class="list-disc space-y-2 pl-5">
+          <li>Order on Review: line items, total, resale or exclusive notice, pricing note. Notices about <em>this</em> video come before the creator&rsquo;s general note.</li>
+          <li>Same heading and &ldquo;In Maya&rsquo;s own words&rdquo; line as the entrance (design 20 A), so it never reads as platform copy.</li>
+          <li>The note comes from the catalog version the draft is quoted against, not the latest one. If a newer version is published, design 18&rsquo;s price-change state shows first.</li>
+          <li>No note (<code class="font-mono text-xs">pricingNote: null</code>): the whole block is omitted, with no empty heading.</li>
+          <li>Shown as plain text: line breaks kept, no links or formatting rendered.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         B. THE FAN'S NAME OR NICKNAME
+         ============================================================ -->
+    <section aria-labelledby="b-label">
+      <p id="b-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">B1 · No name yet &nbsp;·&nbsp; B2 · Name set &nbsp;·&nbsp; B3 · Name can&rsquo;t be used</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <!-- B1 -->
+        <div class="rounded-[12px] border border-divider bg-panel p-5">
+          <fieldset>
+            <legend class="mb-3 text-sm font-semibold">Your name in the video</legend>
+            <div class="space-y-2">
+              <label class="flex min-h-[44px] items-center justify-between gap-3 rounded-[10px] border border-divider px-3 py-2 text-sm">
+                <span class="flex items-center gap-3"><input type="radio" name="b1" class="h-4 w-4 accent-espresso">No name</span><span class="text-muted">Included</span>
+              </label>
+              <div class="rounded-[10px] border border-espresso bg-secondary px-3 py-2 text-sm">
+                <label class="flex min-h-[44px] items-center justify-between gap-3">
+                  <span class="flex items-center gap-3"><input type="radio" name="b1" checked class="h-4 w-4 accent-espresso">Says your name once</span><span class="text-muted">Included</span>
+                </label>
+                <div class="pb-2 pt-1">
+                  <label for="b1-name" class="mb-1 block text-sm font-medium">What should Maya call you?</label>
+                  <input id="b1-name" type="text" maxlength="40" autocomplete="nickname" aria-describedby="b1-hint" class="w-full min-h-[44px] rounded-[10px] border border-divider bg-panel px-3 text-base focus-ring" placeholder="First name or nickname">
+                  <p id="b1-hint" class="mt-1 text-xs text-muted">Just a first name or nickname. No surname or contact details.</p>
+                </div>
+              </div>
+              <label class="flex min-h-[44px] items-center justify-between gap-3 rounded-[10px] border border-divider px-3 py-2 text-sm">
+                <span class="flex items-center gap-3"><input type="radio" name="b1" class="h-4 w-4 accent-espresso">Says your name throughout</span><span class="text-muted">+$15</span>
+              </label>
+            </div>
+          </fieldset>
+          <p class="mt-3 text-xs text-muted">The field opens inside whichever name option is picked. Review stays blocked with &ldquo;Add the name Maya should use&rdquo; until it&rsquo;s saved.</p>
+        </div>
+
+        <!-- B2 -->
+        <div class="rounded-[12px] border border-divider bg-panel p-5">
+          <fieldset>
+            <legend class="mb-3 text-sm font-semibold">Your name in the video</legend>
+            <div class="space-y-2">
+              <label class="flex min-h-[44px] items-center justify-between gap-3 rounded-[10px] border border-divider px-3 py-2 text-sm">
+                <span class="flex items-center gap-3"><input type="radio" name="b2" class="h-4 w-4 accent-espresso">No name</span><span class="text-muted">Included</span>
+              </label>
+              <label class="flex min-h-[44px] items-center justify-between gap-3 rounded-[10px] border border-espresso bg-secondary px-3 py-2 text-sm">
+                <span class="flex items-center gap-3"><input type="radio" name="b2" checked class="h-4 w-4 accent-espresso">Says &ldquo;Sam&rdquo; once</span><span class="text-muted">Included</span>
+              </label>
+              <label class="flex min-h-[44px] items-center justify-between gap-3 rounded-[10px] border border-divider px-3 py-2 text-sm">
+                <span class="flex items-center gap-3"><input type="radio" name="b2" class="h-4 w-4 accent-espresso">Says &ldquo;Sam&rdquo; throughout</span><span class="text-muted">+$15</span>
+              </label>
+            </div>
+          </fieldset>
+          <p class="mt-3 flex items-center justify-between gap-3 text-sm">
+            <span class="inline-flex items-center gap-1.5 text-xs text-muted"><iconify-icon icon="lucide:cloud-check" width="14" class="text-okink" aria-hidden="true"></iconify-icon>Saved to your account</span>
+            <button type="button" class="inline-flex min-h-[44px] items-center font-medium underline underline-offset-4 focus-ring">Change name</button>
+          </p>
+          <p class="mt-1 text-xs text-muted">Once saved, the option labels use the name. Picking &ldquo;No name&rdquo; keeps it on the draft (the Director still uses it in chat) but drops it from the video.</p>
+        </div>
+
+        <!-- B3 -->
+        <div class="rounded-[12px] border border-divider bg-panel p-5">
+          <label for="b3-name" class="mb-1 block text-sm font-medium">What should Maya call you?</label>
+          <input id="b3-name" type="text" maxlength="40" aria-invalid="true" aria-describedby="b3-error" value="Sam 07700 900123" class="w-full min-h-[44px] rounded-[10px] border-2 border-alertink bg-panel px-3 text-base focus-ring">
+          <p id="b3-error" role="alert" class="mt-2 flex items-start gap-2 text-sm text-alertink">
+            <iconify-icon icon="lucide:circle-alert" width="16" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>
+            Maya can&rsquo;t use this name. Use just a first name or nickname, with no phone number, email or links.
+          </p>
+          <p class="mt-4 text-xs text-muted">Server check on save. Contact details map to <code class="font-mono">solicitation</code>. Any other hard-list hit shows design 13&rsquo;s blocked message with that label, and a <code class="font-mono">minors</code> hit follows the safety-case path, never this inline message.</p>
+          <p class="mt-2 text-xs text-muted">Too long can&rsquo;t happen: the field stops at 40 characters. The server still rejects longer input with the same message as B1&rsquo;s hint.</p>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-muted">The name is what the fan chose, not a verified identity. The creator&rsquo;s request detail shows it as &ldquo;Call them: Sam&rdquo;.</p>
+    </section>
+
+    <!-- ============================================================
+         C. ADDING AND REMOVING THE FAN'S OWN SCRIPT
+         ============================================================ -->
+    <section aria-labelledby="c-label">
+      <p id="c-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">C1 · Script added, still empty &nbsp;·&nbsp; C2 · Remove it? &nbsp;·&nbsp; C3 · Removed</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <!-- C1 -->
+        <div class="rounded-[12px] border border-divider bg-panel p-5">
+          <div class="mb-1 flex items-start justify-between gap-4">
+            <h3 class="font-sans text-base font-semibold">Your own script</h3>
+            <span class="shrink-0 text-sm font-medium">$30</span>
+          </div>
+          <p class="mb-3 text-sm text-muted">Write the lines you&rsquo;d like Maya to say.</p>
+          <label for="c1-script" class="sr-only">Your own script</label>
+          <textarea id="c1-script" rows="4" aria-describedby="c1-need" class="w-full resize-y rounded-[12px] border border-divider bg-cream px-4 py-3 text-base leading-relaxed focus-ring"></textarea>
+          <div class="mt-2 flex items-start justify-between gap-3 text-xs text-muted">
+            <span id="c1-need" class="inline-flex items-center gap-1.5 text-askink"><iconify-icon icon="lucide:pen-line" width="14" aria-hidden="true"></iconify-icon>Write your script, or remove this option</span>
+            <span>0 / 3,000</span>
+          </div>
+          <button type="button" class="mt-4 inline-flex min-h-[44px] items-center gap-2 rounded-[12px] border border-divider bg-panel hover:bg-secondary px-4 text-sm font-medium transition-colors duration-160 focus-ring">
+            <iconify-icon icon="lucide:trash-2" width="16" aria-hidden="true"></iconify-icon>Remove script
+          </button>
+          <p class="mt-3 text-xs text-muted">An empty script saves (it&rsquo;s a draft) but can&rsquo;t be sent: Review&rsquo;s Send is disabled with this same message. Removing an empty script needs no confirmation.</p>
+        </div>
+
+        <!-- C2 -->
+        <div class="rounded-[12px] border border-divider bg-espresso/10 p-4">
+          <div role="dialog" aria-modal="true" aria-labelledby="c2-title" aria-describedby="c2-body" class="rounded-[12px] border border-divider bg-panel p-6 shadow-[0_12px_40px_rgba(0,0,0,0.12)]">
+            <h2 id="c2-title" class="mb-2 text-2xl font-semibold tracking-tight">Remove your script?</h2>
+            <p id="c2-body" class="mb-5 text-sm leading-relaxed text-muted">What you&rsquo;ve written (128 characters) will be deleted, and $30 comes off your total. This can&rsquo;t be undone.</p>
+            <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+              <button type="button" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-alertborder bg-panel hover:bg-alertbg px-5 text-sm font-medium text-alertink transition-colors duration-160 focus-ring">Delete script</button>
+              <button type="button" autofocus class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] bg-espresso text-cream px-5 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Keep script</button>
+            </div>
+          </div>
+          <p class="mt-3 px-1 text-xs text-muted">Focus starts on Keep script. Escape = keep. Also asked when the script option is removed from the Scene Card, by a template switch, or by accepting a Director suggestion that drops it.</p>
+        </div>
+
+        <!-- C3 -->
+        <div class="space-y-3">
+          <div role="status" class="flex items-start gap-3 rounded-[12px] border border-divider bg-panel p-5 text-sm">
+            <iconify-icon icon="lucide:circle-check" width="20" class="mt-0.5 shrink-0 text-okink" aria-hidden="true"></iconify-icon>
+            <div>
+              <p class="font-semibold">Script removed</p>
+              <p class="text-muted">Your total is now $225.</p>
+            </div>
+          </div>
+          <div class="flex items-start gap-3 rounded-[12px] border border-divider bg-secondary p-5 text-sm">
+            <iconify-icon icon="lucide:unlock" width="20" class="mt-0.5 shrink-0 text-deeprose" aria-hidden="true"></iconify-icon>
+            <p>&ldquo;Maya may resell it later&rdquo; is available again, because nothing personal is in this video now. <span class="text-muted">&ldquo;Just for you&rdquo; stays selected.</span></p>
+          </div>
+          <p class="text-xs text-muted">The total is the server&rsquo;s new quote; until it arrives, design 18&rsquo;s saving state shows. The second message appears only when neither the name nor the script remains. The rights choice never changes by itself.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         D. RESALE CONFLICT FROM THE SERVER
+         ============================================================ -->
+    <section aria-labelledby="d-label" class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <div>
+        <p id="d-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">D · Name or script plus resale, rejected by the server</p>
+        <div role="alert" class="rounded-[12px] border border-askborder bg-askbg p-5 sm:p-6">
+          <div class="flex items-start gap-3">
+            <iconify-icon icon="lucide:git-compare-arrows" width="20" class="mt-0.5 shrink-0 text-askink" aria-hidden="true"></iconify-icon>
+            <div class="text-sm leading-relaxed text-espresso">
+              <p class="mb-1 font-semibold">Pick one: your name, or resale</p>
+              <p class="mb-4">This video says your name, so Maya can&rsquo;t sell it to anyone else. Nothing was changed and nothing was sent.</p>
+              <div class="space-y-2">
+                <button type="button" class="flex w-full min-h-[48px] items-center justify-between gap-3 rounded-[12px] border border-divider bg-panel hover:border-espresso px-4 text-left text-sm transition-colors duration-160 focus-ring">
+                  <span><span class="font-medium">Keep my name</span><span class="block text-xs text-muted">Only you get the video</span></span>
+                  <span class="shrink-0 font-medium">+$85</span>
+                </button>
+                <button type="button" class="flex w-full min-h-[48px] items-center justify-between gap-3 rounded-[12px] border border-divider bg-panel hover:border-espresso px-4 text-left text-sm transition-colors duration-160 focus-ring">
+                  <span><span class="font-medium">Remove my name</span><span class="block text-xs text-muted">Maya may resell it later</span></span>
+                  <span class="shrink-0 text-muted">Included</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="space-y-3 text-sm text-muted lg:pt-10">
+        <p class="font-semibold text-espresso">Rules for this state</p>
+        <ul class="list-disc space-y-2 pl-5">
+          <li>The normal UI can&rsquo;t reach this: design 20 B disables resale. It appears when a save, quote or send returns <code class="font-mono text-xs">PERSONALISED_VIDEO_RESALE_FORBIDDEN</code>, for example after an edit in another window, an old saved draft, or a template.</li>
+          <li>Shown at the top of the Scene Card (or above Send on Review), replacing the normal save status. Send stays disabled until the fan picks.</li>
+          <li>Wording follows the conflicting item ids the server returns: &ldquo;says your name&rdquo;, &ldquo;uses your script&rdquo;, or both (&ldquo;Remove my name and script&rdquo;, which then asks C2).</li>
+          <li>Both amounts are server quotes for each resolution. If a quote is missing, show the choice without an amount rather than calculating one.</li>
+          <li>&ldquo;Nothing was changed&rdquo; is true: the server rejected the write and the last saved draft stands.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         E. PROHIBITED_ROLES FAN LABEL (owner decision needed)
+         ============================================================ -->
+    <section aria-labelledby="e-label">
+      <p id="e-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">E · <code>prohibited_roles</code> label, in the entrance list and the blocked message</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <div class="rounded-[12px] border border-dashed border-divider bg-panel p-5">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">Today (design 13)</p>
+          <p class="text-sm line-through decoration-muted">School, student, childlike, family or step-family roles</p>
+          <p class="mt-3 text-xs text-muted">Misses babysitter or nanny, someone else&rsquo;s partner or a neighbour, and named characters. &ldquo;Childlike&rdquo; now routes to <code class="font-mono">minors</code>, whose label already covers it.</p>
+        </div>
+
+        <div class="rounded-[12px] border-2 border-espresso bg-panel p-5">
+          <p class="mb-3 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-deeprose">Option 1 · Recommended</p>
+          <ul class="mb-4 space-y-2 text-sm">
+            <li class="flex items-start gap-2"><span aria-hidden="true" class="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-espresso"></span>School, babysitter or family roles, including step-family</li>
+            <li class="flex items-start gap-2"><span aria-hidden="true" class="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-espresso"></span>Playing someone else&rsquo;s partner, or a named character from a film, show, game or anime</li>
+          </ul>
+          <div role="alert" class="rounded-[10px] border border-alertborder bg-alertbg p-3 text-xs leading-relaxed">
+            Your message includes something that&rsquo;s never allowed on Maya Atelier: <span class="font-medium">playing someone else&rsquo;s partner, or a named character from a film, show, game or anime.</span> Nothing was shared with Maya.
+          </div>
+          <p class="mt-3 text-xs text-muted">Two list lines, one key: in the blocked message, show the line that matched if the rules layer knows it, otherwise both. Concrete words fans recognise.</p>
+        </div>
+
+        <div class="rounded-[12px] border border-divider bg-panel p-5">
+          <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-muted">Option 2 · One short line</p>
+          <ul class="mb-4 space-y-2 text-sm">
+            <li class="flex items-start gap-2"><span aria-hidden="true" class="mt-[7px] h-1.5 w-1.5 shrink-0 rounded-full bg-espresso"></span>Roles as a relative, a babysitter, someone else&rsquo;s partner or a named character</li>
+          </ul>
+          <div role="alert" class="rounded-[10px] border border-alertborder bg-alertbg p-3 text-xs leading-relaxed">
+            Your message includes something that&rsquo;s never allowed on Maya Atelier: <span class="font-medium">roles as a relative, a babysitter, someone else&rsquo;s partner or a named character.</span> Nothing was shared with Maya.
+          </div>
+          <p class="mt-3 text-xs text-muted">Keeps design 13&rsquo;s one line per key, but drops &ldquo;school&rdquo;, the word fans are most likely to type.</p>
+        </div>
+      </div>
+
+      <div class="mt-6 flex items-start gap-3 rounded-[12px] border border-okborder bg-okbg p-5 text-sm leading-relaxed">
+        <iconify-icon icon="lucide:circle-check" width="20" class="mt-0.5 shrink-0 text-okink" aria-hidden="true"></iconify-icon>
+        <div>
+          <p class="font-semibold">Optional line under the hard list (either option)</p>
+          <p>Adult roles like a nurse, a police officer or a vampire are fine, if Maya offers them.</p>
+          <p class="mt-1 text-xs text-okink">Heads off the obvious &ldquo;so what <em>can</em> I ask for?&rdquo; question. Owner decides whether to add it.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>

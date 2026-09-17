@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email news step - Maya Atelier</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { serif: ['Cormorant Garamond', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+      colors: {
+        cream: '#FDF8F3', panel: '#FFFFFF', secondary: '#F5F0EB', espresso: '#302720', muted: '#70625C',
+        rose: '#E4A4BD', rosehover: '#D595AE', deeprose: '#84485D', divider: '#DED3CB',
+        okbg: '#EEF4EC', okborder: '#C4D9BF', okink: '#4F7A48',
+        pendbg: '#F8EFE4', pendborder: '#E3C8A6', pendink: '#7A5530',
+        alertbg: '#FBECE9', alertborder: '#EFC2BA', alertink: '#9E3B2C'
+      },
+      transitionDuration: { '160': '160ms' }
+    }
+  }
+}
+</script>
+<style>
+  body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin: 0; }
+  html { background-color: #FDF8F3; }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
+  .focus-ring:focus-visible { outline: 2px solid #302720; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="bg-cream font-sans text-espresso min-h-screen">
+
+  <!--
+    DESIGN 23: The one-time email news step after sign-up, and the unsubscribe page
+    (doc 11 §5.8 and §5.6 item 16). Staging design. Replaces the checkbox inside
+    design 16 A: Clerk's hosted sign-up can't show it, so it becomes its own step.
+
+    Rules this design encodes:
+    - Shown once, straight after a fan's FIRST sign-up, before anything else, for the
+      creator whose boutique they came from. Never after an ordinary sign-in.
+    - The checkbox is unticked and optional. "Continue" with it unticked is the skip:
+      no consent row is written. There is no separate "Skip" button doing the same thing.
+    - The versioned wording is the label AND its helper text together. Changing either
+      is a new wording version.
+    - "Saved" is shown only after the server has written the row. A failure says plainly
+      that the fan is NOT subscribed.
+    - Unsubscribe works without signing in, from a signed link. The page never shows the
+      email address, so a forwarded link reveals nothing new.
+    - Nothing explicit on these pages: the unsubscribe page may be opened from an inbox
+      on a shared screen.
+  -->
+
+  <header class="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-divider">
+    <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 h-[80px] flex items-center justify-between">
+      <div class="flex items-center gap-4 sm:gap-6">
+        <span class="inline-flex min-h-[44px] items-center font-serif text-2xl sm:text-3xl font-medium tracking-tight">Maya Atelier</span>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-secondary text-muted border border-divider">Staging design</span>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-[1120px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-20">
+
+    <!-- ============================================================
+         A. THE STEP: straight after the sign-in link is opened for the
+         first time. The header has no navigation, so the step is the
+         only thing on the page, but it is never a trap: Continue is
+         always available.
+         ============================================================ -->
+    <section aria-labelledby="a-label">
+      <p id="a-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A · One-time step after a new sign-up</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <div class="rounded-[12px] border border-divider bg-panel p-6 sm:p-8 shadow-[0_8px_30px_rgba(0,0,0,0.04)]">
+          <div class="mb-5 flex h-12 w-12 items-center justify-center rounded-full bg-okbg">
+            <iconify-icon icon="lucide:circle-check" width="22" class="text-okink" aria-hidden="true"></iconify-icon>
+          </div>
+          <h1 class="mb-2 text-3xl sm:text-4xl font-semibold leading-tight tracking-tight">You&rsquo;re signed in</h1>
+          <p class="mb-6 text-base text-muted">One quick choice before you start planning. You can change it later in your account.</p>
+
+          <form>
+            <label class="mb-6 flex items-start gap-3 rounded-[12px] border border-divider bg-cream p-4 text-sm">
+              <input type="checkbox" aria-describedby="a-news-hint" class="mt-0.5 h-4 w-4 accent-espresso focus-ring">
+              <span>
+                <span class="font-medium">Email me Maya&rsquo;s news</span> <span class="text-muted">(optional)</span>
+                <span id="a-news-hint" class="mt-1 block text-muted">Live show times, new videos and when custom videos open. Discreet sender name, nothing explicit in your inbox. Unsubscribe anytime.</span>
+              </span>
+            </label>
+
+            <button type="button" class="flex w-full min-h-[48px] items-center justify-center gap-2 rounded-[12px] bg-espresso text-cream px-6 text-base font-medium shadow-md hover:bg-black transition-colors duration-160 focus-ring">
+              Continue
+              <iconify-icon icon="lucide:arrow-right" width="18" aria-hidden="true"></iconify-icon>
+            </button>
+          </form>
+        </div>
+
+        <div class="space-y-3 text-sm text-muted lg:pt-4">
+          <p class="font-semibold text-espresso">Rules for this state</p>
+          <ul class="list-disc space-y-2 pl-5">
+            <li>Unticked + Continue writes nothing and goes where the fan was heading (the Director, Save or Send). Ticked + Continue goes to A2.</li>
+            <li>The wording is identical to design 16 A. The server records its version, plus source <code class="font-mono text-xs">signup</code>, time, IP and user agent. The browser never sends the wording.</li>
+            <li>The server decides whether to show the step. Showing it is not recorded in Clerk&rsquo;s client-writable metadata.</li>
+            <li>If the fan leaves without pressing Continue, treat it as a skip. The step is not shown again; settings (design 16 A3) is where they opt in later.</li>
+            <li>Came from a page with no creator (for example the site home)? Don&rsquo;t show the step. Opt-in is per creator, and there is no creator to ask about.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         A2–A4. SAVING, SAVED, SAVE FAILED
+         ============================================================ -->
+    <section aria-labelledby="a2-label">
+      <p id="a2-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A2 · Saving &nbsp;·&nbsp; A3 · Saved &nbsp;·&nbsp; A4 · Save failed</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <!-- A2 Saving -->
+        <div class="rounded-[12px] border border-divider bg-panel p-6" aria-busy="true">
+          <p class="mb-4 text-xs font-semibold uppercase tracking-wider text-muted">A2 · Saving</p>
+          <label class="mb-5 flex items-start gap-3 rounded-[12px] border border-divider bg-cream p-4 text-sm opacity-70">
+            <input type="checkbox" checked disabled class="mt-0.5 h-4 w-4 accent-espresso">
+            <span><span class="font-medium">Email me Maya&rsquo;s news</span> <span class="text-muted">(optional)</span></span>
+          </label>
+          <button type="button" disabled class="flex w-full min-h-[48px] items-center justify-center gap-2 rounded-[12px] bg-espresso/70 text-cream px-6 text-base font-medium cursor-wait">
+            <iconify-icon icon="lucide:loader" width="18" class="animate-spin" aria-hidden="true"></iconify-icon>
+            Saving your choice&hellip;
+          </button>
+          <p role="status" class="sr-only">Saving your choice</p>
+          <p class="mt-3 text-xs text-muted">Checkbox and button are disabled so the choice can&rsquo;t change mid-save.</p>
+        </div>
+
+        <!-- A3 Saved -->
+        <div role="status" class="rounded-[12px] border border-okborder bg-okbg p-6">
+          <p class="mb-4 text-xs font-semibold uppercase tracking-wider text-okink">A3 · Saved</p>
+          <div class="flex items-start gap-3 text-sm leading-relaxed">
+            <iconify-icon icon="lucide:mail-check" width="20" class="mt-0.5 shrink-0 text-okink" aria-hidden="true"></iconify-icon>
+            <div>
+              <p class="font-semibold">You&rsquo;ll get Maya&rsquo;s news</p>
+              <p class="mb-4">Change it anytime in your account.</p>
+              <a id="d23-start-planning" href="#studio" class="inline-flex min-h-[44px] items-center gap-2 rounded-[12px] bg-rose hover:bg-rosehover px-5 text-sm font-medium shadow-sm transition-colors duration-160 focus-ring">Start planning <iconify-icon icon="lucide:arrow-right" width="16" aria-hidden="true"></iconify-icon></a>
+            </div>
+          </div>
+          <p class="mt-4 text-xs text-okink/80">Shown only after the server confirms the row was written. No auto-redirect: the fan moves on when ready.</p>
+        </div>
+
+        <!-- A4 Save failed -->
+        <div role="alert" class="rounded-[12px] border border-alertborder bg-alertbg p-6">
+          <p class="mb-4 text-xs font-semibold uppercase tracking-wider text-alertink">A4 · Save failed</p>
+          <div class="flex items-start gap-3 text-sm leading-relaxed">
+            <iconify-icon icon="lucide:circle-alert" width="20" class="mt-0.5 shrink-0 text-alertink" aria-hidden="true"></iconify-icon>
+            <div>
+              <p class="font-semibold">We couldn&rsquo;t save your choice</p>
+              <p class="mb-4">You&rsquo;re not signed up for Maya&rsquo;s news. Try again, or carry on without it.</p>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" class="inline-flex min-h-[44px] items-center rounded-[12px] bg-espresso text-cream px-5 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Try again</button>
+                <button type="button" class="inline-flex min-h-[44px] items-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Continue without news</button>
+              </div>
+            </div>
+          </div>
+          <p class="mt-4 text-xs text-alertink/80">The checkbox stays ticked above this message, so Try again sends the same choice. Focus moves to this message.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         A5–A6. SIGNED OUT DURING THE STEP, ALREADY ANSWERED
+         ============================================================ -->
+    <section aria-labelledby="a5-label">
+      <p id="a5-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A5 · Signed out before saving &nbsp;·&nbsp; A6 · Already answered</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+        <div role="alert" class="rounded-[12px] border border-alertborder bg-alertbg p-6">
+          <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-panel">
+            <iconify-icon icon="lucide:log-out" width="22" class="text-alertink" aria-hidden="true"></iconify-icon>
+          </div>
+          <h2 class="mb-2 text-2xl font-semibold tracking-tight">You were signed out</h2>
+          <p class="mb-4 text-sm leading-relaxed">Your choice wasn&rsquo;t saved, so you&rsquo;re not signed up for Maya&rsquo;s news. Sign in again, then turn it on in your account if you&rsquo;d like it.</p>
+          <a id="d23-sign-in-again" href="#sign-in" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Sign in again</a>
+          <p class="mt-4 text-xs text-muted">The server returned 401 on save. Signing in again is an ordinary sign-in, so the step isn&rsquo;t shown again; the message says where to opt in instead of promising the step comes back.</p>
+        </div>
+
+        <div role="status" class="rounded-[12px] border border-divider bg-panel p-6">
+          <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
+            <iconify-icon icon="lucide:copy-check" width="22" class="text-deeprose" aria-hidden="true"></iconify-icon>
+          </div>
+          <h2 class="mb-2 text-2xl font-semibold tracking-tight">You&rsquo;ve already chosen</h2>
+          <p class="mb-4 text-sm leading-relaxed">You answered this in another window. You can change Maya&rsquo;s news anytime in your account.</p>
+          <div class="flex flex-wrap gap-2">
+            <a id="d23-continue" href="#studio" class="inline-flex min-h-[44px] items-center gap-2 rounded-[12px] bg-espresso text-cream px-5 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Continue <iconify-icon icon="lucide:arrow-right" width="16" aria-hidden="true"></iconify-icon></a>
+            <a id="d23-account-settings" href="#settings" class="inline-flex min-h-[44px] items-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Account settings</a>
+          </div>
+          <p class="mt-4 text-xs text-muted">The server says the step is already done (a second tab, or Back after Continue). It doesn&rsquo;t say which choice was made; settings shows the current state.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         U. UNSUBSCRIBE PAGE: the link in every future news email.
+         No sign-in. The page shows no email address.
+         ============================================================ -->
+    <section aria-labelledby="u-label">
+      <p id="u-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">U1 · Unsubscribe link opened &nbsp;·&nbsp; U2 · Done</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
+        <div class="rounded-[12px] border border-divider bg-panel p-6 sm:p-8">
+          <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
+            <iconify-icon icon="lucide:mail-minus" width="22" class="text-deeprose" aria-hidden="true"></iconify-icon>
+          </div>
+          <h2 class="mb-2 text-3xl font-semibold leading-tight tracking-tight">Stop Maya&rsquo;s news?</h2>
+          <p class="mb-6 text-sm leading-relaxed text-muted">You won&rsquo;t get news emails from Maya any more. Emails about your own requests and videos still arrive.</p>
+          <button type="button" class="flex w-full min-h-[48px] items-center justify-center rounded-[12px] bg-espresso text-cream px-6 text-base font-medium shadow-md hover:bg-black transition-colors duration-160 focus-ring">Unsubscribe</button>
+          <p class="mt-4 text-xs text-muted">While sending: the button reads &ldquo;Unsubscribing&hellip;&rdquo; and is disabled.</p>
+        </div>
+
+        <div role="status" class="rounded-[12px] border border-divider bg-panel p-6 sm:p-8">
+          <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
+            <iconify-icon icon="lucide:mail-x" width="22" class="text-deeprose" aria-hidden="true"></iconify-icon>
+          </div>
+          <h2 class="mb-2 text-3xl font-semibold leading-tight tracking-tight">You&rsquo;re unsubscribed</h2>
+          <p class="mb-4 text-sm leading-relaxed">You won&rsquo;t get Maya&rsquo;s news any more. Your account, Scene Cards and videos aren&rsquo;t affected.</p>
+          <button type="button" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Subscribe again</button>
+          <p class="mt-4 text-xs text-muted">Same as design 16 A3. Subscribe again records a new consent row with source <code class="font-mono">unsubscribe_page</code> and the current wording, then shows &ldquo;You&rsquo;ll get Maya&rsquo;s news again&rdquo;.</p>
+        </div>
+      </div>
+
+      <div class="mt-6 flex items-start gap-3 rounded-[12px] border border-pendborder bg-pendbg p-5 text-sm leading-relaxed text-pendink">
+        <iconify-icon icon="lucide:info" width="20" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>
+        <p><span class="font-semibold">Why a button, not &ldquo;opening the link unsubscribes&rdquo;:</span> mail security scanners open links in emails automatically, which would unsubscribe fans who never clicked. Mail apps&rsquo; own one-click unsubscribe uses the <code class="font-mono text-xs">List-Unsubscribe-Post</code> header and needs no page at all. People who follow the link from the email body press one button, with no sign-in.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         U3–U5. LINK PROBLEMS
+         ============================================================ -->
+    <section aria-labelledby="u3-label">
+      <p id="u3-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">U3 · Bad or altered link &nbsp;·&nbsp; U4 · Already unsubscribed &nbsp;·&nbsp; U5 · Couldn&rsquo;t unsubscribe</p>
+
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
+        <div role="alert" class="rounded-[12px] border border-alertborder bg-alertbg p-6">
+          <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-panel">
+            <iconify-icon icon="lucide:link-2-off" width="22" class="text-alertink" aria-hidden="true"></iconify-icon>
+          </div>
+          <h2 class="mb-2 text-2xl font-semibold tracking-tight">This link doesn&rsquo;t work</h2>
+          <p class="mb-4 text-sm leading-relaxed">It may be incomplete or changed. Nothing about your emails has changed. To stop the news, sign in and turn it off in your account.</p>
+          <a id="d23-sign-in" href="#sign-in" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Sign in</a>
+          <p class="mt-4 text-xs text-alertink/80">Signature check failed or the token is malformed. Same message for both, and it never names a creator or fan. No consent row is written.</p>
+        </div>
+
+        <div role="status" class="rounded-[12px] border border-divider bg-panel p-6">
+          <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
+            <iconify-icon icon="lucide:mail-x" width="22" class="text-deeprose" aria-hidden="true"></iconify-icon>
+          </div>
+          <h2 class="mb-2 text-2xl font-semibold tracking-tight">You&rsquo;re already unsubscribed</h2>
+          <p class="mb-4 text-sm leading-relaxed">You aren&rsquo;t getting Maya&rsquo;s news, so there&rsquo;s nothing to stop.</p>
+          <button type="button" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Subscribe again</button>
+          <p class="mt-4 text-xs text-muted">Valid link, latest row is already a withdrawal. Shown instead of U1 when the page loads, and also if Unsubscribe is pressed twice. Writes no duplicate row.</p>
+        </div>
+
+        <div role="alert" class="rounded-[12px] border border-alertborder bg-alertbg p-6">
+          <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-panel">
+            <iconify-icon icon="lucide:circle-alert" width="22" class="text-alertink" aria-hidden="true"></iconify-icon>
+          </div>
+          <h2 class="mb-2 text-2xl font-semibold tracking-tight">We couldn&rsquo;t unsubscribe you</h2>
+          <p class="mb-4 text-sm leading-relaxed">Something went wrong on our side, so you&rsquo;re still subscribed for now. Please try again.</p>
+          <button type="button" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] bg-espresso text-cream px-5 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Try again</button>
+          <p class="mt-4 text-xs text-alertink/80">Server or database error with a valid link. Never show &ldquo;unsubscribed&rdquo; until the withdrawal row exists.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         NOT DRAWN, ON PURPOSE
+         ============================================================ -->
+    <section aria-labelledby="n-label" class="rounded-[12px] border border-dashed border-divider p-6 text-sm text-muted">
+      <p id="n-label" class="mb-3 font-semibold text-espresso">Not drawn here</p>
+      <ul class="list-disc space-y-2 pl-5">
+        <li><span class="font-medium text-espresso">Expired unsubscribe links:</span> unsubscribe links don&rsquo;t expire, because old emails must keep working. An expiry state would only teach Astra to add one.</li>
+        <li><span class="font-medium text-espresso">Creator invitation and authenticator-app setup:</span> Clerk&rsquo;s hosted sign-up and account screens do these. If the Phase 1 build replaces them with custom screens, a design is needed first.</li>
+        <li><span class="font-medium text-espresso">Sign-in network errors and rate limits:</span> also Clerk-hosted screens.</li>
+      </ul>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>
