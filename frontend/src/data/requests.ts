@@ -1,6 +1,6 @@
 // Mock data for the creator's request queue.
-// Transcribed from docs/design-html/03-creator-dashboard-linked-navigation.html (the 6 queue
-// cards) and docs/design-html/05-creator-detail-modal-connected-navigation.html (the full
+// Transcribed from docs/designs/html/03-creator-dashboard-linked-navigation.html (the 6 queue
+// cards) and docs/designs/html/05-creator-detail-modal-connected-navigation.html (the full
 // scene-card detail shown for the "Vintage Lounge Greeting" request from @sarah_smiles).
 //
 // This is a demo: there is no backend, so every request lives in this one array. Fields that

@@ -30,16 +30,13 @@ These are load-bearing for the project's honesty, not style preferences:
 
 ## Ground truth
 
-- `docs/design-html/` is the visual spec — a component library (01) plus HTML
+- `docs/designs/html/` is the visual spec — a component library (01) plus HTML
   drafts of every screen: boutique entrance, AI Director, review, send
   confirmation, creator dashboard and modals (02–09), saved ideas (10), the
   mobile menu (11) and page not found (12). When in doubt about layout or copy,
   this is what to match. Designs 13 onward are **staging designs** for the
-  backend build (doc 11), not screens in this demo: creator limits (13), paused
-  fan account (14), safety-case review (15), sign-in (16), AI Director live
-  states (17), saving and price changes (18), the custom request (19) and
-  commission options (20), the script workspace (21) and the
-  after-shoot letter (22).
+  backend build (docs 11 and 12), not screens in this demo. The full list is in
+  `docs/README.md`.
 - `docs/specs/01-design-context.md` and `02-design-system.md` are reliable and
   worth reading before touching copy, pricing, or styling. `03-developer-handoff.md`
   is reliable for design and page behaviour, but its backend/API/deployment

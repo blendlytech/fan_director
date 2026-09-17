@@ -91,7 +91,7 @@ interface ShootingScript {
 
 ## 7. Creator workspace
 
-Design 21 (`docs/design-html/21-script-workspace.html`). It has these states:
+Design 21 (`docs/designs/html/21-script-workspace.html`). It has these states:
 
 - **Style settings,** saved per creator: tone (warm, playful, commanding), explicitness (from suggestive to fully explicit, capped by doc 11's §5.4 switches), camera setup (handheld POV, fixed tripod, two angles) and dialogue density.
 - **Generate:** a loading state, then the script.
@@ -149,7 +149,7 @@ There is no follow-up message after the letter. A second note asking to "do it a
 
 **Tests:** the same automated checks as scripts, plus production-word, repetition, solicitation and "nothing invented" cases passed straight to the checker. In the quality set (§9), each card also gets a letter from 2 different ticked-beat selections, and **the owner reads all of them in full** before Gate S.
 
-**Design 22** (`docs/design-html/22-after-shoot-letter.html`): the creator's tick-and-notes step, the letter review with changes, and the stylised letter the fan receives.
+**Design 22** (`docs/designs/html/22-after-shoot-letter.html`): the creator's tick-and-notes step, the letter review with changes, and the stylised letter the fan receives.
 
 ## 9. Tests and Gate S
 
