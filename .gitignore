@@ -7,3 +7,4 @@
 .env
 .env.*
 .superdesign/tmp/
+clerk-cli/
