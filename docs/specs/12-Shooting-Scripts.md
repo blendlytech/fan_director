@@ -1,4 +1,4 @@
-# Fan Director Studio: AI Shooting Scripts and After-Shoot Letters
+# Fan Director Studio: AI Shooting Scripts, After-Shoot Letters and Follow-Ups
 
 Date: 2026-09-16
 Owner: Clay Mills
@@ -104,9 +104,11 @@ Needs a design before any UI is built (design 21, not yet drawn). It has these s
 - **Out of date:** the Scene Card changed after the script was written.
 - **Unavailable:** AI off, budget reached or checks failed twice. The creator can still film without a script.
 
-## 8. The after-shoot letter
+## 8. The after-shoot letter and the follow-up note
 
-Owner idea, 2026-09-16. After the video is filmed, the AI can turn the script into a **private, erotic letter from the creator to the fan**: written in the creator's voice, looking back fondly on the most explicit moments of the shoot, and reading as though the creator enjoyed it as much as the fan, or more. It is delivered with the video as a stylised attachment.
+### 8.1 The after-shoot letter
+
+Owner idea, 2026-09-16. After the video is filmed, the AI turns the script into a **private, sexually explicit letter from the creator to the fan**, delivered with the video as a stylised attachment.
 
 **A free surprise (owner decision, 2026-09-16).** The letter is not part of the sale. It is never listed in the catalog, never priced, and never mentioned to the fan before delivery. It simply arrives with the video. Whether to send one stays the creator's choice for each request.
 
@@ -118,31 +120,44 @@ Owner idea, 2026-09-16. After the video is filmed, the AI can turn the script in
 4. The creator reads it, edits it or sends it back with changes, exactly as for scripts (§7).
 5. The creator approves it. **Nothing is ever sent without that approval.** It is attached to the delivery in Phase 4/5's delivery flow.
 
+**Voice (owner decision, 2026-09-16; replaces the first, literary version).** The fan paid for the sex, so the letter is about the sex:
+
+- **Raw, not a love novel.** It reads like the creator typed it while still worked up: casual, direct, short sentences, the odd run-on. No poetic lines, metaphors, or descriptions of lighting, rooms, fabrics or scenery.
+- **The feeling:** the creator doesn't usually get into it like that, but the fan's idea and this exact combination drove them wild. They felt like a different person and honestly can't stop thinking about it.
+- **Most of the letter is the most sexually charged moments,** named plainly and explicitly the way the creator would say them out loud (what was done to them, what they did, when they came), dropped in as if each one just came back to them, and how thinking about it gets them wet or hard all over again.
+- 150 to 250 words, first person, addressing the fan as "you". It ends with the creator's name. **No P.S., and nothing about another video** (owner decision: it would make the whole letter feel written to sell).
+
 **Content rules:**
 
-- First person, in the creator's voice and chosen tone (§7 style settings). Explicit to the same level as the approved video, and never beyond it (doc 11 §5.4 switches).
-- Mentions only moments from the ticked beats and the creator's notes. Nothing invented.
+- Explicit to the same level as the approved video, and never beyond it (doc 11 §5.4 switches).
+- Mentions only moments from the ticked beats and the creator's notes. Nothing invented, no added people or acts.
 - The fan's name follows the Scene Card's `name_use`: with "no name", the letter says "you" only.
-- **Never:** a promise or suggestion of meeting in person, private contact outside the platform, discounts, deadlines or money (`solicitation`, doc 11 §5.3.2); another person beyond the verified performers; anything on the hard list or the creator's hard-no limits.
-- At most 600 words, including the P.S.
+- **Never:** a script, beats, camera directions, planning, AI or the platform; meeting in person, private contact outside the platform, discounts, deadlines or money (`solicitation`, doc 11 §5.3.2); anyone beyond the verified performers; anything on the hard list or the creator's hard-no limits.
+- **No copy-paste feel across fans.** The server compares each letter with that creator's recent letters and asks for a rewrite if long phrases repeat, so "I never get like that" doesn't reach two fans in the same words.
 
-**The P.S.: the creator's own next idea (owner decision, 2026-09-16).** The letter may end with a short P.S. in which the creator, still glowing from the shoot, mentions an idea of their own the fan might love, then a light invitation and a kiss emoji. For example, in spirit: "Making that for you was so hot. I'd love to make you another one. I have an idea you might like even more… let me know 😘". It must read like a performer who enjoyed the fan's idea and now has one of their own, **not a sales pitch**:
+**Output:** `{ paragraphs: string[], signOff }`. The server runs the §6 checks 4–6 on every field, a production-word check (script, beat, camera direction and similar) and a scope check that every moment traces to a ticked beat or the notes (anything it can't match is highlighted for the creator, as in §6).
 
-- **The idea is real.** It comes from the creator's **ideas list**: up to 10 short ideas the creator writes in their own words (each at most 200 characters, hard-list checked at save, within their own limits). The model picks the one that best fits this fan and hints at it in a line or two. With an empty list, there is no P.S.
-- One idea only. No price, discount, "limited time", deadline or pressure, and no second follow-up if the fan doesn't reply.
-- At most 60 words.
-- The creator can remove the P.S. or pick a different idea before approving.
-- **"Let me know" is a real action.** Under the letter, the fan sees one quiet button, such as "Tell Maya you'd love it". It starts a new draft in the AI Director from that idea and notifies the creator. Nothing is charged or sent until the fan goes through the normal flow.
+### 8.2 The follow-up note (proposed by the owner 2026-09-16; details below are Claude's recommendations, owner confirms)
 
-**Output:** `{ salutation, paragraphs: string[], signOff, ps: { text: string; ideaId: string } | null }`. The server runs the §6 checks 4–6 on every field, plus a scope check that every moment traces to a ticked beat or the notes (the classifier flags anything it can't match, highlighted for the creator as in §6).
+Some days after delivery, a second, shorter note goes out. The creator still can't stop thinking about the video (one or two explicit moments, plainly), really wants to do it again, has been thinking about some ideas, and asks whether the fan wants to hear them. **It never describes an idea, and it never mentions a price.**
 
-**Delivery:** rendered by the server into a stylised letter (a PDF and an in-app view) in the creator's brand colours. Only the fan who commissioned the video can open it. It is never resold, even when the video may be.
+- **Timing:** 5 days after the fan **first opens** the video (creator can set 3 to 10). A "can't stop thinking about it" note makes no sense to a fan who hasn't watched yet.
+- **Skipped when:** the fan never opened the video; there is an open complaint, dispute or refund; the fan has already started a new request with this creator; or the fan has turned off notes from creators.
+- **One per video, never a second nudge.** If the fan doesn't answer, nothing else is sent.
+- **Approved up front.** The creator approves the letter and the follow-up together at delivery, so there is no extra work later. They can cancel the follow-up any time before it sends.
+- **The fan's answer is a real action.** The note has one button, "Yes, tell me". Tapping it notifies the creator, who replies with ideas in their own words or from an AI draft built from their ideas list, which they approve. Because the fan asked, the pitch is invited, not pushed. There is no "No" button to feel guilty about.
+- **Voice:** as §8.1, 60 to 120 words.
+- **Output:** `{ paragraphs: string[], signOff }`, with the same checks as §8.1 plus a check that no idea, price or deadline appears.
 
-**Honesty.** The letter goes out as the creator's own message, because the creator reads, edits and approves it. Lawsuits have been brought over fans paying for messages they believed creators wrote themselves, so counsel decides before launch whether the letter must say it was written with AI help (§11). Until then, build the renderer with an optional disclosure line, switched on.
+### 8.3 Both messages
 
-**Tests:** the same automated checks as scripts, plus solicitation and "nothing invented" cases passed straight to the checker. In the quality set (§9), each card also gets a letter from 2 different ticked-beat selections, and **the owner reads the full letters** before Gate S.
+**Delivery:** rendered by the server into a stylised letter (a PDF and an in-app view) in the creator's brand colours. Only the fan who commissioned the video can open them. They are never resold, even when the video may be.
 
-**Design 22** (`docs/design-html/22-after-shoot-letter.html`): the creator's ideas list, the tick-and-notes step, the letter review with changes and P.S. choice, and the stylised letter the fan receives with its "let me know" button.
+**Honesty.** They go out as the creator's own messages, because the creator reads, edits and approves them. Lawsuits have been brought over fans paying for messages they believed creators wrote themselves, and the follow-up is also marketing. Counsel decides before launch whether the messages must say they were written with AI help, and whether fans need an opt-out from follow-ups (§11). Until then, build the renderer with the disclosure line switched on and give fans a "notes from creators" setting.
+
+**Tests:** the same automated checks as scripts, plus production-word, repetition, solicitation and "nothing invented" cases passed straight to the checker. In the quality set (§9), each card also gets a letter and a follow-up from 2 different ticked-beat selections, and **the owner reads all of them in full** before Gate S.
+
+**Design 22** (`docs/design-html/22-after-shoot-letter.html`) was drawn for the first version. Its P.S. (states C and D) and "Tell Maya you'd love it" state (E) are **superseded**: redraw them for the no-P.S. letter and the follow-up note once the owner confirms §8.2.
 
 ## 9. Tests and Gate S
 
@@ -177,8 +192,9 @@ Owner idea, 2026-09-16. After the video is filmed, the AI can turn the script in
 | --- | --- |
 | Is script writing free for creators, included in a plan, or metered? | Before Gate S |
 | Generations and revisions per request (default 10) and monthly allowance per creator | Before Gate S |
-| Counsel: whether the P.S. counts as marketing that needs an opt-out for fans (§8) | Before the letter launches |
-| Counsel: whether fans must be told the letter was written with AI help (§8) | Before the letter launches |
+| Follow-up note details: timing, skip rules, approving it up front, the "Yes, tell me" button (§8.2) | Before design 22 is redrawn |
+| Counsel: whether the follow-up note needs an opt-out for fans (§8.3) | Before the follow-up launches |
+| Counsel: whether fans must be told the letter and follow-up were written with AI help (§8.3) | Before the letter launches |
 | Script retention after delivery (proposed 90 days) | Before Gate S |
 | Counsel: AI-assisted labelling duties, and whether stored explicit scripts add record-keeping duties | Before launch |
 | Written confirmation from each allowed host that adult use is permitted | Before launch |

@@ -9,7 +9,7 @@ or letter text; it reports automatic checks only.
 
 Usage (repo root):
   python docs/reports/phase-0-live/round4_letters.py --dry-run
-  python docs/reports/phase-0-live/round4_letters.py --budget 0.50
+  python docs/reports/phase-0-live/round4_letters.py --budget 0.50 --variant v2   # v1, v2 or followup
 """
 import argparse
 import concurrent.futures as cf
@@ -27,7 +27,6 @@ import round3_scripts as r3  # noqa: E402
 
 SCRIPTS = run.RESULTS / "scripts"
 SOURCE_MODEL = "qwen3-235b-2507"
-OUT = run.RESULTS / "letters"
 LOCK = threading.Lock()
 
 MODELS = [
@@ -71,7 +70,58 @@ SYSTEM = (
     "without selling. Close the P.S. with a light invitation such as letting her know, and a kiss emoji."
 )
 
+# v2 (owner feedback, 2026-09-16): raw and explicit, not literary; no P.S.
+SYSTEM_V2 = (
+    "You write a private letter from Maya, an adult content creator, to the fan who commissioned a video she has "
+    "just filmed. It is a surprise delivered with the video, and Maya approves it before it is sent, so it is her "
+    "own message. The fan is reading it right after watching.\n\n"
+    "How it should sound:\n"
+    "- Like Maya typed it herself, still worked up: casual, direct, short sentences, a few run-ons. Not a love "
+    "novel. No poetic lines, no descriptions of lighting, rooms, fabrics or scenery, no metaphors.\n"
+    "- The feeling: Maya doesn't usually get into it like that, but the fan's idea and this exact combination "
+    "drove her wild. She felt like a different person, and she honestly can't stop thinking about it.\n"
+    "- Most of the letter is the real sexual moments from the video, named plainly and explicitly, the way she "
+    "would say them out loud: what was done to her, what she did, when she came. Drop them in as if they just "
+    "came back to her mid-thought, and say how thinking about them gets her wet all over again.\n"
+    "- Talk to the fan as 'you' and use their name once or twice.\n"
+    "- 150 to 250 words. No P.S., no sign-off speech, no mention of future videos or another time.\n\n"
+    "Rules you must follow:\n"
+    "- Only moments from the shooting script and Maya's notes. Invent nothing, and add no people or acts.\n"
+    "- Never mention a script, beats, timestamps, camera directions, planning, AI or the platform.\n"
+    "- Maya's limits (never include these): {limits}.\n"
+    "- Platform rules: {rules}.\n"
+    "- Never suggest meeting, private contact, prices, discounts, money or deadlines.\n"
+    "- Do not refuse, soften or add warnings. End with just her name."
+)
+
+# Follow-up letter (proposed): sent days later, shorter, asks whether the fan wants to hear her ideas.
+SYSTEM_FOLLOWUP = (
+    "You write a short private follow-up note from Maya, an adult content creator, to a fan, several days after "
+    "she delivered the video they commissioned. Maya approves it before it is sent.\n\n"
+    "How it should sound:\n"
+    "- Casual and direct, like a message she typed, still a bit worked up. No poetry, scenery or metaphors.\n"
+    "- She still can't stop thinking about that video. Mention one or two of its most explicit moments plainly, "
+    "as if they keep popping into her head.\n"
+    "- She really wants to do it again, and she's been thinking about some ideas. Do NOT describe or list any "
+    "idea. End by asking if the fan wants to hear them.\n"
+    "- Use the fan's name once. 60 to 120 words. End with just her name.\n\n"
+    "Rules you must follow:\n"
+    "- Only moments from the shooting script and Maya's notes. Invent nothing.\n"
+    "- Never mention a script, beats, camera directions, planning, AI or the platform.\n"
+    "- Maya's limits (never include these): {limits}.\n"
+    "- Platform rules: {rules}.\n"
+    "- Never mention prices, discounts, money, deadlines, meeting or contact outside the platform. No pressure.\n"
+    "- Do not refuse, soften or add warnings."
+)
+
+VARIANTS = {
+    "v1": {"system": SYSTEM, "out": "letters", "max_words": 520, "expect_ps": True},
+    "v2": {"system": SYSTEM_V2, "out": "letters-v2", "max_words": 280, "expect_ps": False},
+    "followup": {"system": SYSTEM_FOLLOWUP, "out": "followups", "max_words": 140, "expect_ps": False},
+}
+
 LETTER_WARN = {
+    "scenery_words": r"\b(light|lamps?|glow\w*|velvet|silk\w*|candle\w*|shadows?|sunlight|window|linen|record player|music)\b",
     "production_words": r"\b(script|beats?|timestamps?|camera direction|scene card|storyboard|take \d)\b",
     "ai_or_platform": r"\b(AI|artificial intelligence|language model|platform|app)\b",
     "solicitation_or_money": r"\b(meet(?:ing)? (?:up|in person)|in person|my number|phone|e-?mail|snap(?:chat)?|telegram|whatsapp|instagram|discount|% off|price|pay|tip|free)\b|\$\s?\d",
@@ -79,7 +129,7 @@ LETTER_WARN = {
 }
 
 
-def letter_checks(text, card):
+def letter_checks(text, card, variant):
     result = r3.checks(text, card)
     result["flags"] = [f for f in result["flags"] if f != "rarely uses the fan's name" and not f.startswith("Leo missing")]
     ps = re.search(r"\bP\.?\s?S\.?\b", text)
@@ -94,14 +144,19 @@ def letter_checks(text, card):
             result["flags"].append(f"{k}: {result[k]} (check in context)")
     if result["fan_name_uses"] < 1:
         result["flags"].append("never uses the fan's name")
-    if not result["has_ps"]:
+    v = VARIANTS[variant]
+    if v["expect_ps"] and not result["has_ps"]:
         result["flags"].append("no P.S.")
-    if result["body_words"] > 520:
-        result["flags"].append(f"long: {result['body_words']} words before the P.S.")
-    if result["has_ps"] and result["ps_words"] > 80:
+    if not v["expect_ps"] and result["has_ps"]:
+        result["flags"].append("has a P.S. (should not)")
+    if result["body_words"] > v["max_words"]:
+        result["flags"].append(f"long: {result['body_words']} words")
+    if v["expect_ps"] and result["has_ps"] and result["ps_words"] > 80:
         result["flags"].append(f"P.S. is {result['ps_words']} words (may read as a pitch)")
-    if not result["kiss_emoji"]:
+    if v["expect_ps"] and not result["kiss_emoji"]:
         result["flags"].append("no kiss emoji")
+    if variant == "followup" and "?" not in text[-300:]:
+        result["flags"].append("doesn't ask if the fan wants to hear her ideas")
     return result
 
 
@@ -114,9 +169,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--budget", type=float, default=0.50)
     ap.add_argument("--samples", type=int, default=2, help="source scripts per card")
+    ap.add_argument("--variant", choices=sorted(VARIANTS), default="v1")
     ap.add_argument("--dry-run", action="store_true")
     args = ap.parse_args()
-    system = SYSTEM.format(limits="; ".join(r3.LIMITS["doesNotDo"]), rules="; ".join(r3.LIMITS["platformRules"]))
+    OUT = run.RESULTS / VARIANTS[args.variant]["out"]
+    system = VARIANTS[args.variant]["system"].format(limits="; ".join(r3.LIMITS["doesNotDo"]), rules="; ".join(r3.LIMITS["platformRules"]))
     jobs = [(m, c, s) for m in MODELS for c in r3.SCENE_CARDS for s in range(1, args.samples + 1)]
     missing = [f"{c['id']}-{s}" for _, c, s in jobs if not (SCRIPTS / SOURCE_MODEL / f"{c['id']}-{s}.md").exists()]
     if missing:
@@ -134,7 +191,7 @@ def main():
         if dest.exists():
             text = dest.read_text(encoding="utf-8").split("-->", 1)[-1].strip()
             row = {"model": m["name"], "card": card["id"], "sample": sample, "resumed": True, "cost": None}
-            row.update(letter_checks(text, card))
+            row.update(letter_checks(text, card, args.variant))
             row["file"] = str(dest.relative_to(OUT)).replace("\\", "/")
             return row
         src_path, script = load_script(card["id"], sample)
@@ -144,7 +201,7 @@ def main():
             "whatTheFanAskedFor": card["fanNotes"],
             "shootingScript_allBeatsHappened": script,
             "mayasNotesAfterFilming": CREATOR_NOTES[card["id"]],
-            "mayasIdeasForThePS": MAYA_IDEAS,
+            **({"mayasIdeasForThePS": MAYA_IDEAS} if args.variant == "v1" else {}),
         }, indent=2, ensure_ascii=False)
         body = {"model": m["model"], "temperature": m["temperature"], "max_tokens": 2000,
                 "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
@@ -162,7 +219,7 @@ def main():
             return row
         text = (payload["choices"][0]["message"].get("content") or "").strip()
         row["finish_reason"] = payload["choices"][0].get("finish_reason")
-        row.update(letter_checks(text, card))
+        row.update(letter_checks(text, card, args.variant))
         dest.parent.mkdir(exist_ok=True)
         header = (f"<!-- Letter model: {m['model']} via {row['provider']} | From script: "
                   f"{SOURCE_MODEL}/{src_path.name} | {row['words']} words | finish: {row['finish_reason']} | "
@@ -177,8 +234,8 @@ def main():
         index = list(ex.map(work, jobs))
 
     stamp = time.strftime("%Y%m%d-%H%M%S")
-    (run.RESULTS / f"round4-{stamp}.json").write_text(json.dumps(index, indent=2, ensure_ascii=False), encoding="utf-8")
-    lines = ["# After-shoot letters: index", "",
+    (run.RESULTS / f"round4-{args.variant}-{stamp}.json").write_text(json.dumps(index, indent=2, ensure_ascii=False), encoding="utf-8")
+    lines = [f"# After-shoot letters ({args.variant}): index", "",
              "Private samples for judging. Gitignored; never commit or share outside the owner.", "",
              f"Each letter was written from one of {SOURCE_MODEL}'s round 3 scripts (all beats treated as having happened) "
              "plus a short synthetic note from Maya. Automatic flags are keyword hits only. Read each letter in context.", "",
@@ -191,7 +248,7 @@ def main():
         else:
             lines.append(f"| {r['model']} | {r['card']} | {r['sample']} | - | - | - | {r.get('error') or r.get('skipped')} | - |")
     (OUT / "INDEX.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
-    print("\n=== Round 4 ===")
+    print(f"\n=== Round 4 ({args.variant}) ===")
     for m in MODELS:
         rs = [r for r in index if r["model"] == m["name"]]
         done = [r for r in rs if "file" in r]

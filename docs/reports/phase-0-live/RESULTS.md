@@ -143,3 +143,18 @@ The letters are saved under `results/letters/` (gitignored) for **the owner to r
 - **No refusals, and every letter had a P.S. with a kiss emoji.** No meeting, contact, price, discount or urgency words.
 - **Production words can slip in.** The product check (doc 12 §6) must block "script", "beat", "camera direction" and similar in letters, and regenerate.
 - **Quality, tone, and whether the P.S. feels like a performer's idea or a pitch, are the owner's call.**
+
+## Round 4b: raw letters and follow-up notes (owner feedback)
+
+The owner found the first letters overdone, like a love novel, and asked for letters about the sex itself, with no P.S. They also proposed a shorter follow-up note days later. New prompts (`round4_letters.py --variant v2` and `--variant followup`), same 6 source scripts, **$0.008** for 24 more pieces.
+
+| Set | Model | Written | Avg. words | Scenery words | P.S. | Asks to share ideas |
+| --- | --- | --- | --- | --- | --- | --- |
+| Letters v2 (`results/letters-v2/`) | Qwen3 235B | 6/6 | 196 | 0 | 0 | n/a |
+| Letters v2 | DeepSeek V3.2 | 6/6 | 169 | 0 | 0 | n/a |
+| Follow-ups (`results/followups/`) | Qwen3 235B | 6/6 | 66 | 0 | 0 | 6/6 |
+| Follow-ups | DeepSeek V3.2 | 6/6 | 66 | 0 | 0 | 6/6 |
+
+- **No refusals.** The runner's "refused or too short" flags were false alarms: its 150-word minimum was set for scripts, and one refusal hit was the phrase "I can't stop" (checked by printing only those three words).
+- **One DeepSeek letter came in short** at 137 words (target 150–250). No other flags.
+- **Quality is the owner's call.** Read `results/letters-v2/INDEX.md` and `results/followups/INDEX.md`.
