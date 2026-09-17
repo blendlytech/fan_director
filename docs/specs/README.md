@@ -12,11 +12,11 @@
 | [12-Shooting-Scripts.md](12-Shooting-Scripts.md) | **Approved direction, not scheduled**: creator-only AI shooting scripts from an approved Scene Card, revised with the creator's notes, plus an erotic after-shoot letter to the fan that the creator approves (Phase S, after Gate 4). Qwen3 235B primary, DeepSeek V3.2 fallback; output contract, scope and limit checks, quality gate read by the owner |
 
 The visual ground truth remains `docs/design-html/` (PDF copies in `docs/design-pdfs/`).
-Designs 01–12 are the demo's screens. Designs 13–20 and 22 are staging designs for
+Designs 01–12 are the demo's screens. Designs 13–22 are staging designs for
 doc 11: creator limits, paused fan account, safety-case review, sign-in and age
 verification, AI Director live states, saving and price changes, the
 unpriced custom request, and commission options (exclusive, rush, 4K, name use,
-the fan's own script, pricing note, starting templates) and the after-shoot letter (22).
+the fan's own script, pricing note, starting templates) the creator's shooting-script workspace (21) and the after-shoot letter (22).
 The PDFs in `docs/specs-pdf/` are snapshots of 01–03 taken before the
 replacement markings were added.
 

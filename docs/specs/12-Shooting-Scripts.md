@@ -91,7 +91,7 @@ interface ShootingScript {
 
 ## 7. Creator workspace
 
-Needs a design before any UI is built (design 21, not yet drawn). It has these states:
+Design 21 (`docs/design-html/21-script-workspace.html`). It has these states:
 
 - **Style settings,** saved per creator: tone (warm, playful, commanding), explicitness (from suggestive to fully explicit, capped by doc 11's §5.4 switches), camera setup (handheld POV, fixed tripod, two angles) and dialogue density.
 - **Generate:** a loading state, then the script.
