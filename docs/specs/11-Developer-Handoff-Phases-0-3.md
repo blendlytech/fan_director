@@ -316,6 +316,15 @@ Decided after the Gate 0 report and its addendum (owner, 2026-09-16). The full r
     - **Keep Clerk discreet and thin:** the Clerk application name, sender name and email templates contain nothing explicit. Clerk holds identity only; drafts, preferences, limits and consent never go into Clerk metadata. Clerk's terms also forbid storing card or financial data there.
     - **Email for consent records** comes from Clerk's Backend API (the user's verified primary email), not the session token, which doesn't carry it, and never from the browser. `fanId` is our own fan id mapped from the Clerk user id, so consent history survives a future auth change.
 
+Decided at the Gate 1 review (owner, 2026-09-17). The Gate 1 report is `docs/reports/phase-1-report.md` on `staging/clerk-auth`; Gate 1 itself is not yet approved, because staging isn't provisioned.
+
+18. **Gate 1 rebuild choices confirmed:**
+    - **Unsubscribe tokens are bound to the fan and creator**, not to one consent grant. Any unsubscribe link means "stop" for that pair, including after a resubscription. Old emails' links keep working, and a forwarded link can only turn news off, never on (§5.8).
+    - **Drafts live at `/api/creators/:creatorId/drafts/:draftId`**, so every draft route names its tenant.
+    - **No creator draft route** (`GET /api/creator/drafts/:id` is removed). Creators see requests only once submission exists, in Phase 4.
+    - **No HTTP route issues unsubscribe tokens.** Only the future email sender calls `issueUnsubscribeToken()`.
+19. **Staging runs on workers.dev with a Clerk development instance.** Clerk's development instances include every paid feature, TOTP included, and are capped at 100 users. A production instance needs a domain the owner controls, plus Pro (item 17). Before creator accounts go live, run the first-sign-up timing check again on the production instance, because Clerk's session handling differs between development and production.
+
 ### 5.7 Commission options from market research (owner, 2026-09-16)
 
 Source: `docs/reports/custom-video-market-research.md`. That report has no sources, so its figures may guide **seed defaults only**. No figure, market share or claim from it may appear in fan or creator copy.
