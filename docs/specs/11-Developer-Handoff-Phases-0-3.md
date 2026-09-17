@@ -306,6 +306,15 @@ Decided after the Gate 0 report and its addendum (owner, 2026-09-16). The full r
 14. **Classifier:** gpt-oss-safeguard-20b on Groq, with the rules layer as the fail-closed fallback, and childlike always escalated to `minors` (§5.3.3).
 15. **Response contract:** the round 2 design replaces the old operation-and-text schema. The model only names catalog item ids; the server builds, validates and prices options and writes the fan-facing text (§8 Phase 3).
 16. **News consent placement:** a one-time step straight after a fan's first sign-up, not a custom sign-up form (§5.8). The `staging/clerk-auth` branch is not merged as-is; rebase it onto the Phase 1 base first.
+17. **Clerk setup** (owner, 2026-09-16; checked against Clerk's pricing page and Standard Terms, updated 2026-07-02):
+    - **Plan:** Hobby (free) for development. **Pro** ($25 a month, or $20 a month billed annually) before creator accounts go live, because multi-factor authentication is a Pro feature. The owner buys it; nothing in the code assumes it.
+    - **Creator second factor: authenticator app (TOTP)** with backup codes. No SMS. Clerk's "require MFA" setting would also force it on fans, so the **Worker** enforces it on every creator endpoint from the session token's `fva` claim (its second value is the minutes since the second factor was verified; confirm how Clerk marks "never verified" against current docs), and sends a creator without one to enrolment. Test that a creator session without a second factor gets no creator data.
+    - **Fans sign in by email link only.** No passwords, so there is no password reset.
+    - **Recovery:** a fan who can still open their email signs in with a new link on any device. **A fan who has lost access to their email opens a new account.** Support never moves an account to a different email address in the pilot, because order details are weak proof and a takeover would expose private drafts. Revisit once fans have ID verification.
+    - **Terms:** Clerk's Standard Terms don't mention adult content; they require lawful use and compliance with Clerk's published policies, and no separate acceptable use policy was found. That is an absence of a ban, not a permission, so written confirmation from Clerk stays a **launch** requirement (§10).
+    - **Never use Clerk Billing** or any Stripe payments: Stripe lists pornography and adult services as prohibited businesses. Payments go through an adult-capable processor (§10).
+    - **Keep Clerk discreet and thin:** the Clerk application name, sender name and email templates contain nothing explicit. Clerk holds identity only; drafts, preferences, limits and consent never go into Clerk metadata. Clerk's terms also forbid storing card or financial data there.
+    - **Email for consent records** comes from Clerk's Backend API (the user's verified primary email), not the session token, which doesn't carry it, and never from the browser. `fanId` is our own fan id mapped from the Clerk user id, so consent history survives a future auth change.
 
 ### 5.7 Commission options from market research (owner, 2026-09-16)
 
@@ -545,7 +554,7 @@ interface Quote {                  // computed by the server only
 ### Phase 1: Backend foundation
 
 - A staging Worker and D1 schema/migrations for `creator`, `catalog`, `catalog_version`, `fan_session`, `draft`, `ai_request`, `audit_event`, `compliance_status`, `performer`, `safety_case` and `marketing_consent`.
-- Auth as approved, following design 16: fans sign in by email link (or email and password, if that's the approved choice), creators always use a second factor, and creator accounts are created by invitation in the pilot. Tenant authorization on every private endpoint; CSRF protection suited to the auth choice; input size limits.
+- Auth as approved, following design 16: fans sign in by email link only, creators always use an authenticator-app second factor enforced by the Worker (§5.6 item 17), and creator accounts are created by invitation in the pilot. Tenant authorization on every private endpoint; CSRF protection suited to the auth choice; input size limits.
 - Save and reload of a `DraftV2` scoped to its owner.
 - The email news opt-in (§5.8): consent recorded on sign-up and in settings, and the one-click unsubscribe endpoint with a signed token. Nothing is emailed.
 - Secrets set by the owner. Prove none appear in the built frontend bundle (scan `dist/`).
@@ -673,7 +682,8 @@ Do not describe anything as working unless you ran it. Say "not verified" when y
 
 | Decision | Needed by |
 | --- | --- |
-| Clerk plan, fan recovery flow and Clerk terms for an adult business (Clerk chosen at Gate 0, §5.6) | Before Phase 1 sign-in work is merged to main |
+| Buy Clerk Pro (§5.6 item 17) | Before creator accounts go live |
+| Written confirmation from Clerk that a legal adult business may use the service | Before launch |
 | Adult creator-limit checklist entries (§5.3.4) | Before adult content is enabled |
 | Hard-list block threshold per fan session (default 3 in 24 hours) | Phase 2 |
 | Counsel review of the child-exploitation reporting process: authorities by country, US NCMEC duties, preservation periods, terms and privacy-policy wording | Before any live fan traffic |
