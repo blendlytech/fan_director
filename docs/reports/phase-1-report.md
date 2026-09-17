@@ -1,61 +1,20 @@
-# Gate 1 report: backend foundation
+# Gate 1 report — backend foundation
 
-Date: 2026-09-17. Branch: **staging/clerk-auth**, rebased onto `main` at **1d7d81f**.
+Date: 2026-09-17. Base: `main` at **dc86106**. Branch: **staging/clerk-auth**.
 
-**Status: ready for owner review. Gate 1's criteria are met locally but NOT in staging.**
-Nothing is provisioned, deployed or sent, and no money was spent. Stop here: no Phase 2 work and no consent UI.
+**Status: implementation ready for review; Gate 1 completion criteria are NOT all met. Stop here.** Remote staging persistence, actual Clerk settings/sign-in and browser regression tests remain unverified because this workspace has no Cloudflare/Clerk credentials and cannot download Chromium. No Phase 2 work or consent UI was started.
 
-## 0. Why this report replaces Astra's
+## 1. Built and recovered
 
-Astra's Gate 1 report described a `worker/` built in Astra's own cloud workspace
-(rebased commit f8fd8b3). That code was never pushed, and the workspace was lost
-when Astra's credits ran out. Only the report reached the repository, as
-`docs/phase-1-report (1).md` on `main`. It has been removed from `main` (commit
-fe2f793, not yet pushed).
-
-Phase 1 was rebuilt on the owner's machine, with doc 11 and Astra's report as
-the spec and every change from the Gate 1 review included. The
-`docs/reports/phase-0-eval/` files Astra recovered are lost too. They were
-historical offline evaluation files, superseded by the doc 11 item-id contract,
-so they weren't recreated.
-
-## 1. Built
-
-- **Rebase (review item 2).** The Clerk commit 2a1f0c7 was rebased onto 1d7d81f
-  without a merge. The only remaining `design-pdfs` mention is a `git show 2c60e43:…`
-  instruction in `docs/specs/README.md`, which correctly reads the old path from an old commit.
-  No path points to `docs/design-html/`.
-- **`worker/`:** strict TypeScript and locked dependencies. It serves `frontend/dist` as
-  assets with `run_worker_first: ["/api/*"]` and SPA fallback. Worker names are
-  `fan-director-studio-development` (local) and `fan-director-studio-staging`.
-  D1 ids and origins are placeholders; `scripts/staging-guard.mjs` blocks a deploy
-  until they're replaced and checks that the AI and adult switches are `"false"`.
-  Observability is off, because unsubscribe tokens travel in URLs.
-- **`migrations/0001_foundation.sql`** holds the 11 doc 11 tables (`creator`, `catalog`,
-  `catalog_version`, `fan_session`, `draft`, `ai_request`, `audit_event`,
-  `compliance_status`, `performer`, `safety_case`, `marketing_consent`) plus the
-  approved `fan`, `consent_wording` and `consent_onboarding`. It has foreign keys and
-  creator, owner, status and time indexes. Triggers make published catalog content,
-  consent wording, consent history and audit events immutable. Compliance flags
-  default to false, and `performer.is_synthetic` must be 1.
-- **Auth (`src/auth.ts`):** bearer tokens only, never the `__session` cookie. RS256
-  signature, `exp`/`nbf`, issuer, `azp`, `v: 2`, no `act`, and `sts` absent or active.
-  Fans are created on first sight; suspended and closed fans get no data. Creators need an
-  owner-linked `active` row, TOTP enrolled, and `fva[1] >= 0` (Clerk's docs:
-  `-1` = never verified).
-- **Drafts (`src/drafts.ts`):** DraftV2 save and reload scoped to the fan **and** the
-  creator's boutique, with an atomic `expectedRevision`. Payloads are strict: prices,
-  quotes, tenant ids and boundary flags are rejected. The catalog version must be that
-  creator's published version and can't change. Unknown, hidden and adult items and
-  out-of-range quantities are rejected. Responses say `validation: "pending_phase_2"`.
-- **Consent (`src/consent.ts`):** the one-time step after sign-up, and settings.
-  The email is Clerk's verified primary address and the wording is stored by version.
-  A skip writes no consent row. A second answer is refused. Success is returned only after the row is written.
-- **Unsubscribe (`src/unsubscribe.ts`):** see §4.
-- **Tests:** 79 in `worker/test/`, with real RS256 tokens and real local D1; only
-  Clerk's Backend API is faked.
-- **Scripts and docs:** `scan-bundle.mjs`, `smoke.mjs`, and `worker/README.md` with the API,
-  provisioning steps and the staging checklist.
+- Rebased the existing Clerk commit `2a1f0c7` onto `dc86106` without a merge. Its rebased commit is `f8fd8b3`. No new frontend changes were authored; the existing key-gated Clerk controls remain. Public-demo config and disclaimers are unchanged.
+- Recovered all ten `docs/reports/phase-0-eval/` files byte-for-byte from `/workspace/scratch/f86120702689/fan_director/`. They are historical offline evaluation artifacts, not the current Phase 3 contract. Their README/schema reflect that earlier phase; Doc 11's item-ID contract now governs future work. No live evaluation was rerun.
+- Added `worker/` with locked npm dependencies, strict TypeScript, staging/development Wrangler configurations and API routing before static assets. Worker names: `fan-director-studio-development` and `fan-director-studio-staging`. Real databases have **not** been provisioned; UUIDs are placeholders and the deployment script rejects them. AI and adult-catalog switches are false.
+- `worker/migrations/0001_foundation.sql`: `creator`, `catalog`, `catalog_version`, `fan_session`, `draft`, `ai_request`, `audit_event`, `compliance_status`, `performer`, `safety_case`, `marketing_consent`; plus stable `fan` identity mapping, immutable `consent_wording` and one-time `consent_onboarding`. Foreign keys, creator/owner/status/time indexes, immutable published catalog content, append-only consent history, false compliance defaults and synthetic-only performers.
+- `worker/src/auth.ts`: Clerk signature/time/issuer/authorized-party/session validation; bearer-only private API; no auth-cookie trust or client metadata authorization. Every creator route checks `fva`, administrator-invited creator identity and actual TOTP enrollment. Email is obtained only from Clerk's verified primary address. Suspended/closed fans cannot access private fan data.
+- `worker/src/drafts.ts`: owner-scoped DraftV2 save/reload with atomic revision checks, no tenant/version reassignment, strict payloads, no browser prices or boundary flags, and rejection of hidden, unknown or adult selections. Phase 2 semantic/rules/quote validation is explicitly pending.
+- `worker/src/consent.ts`: versioned exact label/helper evidence, optional signup skip, one-time signup completion, settings updates, signed one-click unsubscribe and owner-only token issuance. No email is sent. Replayed links do not add duplicate withdrawals; old grants cannot withdraw a later resubscription.
+- `worker/src/index.ts`, `validation.ts`, `types.ts`: route authorization, same-origin mutations, bounded streaming bodies, safe stable errors, no-store/private response headers, anonymous browse-session cookies that cannot authenticate.
+- `worker/test/backend.test.ts`: actual RSA-signed JWT checks plus real local D1 SQL; only Clerk Backend API user/session lookup is mocked. `worker/scripts/` contains staging guards, bundle scanning and a compiled-Worker runtime smoke check. `worker/README.md` documents API schemas, endpoint behavior and exact provisioning steps.
 
 Endpoints:
 
@@ -65,194 +24,79 @@ Endpoints:
 | POST | `/api/browse-session` |
 | GET | `/api/session` |
 | GET | `/api/creator/me` |
-| GET, PUT | `/api/creators/:creatorId/drafts/:draftId` |
+| GET | `/api/creator/drafts/:id` |
+| GET, PUT | `/api/drafts/:id` |
 | GET, POST | `/api/creators/:creatorId/consent` |
 | POST | `/api/creators/:creatorId/consent-onboarding` |
-| GET, POST | `/api/unsubscribe/:token` |
+| POST | `/api/creators/:creatorId/unsubscribe-link` |
+| GET, POST | `/api/unsubscribe/:signedToken` |
 
-Changes from Astra's endpoint list:
+Creator draft reads expose only that creator identity's **own** draft in their own boutique. They never expose another fan's unsent draft; creator review of submitted cards is Phase 4.
 
-- Drafts moved under `/api/creators/:creatorId/` so the tenant is explicit.
-- `GET /api/creator/drafts/:id` is removed (§5).
-- `POST /api/creators/:creatorId/unsubscribe-link` is removed. Tokens are
-  issued only by `issueUnsubscribeToken()` for the future sender, so there is
-  no HTTP surface for minting them.
+## 2. Verification evidence
 
-## 2. Verification (owner's machine, 2026-09-17)
-
-Commands run in a clean worktree of the branch:
+Commands below run from the repository root unless stated otherwise.
 
 | Command | Result |
 | --- | --- |
 | `npm run typecheck --prefix worker` | Passed |
-| `npm test --prefix worker` | **79/79 passed**, 4 files |
-| `npm test --prefix frontend` | **67/67 passed**, 2 files |
-| `npm run lint --prefix frontend` | Passed, exit 0, no diagnostics |
-| `npm run build --prefix frontend` | Passed |
-| `npm run test:e2e --prefix frontend` | **24/24 passed** (run on port 5174 because 5173 was in use) |
-| `wrangler d1 migrations apply DB --local` | Applied, 40 commands |
-| `wrangler deploy --env staging --dry-run` | Passed; assets and staging bindings resolved; AI and adult switches `"false"`; **not deployed** |
-| `node worker/scripts/staging-guard.mjs` | Blocks as intended: placeholder D1 id, origin and issuer |
-| `node worker/scripts/scan-bundle.mjs` | 5 files, no secret signatures. No real secret values exist on this machine to compare |
-| `wrangler dev` + `node worker/scripts/smoke.mjs` | 7/7 ok |
-| `wrangler dev`, real signed token | GET, GET → `confirm`; POST → `done`; POST, GET → `already_unsubscribed`. D1 had exactly one `unsubscribed` row with `unsubscribe_page` |
+| `npm test --prefix worker` | **53/53 passed**, one test file |
+| `npm test --prefix frontend` | **67/67 passed**, two test files |
+| `npm run lint --prefix frontend` | Passed, no diagnostics |
+| `npm run build --prefix frontend` | Passed, TypeScript + Vite build |
+| `npm run test:e2e --prefix frontend` | **Blocked: 24/24 could not launch**, Chromium headless shell v1243 missing; no application assertion executed |
+| `npx --prefix frontend playwright install chromium` | Failed after repeated 30-second download timeouts from `cdn.playwright.dev` |
+| `worker/node_modules/.bin/wrangler d1 migrations apply DB --local --config worker/wrangler.jsonc` | Migration applied successfully; 32 SQL commands |
+| `worker/node_modules/.bin/wrangler deploy --env staging --dry-run --config worker/wrangler.jsonc --outdir dist` | Passed; bundle produced, assets and staging bindings resolved; **not deployed** |
+| `node worker/scripts/runtime-smoke.mjs` | Passed: bundled Worker executed in workerd; health 200 and unauthenticated private draft 401 |
+| `node worker/scripts/scan-bundle.mjs` | 5 frontend files scanned; no credential signatures or available secret values found |
+| `PYTHONPATH=/workspace/scratch/f86120702689/eval-deps python docs/reports/phase-0-eval/check.py --self-test` | 11 offline checks passed; live provider results not run |
+| `PYTHONPATH=/workspace/scratch/f86120702689/eval-deps python docs/reports/phase-0-eval/mock_check.py` | 4 hostile outputs rejected; 3 routing/budget checks passed; 0 live calls |
+| `worker/node_modules/.bin/wrangler whoami` | Not authenticated |
+| `worker/node_modules/.bin/wrangler dev --config worker/wrangler.jsonc --port 8787` | Environment failure: `uv_interface_addresses` system error; local HTTP server did not start |
 
-The mutation checks passed:
+Backend assertions cover altered/expired/not-yet-valid/wrong-issuer/wrong-origin/pending/impersonated JWTs, cookie-only denial, missing/negative/malformed second factor, noninvited users, missing TOTP enrollment, creator/fan isolation, concurrent revisions, account suspension, body caps, catalog tenant mismatch, selection tampering, primary-email verification/failure, one-time/concurrent signup consent, skipping and ordinary sign-in, immutable evidence, signed-link tampering, replay, later resubscription, and nonexistent send/submission/AI routes.
 
-- Removing the signature check made 3 tests fail.
-- Making GET write made 2 tests fail.
-
-Both changes were reverted.
-
-**Local environment notes:**
-
-- Wrangler's local D1 fails with "internal error" when the state path passes
-  Windows' 260-character limit. The deep worktree path triggered it, and
-  `--persist-to` with a shorter path fixed it.
-- Astra's `uv_interface_addresses` failure did not happen here.
+No real secrets are present in this workspace; therefore the dist scan cannot claim comparison against owner-held credentials. The scanner compares them by value when supplied through backend environment variables, without printing them. Clerk SDK diagnostic strings mentioning secrets are not secret values. No additional UI was built, so new 375/768/1280 visual verification is not applicable; inherited frontend browser regressions remain blocked as above.
 
 ## 3. Gate 1 completion criteria
 
-| Criterion | Status |
+| Criterion | Status and evidence |
 | --- | --- |
-| Two test creators cannot read each other's drafts | **Met locally.** Drafts are scoped to the creator's boutique: creator A's draft is 404 under creator B, and two creator identities get 404. Not yet in staging |
-| One fan cannot read another's draft by guessing its id | **Met locally.** GET, update and create-overwrite all return 404 with no data, and the owner's draft is unchanged |
-| Save and reload works in staging | **NOT MET.** Passes against local D1; staging isn't provisioned |
-| Every existing test still passes | **Met on this machine:** 67 unit + 24 browser tests, lint and build |
-| Auth as approved | **Partly met.** Worker enforcement is tested. Clerk instance settings (email link only, TOTP, SMS off) are unverified |
-| Consent and signed unsubscribe | **Met locally** with fixture wording. Real wording and a real Clerk email lookup are pending |
-| No backend secrets in the frontend bundle | **Met for the signatures.** A value comparison needs the owner's real secrets |
+| Two creators cannot access each other's drafts | **Met locally**: signed identities, TOTP checks and real D1 queries; actual staging identities not verified |
+| One fan cannot retrieve another's draft by ID | **Met locally**: read/update/create-overwrite attempts return 404 without data |
+| Save/reload works in staging | **NOT MET**: local D1 save/reload and concurrency pass; Cloudflare auth and provisioned staging DB absent |
+| Every existing test still passes | **NOT MET in this workspace**: 67 unit tests, lint/build pass; 24 browser tests cannot launch |
+| Auth as approved, fan email links and creator authenticator/backup codes | **Partly met**: Worker enforcement is tested; actual Clerk instance settings, email-link delivery, TOTP/backup-code login and Pro availability are **not verified** |
+| Consent and signed unsubscribe | **Met locally** with synthetic wording; approved real wording and live Clerk email lookup pending |
+| No backend secrets in frontend bundle | **Met for available evidence**, signature scan clean; actual owner credentials unavailable |
 
-## 4. Unsubscribe (review items 4 and 5)
+## 4. Deviations and limits
 
-**GET never changes consent.** `GET /api/unsubscribe/:token` checks the token and
-returns `confirm`, `already_unsubscribed` or `invalid` (design 23 U1, U4, U3). It
-performs no write. **POST** appends one `unsubscribed` row with
-`source: 'unsubscribe_page'`, copying the email and wording version of the
-current grant. It returns `done`, or `already_unsubscribed` if there is nothing
-to withdraw. A failed write returns `503 unsubscribe_failed` (U5). The insert is a
-single conditional statement, so two presses write one row. POST also requires a
-same-origin `Origin`. Tests show GET, repeated GET, GET with a bad token, and
-other methods all write nothing.
+1. Deployment/configuration is incomplete because there is no authenticated Cloudflare account, no Clerk secret or issuer setting, and no signing key here. Provisioning commands are in `worker/README.md`. No temporary Cloudflare account or other Worker was used.
+2. Clerk `fva` says when factors were verified, not which method was used. The Worker checks nonnegative second-factor age and TOTP enrollment; **SMS must be disabled in the actual Clerk instance**. Email-link-only fan login likewise requires instance configuration; the token alone does not prove a first-factor strategy. These are genuine Gate 1 verification blockers.
+3. Signup-only detection uses Clerk's sole session, session/account creation times within 60 seconds, and an application one-time row. Verify Clerk's real timestamps and first-session flow in staging. Failure is conservative: no signup step/consent write; settings remain available.
+4. No production consent wording was invented. Only isolated test fixtures contain a label/helper. Consent writes fail until a real approved version is inserted administratively. Endpoint success always follows a committed row.
+5. Safety cases are schema-only with a restricted-evidence reference; there is no evidence store, review route or reporting. Rules-triggered case creation is later-phase work. No real performers or fan traffic are enabled.
+6. Draft saves are Phase 1 persistence, not boundary approval or a quote. Responses explicitly mark validation pending Phase 2; no submission endpoint exists. Quantities, groups, scenario text and pricing require Phase 2 checks before live use.
+7. The unsubscribe endpoint accepts GET for the specified one-click link. Email scanners can trigger GETs. No sender exists yet; RFC 8058 email-header integration belongs in the future sending spec. Tokens are random-row-ID capabilities, never emails; request observability is disabled.
+8. Existing Clerk frontend code was retained by the requested rebase. No consent screen, failure state, new visible flow, or live frontend persistence claim was introduced.
 
-**The token is HMAC-signed, not a random id.**
+## 5. Owner setup and outstanding decisions
 
-- **Format:** `v1.<payload>.<signature>`, base64url. The payload is
-  `{"f": fanId, "c": creatorId, "t": issuedAtSeconds}`, with no email.
-- **Signature:** HMAC-SHA256 over the ASCII string `v1.<payload>`.
-- **Secret:** a Worker secret, `UNSUBSCRIBE_SIGNING_KEY`, of 32+ random bytes in base64. In staging it is
-  set **only** with `wrangler secret put UNSUBSCRIBE_SIGNING_KEY --env staging`.
-  Locally it lives in the gitignored `worker/.dev.vars`. It's listed in
-  `secrets.required` and appears nowhere in `wrangler.jsonc` or the repository.
-- **Rejecting an altered token:** before any database read, the Worker checks:
-  - exactly three parts;
-  - the version is `v1`;
-  - canonical base64url, with no padding or alternative encodings;
-  - a 32-byte signature.
+No product decisions are reopened. To complete Gate 1 verification:
 
-  Then `crypto.subtle.verify` (constant time) checks the signature. Any change to
-  the payload, the signature or the version, or a key other than the Worker's,
-  fails verification and returns `{ "state": "invalid" }`, the same response for
-  every failure. It never names a fan or creator. A validly signed token for a
-  creator that doesn't exist is also `invalid`. Tests cover a forged payload (which
-  would unsubscribe another fan), a changed signature, a different key, and
-  truncated, re-versioned and padded tokens.
-- **Rotation:** the `v1` prefix lets a second key be accepted during a changeover.
+- Authenticate Wrangler on the owner machine, provision separate development/staging D1 databases, replace placeholder IDs, set exact Clerk issuer/origin and owner-held backend secrets, apply staging migrations and deploy only the staging Worker.
+- Configure and verify email-link-only first factor, authenticator/backup second factor, SMS disabled, and creator invitation provisioning. Owner purchases Pro before live creator accounts; written Clerk approval remains a launch requirement.
+- Supply the approved consent label **and helper text** as an immutable version. Seed only synthetic test creators/catalogs; verify first signup versus ordinary sign-in and real verified-primary-email lookup.
+- Run the remote persistence/auth/consent smoke checks and 24 browser regressions with Chromium installed. Record the results before approving Gate 1.
 
-**One behaviour differs from Astra's report. Confirmed by the owner on 2026-09-17**
-(doc 11 §5.6 item 18). Astra
-bound a token to one grant, so an old link couldn't withdraw a later
-resubscription. This rebuild binds the token to the fan and creator, so **any
-unsubscribe link means "stop" for that pair**, including after a resubscription.
-Reasons:
+## 6. Designs needed
 
-- A fan who presses Unsubscribe in any of their news emails wants the news to stop.
-- Unsubscribe links are expected to keep working for emails already sent.
-- Design 23's U2 and U4 offer "Subscribe again" on the same page, which implies
-  the link stays usable.
+Still waiting for the post-signup consent step and its saving, write-failed, invalid/altered unsubscribe, already-unsubscribed and skip states, plus exact versioned label/helper copy. No UI was added for these states. Auth enrollment routing must use the approved design when frontend integration resumes.
 
-The risk is small: someone with a forwarded email could turn a fan's news off,
-but never on.
+## 7. Cost and release state
 
-## 5. `GET /api/creator/drafts/:id` (review item 6)
+AI/provider calls: **0**, spend **$0**. No email sent. No paid plan purchased. No remote Cloudflare resources, migrations or deploys were performed, so this work incurred no known remote usage charges. Existing live-evaluation spend is unchanged; its **$8** ceiling was not used. Worker AI remains off and no provider adapter exists.
 
-**Removed.** In Phase 1 there is no such thing as a creator-owned draft. Drafts
-belong to fans and are scoped to one creator's boutique. Astra's route returned a
-draft saved by the creator's own identity acting as a fan in their own boutique.
-It existed only to test "two creators cannot read each other's drafts". That
-criterion is now tested as tenant isolation on the fan draft routes:
-
-- a draft saved in creator A's boutique is 404 through creator B's path;
-- each creator's identity gets 404 for the other's boutique draft;
-- another creator's catalog version is rejected.
-
-`GET /api/creator/me` remains, so the TOTP and `fva` enforcement is tested on a
-real creator route. Creator review of submitted cards is Phase 4.
-
-**Confirmed by the owner on 2026-09-17** (doc 11 §5.6 item 18): the removal, the
-drafts path `/api/creators/:creatorId/drafts/:draftId`, and the removal of the
-unsubscribe-link route.
-
-## 6. Sign-up detection (review item 7)
-
-The step shows only if all of these hold:
-
-- the session is the user's only live session;
-- the session's `created_at` is within 60 seconds of the user's `created_at`;
-- no `consent_onboarding` row exists;
-- a consent wording version exists.
-
-Any Clerk error, or any doubt, means "not a first sign-up": no step and no consent write,
-with settings still available. Tests cover 2 seconds (shown), 61 seconds and 2 hours
-(not shown), a second live session, a Clerk outage, and two tabs.
-`worker/README.md`'s staging checklist asks the owner to record Clerk's real
-user and session `created_at` for a first sign-up and for an ordinary sign-in.
-
-## 7. Designs
-
-The post-sign-up consent step and its states (A–A6) and the unsubscribe page
-(U1–U5) are drawn in **design 23**
-(`docs/designs/html/23-news-consent-step.html`). It **awaits the owner's review**,
-including its wording. No UI for it was built. The endpoints return the states
-design 23 needs. Its "Subscribe again" button (U2, U4) has no endpoint yet; that
-waits for design approval. Creator authenticator enrolment routing will follow
-the approved design 16 when frontend integration resumes.
-
-## 8. Owner setup still needed
-
-All of it follows `worker/README.md` ("Owner provisioning" and "Staging checklist").
-Staging runs on workers.dev with a Clerk development instance (doc 11 §5.6 item 19).
-
-**Added 2026-09-17 for running the checklist.** The frontend doesn't call the API yet, so:
-
-- `worker/scripts/staging-console.js` gives `fds.*` helpers to paste into the browser console on staging;
-- `worker/scripts/issue-unsubscribe-token.mjs` makes a test link token, with the key read from the environment;
-- `worker/seeds/staging-synthetic.sql` adds two synthetic creators with published catalogs.
-
-A new worker test proves the script's tokens match `issueUnsubscribeToken()` exactly: 82/82 tests.
-Checked locally with `wrangler dev`:
-
-- the seed applied, and `smoke.mjs` passed 7/7;
-- in a browser, the console helper made two unsubscribe GETs (`confirm`, no row) and
-  two POSTs (`done`, then `already_unsubscribed`), writing exactly one
-  `unsubscribe_page` row, and a tampered token returned `invalid`.
-
-The signed-in helpers are **not verified**, because no Clerk server keys exist on this machine.
-
-Still to do:
-
-- Wrangler login, D1 databases, real origins and issuer.
-- The three secrets, set with `wrangler secret put`.
-- Remote migrations, then the staging deploy.
-- Clerk settings: email-link-only fans, TOTP with backup codes for creators, SMS off.
-  Pro is needed before live creators, and written confirmation from Clerk is a launch item.
-- Approve design 23's wording, then insert it as a `consent_wording` version.
-- Run the staging checklist, including the sign-up timestamps, and record the results
-  before approving Gate 1.
-
-## 9. Cost and release state
-
-- AI and provider calls: **0**. No email was sent and no plan was bought.
-- No remote Cloudflare or Clerk resources were used.
-- The AI and adult-catalog switches are off.
-- The branch is pushed, not merged. **Stop at Gate 1; don't start Phase 2.**
+The staging branch is rebased, not merged. Commit/push outcome is reported in the handoff response after this report is committed. **Stop at Gate 1; do not start Phase 2.**
