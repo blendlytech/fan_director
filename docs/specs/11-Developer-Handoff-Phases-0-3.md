@@ -41,7 +41,7 @@ Routes: the fan side has `/`, `/ai-director`, `/review`, `/confirmation` and `/s
 
 The "AI Director" today is scripted UI. It has two canned choices ("Richer Setting" and "Longer Video"), and fan notes are recorded but never answered.
 
-Visual ground truth lives in `docs/design-html/`: 01 is the component library, 02–09 are the original screens, 10 is saved ideas, 11 is the mobile menu, 12 is page not found, 13 is creator limits, 14 is the fan's paused, restored and closed account states, 15 is the safety-case review screen, 16 is sign-in and age verification, 17 is the AI Director's live states, 18 is saving and price changes, 19 is the unpriced custom request. 13–19 are staging designs for this handoff. PDFs are in `docs/design-pdfs/`.
+Visual ground truth lives in `docs/design-html/`: 01 is the component library, 02–09 are the original screens, 10 is saved ideas, 11 is the mobile menu, 12 is page not found, 13 is creator limits, 14 is the fan's paused, restored and closed account states, 15 is the safety-case review screen, 16 is sign-in and age verification, 17 is the AI Director's live states, 18 is saving and price changes, 19 is the unpriced custom request, 20 is commission options and starting templates. 13–20 are staging designs for this handoff. PDFs are in `docs/design-pdfs/`.
 
 ---
 
@@ -108,9 +108,12 @@ The owner decided these on 2026-09-16.
 | `length_format` | Length & format | Groups: `base` exactly one; `extra_minutes` optional; `orientation` exactly one | Base video 3 min (required, $90); extra minute ($40 each, max 2); orientation vertical/horizontal ($0) |
 | `setting` | Setting / set | Exactly one | Vintage Lounge $35, Floral Studio $45, Backstage $15 |
 | `wardrobe` | Wardrobe & look | At most one | Creator's choice ($0). Priced wardrobe items are allowed |
-| `personalization_delivery` | Personalization & delivery | Groups: `greeting` exactly one; `delivery` at most one | Standard greeting $0, detailed greeting $20; standard delivery 7 days from payment ($0) |
+| `personalization_delivery` | Personalization & delivery | Groups: `greeting` exactly one; `name_use` exactly one; `fan_script` at most one; `delivery` exactly one | Standard greeting $0, detailed greeting $20; no name $0, says your name once $0, says your name throughout $15; your own script $30 (§5.7); standard delivery 7 days from payment $0, rush delivery 2 days from payment +50% |
+| `rights_quality` | Rights & quality | Groups: `rights` exactly one; `resolution` exactly one | Maya may resell it later $0, just for you (exclusive) +50%; HD 1080p $0, 4K $25 |
 
-**Adult-gated starter categories** (§5.4): `props`, `participants` (solo, or with a verified partner performer; §5.3.1), `posing`, `encounter_type`. Their definitions exist in the schema and the seed, **with no items**, `contentRating: "adult"`, and they are **disabled**.
+Pilot figures in this table are staging seed values. The creator sets real prices (§10).
+
+**Adult-gated starter categories** (§5.4): `props`, `participants` (solo, or with a verified partner performer; §5.3.1), `posing`, `encounter_type`, `specialty_acts` (§5.7). Their definitions exist in the schema and the seed, **with no items**, `contentRating: "adult"`, and they are **disabled**.
 
 ### 5.3 Boundaries: a platform hard list, plus creator limits set to "Ask me" or "Hard no"
 
@@ -130,7 +133,9 @@ Every fantasy is a fictionalized experience between real, consenting adults. Eac
 
 - any role that implies someone under 18, even indirectly: student or pupil, school uniforms, school settings, childlike costumes or behaviour;
 - family roles, including step-relations;
-- named characters from films, games, anime or other media, and real people;
+- caregiver roles that imply a child is present, such as a babysitter or nanny;
+- relationship roles that make someone other than themselves, such as a neighbour, a friend's partner or a stranger;
+- named characters from films, games, anime, comics or other media (cosplay of them included), and real people;
 - any role used in a way that would be a sexual crime if it were real, such as an officer forcing someone in custody.
 
 Personal formats are encouraged. For example:
@@ -147,7 +152,7 @@ The hard list is fixed by the platform. Creators, fans and the AI cannot edit, r
 | Key | Blocks | Fan-facing label |
 | --- | --- | --- |
 | `minors` | Anyone under 18, or anything suggesting it: stated ages under 18, school grades, "teen", "barely legal", childlike framing, age play | Anyone under 18, or anything that suggests it |
-| `prohibited_roles` | Any role in the "not allowed" list in §5.3.1: roles implying anyone under 18 (student, pupil, school uniform or setting, childlike costume or behaviour, "young" age roles), family roles including step-relations, named media characters, and any role used to create a scenario that would be a sexual crime if real. Generic adult status roles (nurse, doctor, police officer and similar) are **allowed** and must not be blocked | School, student, childlike, family or step-family roles |
+| `prohibited_roles` | Any role in the "not allowed" list in §5.3.1: roles implying anyone under 18 (student, pupil, school uniform or setting, childlike costume or behaviour, "young" age roles, babysitter or nanny), family roles including step-relations, relationship roles other than themselves (neighbour, a friend's partner), named media characters, and any role used to create a scenario that would be a sexual crime if real. Generic adult status roles (nurse, doctor, police officer and similar) are **allowed** and must not be blocked | School, student, childlike, family or step-family roles |
 | `incest` | Sexual content between relatives, real or implied | Sex between relatives |
 | `non_consent` | Non-consent, including pretend or "consensual non-consent" scenarios; anyone asleep, unconscious, drugged, intoxicated or otherwise unable to consent; coercion or blackmail | Anything without clear consent, including pretend, drunk or asleep |
 | `bestiality` | Any sexual content involving animals | Anything involving animals |
@@ -200,7 +205,7 @@ Manual catalog selection keeps working. Never skip the check.
 **Tests** (rules layer at Gate 2, classifier and AI output at Gate 3):
 
 - **Must-block set:** at least 100 cases covering every key. Include paraphrases, misspellings, euphemisms and conversations that only become a violation over several messages.
-- **Must-allow set:** at least 100 legal cases. Include explicit acts between the creator, the fan by name and verified partners; point-of-view and first-person formats; status roles such as nurse, doctor and police officer; and common near-misses such as "my 18th birthday", "I'm 42", "my sister recommended you" and "I've been a fan since school".
+- **Must-allow set:** at least 100 legal cases. Include explicit acts between the creator, the fan by name and verified partners; point-of-view and first-person formats; status roles such as nurse, doctor and police officer; and common near-misses such as "my 18th birthday", "I'm 42", "my sister recommended you", "my neighbour told me about you" and "I've been a fan since school".
 - A blocked must-allow case fails the gate just as a missed must-block case does. Report both rates.
 - Adult fixtures are synthetic and exist only in the test suite and staging.
 - **What may be sent to an external provider during tests (owner decision, 2026-09-16):**
@@ -291,6 +296,49 @@ From the Phase 0 report's findings. Each is also written into the section it aff
 11. **Live AI tests** run on the owner's machine within the $8 ceiling, following §5.3.3 on what may be sent to a provider.
 12. **Design 16's creator sign-in** is corrected: email, then a sign-in link or password, then the authenticator code.
 
+### 5.7 Commission options from market research (owner, 2026-09-16)
+
+Source: `docs/reports/custom-video-market-research.md`. That report has no sources, so its figures may guide **seed defaults only**. No figure, market share or claim from it may appear in fan or creator copy.
+
+**New catalog options** (starter items in §5.2; the creator prices, hides or deletes each one):
+
+| Option | Where | Pricing | Notes |
+| --- | --- | --- | --- |
+| Exclusive ("Just for you") vs. "May resell it later" | `rights_quality.rights` | Exclusive: percentage of the subtotal | The fan always sees which one applies before sending. Subject to the personalised-video rule below |
+| 4K resolution | `rights_quality.resolution` | Fixed | HD is the included default |
+| Rush delivery | `personalization_delivery.delivery` | Percentage of the subtotal | `effects.deliveryDaysDelta` sets the shorter delivery; never below 1 day |
+| Says your name throughout | `personalization_delivery.name_use` | Fixed | "Says your name once" is included. Both require `fanDisplayName` |
+| Your own script | `personalization_delivery.fan_script` | Fixed | Needs `DraftV2.fanScript` (at most 3,000 characters). Checked like a custom request (§5.3.3 check point 2) and shown in full to the creator. The AI never rewrites it |
+| Wardrobe the creator doesn't own | Custom request (§5.1) | Unpriced until the creator reviews it | No wishlist links or outside payments |
+| Minimum length and per-minute price | `length_format` | Already modelled: base item + `extra_minutes` per unit | The creator sets the base minutes and per-minute price |
+
+**Percentage pricing.** A new `Item.pricing` kind, `percent` (§6). Its amount is computed on the **subtotal of fixed and per-unit lines** only. Percentage lines never compound on each other, and the unpriced custom request is never part of the subtotal. Each percentage line is rounded to the nearest cent, half up. The fan sees the resulting amount as a normal line, with the percentage in the label (for example "Rush delivery (+50%)").
+
+**Personalised videos and resale (proposed default; owner confirms, §10).** A video that says the fan's name, or uses the fan's own script, could identify the fan if it is resold. Until the owner decides:
+
+- A draft with `name_use` other than "no name", or with a `fan_script` item, cannot select "May resell it later". The server rejects that combination with a typed error, and the fan UI shows why (design 20, state B).
+- A non-personalised video that may be resold says so on the Scene Card and the review screen, in plain English, before sending.
+
+**Creator's pricing note.** `CatalogVersion.pricingNote`: at most 400 characters, in the creator's own words (for example how long filming and editing take). It is checked against the hard list at publish, and shown on the entrance and review screens under the price. The platform never writes it or fills it with market figures.
+
+**Starting templates.** `CatalogVersion.templates`: preset selections a fan can start from on the entrance. Starter templates follow the report's five archetypes, renamed for fans:
+
+1. Girlfriend experience ("Just us")
+2. Guided instructions ("Follow my lead")
+3. Status-role scene ("In uniform"): allowed roles only (§5.3.1)
+4. Body focus ("Up close")
+5. Kink ("[Creator]'s specialties"): adult-gated; shown only when §5.4 allows it **and** the template's items all exist and are visible
+
+A template is only a starting draft. It is validated and quoted like any draft, and a template that no longer validates is hidden, never silently repaired.
+
+**Specialty acts.** The adult-gated `specialty_acts` category holds legal kink items (for example humiliation, degradation, guided finish instructions). Their creator-limit checklist entries default to `ask_me` (§5.3.4). The report's label "Hard limits / taboo" is not used, because "Hard no" means something else here.
+
+**Not adopted:**
+
+- Roles the §5.3.1 rules forbid (step-family, babysitter, teacher or principal, a friend's partner, anime and comic characters). §5.3.1 and §5.3.2 now name them.
+- **Financial domination** ("wallet drain" or payment as part of the scene). The AI never suggests it and no catalog item may offer it, because it conflicts with the rule that no text states money and with payment-processor rules. The owner may revisit (§10).
+- Fantasy creature roles (vampire, succubus): not allowed until the owner decides (§10).
+
 ---
 
 ## 6. Target data model (extends doc 10 §5)
@@ -312,6 +360,8 @@ interface CatalogVersion {         // immutable once published
   categories: Category[]
   boundaries: Boundaries
   delivery: { standardDaysFromPayment: number }
+  pricingNote: string | null       // creator's own words, <= 400 chars, hard-list checked at publish (§5.7)
+  templates: Template[]            // starting drafts (§5.7)
   createdAt: string; publishedAt: string | null
 }
 
@@ -335,9 +385,18 @@ interface Item {
     | { kind: 'fixed'; amount: Cents }
     | { kind: 'per_unit'; unitLabel: string; amountPerUnit: Cents; minQty: number; maxQty: number }
     | { kind: 'included' }            // $0, shown as "Included"
+    | { kind: 'percent'; basisPoints: number }  // e.g. 5000 = +50% of the fixed + per-unit subtotal (§5.7)
   effects?: { minutes?: number; deliveryDaysDelta?: number }  // e.g. extra minute: minutes +1 per unit
   groupKey?: string                  // required when the category has groups
   requires?: string[]; excludes?: string[]  // item ids within the same version
+  hidden: boolean; sortOrder: number
+}
+
+interface Template {               // a starting draft, validated and quoted like any draft (§5.7)
+  id: string; key: string
+  label: string; description?: string
+  contentRating: 'general' | 'adult'
+  selections: { itemId: string; qty: number }[]
   hidden: boolean; sortOrder: number
 }
 
@@ -371,6 +430,7 @@ interface DraftV2 {                // replaces today's { setting, focus, extraMi
   selections: { itemId: string; qty: number }[]
   fanDisplayName: string | null    // first name or nickname, <= 40 chars, hard-list checked (§5.3.1)
   customRequest: string | null     // never priced
+  fanScript: string | null         // <= 3,000 chars; only with the fan_script item; checked like customRequest (§5.7)
   notes: { id: number; text: string }[]
   boundaryFlags: BoundaryFlag[]    // recomputed by the server on every save
   budget: Cents | null
@@ -397,6 +457,8 @@ interface Quote {                  // computed by the server only
 
 - Validate every selection against the version's category limits (`selection.min`/`max`), item quantities, `requires`/`excludes`, `hidden` and `contentRating` gating.
 - Reject invalid input with a typed error. Never "fix" it silently.
+- Percentage lines are computed on the subtotal of fixed and per-unit lines, never on each other, each rounded to the nearest cent, half up (§5.7).
+- Reject a personalised draft (`name_use` other than "no name", or a `fan_script` item) that selects "May resell it later" (§5.7), with a typed error.
 - The total is the sum of line amounts in cents. `minutes` is the base plus effects. Delivery is the standard days plus deltas, never below 1 day.
 
 ---
@@ -439,7 +501,7 @@ interface Quote {                  // computed by the server only
 
    Run at least 10 sample conversations against the pilot catalog with the §8 Phase 3 schema (use the owner's test key only if provided; otherwise design the harness and mark it blocked). Follow §5.3.3 on what may be sent to an external provider. The owner has reviewed the terms that matter for testing: OpenRouter's terms and Meta's Llama 3.3 policy don't prohibit legal adult content, so live tests with synthetic legal adult content may run once the key is set. Written confirmation from providers is a **launch** requirement, not a test blocker.
 6. Evaluate **hard-list classifiers** (§5.3.3) the same way: custom-category support, terms for adult text, retention, latency, price, and a first run against a draft of the must-block and must-allow sets.
-7. List every UI state Phases 1–3 need that **still** has no design. Already designed: creator limits and boundary notices (13), paused, restored and closed fan accounts (14), safety-case review (15), sign-in and age verification (16), AI thinking, suggestions, accepted, rejected, out of date, unavailable, out of replies and the catalog fallback (17), save status, edits from another window and price changes (18), and the unpriced custom request (19). If the chosen auth or verification provider can't support a design, say so in the report.
+7. List every UI state Phases 1–3 need that **still** has no design. Already designed: creator limits and boundary notices (13), paused, restored and closed fan accounts (14), safety-case review (15), sign-in and age verification (16), AI thinking, suggestions, accepted, rejected, out of date, unavailable, out of replies and the catalog fallback (17), save status, edits from another window and price changes (18), the unpriced custom request (19), and commission options: rights, rush, 4K, name use, the fan's own script, the creator's pricing note and starting templates (20). If the chosen auth or verification provider can't support a design, say so in the report.
 
 **Gate 0 report:** findings, recommendations with sources, the migration map, the list of needed designs, and open questions.
 
@@ -456,7 +518,7 @@ interface Quote {                  // computed by the server only
 
 ### Phase 2: Catalog, boundaries and server-side quotes
 
-- Seed the pilot catalog (§5.2 and the §6 mapping) as published version 1, with the four general starter categories populated and the adult categories defined, empty and disabled.
+- Seed the pilot catalog (§5.2, §5.7 and the §6 mapping) as published version 1, with the five general starter categories and the four general starter templates populated and the adult categories defined, empty and disabled.
 - Endpoints:
   - read the published catalog (with adult content filtered server-side);
   - create/update a draft with `expectedRevision`;
@@ -473,6 +535,7 @@ interface Quote {                  // computed by the server only
 - a tampered browser request (unknown item, over-limit quantity, hidden item, adult item, edited price) is rejected;
 - the rules layer passes the §5.3.3 must-block and must-allow sets, and both rates are reported;
 - `validateForSubmission` rejects a draft with a hard-no request and accepts an ask-me request with its flag;
+- percentage lines, the personalised-video resale rule and template validation pass unit tests and API tests (§5.7);
 - existing e2e tests pass against staging.
 
 **Gate 2 report.**
@@ -594,6 +657,10 @@ Do not describe anything as working unless you ran it. Say "not verified" when y
 | Global AI test budget ceiling (doc 10 example: $25) | Before any live provider call |
 | Written authorization from OpenRouter (and the chosen host) for prompt-injection testing, and written confirmation that adult use is allowed | Before injection tests against a real provider; adult confirmation before launch |
 | Designs for every new UI state listed at Gate 0 | Before that UI is built |
+| Personalised videos and resale: keep the proposed default (a video with the fan's name or script is always exclusive), or allow resale after the creator removes the name and script lines (§5.7) | Phase 2 |
+| Real percentages and prices for exclusive, rush, 4K, name use and the fan's own script | Phase 2 |
+| Whether financial domination is ever offered, and whether fantasy creature roles (vampire, succubus) are allowed (§5.7) | Before adult content is enabled |
+| Specialty-act checklist entries (§5.7) | Before adult content is enabled |
 | When, and whether, `ADULT_CATALOG_ENABLED` may ever be turned on | After compliance, outside Phases 0–3 |
 
 ---

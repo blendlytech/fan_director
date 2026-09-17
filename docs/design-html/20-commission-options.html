@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Commission options - Maya Atelier</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { serif: ['Cormorant Garamond', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+      colors: {
+        cream: '#FDF8F3', panel: '#FFFFFF', secondary: '#F5F0EB', espresso: '#302720', muted: '#70625C',
+        rose: '#E4A4BD', rosehover: '#D595AE', deeprose: '#84485D', divider: '#DED3CB',
+        okbg: '#EEF4EC', okborder: '#C4D9BF', okink: '#4F7A48',
+        askbg: '#F8EFE4', askborder: '#E3C8A6', askink: '#7A5530'
+      },
+      transitionDuration: { '160': '160ms' }
+    }
+  }
+}
+</script>
+<style>
+  body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin: 0; }
+  html { background-color: #FDF8F3; }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
+  .focus-ring:focus-visible { outline: 2px solid #302720; outline-offset: 2px; }
+</style>
+</head>
+<body>
+<div class="bg-cream font-sans text-espresso min-h-screen">
+
+  <!--
+    DESIGN 20: Commission options (doc 11 §5.7). Staging design.
+
+    Rules this design encodes:
+    - Every amount is the server's quote; percentage options show their percentage and the amount.
+    - Percentages apply to the fixed and per-unit subtotal, never to each other.
+    - A video that uses the fan's name or the fan's own script can't be resold (proposed default;
+      owner confirms). The disabled option keeps its reason visible.
+    - A resellable video says so before sending.
+    - The pricing note is the creator's own words; templates are starting drafts only.
+    - No figures from the market research appear in copy.
+  -->
+
+  <header class="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-divider">
+    <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 h-[80px] flex items-center justify-between">
+      <div class="flex items-center gap-4 sm:gap-6">
+        <a href="#collection" class="inline-flex min-h-[44px] items-center font-serif text-2xl sm:text-3xl font-medium tracking-tight focus-ring">Maya Atelier</a>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-secondary text-muted border border-divider">Staging design</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#collection" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Collection</a>
+        <a href="#studio" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Your studio</a>
+        <a href="#saved" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Saved ideas</a>
+      </nav>
+      <button type="button" aria-expanded="false" class="md:hidden inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-[12px] px-3 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
+        <iconify-icon icon="lucide:menu" width="18"></iconify-icon>
+        Menu
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-[1120px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-20">
+
+    <!-- ============================================================
+         A. STARTING TEMPLATES + CREATOR'S PRICING NOTE (entrance)
+         ============================================================ -->
+    <section aria-labelledby="a-label">
+      <p id="a-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A · Entrance: start from a template</p>
+      <h2 class="mb-2 text-3xl sm:text-4xl font-medium">Where would you like to start?</h2>
+      <p class="mb-8 max-w-[560px] text-base text-muted">Pick a starting point. You can change every choice before you send it to Maya.</p>
+
+      <ul class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <li>
+          <a href="#studio" class="flex h-full flex-col rounded-[12px] border border-divider bg-panel p-5 transition-colors duration-160 hover:border-espresso focus-ring">
+            <iconify-icon icon="lucide:heart" width="22" class="mb-3 text-deeprose" aria-hidden="true"></iconify-icon>
+            <span class="mb-1 font-serif text-2xl font-medium">Just us</span>
+            <span class="mb-4 flex-1 text-sm text-muted">Warm and personal. Maya talks to you like it&rsquo;s just the two of you.</span>
+            <span class="text-sm font-medium">From $105</span>
+          </a>
+        </li>
+        <li>
+          <a href="#studio" class="flex h-full flex-col rounded-[12px] border border-divider bg-panel p-5 transition-colors duration-160 hover:border-espresso focus-ring">
+            <iconify-icon icon="lucide:timer" width="22" class="mb-3 text-deeprose" aria-hidden="true"></iconify-icon>
+            <span class="mb-1 font-serif text-2xl font-medium">Follow my lead</span>
+            <span class="mb-4 flex-1 text-sm text-muted">Maya guides you step by step, at her pace.</span>
+            <span class="text-sm font-medium">From $145</span>
+          </a>
+        </li>
+        <li>
+          <a href="#studio" class="flex h-full flex-col rounded-[12px] border border-divider bg-panel p-5 transition-colors duration-160 hover:border-espresso focus-ring">
+            <iconify-icon icon="lucide:stethoscope" width="22" class="mb-3 text-deeprose" aria-hidden="true"></iconify-icon>
+            <span class="mb-1 font-serif text-2xl font-medium">In uniform</span>
+            <span class="mb-4 flex-1 text-sm text-muted">Maya in a nurse or doctor costume. Adult roles only.</span>
+            <span class="text-sm font-medium">From $150</span>
+          </a>
+        </li>
+        <li>
+          <a href="#studio" class="flex h-full flex-col rounded-[12px] border border-divider bg-panel p-5 transition-colors duration-160 hover:border-espresso focus-ring">
+            <iconify-icon icon="lucide:scan-eye" width="22" class="mb-3 text-deeprose" aria-hidden="true"></iconify-icon>
+            <span class="mb-1 font-serif text-2xl font-medium">Up close</span>
+            <span class="mb-4 flex-1 text-sm text-muted">Slow, close shots with soft sound. Little talking.</span>
+            <span class="text-sm font-medium">From $125</span>
+          </a>
+        </li>
+      </ul>
+      <p class="mt-3 text-xs text-muted">&ldquo;From&rdquo; prices are derived from each template&rsquo;s cheapest valid build. The fifth template, &ldquo;Maya&rsquo;s specialties&rdquo;, appears only when adult content is on for Maya (doc 11 &sect;5.4) and all its items are visible.</p>
+
+      <div class="mt-8 flex items-start gap-3 rounded-[12px] border border-divider bg-secondary p-5 max-w-[720px]">
+        <iconify-icon icon="lucide:message-square-quote" width="20" class="mt-0.5 shrink-0 text-deeprose" aria-hidden="true"></iconify-icon>
+        <div>
+          <p class="mb-1 text-sm font-semibold">Why Maya prices it this way</p>
+          <p class="text-sm leading-relaxed">&ldquo;Every video is filmed just for you. A few minutes on screen takes me about an hour to set up, film and edit, so I price by the minute.&rdquo;</p>
+          <p class="mt-2 text-xs text-muted">In Maya&rsquo;s own words.</p>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-muted">The note is the creator&rsquo;s text (at most 400 characters). It is omitted when empty. The platform never adds figures to it.</p>
+    </section>
+
+    <!-- ============================================================
+         B. OPTIONS ON THE SCENE CARD (AI Director workspace, right column)
+         ============================================================ -->
+    <section aria-labelledby="b-label" class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <div>
+        <p id="b-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">B · Scene Card options</p>
+        <div class="space-y-6 rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
+
+          <fieldset>
+            <legend class="mb-3 text-sm font-semibold">Your name in the video</legend>
+            <div class="space-y-2">
+              <label class="flex min-h-[44px] cursor-pointer items-center justify-between gap-3 rounded-[10px] border border-divider px-3 py-2 text-sm">
+                <span class="flex items-center gap-3"><input type="radio" name="name" class="h-4 w-4 accent-espresso">No name</span><span class="text-muted">Included</span>
+              </label>
+              <label class="flex min-h-[44px] cursor-pointer items-center justify-between gap-3 rounded-[10px] border border-espresso bg-secondary px-3 py-2 text-sm">
+                <span class="flex items-center gap-3"><input type="radio" name="name" checked class="h-4 w-4 accent-espresso">Says &ldquo;Sam&rdquo; once</span><span class="text-muted">Included</span>
+              </label>
+              <label class="flex min-h-[44px] cursor-pointer items-center justify-between gap-3 rounded-[10px] border border-divider px-3 py-2 text-sm">
+                <span class="flex items-center gap-3"><input type="radio" name="name" class="h-4 w-4 accent-espresso">Says &ldquo;Sam&rdquo; throughout</span><span class="text-muted">+$15</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="mb-3 text-sm font-semibold">Who gets the video</legend>
+            <div class="space-y-2">
+              <label class="flex min-h-[44px] cursor-pointer items-center justify-between gap-3 rounded-[10px] border border-espresso bg-secondary px-3 py-2 text-sm">
+                <span class="flex items-center gap-3"><input type="radio" name="rights" checked class="h-4 w-4 accent-espresso">Just for you</span><span class="text-muted">+50% &middot; $85</span>
+              </label>
+              <div class="rounded-[10px] border border-dashed border-divider px-3 py-2 text-sm text-muted">
+                <label class="flex min-h-[44px] items-center justify-between gap-3">
+                  <span class="flex items-center gap-3"><input type="radio" name="rights" disabled aria-describedby="resale-why" class="h-4 w-4">Maya may resell it later</span><span>Included</span>
+                </label>
+                <p id="resale-why" class="flex items-start gap-2 pb-1 text-xs">
+                  <iconify-icon icon="lucide:lock" width="14" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>
+                  Not available: this video says your name, so only you get it.
+                </p>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="mb-3 text-sm font-semibold">Video quality</legend>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <label class="flex min-h-[44px] cursor-pointer items-center justify-between gap-3 rounded-[10px] border border-divider px-3 py-2 text-sm">
+                <span class="flex items-center gap-3"><input type="radio" name="res" class="h-4 w-4 accent-espresso">HD</span><span class="text-muted">Included</span>
+              </label>
+              <label class="flex min-h-[44px] cursor-pointer items-center justify-between gap-3 rounded-[10px] border border-espresso bg-secondary px-3 py-2 text-sm">
+                <span class="flex items-center gap-3"><input type="radio" name="res" checked class="h-4 w-4 accent-espresso">4K</span><span class="text-muted">+$25</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend class="mb-3 text-sm font-semibold">Delivery</legend>
+            <div class="space-y-2">
+              <label class="flex min-h-[44px] cursor-pointer items-center justify-between gap-3 rounded-[10px] border border-espresso bg-secondary px-3 py-2 text-sm">
+                <span class="flex items-center gap-3"><input type="radio" name="delivery" checked class="h-4 w-4 accent-espresso">Standard &middot; 7 days after payment</span><span class="text-muted">Included</span>
+              </label>
+              <label class="flex min-h-[44px] cursor-pointer items-center justify-between gap-3 rounded-[10px] border border-divider px-3 py-2 text-sm">
+                <span class="flex items-center gap-3"><input type="radio" name="delivery" class="h-4 w-4 accent-espresso">Rush &middot; 2 days after payment</span><span class="text-muted">+50% &middot; $85</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <p class="flex items-start gap-2 rounded-[10px] bg-secondary px-3 py-2 text-xs text-muted">
+            <iconify-icon icon="lucide:info" width="14" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>
+            Percentages apply to the video, set and extras above them, not to each other. Maya confirms delivery dates when she approves.
+          </p>
+        </div>
+        <p class="mt-3 text-xs text-muted">Every amount shown is the server&rsquo;s quote for that choice on the current draft. The disabled resale option keeps its reason visible and is linked with <code class="font-mono">aria-describedby</code>.</p>
+      </div>
+
+      <!-- ============================================================
+           C. SCENE CARD TOTAL WITH PERCENTAGE LINES
+           ============================================================ -->
+      <div>
+        <p class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">C · Scene Card and Review: personalised, exclusive</p>
+        <div class="overflow-hidden rounded-[12px] border border-divider bg-panel">
+          <div class="space-y-4 border-b border-divider p-5 sm:p-6">
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">3-minute video</span><span class="font-medium">$90</span></div>
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">Vintage Lounge</span><span class="font-medium">$35</span></div>
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">Detailed greeting</span><span class="font-medium">$20</span></div>
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">Says &ldquo;Sam&rdquo; once</span><span class="text-muted">Included</span></div>
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">4K quality</span><span class="font-medium">$25</span></div>
+            <div class="flex justify-between gap-4 border-t border-dashed border-divider pt-4 text-sm text-muted"><span>Subtotal</span><span>$170</span></div>
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">Just for you (+50%)</span><span class="font-medium">$85</span></div>
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">Standard delivery</span><span class="text-muted">Included</span></div>
+          </div>
+          <div class="bg-secondary p-5 sm:p-6">
+            <div class="flex items-end justify-between">
+              <span class="text-sm font-medium uppercase tracking-wider text-muted">Estimated total</span>
+              <span class="font-serif text-2xl font-bold">$255</span>
+            </div>
+            <p class="mt-3 flex items-start gap-2 text-xs text-muted">
+              <iconify-icon icon="lucide:lock" width="14" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>
+              Only you get this video. Maya won&rsquo;t sell it to anyone else.
+            </p>
+          </div>
+        </div>
+
+        <p class="mb-4 mt-10 font-mono text-xs uppercase tracking-wider text-muted">C2 · Not personalised, resale allowed</p>
+        <div class="overflow-hidden rounded-[12px] border border-divider bg-panel">
+          <div class="space-y-4 border-b border-divider p-5 sm:p-6">
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">3-minute video</span><span class="font-medium">$90</span></div>
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">Backstage</span><span class="font-medium">$15</span></div>
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">No name</span><span class="text-muted">Included</span></div>
+            <div class="flex justify-between gap-4 text-sm"><span class="font-medium">Maya may resell it later</span><span class="text-muted">Included</span></div>
+          </div>
+          <div class="bg-secondary p-5 sm:p-6">
+            <div class="flex items-end justify-between">
+              <span class="text-sm font-medium uppercase tracking-wider text-muted">Estimated total</span>
+              <span class="font-serif text-2xl font-bold">$105</span>
+            </div>
+            <p class="mt-3 flex items-start gap-2 rounded-[10px] border border-askborder bg-askbg px-3 py-2 text-xs text-askink">
+              <iconify-icon icon="lucide:store" width="14" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>
+              Maya may sell this video to other fans later. Choose &ldquo;Just for you&rdquo; to keep it private.
+            </p>
+          </div>
+        </div>
+        <p class="mt-3 text-xs text-muted">The resale notice shows on the Scene Card and again on Review, before sending. It is never collapsed.</p>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         D. THE FAN'S OWN SCRIPT
+         ============================================================ -->
+    <section aria-labelledby="d-label" class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+      <div>
+        <p id="d-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">D · Writing your own script</p>
+        <div class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
+          <div class="mb-1 flex items-start justify-between gap-4">
+            <h3 class="font-sans text-base font-semibold">Your own script</h3>
+            <span class="shrink-0 text-sm font-medium">$30</span>
+          </div>
+          <p class="mb-4 text-sm text-muted">Write the lines you&rsquo;d like Maya to say. She&rsquo;ll read it before she approves, and may ask to change parts.</p>
+          <label for="script" class="sr-only">Your own script</label>
+          <textarea id="script" rows="7" class="w-full resize-y rounded-[12px] border border-divider bg-cream px-4 py-3 text-base leading-relaxed focus-ring">Hi Sam. I&rsquo;ve been thinking about you all week. Sit back, get comfortable, and let me show you what I picked out for tonight&hellip;</textarea>
+          <div class="mt-2 flex items-center justify-between text-xs text-muted">
+            <span class="inline-flex items-center gap-1.5"><iconify-icon icon="lucide:cloud-check" width="14" class="text-okink" aria-hidden="true"></iconify-icon>Saved to your account</span>
+            <span>128 / 3,000</span>
+          </div>
+          <p class="mt-4 flex items-start gap-2 rounded-[10px] bg-secondary px-3 py-2 text-xs text-muted">
+            <iconify-icon icon="lucide:shield-check" width="14" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>
+            Maya&rsquo;s limits apply to your script too. Because it&rsquo;s your writing, only you get this video.
+          </p>
+        </div>
+      </div>
+      <div class="space-y-3 text-sm text-muted lg:pt-10">
+        <p class="font-semibold text-espresso">Rules for this state</p>
+        <ul class="list-disc space-y-2 pl-5">
+          <li>The text box appears only when &ldquo;Your own script&rdquo; is on the Scene Card.</li>
+          <li>It is checked like a custom request on every save. Blocks and flags use design 13 states C2, C3, D1 and D2.</li>
+          <li>The AI Director never rewrites, shortens or &ldquo;improves&rdquo; the fan&rsquo;s script.</li>
+          <li>Removing the script item asks before discarding the text.</li>
+          <li>The creator sees the whole script on the request detail, above the Scene Card.</li>
+        </ul>
+      </div>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>
