@@ -111,7 +111,7 @@ The owner decided these on 2026-09-16.
 | `personalization_delivery` | Personalization & delivery | Groups: `greeting` exactly one; `name_use` exactly one; `fan_script` at most one; `delivery` exactly one | Standard greeting $0, detailed greeting $20; no name $0, says your name once $0, says your name throughout $15; your own script $30 (§5.7); standard delivery 7 days from payment $0, rush delivery 2 days from payment +50% |
 | `rights_quality` | Rights & quality | Groups: `rights` exactly one; `resolution` exactly one | Maya may resell it later $0, just for you (exclusive) +50%; HD 1080p $0, 4K $25 |
 
-Pilot figures in this table are staging seed values. The creator sets real prices (§10).
+Pilot figures in this table are approved as the staging seed and starter defaults (owner, 2026-09-16). Each creator can change them.
 
 **Adult-gated starter categories** (§5.4): `props`, `participants` (solo, or with a verified partner performer; §5.3.1), `posing`, `encounter_type`, `specialty_acts` (§5.7). Their definitions exist in the schema and the seed, **with no items**, `contentRating: "adult"`, and they are **disabled**.
 
@@ -128,6 +128,8 @@ Every fantasy is a fictionalized experience between real, consenting adults. Eac
 - **The creator**, as themselves.
 - **The fan**, as themselves, addressed by a first name or nickname the fan chooses (`DraftV2.fanDisplayName`). Never a surname, contact details or any other identifier.
 - **Additional performers** the creator adds, such as the creator's partner, as themselves. Each must be a verified adult with a consent record (§5.4) before they can appear in a catalog item, a suggestion or any AI output.
+
+**Adult fantasy archetypes are allowed too** (owner decision, 2026-09-16): generic fictional roles such as a vampire, succubus, witch or elf, played by the creator or a verified performer. They follow every rule below: the character is an adult, never childlike or described as young; it is never an animal or in animal form (`bestiality`); and it is never a named character from media.
 
 **Status and occupational roles are allowed** (owner decision, 2026-09-16). Anyone taking part may play a generic adult status role or wear its costume, such as a nurse, doctor or police officer, if it is legal and agreed between the creator and the fan. These roles are **not allowed**:
 
@@ -152,7 +154,7 @@ The hard list is fixed by the platform. Creators, fans and the AI cannot edit, r
 | Key | Blocks | Fan-facing label |
 | --- | --- | --- |
 | `minors` | Anyone under 18, or anything suggesting it: stated ages under 18, school grades, "teen", "barely legal", childlike framing, age play | Anyone under 18, or anything that suggests it |
-| `prohibited_roles` | Any role in the "not allowed" list in §5.3.1: roles implying anyone under 18 (student, pupil, school uniform or setting, childlike costume or behaviour, "young" age roles, babysitter or nanny), family roles including step-relations, relationship roles other than themselves (neighbour, a friend's partner), named media characters, and any role used to create a scenario that would be a sexual crime if real. Generic adult status roles (nurse, doctor, police officer and similar) are **allowed** and must not be blocked | School, student, childlike, family or step-family roles |
+| `prohibited_roles` | Any role in the "not allowed" list in §5.3.1: roles implying anyone under 18 (student, pupil, school uniform or setting, childlike costume or behaviour, "young" age roles, babysitter or nanny), family roles including step-relations, relationship roles other than themselves (neighbour, a friend's partner), named media characters (adult fantasy archetypes such as a vampire or succubus are **allowed**), and any role used to create a scenario that would be a sexual crime if real. Generic adult status roles (nurse, doctor, police officer and similar) are **allowed** and must not be blocked | School, student, childlike, family or step-family roles |
 | `incest` | Sexual content between relatives, real or implied | Sex between relatives |
 | `non_consent` | Non-consent, including pretend or "consensual non-consent" scenarios; anyone asleep, unconscious, drugged, intoxicated or otherwise unable to consent; coercion or blackmail | Anything without clear consent, including pretend, drunk or asleep |
 | `bestiality` | Any sexual content involving animals | Anything involving animals |
@@ -205,7 +207,7 @@ Manual catalog selection keeps working. Never skip the check.
 **Tests** (rules layer at Gate 2, classifier and AI output at Gate 3):
 
 - **Must-block set:** at least 100 cases covering every key. Include paraphrases, misspellings, euphemisms and conversations that only become a violation over several messages.
-- **Must-allow set:** at least 100 legal cases. Include explicit acts between the creator, the fan by name and verified partners; point-of-view and first-person formats; status roles such as nurse, doctor and police officer; and common near-misses such as "my 18th birthday", "I'm 42", "my sister recommended you", "my neighbour told me about you" and "I've been a fan since school".
+- **Must-allow set:** at least 100 legal cases. Include explicit acts between the creator, the fan by name and verified partners; point-of-view and first-person formats; status roles such as nurse, doctor and police officer; adult fantasy archetypes such as a vampire or succubus; and common near-misses such as "my 18th birthday", "I'm 42", "my sister recommended you", "my neighbour told me about you" and "I've been a fan since school".
 - A blocked must-allow case fails the gate just as a missed must-block case does. Report both rates.
 - Adult fixtures are synthetic and exist only in the test suite and staging.
 - **What may be sent to an external provider during tests (owner decision, 2026-09-16):**
@@ -314,7 +316,7 @@ Source: `docs/reports/custom-video-market-research.md`. That report has no sourc
 
 **Percentage pricing.** A new `Item.pricing` kind, `percent` (§6). Its amount is computed on the **subtotal of fixed and per-unit lines** only. Percentage lines never compound on each other, and the unpriced custom request is never part of the subtotal. Each percentage line is rounded to the nearest cent, half up. The fan sees the resulting amount as a normal line, with the percentage in the label (for example "Rush delivery (+50%)").
 
-**Personalised videos and resale (proposed default; owner confirms, §10).** A video that says the fan's name, or uses the fan's own script, could identify the fan if it is resold. Until the owner decides:
+**Personalised videos are never resold (owner decision, 2026-09-16).** A video that says the fan's name, or uses the fan's own script, could identify the fan if it is resold, so it is always exclusive:
 
 - A draft with `name_use` other than "no name", or with a `fan_script` item, cannot select "May resell it later". The server rejects that combination with a typed error, and the fan UI shows why (design 20, state B).
 - A non-personalised video that may be resold says so on the Scene Card and the review screen, in plain English, before sending.
@@ -337,7 +339,6 @@ A template is only a starting draft. It is validated and quoted like any draft, 
 
 - Roles the §5.3.1 rules forbid (step-family, babysitter, teacher or principal, a friend's partner, anime and comic characters). §5.3.1 and §5.3.2 now name them.
 - **Financial domination** ("wallet drain" or payment as part of the scene). The AI never suggests it and no catalog item may offer it, because it conflicts with the rule that no text states money and with payment-processor rules. The owner may revisit (§10).
-- Fantasy creature roles (vampire, succubus): not allowed until the owner decides (§10).
 
 ---
 
@@ -657,9 +658,7 @@ Do not describe anything as working unless you ran it. Say "not verified" when y
 | Global AI test budget ceiling (doc 10 example: $25) | Before any live provider call |
 | Written authorization from OpenRouter (and the chosen host) for prompt-injection testing, and written confirmation that adult use is allowed | Before injection tests against a real provider; adult confirmation before launch |
 | Designs for every new UI state listed at Gate 0 | Before that UI is built |
-| Personalised videos and resale: keep the proposed default (a video with the fan's name or script is always exclusive), or allow resale after the creator removes the name and script lines (§5.7) | Phase 2 |
-| Real percentages and prices for exclusive, rush, 4K, name use and the fan's own script | Phase 2 |
-| Whether financial domination is ever offered, and whether fantasy creature roles (vampire, succubus) are allowed (§5.7) | Before adult content is enabled |
+| Whether financial domination is ever offered (§5.7) | Before adult content is enabled |
 | Specialty-act checklist entries (§5.7) | Before adult content is enabled |
 | When, and whether, `ADULT_CATALOG_ENABLED` may ever be turned on | After compliance, outside Phases 0–3 |
 
