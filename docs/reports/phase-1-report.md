@@ -159,7 +159,8 @@ other methods all write nothing.
   truncated, re-versioned and padded tokens.
 - **Rotation:** the `v1` prefix lets a second key be accepted during a changeover.
 
-**One behaviour differs from Astra's report, for the owner to confirm.** Astra
+**One behaviour differs from Astra's report. Confirmed by the owner on 2026-09-17**
+(doc 11 §5.6 item 18). Astra
 bound a token to one grant, so an old link couldn't withdraw a later
 resubscription. This rebuild binds the token to the fan and creator, so **any
 unsubscribe link means "stop" for that pair**, including after a resubscription.
@@ -188,6 +189,10 @@ criterion is now tested as tenant isolation on the fan draft routes:
 `GET /api/creator/me` remains, so the TOTP and `fva` enforcement is tested on a
 real creator route. Creator review of submitted cards is Phase 4.
 
+**Confirmed by the owner on 2026-09-17** (doc 11 §5.6 item 18): the removal, the
+drafts path `/api/creators/:creatorId/drafts/:draftId`, and the removal of the
+unsubscribe-link route.
+
 ## 6. Sign-up detection (review item 7)
 
 The step shows only if all of these hold:
@@ -215,7 +220,26 @@ the approved design 16 when frontend integration resumes.
 
 ## 8. Owner setup still needed
 
-All of it follows `worker/README.md` ("Owner provisioning" and "Staging checklist"):
+All of it follows `worker/README.md` ("Owner provisioning" and "Staging checklist").
+Staging runs on workers.dev with a Clerk development instance (doc 11 §5.6 item 19).
+
+**Added 2026-09-17 for running the checklist.** The frontend doesn't call the API yet, so:
+
+- `worker/scripts/staging-console.js` gives `fds.*` helpers to paste into the browser console on staging;
+- `worker/scripts/issue-unsubscribe-token.mjs` makes a test link token, with the key read from the environment;
+- `worker/seeds/staging-synthetic.sql` adds two synthetic creators with published catalogs.
+
+A new worker test proves the script's tokens match `issueUnsubscribeToken()` exactly: 82/82 tests.
+Checked locally with `wrangler dev`:
+
+- the seed applied, and `smoke.mjs` passed 7/7;
+- in a browser, the console helper made two unsubscribe GETs (`confirm`, no row) and
+  two POSTs (`done`, then `already_unsubscribed`), writing exactly one
+  `unsubscribe_page` row, and a tampered token returned `invalid`.
+
+The signed-in helpers are **not verified**, because no Clerk server keys exist on this machine.
+
+Still to do:
 
 - Wrangler login, D1 databases, real origins and issuer.
 - The three secrets, set with `wrangler secret put`.
