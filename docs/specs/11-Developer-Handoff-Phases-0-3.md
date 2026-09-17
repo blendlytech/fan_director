@@ -346,6 +346,17 @@ A template is only a starting draft. It is validated and quoted like any draft, 
 
 - Roles the §5.3.1 rules forbid (step-family, babysitter, teacher or principal, a friend's partner, anime and comic characters). §5.3.1 and §5.3.2 now name them.
 
+### 5.8 Email news opt-in (owner decision, 2026-09-16)
+
+Creators will later be able to send fans a regular news email (live show times, new videos, when custom videos open). **Sending emails is out of scope for Phases 0–3** and will get its own spec. **Collecting consent starts now**, so the list grows from the first fan sign-up.
+
+- **Where:** a separate, **unticked, optional** checkbox on fan sign-up, per creator: "Email me [creator]'s news" (design 16, state A). It is never bundled with the terms checkbox and never required to continue. Fans can change it later in account settings (design 16, state A3).
+- **Proof of consent:** the server records it, not the browser and not the auth provider's client-writable metadata. Store the fan, the creator, the email address it applies to, the exact wording shown (by version), the source (`signup`, `settings`, `unsubscribe_page`), the timestamp, and the IP address and user agent. Withdrawal is recorded the same way; nothing is deleted, so the history proves what was agreed and when.
+- **Clerk:** Clerk's prebuilt sign-up modal can't show this checkbox. Use a custom sign-up form, or a one-time step straight after sign-up that the fan sees before anything else. In both cases the checkbox is unticked and skippable.
+- **Unsubscribe must work in one click** from any future news email, without signing in (design 16, A3). Build the endpoint and its signed token now, with tests, even though nothing sends yet.
+- **Promises in the wording are rules for the future sender:** a discreet sender name, nothing explicit in subject lines or email bodies (explicit content stays behind a link to the age-gated site), and an easy unsubscribe.
+- Emails about the fan's own requests and deliveries are service messages, not marketing, and don't depend on this consent.
+
 ---
 
 ## 6. Target data model (extends doc 10 §5)
@@ -431,6 +442,16 @@ interface BoundaryFlag {           // set by the server check; the AI's own flag
   mode: 'ask_me'                   // a hard_no is never flagged: it is removed or blocked
 }
 
+interface MarketingConsent {       // append-only history (§5.8); the latest row per fan + creator is current
+  id: string; fanId: string; creatorId: string
+  email: string                    // the address the consent applies to
+  status: 'subscribed' | 'unsubscribed'
+  wordingVersion: string           // the exact checkbox text shown, stored by version
+  source: 'signup' | 'settings' | 'unsubscribe_page'
+  ip: string; userAgent: string
+  createdAt: string
+}
+
 interface DraftV2 {                // replaces today's { setting, focus, extraMinute, notes }
   id: string; revision: number     // increments on every accepted change
   creatorId: string; catalogVersionId: string
@@ -514,9 +535,10 @@ interface Quote {                  // computed by the server only
 
 ### Phase 1: Backend foundation
 
-- A staging Worker and D1 schema/migrations for `creator`, `catalog`, `catalog_version`, `fan_session`, `draft`, `ai_request`, `audit_event`, `compliance_status`, `performer` and `safety_case`.
+- A staging Worker and D1 schema/migrations for `creator`, `catalog`, `catalog_version`, `fan_session`, `draft`, `ai_request`, `audit_event`, `compliance_status`, `performer`, `safety_case` and `marketing_consent`.
 - Auth as approved, following design 16: fans sign in by email link (or email and password, if that's the approved choice), creators always use a second factor, and creator accounts are created by invitation in the pilot. Tenant authorization on every private endpoint; CSRF protection suited to the auth choice; input size limits.
 - Save and reload of a `DraftV2` scoped to its owner.
+- The email news opt-in (§5.8): consent recorded on sign-up and in settings, and the one-click unsubscribe endpoint with a signed token. Nothing is emailed.
 - Secrets set by the owner. Prove none appear in the built frontend bundle (scan `dist/`).
 
 **Complete when:** two test creators cannot read each other's drafts, one fan cannot read another fan's draft by guessing its id, save/reload works in staging, and every existing test still passes.
@@ -666,6 +688,8 @@ Do not describe anything as working unless you ran it. Say "not verified" when y
 | Designs for every new UI state listed at Gate 0 | Before that UI is built |
 | Payment processor's position on financial domination content (§5.7) | Before that item is enabled |
 | Specialty-act checklist entries (§5.7) | Before adult content is enabled |
+| Counsel: email consent wording and record-keeping for the target countries (§5.8) | Before any news email is sent |
+| News email feature: sender, frequency, content and whether it is part of a creator subscription (future spec) | After the pilot |
 | When, and whether, `ADULT_CATALOG_ENABLED` may ever be turned on | After compliance, outside Phases 0–3 |
 
 ---

@@ -45,6 +45,9 @@ tailwind.config = {
     - "[Verification partner]" is a placeholder for the partner's name.
     Copy rules: never claim a time, a retention promise or a result the server
     hasn't returned. Say "sent" only after the server sent it.
+    Email opt-in (doc 11 §5.8, owner decision 2026-09-16): a separate, unticked, optional
+    checkbox, never bundled with the terms. It is shown only to fans not already subscribed
+    to this creator. Consent is recorded by the server with the exact wording shown.
   -->
 
   <header class="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-divider">
@@ -90,6 +93,14 @@ tailwind.config = {
               <span>I&rsquo;m 18 or older, and I agree to the <a href="#terms" class="underline underline-offset-4 focus-ring">terms of service</a> and <a href="#privacy" class="underline underline-offset-4 focus-ring">privacy policy</a>.</span>
             </label>
 
+            <label class="mb-6 flex items-start gap-3 rounded-[12px] border border-divider bg-cream p-4 text-sm">
+              <input type="checkbox" aria-describedby="news-hint" class="mt-0.5 h-4 w-4 accent-espresso">
+              <span>
+                <span class="font-medium">Email me Maya&rsquo;s news</span> <span class="text-muted">(optional)</span>
+                <span id="news-hint" class="mt-1 block text-muted">Live show times, new videos and when custom videos open. Discreet sender name, nothing explicit in your inbox. Unsubscribe anytime.</span>
+              </span>
+            </label>
+
             <button type="button" class="flex w-full min-h-[48px] items-center justify-center gap-2 rounded-[12px] bg-espresso text-cream px-6 text-base font-medium shadow-md hover:bg-black transition-colors duration-160 focus-ring">
               Email me a sign-in link
               <iconify-icon icon="lucide:arrow-right" width="18" aria-hidden="true"></iconify-icon>
@@ -133,6 +144,37 @@ tailwind.config = {
           <a href="#sign-in" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Get a new link</a>
         </div>
       </div>
+    </section>
+
+    <!-- A3. Email news: change it later (account menu and the delivery page) -->
+    <section aria-labelledby="a3-label">
+      <p id="a3-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A3 · Maya&rsquo;s news, later: account settings</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="rounded-[12px] border border-divider bg-panel p-6">
+          <h2 class="mb-4 text-2xl font-semibold tracking-tight">Email</h2>
+          <div class="flex items-start justify-between gap-4">
+            <div>
+              <p class="text-sm font-medium">Maya&rsquo;s news</p>
+              <p class="mt-1 text-sm text-muted">Live show times, new videos and when custom videos open.</p>
+              <p class="mt-2 text-xs text-muted">Subscribed on Sep 16, 2026</p>
+            </div>
+            <label class="inline-flex min-h-[44px] shrink-0 cursor-pointer items-center">
+              <input type="checkbox" checked class="sr-only" aria-label="Email me Maya's news">
+              <span class="relative inline-flex h-6 w-11 items-center rounded-full bg-espresso" aria-hidden="true"><span class="absolute left-6 h-5 w-5 rounded-full bg-panel"></span></span>
+            </label>
+          </div>
+          <p class="mt-4 border-t border-divider pt-4 text-xs text-muted">Emails about your requests and deliveries aren&rsquo;t marketing, so they keep coming either way.</p>
+        </div>
+        <div role="status" class="rounded-[12px] border border-divider bg-panel p-6">
+          <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
+            <iconify-icon icon="lucide:mail-x" width="22" class="text-deeprose" aria-hidden="true"></iconify-icon>
+          </div>
+          <h2 class="mb-2 text-2xl font-semibold tracking-tight">You&rsquo;re unsubscribed</h2>
+          <p class="mb-4 text-sm leading-relaxed">You won&rsquo;t get Maya&rsquo;s news any more. Your account, Scene Cards and videos aren&rsquo;t affected.</p>
+          <button type="button" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Subscribe again</button>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-muted">The unsubscribed page is also where the one-click link in every news email lands; it works without signing in. &ldquo;Subscribed on&rdquo; shows the server&rsquo;s recorded date only.</p>
     </section>
 
     <!-- ============================================================

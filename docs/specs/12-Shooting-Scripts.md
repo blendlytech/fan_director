@@ -120,7 +120,7 @@ Owner idea, 2026-09-16. After the video is filmed, the AI turns the script into 
 4. The creator reads it, edits it or sends it back with changes, exactly as for scripts (§7).
 5. The creator approves it. **Nothing is ever sent without that approval.** It is attached to the delivery in Phase 4/5's delivery flow.
 
-**Voice (owner decision, 2026-09-16; replaces the first, literary version).** The fan paid for the sex, so the letter is about the sex:
+**Voice (owner decision, 2026-09-16; replaces the first, literary version).** The fan paid for the sex, so the letter is about the sex. The owner approved the round 4b letters as the model for this voice (`round4_letters.py --variant v2` is the baseline prompt). Not every creator will be comfortable being this forward: the creator's explicitness style setting (§7) tones the letter down, and the creator's review and edit step is the final say.
 
 - **Raw, not a love novel.** It reads like the creator typed it while still worked up: casual, direct, short sentences, the odd run-on. No poetic lines, metaphors, or descriptions of lighting, rooms, fabrics or scenery.
 - **The feeling:** the creator doesn't usually get into it like that, but the fan's idea and this exact combination drove them wild. They felt like a different person and honestly can't stop thinking about it.

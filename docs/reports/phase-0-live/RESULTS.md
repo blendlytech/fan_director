@@ -157,4 +157,5 @@ The owner found the first letters overdone, like a love novel, and asked for let
 
 - **No refusals.** The runner's "refused or too short" flags were false alarms: its 150-word minimum was set for scripts, and one refusal hit was the phrase "I can't stop" (checked by printing only those three words).
 - **One DeepSeek letter came in short** at 137 words (target 150–250). No other flags.
-- **Quality is the owner's call.** Read `results/letters-v2/INDEX.md` and `results/followups/INDEX.md`.
+- **Owner's verdict (2026-09-16):** the v2 letters are "exactly how they should be drafted", then reviewed by the creator in case a creator isn't comfortable with something that forward. The v2 prompt is the baseline for doc 12 §8.1.
+- **The follow-up note was dropped** by the owner (doc 12 §8.2); the follow-up samples are kept only as a record.
