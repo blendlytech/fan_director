@@ -211,7 +211,7 @@
                 <!-- Choice Cards (Large) -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                   <!-- Selected Choice -->
-                  <button id="choice-vintage-btn" class="group relative rounded-[12px] bg-panel border-2 border-[var(--color-dusty-rose)] p-3 text-left focus-ring shadow-sm overflow-hidden flex flex-col sm:block">
+                  <button data-go="17-ai-director-live-states.html#catalog" data-note="picking a setting updates the Scene Card with the server’s new estimate." id="choice-vintage-btn" class="group relative rounded-[12px] bg-panel border-2 border-[var(--color-dusty-rose)] p-3 text-left focus-ring shadow-sm overflow-hidden flex flex-col sm:block">
                     <div class="absolute top-2 right-2 z-10 text-[var(--color-text-primary)] bg-[var(--color-dusty-rose)] rounded-full w-5 h-5 flex items-center justify-center animate-bounce-in">
                       <iconify-icon icon="lucide:check" class="text-xs"></iconify-icon>
                     </div>
@@ -226,7 +226,7 @@
                   </button>
                   
                   <!-- Unselected Choices -->
-                  <button id="choice-floral-btn" class="group rounded-[12px] bg-panel border border-rule hover:border-[var(--color-text-muted)] hover:shadow-md p-3 text-left focus-ring transition-all duration-200 flex flex-col sm:block">
+                  <button data-go="17-ai-director-live-states.html#catalog" data-note="picking a setting updates the Scene Card with the server’s new estimate." id="choice-floral-btn" class="group rounded-[12px] bg-panel border border-rule hover:border-[var(--color-text-muted)] hover:shadow-md p-3 text-left focus-ring transition-all duration-200 flex flex-col sm:block">
                     <div class="h-20 sm:h-24 bg-secondary rounded-lg mb-3 border border-rule overflow-hidden">
                       <img src="https://images.unsplash.com/photo-1563241527-2004cb630db0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Floral Studio" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
@@ -237,7 +237,7 @@
                     </div>
                   </button>
 
-                  <button id="choice-backstage-btn" class="group rounded-[12px] bg-panel border border-rule hover:border-[var(--color-text-muted)] hover:shadow-md p-3 text-left focus-ring transition-all duration-200 flex flex-col sm:block">
+                  <button data-go="17-ai-director-live-states.html#catalog" data-note="picking a setting updates the Scene Card with the server’s new estimate." id="choice-backstage-btn" class="group rounded-[12px] bg-panel border border-rule hover:border-[var(--color-text-muted)] hover:shadow-md p-3 text-left focus-ring transition-all duration-200 flex flex-col sm:block">
                     <div class="h-20 sm:h-24 bg-secondary rounded-lg mb-3 border border-rule overflow-hidden">
                       <img src="https://images.unsplash.com/photo-1517457224219-c60317e3df1c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80" alt="Backstage" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                     </div>
@@ -280,7 +280,7 @@
                 <!-- Visual Choices -->
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mt-2">
                   <!-- Selected Option -->
-                  <button id="choice-richer-setting-btn" class="rounded-[12px] bg-[rgba(228,164,189,0.1)] border-2 border-[var(--color-text-primary)] p-4 text-left cursor-pointer focus-ring shadow-sm relative overflow-hidden transition-all duration-200">
+                  <button data-go="17-ai-director-live-states.html#c-label" id="choice-richer-setting-btn" class="rounded-[12px] bg-[rgba(228,164,189,0.1)] border-2 border-[var(--color-text-primary)] p-4 text-left cursor-pointer focus-ring shadow-sm relative overflow-hidden transition-all duration-200">
                     <div class="absolute top-3 right-3 text-primary animate-bounce-in">
                       <iconify-icon icon="lucide:check-circle-2" class="text-xl"></iconify-icon>
                     </div>
@@ -297,7 +297,7 @@
                   </button>
                   
                   <!-- Unselected Option -->
-                  <button id="choice-longer-video-btn" class="rounded-[12px] bg-panel border border-rule hover:border-[var(--color-text-muted)] hover:shadow-md p-4 text-left cursor-pointer focus-ring transition-all duration-200">
+                  <button data-go="17-ai-director-live-states.html#c-label" id="choice-longer-video-btn" class="rounded-[12px] bg-panel border border-rule hover:border-[var(--color-text-muted)] hover:shadow-md p-4 text-left cursor-pointer focus-ring transition-all duration-200">
                     <div class="flex items-center gap-3 mb-2">
                       <div class="w-10 h-10 rounded-full bg-secondary flex items-center justify-center border border-rule">
                         <iconify-icon icon="lucide:clock" class="text-lg text-muted"></iconify-icon>
@@ -346,16 +346,16 @@
               <textarea class="w-full bg-transparent border-0 p-4 sm:p-5 text-sm sm:text-base resize-none focus:ring-0 placeholder:text-[var(--color-text-muted)] min-h-[100px]" placeholder="Tell the Director what you have in mind or ask for suggestions..."></textarea>
               <div class="px-3 py-3 sm:px-4 bg-secondary border-t border-rule flex items-center justify-between">
                 <div class="flex items-center gap-1 sm:gap-2">
-                  <button id="btn-suggest-idea" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-muted hover:text-primary hover:bg-panel rounded-lg border border-transparent hover:border-rule transition-colors focus-ring">
+                  <button data-go="17-ai-director-live-states.html#a-label" id="btn-suggest-idea" class="hidden sm:flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-medium text-muted hover:text-primary hover:bg-panel rounded-lg border border-transparent hover:border-rule transition-colors focus-ring">
                     <iconify-icon icon="lucide:wand-2"></iconify-icon>
                     Suggest idea
                   </button>
-                  <button id="btn-undo" class="p-2 sm:px-3 sm:py-1.5 text-[11px] font-medium text-muted hover:text-primary hover:bg-panel rounded-lg border border-transparent hover:border-rule transition-colors focus-ring flex items-center gap-1.5">
+                  <button data-go="17-ai-director-live-states.html#c-label" id="btn-undo" class="p-2 sm:px-3 sm:py-1.5 text-[11px] font-medium text-muted hover:text-primary hover:bg-panel rounded-lg border border-transparent hover:border-rule transition-colors focus-ring flex items-center gap-1.5">
                     <iconify-icon icon="lucide:undo-2"></iconify-icon>
                     <span class="hidden sm:inline">Undo</span>
                   </button>
                 </div>
-                <button id="btn-send-message" class="h-[44px] sm:h-10 px-6 sm:px-8 rounded-[12px] bg-[var(--color-text-primary)] text-[var(--color-bg)] text-sm font-medium hover:bg-black transition-colors focus-ring flex items-center gap-2 shadow-sm">
+                <button data-go="17-ai-director-live-states.html#a-label" id="btn-send-message" class="h-[44px] sm:h-10 px-6 sm:px-8 rounded-[12px] bg-[var(--color-text-primary)] text-[var(--color-bg)] text-sm font-medium hover:bg-black transition-colors focus-ring flex items-center gap-2 shadow-sm">
                   Send
                   <iconify-icon icon="lucide:send" class="text-xs"></iconify-icon>
                 </button>
@@ -378,7 +378,7 @@
                     <span class="w-1.5 h-1.5 rounded-full bg-dusty-rose mr-1.5"></span>
                     Status: Draft
                   </span>
-                  <button id="btn-save-idea-desktop" class="text-xs text-muted hover:text-primary font-medium focus-ring flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-panel">
+                  <button data-go="18-saved-and-stale-quote.html#a-label" data-note="drafts now save on every change; design 18 replaces this button." id="btn-save-idea-desktop" class="text-xs text-muted hover:text-primary font-medium focus-ring flex items-center gap-1.5 px-2 py-1 rounded-md hover:bg-panel">
                     <iconify-icon icon="lucide:bookmark"></iconify-icon>
                     Save idea
                   </button>
@@ -396,7 +396,7 @@
                   <div>
                     <div class="flex items-center gap-2 mb-1">
                       <h4 class="text-sm font-medium">3-Minute Video</h4>
-                      <button id="edit-video-btn" class="w-6 h-6 rounded flex items-center justify-center bg-secondary text-muted hover:text-primary opacity-0 group-hover:opacity-100 transition-all focus-ring">
+                      <button data-go="17-ai-director-live-states.html#catalog" id="edit-video-btn" class="w-6 h-6 rounded flex items-center justify-center bg-secondary text-muted hover:text-primary opacity-0 group-hover:opacity-100 transition-all focus-ring">
                         <iconify-icon icon="lucide:pencil" class="text-[10px]"></iconify-icon>
                       </button>
                     </div>
@@ -412,7 +412,7 @@
                         Added
                       </div>
                       <h4 class="text-sm font-medium">Vintage Lounge Setup</h4>
-                      <button id="edit-setup-btn" class="w-6 h-6 rounded flex items-center justify-center bg-secondary text-muted hover:text-primary opacity-0 group-hover:opacity-100 transition-all focus-ring">
+                      <button data-go="17-ai-director-live-states.html#catalog" id="edit-setup-btn" class="w-6 h-6 rounded flex items-center justify-center bg-secondary text-muted hover:text-primary opacity-0 group-hover:opacity-100 transition-all focus-ring">
                         <iconify-icon icon="lucide:pencil" class="text-[10px]"></iconify-icon>
                       </button>
                     </div>
@@ -428,7 +428,7 @@
                         Added
                       </div>
                       <h4 class="text-sm font-medium">Personalized Greeting</h4>
-                      <button id="edit-greeting-btn" class="w-6 h-6 rounded flex items-center justify-center bg-secondary text-muted hover:text-primary opacity-0 group-hover:opacity-100 transition-all focus-ring">
+                      <button data-go="17-ai-director-live-states.html#catalog" id="edit-greeting-btn" class="w-6 h-6 rounded flex items-center justify-center bg-secondary text-muted hover:text-primary opacity-0 group-hover:opacity-100 transition-all focus-ring">
                         <iconify-icon icon="lucide:pencil" class="text-[10px]"></iconify-icon>
                       </button>
                     </div>
@@ -516,5 +516,140 @@
     </div>
 
   </div>
+<!-- DESIGN WALK-THROUGH (same block in every design). Buttons and links jump to the
+     state they lead to, here or in another design. Nothing is saved, sent or charged.
+     data-go="#id" or "NN-file.html#id" sets the destination; data-note explains an
+     action whose result isn't drawn. On p.superdesign.dev, draft links work as before. -->
+<style>
+  [id] { scroll-margin-top: 100px; }
+  .walk-flash { outline: 3px solid #84485D !important; outline-offset: 6px; border-radius: 12px; }
+  #walk-note { position: fixed; left: 50%; bottom: 16px; z-index: 60; transform: translateX(-50%); width: max-content; max-width: calc(100% - 32px); padding: 12px 16px; border-radius: 12px; background: #302720; color: #FDF8F3; font: 400 14px/1.45 Inter, sans-serif; box-shadow: 0 12px 40px rgba(0,0,0,.2); }
+  #walk-note[hidden] { display: none; }
+  @media print { #walk-note, #walk-menu { display: none !important; } }
+</style>
+<script>
+(function () {
+  var F = {
+    entrance: '02-boutique-entrance-connected.html', dashboard: '03-creator-dashboard-linked-navigation.html',
+    director: '04-linked-ai-director-workspace.html', detail: '05-creator-detail-modal-connected-navigation.html',
+    ask: '06-linked-ask-question-modal.html', review: '07-linked-review-scene-card-page.html',
+    sent: '08-send-confirmation.html', decline: '09-decline-confirmation-modal-with-navigation.html',
+    saved: '10-saved-ideas.html'
+  };
+  // href="#name" links that point at an app route rather than this page.
+  var ROUTES = {
+    home: F.entrance, collection: F.entrance, studio: F.director, saved: F.saved,
+    'sign-in': '16-sign-in.html#a-label', 'creator-sign-in': '16-sign-in.html#c-label',
+    catalog: '17-ai-director-live-states.html#catalog', rules: '13-creator-limits.html#limits-panel',
+    'limits-panel': '13-creator-limits.html#limits-panel', 'custom-request': '19-custom-request-pending.html#a-label',
+    requests: F.dashboard, 'creator-requests': F.dashboard, request: F.detail
+  };
+  // Superdesign draft links, by the first block of the draft id.
+  var DRAFTS = {
+    '048b6b8a': F.director, '82277dd9': F.entrance, '48723685': F.review, 'a98b81cb': F.sent,
+    'c6e6d108': F.detail, '2b65d4ed': F.dashboard, '5d2c9ba0': F.ask, '7fc2a528': F.decline,
+    '5a21d2ca': F.review, 'b7e484e4': F.saved
+  };
+  var here = location.pathname.split('/').pop();
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var noteEl, noteTimer;
+
+  function note(text) {
+    if (!noteEl) {
+      noteEl = document.createElement('div');
+      noteEl.id = 'walk-note';
+      noteEl.setAttribute('role', 'status');
+      noteEl.hidden = true;
+      document.body.appendChild(noteEl);
+    }
+    noteEl.textContent = 'Design only: ' + text;
+    noteEl.hidden = false;
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(function () { noteEl.hidden = true; }, 6000);
+  }
+
+  function show(el) {
+    var box = /-(label|title)$/.test(el.id) ? (el.closest('section') || el) : el;
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    if (!box.matches('a,button,input,select,textarea,[tabindex]')) box.setAttribute('tabindex', '-1');
+    box.focus({ preventScroll: true });
+    box.classList.add('walk-flash');
+    setTimeout(function () { box.classList.remove('walk-flash'); }, 1600);
+  }
+
+  function go(dest) {
+    var parts = dest.split('#'), file = parts[0], id = parts[1];
+    if (file && file !== here) { location.href = dest; return; }
+    var el = id ? document.getElementById(id) : null;
+    if (el) show(el); else window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  }
+
+  function toggleMenu(btn) {
+    var menu = document.getElementById('walk-menu');
+    if (!menu) {
+      var nav = document.querySelector('header nav');
+      if (!nav) { note('the menu isn’t drawn for this page.'); return; }
+      menu = document.createElement('div');
+      menu.id = 'walk-menu';
+      menu.className = 'md:hidden border-t border-divider bg-cream px-4 py-2';
+      menu.hidden = true;
+      Array.prototype.forEach.call(nav.querySelectorAll('a'), function (a) {
+        var link = a.cloneNode(true);
+        link.removeAttribute('id');
+        link.className = 'flex min-h-[48px] items-center text-base font-medium focus-ring';
+        menu.appendChild(link);
+      });
+      btn.closest('header').appendChild(menu);
+      btn.setAttribute('aria-controls', 'walk-menu');
+    }
+    menu.hidden = !menu.hidden;
+    btn.setAttribute('aria-expanded', String(!menu.hidden));
+    if (!menu.hidden) { var first = menu.querySelector('a'); if (first) first.focus(); }
+  }
+
+  document.addEventListener('keydown', function (e) {
+    var menu = document.getElementById('walk-menu');
+    if (e.key === 'Escape' && menu && !menu.hidden) {
+      var btn = document.querySelector('[aria-controls="walk-menu"]');
+      toggleMenu(btn); btn.focus();
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('a,button');
+    if (!t || t.disabled || t.getAttribute('aria-disabled') === 'true') return;
+    var dest = t.getAttribute('data-go'), text = t.getAttribute('data-note');
+    var href = t.tagName === 'A' ? (t.getAttribute('href') || '') : '';
+
+    if (t.tagName === 'BUTTON' && !dest && t.hasAttribute('aria-expanded') && /menu/i.test(t.textContent)) {
+      e.preventDefault(); toggleMenu(t); return;
+    }
+    if (!dest && href.indexOf('p.superdesign.dev/draft/') > -1) {
+      if (location.hostname === 'p.superdesign.dev') return;
+      dest = DRAFTS[href.split('/draft/')[1].slice(0, 8)];
+      if (!dest) return;
+    }
+    if (!dest && href.charAt(0) === '#') {
+      var name = href.slice(1);
+      if (name && document.getElementById(name)) dest = '#' + name;
+      else if (ROUTES[name]) dest = ROUTES[name];
+      else if (!text) text = 'this page isn’t designed yet.';
+    }
+    if (!dest && !text && t.tagName === 'BUTTON') {
+      text = document.body.getAttribute('data-walk-default') || 'this button’s next state isn’t drawn yet.';
+    }
+    if (!dest && !text) return;
+
+    e.preventDefault();
+    if (dest) go(dest);
+    if (text) note(text);
+  });
+
+  if (location.hash) {
+    var target = document.getElementById(location.hash.slice(1));
+    if (target) setTimeout(function () { show(target); }, 300);
+  }
+})();
+</script>
 </body>
 </html>

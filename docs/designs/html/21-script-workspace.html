@@ -56,8 +56,8 @@ tailwind.config = {
       </div>
       <nav class="hidden md:flex items-center gap-8">
         <a id="nav-requests" href="#requests" class="inline-flex min-h-[44px] items-center text-sm font-medium text-deeprose focus-ring">Requests</a>
-        <a id="nav-completed" href="#completed" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Completed</a>
-        <a id="nav-settings" href="#settings" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Settings</a>
+        <a data-note="the completed list isn’t designed yet." id="nav-completed" href="#completed" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Completed</a>
+        <a data-go="#b-title" id="nav-settings" href="#settings" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Settings</a>
       </nav>
       <button type="button" aria-expanded="false" class="md:hidden inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-[12px] px-3 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
         <iconify-icon icon="lucide:menu" width="18"></iconify-icon>
@@ -140,7 +140,7 @@ tailwind.config = {
                 </dd>
               </div>
             </dl>
-            <button type="button" class="mt-3 inline-flex min-h-[44px] items-center gap-1.5 text-sm text-muted hover:text-espresso focus-ring"><iconify-icon icon="lucide:sticky-note" width="14" aria-hidden="true"></iconify-icon>Add a note for this beat</button>
+            <button data-note="a short note field opens under the beat, like the one on beat 3." type="button" class="mt-3 inline-flex min-h-[44px] items-center gap-1.5 text-sm text-muted hover:text-espresso focus-ring"><iconify-icon icon="lucide:sticky-note" width="14" aria-hidden="true"></iconify-icon>Add a note for this beat</button>
           </div>
 
           <!-- Beat 2 -->
@@ -153,7 +153,7 @@ tailwind.config = {
                 <dd><p><span class="mr-2 text-[11px] font-semibold uppercase tracking-wider text-deeprose">Leo</span>&ldquo;Slow, just like Sam wanted.&rdquo;</p></dd>
               </div>
             </dl>
-            <button type="button" class="mt-3 inline-flex min-h-[44px] items-center gap-1.5 text-sm text-muted hover:text-espresso focus-ring"><iconify-icon icon="lucide:sticky-note" width="14" aria-hidden="true"></iconify-icon>Add a note for this beat</button>
+            <button data-note="a short note field opens under the beat, like the one on beat 3." type="button" class="mt-3 inline-flex min-h-[44px] items-center gap-1.5 text-sm text-muted hover:text-espresso focus-ring"><iconify-icon icon="lucide:sticky-note" width="14" aria-hidden="true"></iconify-icon>Add a note for this beat</button>
           </div>
 
           <!-- Beat 3 -->
@@ -175,8 +175,8 @@ tailwind.config = {
             <div role="note" class="mb-4 flex flex-col gap-3 rounded-[10px] border border-askborder bg-panel p-3 text-sm text-askink sm:flex-row sm:items-center sm:justify-between">
               <p class="flex items-start gap-2"><iconify-icon icon="lucide:triangle-alert" width="16" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>This beat may touch &ldquo;showing your face&rdquo;. Edit it or confirm it&rsquo;s fine.</p>
               <div class="flex shrink-0 gap-2">
-                <button type="button" class="inline-flex min-h-[44px] items-center gap-1.5 rounded-[10px] border border-askborder bg-panel px-3 text-sm font-medium text-espresso hover:bg-secondary focus-ring"><iconify-icon icon="lucide:pencil" width="14" aria-hidden="true"></iconify-icon>Edit beat</button>
-                <button type="button" class="inline-flex min-h-[44px] items-center gap-1.5 rounded-[10px] bg-espresso px-3 text-sm font-medium text-cream hover:bg-black focus-ring"><iconify-icon icon="lucide:check" width="14" aria-hidden="true"></iconify-icon>Confirm it&rsquo;s fine</button>
+                <button data-note="the beat opens for editing. That state isn’t drawn yet." type="button" class="inline-flex min-h-[44px] items-center gap-1.5 rounded-[10px] border border-askborder bg-panel px-3 text-sm font-medium text-espresso hover:bg-secondary focus-ring"><iconify-icon icon="lucide:pencil" width="14" aria-hidden="true"></iconify-icon>Edit beat</button>
+                <button data-go="#c-approved" data-note="once beat 4 is checked, Approve for filming turns on." type="button" class="inline-flex min-h-[44px] items-center gap-1.5 rounded-[10px] bg-espresso px-3 text-sm font-medium text-cream hover:bg-black focus-ring"><iconify-icon icon="lucide:check" width="14" aria-hidden="true"></iconify-icon>Confirm it&rsquo;s fine</button>
               </div>
             </div>
             <dl class="space-y-3 text-sm">
@@ -198,7 +198,7 @@ tailwind.config = {
                 <dd><p><span class="mr-2 text-[11px] font-semibold uppercase tracking-wider text-deeprose">Maya</span>&ldquo;That was all for you, Sam.&rdquo;</p></dd>
               </div>
             </dl>
-            <button type="button" class="mt-3 inline-flex min-h-[44px] items-center gap-1.5 text-sm text-muted hover:text-espresso focus-ring"><iconify-icon icon="lucide:sticky-note" width="14" aria-hidden="true"></iconify-icon>Add a note for this beat</button>
+            <button data-note="a short note field opens under the beat, like the one on beat 3." type="button" class="mt-3 inline-flex min-h-[44px] items-center gap-1.5 text-sm text-muted hover:text-espresso focus-ring"><iconify-icon icon="lucide:sticky-note" width="14" aria-hidden="true"></iconify-icon>Add a note for this beat</button>
           </div>
         </article>
 
@@ -209,14 +209,14 @@ tailwind.config = {
             <textarea id="changes" rows="4" placeholder="e.g. Slower build before Leo joins" class="w-full resize-y rounded-[12px] border border-divider bg-cream px-4 py-3 text-base focus-ring"></textarea>
             <div class="mt-2 flex flex-wrap items-center gap-2">
               <span class="inline-flex items-center gap-1 rounded-full border border-divider bg-secondary py-0.5 pl-2.5 pr-1 text-xs">Beat 3: fewer lines
-                <button type="button" aria-label="Remove note for beat 3" class="inline-flex h-7 w-7 items-center justify-center rounded-full hover:bg-divider focus-ring"><iconify-icon icon="lucide:x" width="12" aria-hidden="true"></iconify-icon></button>
+                <button data-note="the note chip is removed from the changes." type="button" aria-label="Remove note for beat 3" class="inline-flex h-7 w-7 items-center justify-center rounded-full hover:bg-divider focus-ring"><iconify-icon icon="lucide:x" width="12" aria-hidden="true"></iconify-icon></button>
               </span>
             </div>
             <p class="mt-2 text-right text-xs text-muted">16 / 1,000</p>
-            <button type="button" class="mt-3 inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[12px] border border-divider px-4 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring"><iconify-icon icon="lucide:refresh-cw" width="16" aria-hidden="true"></iconify-icon>Rewrite with my changes</button>
+            <button data-go="#c-writing" type="button" class="mt-3 inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[12px] border border-divider px-4 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring"><iconify-icon icon="lucide:refresh-cw" width="16" aria-hidden="true"></iconify-icon>Rewrite with my changes</button>
             <div class="mt-2 flex items-center justify-between text-xs text-muted">
               <span>7 of 10 writes left</span>
-              <button type="button" class="inline-flex min-h-[44px] items-center font-medium hover:text-espresso focus-ring">Start over</button>
+              <button data-go="#c-writing" data-note="a fresh script is written from the approved Scene Card." type="button" class="inline-flex min-h-[44px] items-center font-medium hover:text-espresso focus-ring">Start over</button>
             </div>
           </div>
 
@@ -224,8 +224,8 @@ tailwind.config = {
             <h2 class="mb-3 font-sans text-sm font-semibold">Versions</h2>
             <ul class="divide-y divide-divider text-sm">
               <li class="flex min-h-[44px] items-center justify-between gap-2"><span><span class="font-medium">Version 3</span> <span class="text-muted">&middot; 10 min ago</span></span><span class="rounded-full bg-secondary px-2 py-0.5 text-[11px] font-medium text-muted">Current</span></li>
-              <li class="flex min-h-[44px] items-center justify-between gap-2"><span><span class="font-medium">Version 2</span> <span class="text-muted">&middot; 1 hr ago</span></span><button type="button" class="inline-flex min-h-[44px] items-center text-sm font-medium text-deeprose hover:underline focus-ring">View</button></li>
-              <li class="flex min-h-[44px] items-center justify-between gap-2"><span><span class="font-medium">Version 1</span> <span class="text-muted">&middot; 2 hr ago</span></span><button type="button" class="inline-flex min-h-[44px] items-center text-sm font-medium text-deeprose hover:underline focus-ring">View</button></li>
+              <li class="flex min-h-[44px] items-center justify-between gap-2"><span><span class="font-medium">Version 2</span> <span class="text-muted">&middot; 1 hr ago</span></span><button data-note="older versions open read-only. That view isn’t drawn yet." type="button" class="inline-flex min-h-[44px] items-center text-sm font-medium text-deeprose hover:underline focus-ring">View</button></li>
+              <li class="flex min-h-[44px] items-center justify-between gap-2"><span><span class="font-medium">Version 1</span> <span class="text-muted">&middot; 2 hr ago</span></span><button data-note="older versions open read-only. That view isn’t drawn yet." type="button" class="inline-flex min-h-[44px] items-center text-sm font-medium text-deeprose hover:underline focus-ring">View</button></li>
             </ul>
           </div>
 
@@ -235,8 +235,8 @@ tailwind.config = {
             </button>
             <p id="approve-why" class="mt-2 flex items-center gap-1.5 text-xs text-askink"><iconify-icon icon="lucide:lock" width="12" aria-hidden="true"></iconify-icon>Check beat 4 first.</p>
             <div class="mt-3 grid grid-cols-2 gap-2">
-              <button type="button" class="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-[12px] border border-divider text-sm font-medium hover:bg-secondary focus-ring"><iconify-icon icon="lucide:printer" width="15" aria-hidden="true"></iconify-icon>Print</button>
-              <button type="button" class="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-[12px] border border-divider text-sm font-medium hover:bg-secondary focus-ring"><iconify-icon icon="lucide:copy" width="15" aria-hidden="true"></iconify-icon>Copy as text</button>
+              <button data-note="the script prints on a plain page. Print styles aren’t designed yet." type="button" class="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-[12px] border border-divider text-sm font-medium hover:bg-secondary focus-ring"><iconify-icon icon="lucide:printer" width="15" aria-hidden="true"></iconify-icon>Print</button>
+              <button data-note="the script is copied as plain text." type="button" class="inline-flex min-h-[44px] items-center justify-center gap-1.5 rounded-[12px] border border-divider text-sm font-medium hover:bg-secondary focus-ring"><iconify-icon icon="lucide:copy" width="15" aria-hidden="true"></iconify-icon>Copy as text</button>
             </div>
             <p class="mt-4 flex items-center gap-1.5 border-t border-divider pt-3 text-xs text-muted"><iconify-icon icon="lucide:eye-off" width="13" aria-hidden="true"></iconify-icon>Sam never sees this script.</p>
           </div>
@@ -296,7 +296,7 @@ tailwind.config = {
     <section aria-labelledby="c-label">
       <p id="c-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">C · Other states (center column)</p>
       <div class="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <div role="status" class="rounded-[12px] border border-divider bg-panel p-5">
+        <div id="c-writing" role="status" class="rounded-[12px] border border-divider bg-panel p-5">
           <p class="mb-3 flex items-center gap-2 text-sm font-semibold"><iconify-icon icon="lucide:loader-circle" width="16" class="animate-spin text-deeprose" aria-hidden="true"></iconify-icon>Writing your script&hellip;</p>
           <div class="space-y-2" aria-hidden="true">
             <div class="h-3 w-4/5 rounded bg-secondary"></div><div class="h-3 w-3/5 rounded bg-secondary"></div>
@@ -307,18 +307,18 @@ tailwind.config = {
         <div class="rounded-[12px] border border-askborder bg-askbg p-5">
           <p class="mb-2 flex items-center gap-2 text-sm font-semibold text-askink"><iconify-icon icon="lucide:file-clock" width="16" aria-hidden="true"></iconify-icon>Out of date</p>
           <p class="mb-4 text-sm">The Scene Card changed to version 4 after this script was written. It can&rsquo;t be approved for the new version.</p>
-          <button type="button" class="inline-flex min-h-[44px] items-center gap-2 rounded-[12px] bg-espresso px-4 text-sm font-medium text-cream hover:bg-black focus-ring"><iconify-icon icon="lucide:feather" width="15" aria-hidden="true"></iconify-icon>Write for version 4</button>
+          <button data-go="#c-writing" type="button" class="inline-flex min-h-[44px] items-center gap-2 rounded-[12px] bg-espresso px-4 text-sm font-medium text-cream hover:bg-black focus-ring"><iconify-icon icon="lucide:feather" width="15" aria-hidden="true"></iconify-icon>Write for version 4</button>
         </div>
         <div class="rounded-[12px] border border-divider bg-secondary p-5">
           <p class="mb-2 flex items-center gap-2 text-sm font-semibold"><iconify-icon icon="lucide:circle-minus" width="16" aria-hidden="true"></iconify-icon>Script unavailable</p>
           <p class="text-sm">Scripts can&rsquo;t be written right now. You can still film without one, and your Scene Card is ready.</p>
         </div>
-        <div role="status" class="rounded-[12px] border border-okborder bg-okbg p-5">
+        <div id="c-approved" role="status" class="rounded-[12px] border border-okborder bg-okbg p-5">
           <p class="mb-2 flex items-center gap-2 text-sm font-semibold text-okink"><iconify-icon icon="lucide:clapperboard" width="16" aria-hidden="true"></iconify-icon>Approved for filming</p>
           <p class="mb-4 text-sm">Version 3, locked to Scene Card version 3.</p>
           <div class="flex gap-2">
-            <button type="button" class="inline-flex min-h-[44px] items-center gap-1.5 rounded-[12px] border border-okborder bg-panel px-3 text-sm font-medium hover:bg-cream focus-ring"><iconify-icon icon="lucide:printer" width="15" aria-hidden="true"></iconify-icon>Print</button>
-            <button type="button" class="inline-flex min-h-[44px] items-center gap-1.5 rounded-[12px] border border-okborder bg-panel px-3 text-sm font-medium hover:bg-cream focus-ring"><iconify-icon icon="lucide:copy" width="15" aria-hidden="true"></iconify-icon>Copy</button>
+            <button data-note="the script prints on a plain page. Print styles aren’t designed yet." type="button" class="inline-flex min-h-[44px] items-center gap-1.5 rounded-[12px] border border-okborder bg-panel px-3 text-sm font-medium hover:bg-cream focus-ring"><iconify-icon icon="lucide:printer" width="15" aria-hidden="true"></iconify-icon>Print</button>
+            <button data-note="the script is copied as plain text." type="button" class="inline-flex min-h-[44px] items-center gap-1.5 rounded-[12px] border border-okborder bg-panel px-3 text-sm font-medium hover:bg-cream focus-ring"><iconify-icon icon="lucide:copy" width="15" aria-hidden="true"></iconify-icon>Copy</button>
           </div>
         </div>
       </div>
@@ -327,5 +327,140 @@ tailwind.config = {
 
   </main>
 </div>
+<!-- DESIGN WALK-THROUGH (same block in every design). Buttons and links jump to the
+     state they lead to, here or in another design. Nothing is saved, sent or charged.
+     data-go="#id" or "NN-file.html#id" sets the destination; data-note explains an
+     action whose result isn't drawn. On p.superdesign.dev, draft links work as before. -->
+<style>
+  [id] { scroll-margin-top: 100px; }
+  .walk-flash { outline: 3px solid #84485D !important; outline-offset: 6px; border-radius: 12px; }
+  #walk-note { position: fixed; left: 50%; bottom: 16px; z-index: 60; transform: translateX(-50%); width: max-content; max-width: calc(100% - 32px); padding: 12px 16px; border-radius: 12px; background: #302720; color: #FDF8F3; font: 400 14px/1.45 Inter, sans-serif; box-shadow: 0 12px 40px rgba(0,0,0,.2); }
+  #walk-note[hidden] { display: none; }
+  @media print { #walk-note, #walk-menu { display: none !important; } }
+</style>
+<script>
+(function () {
+  var F = {
+    entrance: '02-boutique-entrance-connected.html', dashboard: '03-creator-dashboard-linked-navigation.html',
+    director: '04-linked-ai-director-workspace.html', detail: '05-creator-detail-modal-connected-navigation.html',
+    ask: '06-linked-ask-question-modal.html', review: '07-linked-review-scene-card-page.html',
+    sent: '08-send-confirmation.html', decline: '09-decline-confirmation-modal-with-navigation.html',
+    saved: '10-saved-ideas.html'
+  };
+  // href="#name" links that point at an app route rather than this page.
+  var ROUTES = {
+    home: F.entrance, collection: F.entrance, studio: F.director, saved: F.saved,
+    'sign-in': '16-sign-in.html#a-label', 'creator-sign-in': '16-sign-in.html#c-label',
+    catalog: '17-ai-director-live-states.html#catalog', rules: '13-creator-limits.html#limits-panel',
+    'limits-panel': '13-creator-limits.html#limits-panel', 'custom-request': '19-custom-request-pending.html#a-label',
+    requests: F.dashboard, 'creator-requests': F.dashboard, request: F.detail
+  };
+  // Superdesign draft links, by the first block of the draft id.
+  var DRAFTS = {
+    '048b6b8a': F.director, '82277dd9': F.entrance, '48723685': F.review, 'a98b81cb': F.sent,
+    'c6e6d108': F.detail, '2b65d4ed': F.dashboard, '5d2c9ba0': F.ask, '7fc2a528': F.decline,
+    '5a21d2ca': F.review, 'b7e484e4': F.saved
+  };
+  var here = location.pathname.split('/').pop();
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var noteEl, noteTimer;
+
+  function note(text) {
+    if (!noteEl) {
+      noteEl = document.createElement('div');
+      noteEl.id = 'walk-note';
+      noteEl.setAttribute('role', 'status');
+      noteEl.hidden = true;
+      document.body.appendChild(noteEl);
+    }
+    noteEl.textContent = 'Design only: ' + text;
+    noteEl.hidden = false;
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(function () { noteEl.hidden = true; }, 6000);
+  }
+
+  function show(el) {
+    var box = /-(label|title)$/.test(el.id) ? (el.closest('section') || el) : el;
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    if (!box.matches('a,button,input,select,textarea,[tabindex]')) box.setAttribute('tabindex', '-1');
+    box.focus({ preventScroll: true });
+    box.classList.add('walk-flash');
+    setTimeout(function () { box.classList.remove('walk-flash'); }, 1600);
+  }
+
+  function go(dest) {
+    var parts = dest.split('#'), file = parts[0], id = parts[1];
+    if (file && file !== here) { location.href = dest; return; }
+    var el = id ? document.getElementById(id) : null;
+    if (el) show(el); else window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  }
+
+  function toggleMenu(btn) {
+    var menu = document.getElementById('walk-menu');
+    if (!menu) {
+      var nav = document.querySelector('header nav');
+      if (!nav) { note('the menu isn’t drawn for this page.'); return; }
+      menu = document.createElement('div');
+      menu.id = 'walk-menu';
+      menu.className = 'md:hidden border-t border-divider bg-cream px-4 py-2';
+      menu.hidden = true;
+      Array.prototype.forEach.call(nav.querySelectorAll('a'), function (a) {
+        var link = a.cloneNode(true);
+        link.removeAttribute('id');
+        link.className = 'flex min-h-[48px] items-center text-base font-medium focus-ring';
+        menu.appendChild(link);
+      });
+      btn.closest('header').appendChild(menu);
+      btn.setAttribute('aria-controls', 'walk-menu');
+    }
+    menu.hidden = !menu.hidden;
+    btn.setAttribute('aria-expanded', String(!menu.hidden));
+    if (!menu.hidden) { var first = menu.querySelector('a'); if (first) first.focus(); }
+  }
+
+  document.addEventListener('keydown', function (e) {
+    var menu = document.getElementById('walk-menu');
+    if (e.key === 'Escape' && menu && !menu.hidden) {
+      var btn = document.querySelector('[aria-controls="walk-menu"]');
+      toggleMenu(btn); btn.focus();
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('a,button');
+    if (!t || t.disabled || t.getAttribute('aria-disabled') === 'true') return;
+    var dest = t.getAttribute('data-go'), text = t.getAttribute('data-note');
+    var href = t.tagName === 'A' ? (t.getAttribute('href') || '') : '';
+
+    if (t.tagName === 'BUTTON' && !dest && t.hasAttribute('aria-expanded') && /menu/i.test(t.textContent)) {
+      e.preventDefault(); toggleMenu(t); return;
+    }
+    if (!dest && href.indexOf('p.superdesign.dev/draft/') > -1) {
+      if (location.hostname === 'p.superdesign.dev') return;
+      dest = DRAFTS[href.split('/draft/')[1].slice(0, 8)];
+      if (!dest) return;
+    }
+    if (!dest && href.charAt(0) === '#') {
+      var name = href.slice(1);
+      if (name && document.getElementById(name)) dest = '#' + name;
+      else if (ROUTES[name]) dest = ROUTES[name];
+      else if (!text) text = 'this page isn’t designed yet.';
+    }
+    if (!dest && !text && t.tagName === 'BUTTON') {
+      text = document.body.getAttribute('data-walk-default') || 'this button’s next state isn’t drawn yet.';
+    }
+    if (!dest && !text) return;
+
+    e.preventDefault();
+    if (dest) go(dest);
+    if (text) note(text);
+  });
+
+  if (location.hash) {
+    var target = document.getElementById(location.hash.slice(1));
+    if (target) setTimeout(function () { show(target); }, 300);
+  }
+})();
+</script>
 </body>
 </html>

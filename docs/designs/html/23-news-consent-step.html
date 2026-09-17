@@ -93,7 +93,7 @@ tailwind.config = {
               </span>
             </label>
 
-            <button type="button" class="flex w-full min-h-[48px] items-center justify-center gap-2 rounded-[12px] bg-espresso text-cream px-6 text-base font-medium shadow-md hover:bg-black transition-colors duration-160 focus-ring">
+            <button data-go="#a2-label" data-note="ticked goes to Saving (A2). Unticked writes nothing and goes straight on." type="button" class="flex w-full min-h-[48px] items-center justify-center gap-2 rounded-[12px] bg-espresso text-cream px-6 text-base font-medium shadow-md hover:bg-black transition-colors duration-160 focus-ring">
               Continue
               <iconify-icon icon="lucide:arrow-right" width="18" aria-hidden="true"></iconify-icon>
             </button>
@@ -158,8 +158,8 @@ tailwind.config = {
               <p class="font-semibold">We couldn&rsquo;t save your choice</p>
               <p class="mb-4">You&rsquo;re not signed up for Maya&rsquo;s news. Try again, or carry on without it.</p>
               <div class="flex flex-wrap gap-2">
-                <button type="button" class="inline-flex min-h-[44px] items-center rounded-[12px] bg-espresso text-cream px-5 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Try again</button>
-                <button type="button" class="inline-flex min-h-[44px] items-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Continue without news</button>
+                <button data-go="#a2-label" type="button" class="inline-flex min-h-[44px] items-center rounded-[12px] bg-espresso text-cream px-5 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Try again</button>
+                <button data-go="04-linked-ai-director-workspace.html" type="button" class="inline-flex min-h-[44px] items-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Continue without news</button>
               </div>
             </div>
           </div>
@@ -193,7 +193,7 @@ tailwind.config = {
           <p class="mb-4 text-sm leading-relaxed">You answered this in another window. You can change Maya&rsquo;s news anytime in your account.</p>
           <div class="flex flex-wrap gap-2">
             <a id="d23-continue" href="#studio" class="inline-flex min-h-[44px] items-center gap-2 rounded-[12px] bg-espresso text-cream px-5 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Continue <iconify-icon icon="lucide:arrow-right" width="16" aria-hidden="true"></iconify-icon></a>
-            <a id="d23-account-settings" href="#settings" class="inline-flex min-h-[44px] items-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Account settings</a>
+            <a data-go="16-sign-in.html#a3-label" id="d23-account-settings" href="#settings" class="inline-flex min-h-[44px] items-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Account settings</a>
           </div>
           <p class="mt-4 text-xs text-muted">The server says the step is already done (a second tab, or Back after Continue). It doesn&rsquo;t say which choice was made; settings shows the current state.</p>
         </div>
@@ -208,23 +208,23 @@ tailwind.config = {
       <p id="u-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">U1 · Unsubscribe link opened &nbsp;·&nbsp; U2 · Done</p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6 items-start">
-        <div class="rounded-[12px] border border-divider bg-panel p-6 sm:p-8">
+        <div id="u1" class="rounded-[12px] border border-divider bg-panel p-6 sm:p-8">
           <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
             <iconify-icon icon="lucide:mail-minus" width="22" class="text-deeprose" aria-hidden="true"></iconify-icon>
           </div>
           <h2 class="mb-2 text-3xl font-semibold leading-tight tracking-tight">Stop Maya&rsquo;s news?</h2>
           <p class="mb-6 text-sm leading-relaxed text-muted">You won&rsquo;t get news emails from Maya any more. Emails about your own requests and videos still arrive.</p>
-          <button type="button" class="flex w-full min-h-[48px] items-center justify-center rounded-[12px] bg-espresso text-cream px-6 text-base font-medium shadow-md hover:bg-black transition-colors duration-160 focus-ring">Unsubscribe</button>
+          <button data-go="#u2" data-note="the withdrawal is saved first; this page shows only after that." type="button" class="flex w-full min-h-[48px] items-center justify-center rounded-[12px] bg-espresso text-cream px-6 text-base font-medium shadow-md hover:bg-black transition-colors duration-160 focus-ring">Unsubscribe</button>
           <p class="mt-4 text-xs text-muted">While sending: the button reads &ldquo;Unsubscribing&hellip;&rdquo; and is disabled.</p>
         </div>
 
-        <div role="status" class="rounded-[12px] border border-divider bg-panel p-6 sm:p-8">
+        <div id="u2" role="status" class="rounded-[12px] border border-divider bg-panel p-6 sm:p-8">
           <div class="mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-secondary">
             <iconify-icon icon="lucide:mail-x" width="22" class="text-deeprose" aria-hidden="true"></iconify-icon>
           </div>
           <h2 class="mb-2 text-3xl font-semibold leading-tight tracking-tight">You&rsquo;re unsubscribed</h2>
           <p class="mb-4 text-sm leading-relaxed">You won&rsquo;t get Maya&rsquo;s news any more. Your account, Scene Cards and videos aren&rsquo;t affected.</p>
-          <button type="button" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Subscribe again</button>
+          <button data-note="a new consent record is written, then the page says “You’ll get Maya’s news again” (not drawn)." type="button" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Subscribe again</button>
           <p class="mt-4 text-xs text-muted">Same as design 16 A3. Subscribe again records a new consent row with source <code class="font-mono">unsubscribe_page</code> and the current wording, then shows &ldquo;You&rsquo;ll get Maya&rsquo;s news again&rdquo;.</p>
         </div>
       </div>
@@ -258,7 +258,7 @@ tailwind.config = {
           </div>
           <h2 class="mb-2 text-2xl font-semibold tracking-tight">You&rsquo;re already unsubscribed</h2>
           <p class="mb-4 text-sm leading-relaxed">You aren&rsquo;t getting Maya&rsquo;s news, so there&rsquo;s nothing to stop.</p>
-          <button type="button" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Subscribe again</button>
+          <button data-note="a new consent record is written, then the page says “You’ll get Maya’s news again” (not drawn)." type="button" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-divider bg-panel hover:bg-secondary px-5 text-sm font-medium transition-colors duration-160 focus-ring">Subscribe again</button>
           <p class="mt-4 text-xs text-muted">Valid link, latest row is already a withdrawal. Shown instead of U1 when the page loads, and also if Unsubscribe is pressed twice. Writes no duplicate row.</p>
         </div>
 
@@ -268,7 +268,7 @@ tailwind.config = {
           </div>
           <h2 class="mb-2 text-2xl font-semibold tracking-tight">We couldn&rsquo;t unsubscribe you</h2>
           <p class="mb-4 text-sm leading-relaxed">Something went wrong on our side, so you&rsquo;re still subscribed for now. Please try again.</p>
-          <button type="button" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] bg-espresso text-cream px-5 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Try again</button>
+          <button data-go="#u1" type="button" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] bg-espresso text-cream px-5 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Try again</button>
           <p class="mt-4 text-xs text-alertink/80">Server or database error with a valid link. Never show &ldquo;unsubscribed&rdquo; until the withdrawal row exists.</p>
         </div>
       </div>
@@ -288,5 +288,140 @@ tailwind.config = {
 
   </main>
 </div>
+<!-- DESIGN WALK-THROUGH (same block in every design). Buttons and links jump to the
+     state they lead to, here or in another design. Nothing is saved, sent or charged.
+     data-go="#id" or "NN-file.html#id" sets the destination; data-note explains an
+     action whose result isn't drawn. On p.superdesign.dev, draft links work as before. -->
+<style>
+  [id] { scroll-margin-top: 100px; }
+  .walk-flash { outline: 3px solid #84485D !important; outline-offset: 6px; border-radius: 12px; }
+  #walk-note { position: fixed; left: 50%; bottom: 16px; z-index: 60; transform: translateX(-50%); width: max-content; max-width: calc(100% - 32px); padding: 12px 16px; border-radius: 12px; background: #302720; color: #FDF8F3; font: 400 14px/1.45 Inter, sans-serif; box-shadow: 0 12px 40px rgba(0,0,0,.2); }
+  #walk-note[hidden] { display: none; }
+  @media print { #walk-note, #walk-menu { display: none !important; } }
+</style>
+<script>
+(function () {
+  var F = {
+    entrance: '02-boutique-entrance-connected.html', dashboard: '03-creator-dashboard-linked-navigation.html',
+    director: '04-linked-ai-director-workspace.html', detail: '05-creator-detail-modal-connected-navigation.html',
+    ask: '06-linked-ask-question-modal.html', review: '07-linked-review-scene-card-page.html',
+    sent: '08-send-confirmation.html', decline: '09-decline-confirmation-modal-with-navigation.html',
+    saved: '10-saved-ideas.html'
+  };
+  // href="#name" links that point at an app route rather than this page.
+  var ROUTES = {
+    home: F.entrance, collection: F.entrance, studio: F.director, saved: F.saved,
+    'sign-in': '16-sign-in.html#a-label', 'creator-sign-in': '16-sign-in.html#c-label',
+    catalog: '17-ai-director-live-states.html#catalog', rules: '13-creator-limits.html#limits-panel',
+    'limits-panel': '13-creator-limits.html#limits-panel', 'custom-request': '19-custom-request-pending.html#a-label',
+    requests: F.dashboard, 'creator-requests': F.dashboard, request: F.detail
+  };
+  // Superdesign draft links, by the first block of the draft id.
+  var DRAFTS = {
+    '048b6b8a': F.director, '82277dd9': F.entrance, '48723685': F.review, 'a98b81cb': F.sent,
+    'c6e6d108': F.detail, '2b65d4ed': F.dashboard, '5d2c9ba0': F.ask, '7fc2a528': F.decline,
+    '5a21d2ca': F.review, 'b7e484e4': F.saved
+  };
+  var here = location.pathname.split('/').pop();
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var noteEl, noteTimer;
+
+  function note(text) {
+    if (!noteEl) {
+      noteEl = document.createElement('div');
+      noteEl.id = 'walk-note';
+      noteEl.setAttribute('role', 'status');
+      noteEl.hidden = true;
+      document.body.appendChild(noteEl);
+    }
+    noteEl.textContent = 'Design only: ' + text;
+    noteEl.hidden = false;
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(function () { noteEl.hidden = true; }, 6000);
+  }
+
+  function show(el) {
+    var box = /-(label|title)$/.test(el.id) ? (el.closest('section') || el) : el;
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    if (!box.matches('a,button,input,select,textarea,[tabindex]')) box.setAttribute('tabindex', '-1');
+    box.focus({ preventScroll: true });
+    box.classList.add('walk-flash');
+    setTimeout(function () { box.classList.remove('walk-flash'); }, 1600);
+  }
+
+  function go(dest) {
+    var parts = dest.split('#'), file = parts[0], id = parts[1];
+    if (file && file !== here) { location.href = dest; return; }
+    var el = id ? document.getElementById(id) : null;
+    if (el) show(el); else window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  }
+
+  function toggleMenu(btn) {
+    var menu = document.getElementById('walk-menu');
+    if (!menu) {
+      var nav = document.querySelector('header nav');
+      if (!nav) { note('the menu isn’t drawn for this page.'); return; }
+      menu = document.createElement('div');
+      menu.id = 'walk-menu';
+      menu.className = 'md:hidden border-t border-divider bg-cream px-4 py-2';
+      menu.hidden = true;
+      Array.prototype.forEach.call(nav.querySelectorAll('a'), function (a) {
+        var link = a.cloneNode(true);
+        link.removeAttribute('id');
+        link.className = 'flex min-h-[48px] items-center text-base font-medium focus-ring';
+        menu.appendChild(link);
+      });
+      btn.closest('header').appendChild(menu);
+      btn.setAttribute('aria-controls', 'walk-menu');
+    }
+    menu.hidden = !menu.hidden;
+    btn.setAttribute('aria-expanded', String(!menu.hidden));
+    if (!menu.hidden) { var first = menu.querySelector('a'); if (first) first.focus(); }
+  }
+
+  document.addEventListener('keydown', function (e) {
+    var menu = document.getElementById('walk-menu');
+    if (e.key === 'Escape' && menu && !menu.hidden) {
+      var btn = document.querySelector('[aria-controls="walk-menu"]');
+      toggleMenu(btn); btn.focus();
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('a,button');
+    if (!t || t.disabled || t.getAttribute('aria-disabled') === 'true') return;
+    var dest = t.getAttribute('data-go'), text = t.getAttribute('data-note');
+    var href = t.tagName === 'A' ? (t.getAttribute('href') || '') : '';
+
+    if (t.tagName === 'BUTTON' && !dest && t.hasAttribute('aria-expanded') && /menu/i.test(t.textContent)) {
+      e.preventDefault(); toggleMenu(t); return;
+    }
+    if (!dest && href.indexOf('p.superdesign.dev/draft/') > -1) {
+      if (location.hostname === 'p.superdesign.dev') return;
+      dest = DRAFTS[href.split('/draft/')[1].slice(0, 8)];
+      if (!dest) return;
+    }
+    if (!dest && href.charAt(0) === '#') {
+      var name = href.slice(1);
+      if (name && document.getElementById(name)) dest = '#' + name;
+      else if (ROUTES[name]) dest = ROUTES[name];
+      else if (!text) text = 'this page isn’t designed yet.';
+    }
+    if (!dest && !text && t.tagName === 'BUTTON') {
+      text = document.body.getAttribute('data-walk-default') || 'this button’s next state isn’t drawn yet.';
+    }
+    if (!dest && !text) return;
+
+    e.preventDefault();
+    if (dest) go(dest);
+    if (text) note(text);
+  });
+
+  if (location.hash) {
+    var target = document.getElementById(location.hash.slice(1));
+    if (target) setTimeout(function () { show(target); }, 300);
+  }
+})();
+</script>
 </body>
 </html>

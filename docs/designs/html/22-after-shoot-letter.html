@@ -59,8 +59,8 @@ tailwind.config = {
       </div>
       <nav class="hidden md:flex items-center gap-8">
         <a href="#requests" class="inline-flex min-h-[44px] items-center text-sm font-medium text-deeprose hover:text-muted transition-colors duration-160 focus-ring">Requests</a>
-        <a href="#completed" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Completed</a>
-        <a href="#settings" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Settings</a>
+        <a data-note="the completed list isn’t designed yet." href="#completed" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Completed</a>
+        <a data-go="21-script-workspace.html#b-title" href="#settings" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Settings</a>
       </nav>
       <button type="button" aria-expanded="false" class="md:hidden inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-[12px] px-3 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
         <iconify-icon icon="lucide:menu" width="18"></iconify-icon>
@@ -121,7 +121,7 @@ tailwind.config = {
           <div class="mt-2 text-right text-xs text-muted">112 / 1,000</div>
 
           <div class="mt-6 flex flex-col gap-3 sm:flex-row">
-            <button type="button" class="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[12px] bg-espresso px-5 text-sm font-medium text-cream hover:bg-espresso/90 transition-colors duration-160 focus-ring">
+            <button data-go="#c-label" type="button" class="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[12px] bg-espresso px-5 text-sm font-medium text-cream hover:bg-espresso/90 transition-colors duration-160 focus-ring">
               <iconify-icon icon="lucide:feather" width="16" aria-hidden="true"></iconify-icon>Write the letter
             </button>
           </div>
@@ -166,20 +166,20 @@ tailwind.config = {
           <div class="rounded-[12px] border border-divider bg-panel p-5">
             <label for="changes" class="mb-2 block text-sm font-semibold">Send back with changes</label>
             <textarea id="changes" rows="3" placeholder="e.g. Softer opening, and mention how the record kept skipping." class="w-full resize-y rounded-[12px] border border-divider bg-cream px-4 py-3 text-base focus-ring"></textarea>
-            <button type="button" class="mt-3 inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[12px] border border-divider px-4 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
+            <button data-go="#c-label" data-note="a new version is written and shown here for review." type="button" class="mt-3 inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[12px] border border-divider px-4 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
               <iconify-icon icon="lucide:refresh-cw" width="16" aria-hidden="true"></iconify-icon>Rewrite with my changes
             </button>
             <p class="mt-2 text-xs text-muted">4 of 10 rewrites left for this request</p>
           </div>
 
           <div class="rounded-[12px] border border-divider bg-panel p-5">
-            <button type="button" class="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[12px] bg-rose px-4 text-sm font-medium text-espresso hover:bg-rosehover transition-colors duration-160 focus-ring">
+            <button data-go="#d-label" data-note="the letter is attached to Sam’s delivery and arrives with the video, as shown here." type="button" class="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[12px] bg-rose px-4 text-sm font-medium text-espresso hover:bg-rosehover transition-colors duration-160 focus-ring">
               <iconify-icon icon="lucide:check" width="16" aria-hidden="true"></iconify-icon>Approve letter
             </button>
             <p class="mt-2 flex items-start gap-1.5 text-xs text-askink"><iconify-icon icon="lucide:lock" width="12" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>Check the highlighted line first.</p>
             <div class="mt-3 flex flex-col gap-2 sm:flex-row lg:flex-col">
-              <button type="button" class="inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-[12px] px-4 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon>Edit it myself</button>
-              <button type="button" class="inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-[12px] px-4 text-sm font-medium text-muted hover:bg-secondary transition-colors duration-160 focus-ring">Don&rsquo;t send a letter</button>
+              <button data-note="the letter opens for editing. That state isn’t drawn yet." type="button" class="inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-[12px] px-4 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon>Edit it myself</button>
+              <button data-go="#b-label" data-note="the switch turns off and no letter is written or sent." type="button" class="inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-[12px] px-4 text-sm font-medium text-muted hover:bg-secondary transition-colors duration-160 focus-ring">Don&rsquo;t send a letter</button>
             </div>
             <p class="mt-4 border-t border-divider pt-3 text-xs text-muted">Approving attaches the letter to Sam&rsquo;s delivery. It isn&rsquo;t sent until the video is.</p>
           </div>
@@ -210,7 +210,7 @@ tailwind.config = {
         </article>
 
         <div class="mx-auto mt-8 flex max-w-[640px] flex-col items-center gap-3 sm:flex-row sm:justify-center">
-          <button type="button" class="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-[12px] border border-divider bg-panel px-6 text-sm font-medium hover:bg-cream transition-colors duration-160 focus-ring sm:w-auto">
+          <button data-note="the fan downloads the letter as a PDF with the same layout." type="button" class="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-[12px] border border-divider bg-panel px-6 text-sm font-medium hover:bg-cream transition-colors duration-160 focus-ring sm:w-auto">
             <iconify-icon icon="lucide:download" width="16" aria-hidden="true"></iconify-icon>Save letter (PDF)
           </button>
         </div>
@@ -221,5 +221,140 @@ tailwind.config = {
 
   </main>
 </div>
+<!-- DESIGN WALK-THROUGH (same block in every design). Buttons and links jump to the
+     state they lead to, here or in another design. Nothing is saved, sent or charged.
+     data-go="#id" or "NN-file.html#id" sets the destination; data-note explains an
+     action whose result isn't drawn. On p.superdesign.dev, draft links work as before. -->
+<style>
+  [id] { scroll-margin-top: 100px; }
+  .walk-flash { outline: 3px solid #84485D !important; outline-offset: 6px; border-radius: 12px; }
+  #walk-note { position: fixed; left: 50%; bottom: 16px; z-index: 60; transform: translateX(-50%); width: max-content; max-width: calc(100% - 32px); padding: 12px 16px; border-radius: 12px; background: #302720; color: #FDF8F3; font: 400 14px/1.45 Inter, sans-serif; box-shadow: 0 12px 40px rgba(0,0,0,.2); }
+  #walk-note[hidden] { display: none; }
+  @media print { #walk-note, #walk-menu { display: none !important; } }
+</style>
+<script>
+(function () {
+  var F = {
+    entrance: '02-boutique-entrance-connected.html', dashboard: '03-creator-dashboard-linked-navigation.html',
+    director: '04-linked-ai-director-workspace.html', detail: '05-creator-detail-modal-connected-navigation.html',
+    ask: '06-linked-ask-question-modal.html', review: '07-linked-review-scene-card-page.html',
+    sent: '08-send-confirmation.html', decline: '09-decline-confirmation-modal-with-navigation.html',
+    saved: '10-saved-ideas.html'
+  };
+  // href="#name" links that point at an app route rather than this page.
+  var ROUTES = {
+    home: F.entrance, collection: F.entrance, studio: F.director, saved: F.saved,
+    'sign-in': '16-sign-in.html#a-label', 'creator-sign-in': '16-sign-in.html#c-label',
+    catalog: '17-ai-director-live-states.html#catalog', rules: '13-creator-limits.html#limits-panel',
+    'limits-panel': '13-creator-limits.html#limits-panel', 'custom-request': '19-custom-request-pending.html#a-label',
+    requests: F.dashboard, 'creator-requests': F.dashboard, request: F.detail
+  };
+  // Superdesign draft links, by the first block of the draft id.
+  var DRAFTS = {
+    '048b6b8a': F.director, '82277dd9': F.entrance, '48723685': F.review, 'a98b81cb': F.sent,
+    'c6e6d108': F.detail, '2b65d4ed': F.dashboard, '5d2c9ba0': F.ask, '7fc2a528': F.decline,
+    '5a21d2ca': F.review, 'b7e484e4': F.saved
+  };
+  var here = location.pathname.split('/').pop();
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var noteEl, noteTimer;
+
+  function note(text) {
+    if (!noteEl) {
+      noteEl = document.createElement('div');
+      noteEl.id = 'walk-note';
+      noteEl.setAttribute('role', 'status');
+      noteEl.hidden = true;
+      document.body.appendChild(noteEl);
+    }
+    noteEl.textContent = 'Design only: ' + text;
+    noteEl.hidden = false;
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(function () { noteEl.hidden = true; }, 6000);
+  }
+
+  function show(el) {
+    var box = /-(label|title)$/.test(el.id) ? (el.closest('section') || el) : el;
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    if (!box.matches('a,button,input,select,textarea,[tabindex]')) box.setAttribute('tabindex', '-1');
+    box.focus({ preventScroll: true });
+    box.classList.add('walk-flash');
+    setTimeout(function () { box.classList.remove('walk-flash'); }, 1600);
+  }
+
+  function go(dest) {
+    var parts = dest.split('#'), file = parts[0], id = parts[1];
+    if (file && file !== here) { location.href = dest; return; }
+    var el = id ? document.getElementById(id) : null;
+    if (el) show(el); else window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  }
+
+  function toggleMenu(btn) {
+    var menu = document.getElementById('walk-menu');
+    if (!menu) {
+      var nav = document.querySelector('header nav');
+      if (!nav) { note('the menu isn’t drawn for this page.'); return; }
+      menu = document.createElement('div');
+      menu.id = 'walk-menu';
+      menu.className = 'md:hidden border-t border-divider bg-cream px-4 py-2';
+      menu.hidden = true;
+      Array.prototype.forEach.call(nav.querySelectorAll('a'), function (a) {
+        var link = a.cloneNode(true);
+        link.removeAttribute('id');
+        link.className = 'flex min-h-[48px] items-center text-base font-medium focus-ring';
+        menu.appendChild(link);
+      });
+      btn.closest('header').appendChild(menu);
+      btn.setAttribute('aria-controls', 'walk-menu');
+    }
+    menu.hidden = !menu.hidden;
+    btn.setAttribute('aria-expanded', String(!menu.hidden));
+    if (!menu.hidden) { var first = menu.querySelector('a'); if (first) first.focus(); }
+  }
+
+  document.addEventListener('keydown', function (e) {
+    var menu = document.getElementById('walk-menu');
+    if (e.key === 'Escape' && menu && !menu.hidden) {
+      var btn = document.querySelector('[aria-controls="walk-menu"]');
+      toggleMenu(btn); btn.focus();
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('a,button');
+    if (!t || t.disabled || t.getAttribute('aria-disabled') === 'true') return;
+    var dest = t.getAttribute('data-go'), text = t.getAttribute('data-note');
+    var href = t.tagName === 'A' ? (t.getAttribute('href') || '') : '';
+
+    if (t.tagName === 'BUTTON' && !dest && t.hasAttribute('aria-expanded') && /menu/i.test(t.textContent)) {
+      e.preventDefault(); toggleMenu(t); return;
+    }
+    if (!dest && href.indexOf('p.superdesign.dev/draft/') > -1) {
+      if (location.hostname === 'p.superdesign.dev') return;
+      dest = DRAFTS[href.split('/draft/')[1].slice(0, 8)];
+      if (!dest) return;
+    }
+    if (!dest && href.charAt(0) === '#') {
+      var name = href.slice(1);
+      if (name && document.getElementById(name)) dest = '#' + name;
+      else if (ROUTES[name]) dest = ROUTES[name];
+      else if (!text) text = 'this page isn’t designed yet.';
+    }
+    if (!dest && !text && t.tagName === 'BUTTON') {
+      text = document.body.getAttribute('data-walk-default') || 'this button’s next state isn’t drawn yet.';
+    }
+    if (!dest && !text) return;
+
+    e.preventDefault();
+    if (dest) go(dest);
+    if (text) note(text);
+  });
+
+  if (location.hash) {
+    var target = document.getElementById(location.hash.slice(1));
+    if (target) setTimeout(function () { show(target); }, 300);
+  }
+})();
+</script>
 </body>
 </html>

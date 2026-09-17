@@ -123,7 +123,7 @@ tailwind.config = {
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         <!-- B1 -->
-        <div class="rounded-[12px] border border-divider bg-panel p-5">
+        <div id="b1" class="rounded-[12px] border border-divider bg-panel p-5">
           <fieldset>
             <legend class="mb-3 text-sm font-semibold">Your name in the video</legend>
             <div class="space-y-2">
@@ -149,7 +149,7 @@ tailwind.config = {
         </div>
 
         <!-- B2 -->
-        <div class="rounded-[12px] border border-divider bg-panel p-5">
+        <div id="b2" class="rounded-[12px] border border-divider bg-panel p-5">
           <fieldset>
             <legend class="mb-3 text-sm font-semibold">Your name in the video</legend>
             <div class="space-y-2">
@@ -166,7 +166,7 @@ tailwind.config = {
           </fieldset>
           <p class="mt-3 flex items-center justify-between gap-3 text-sm">
             <span class="inline-flex items-center gap-1.5 text-xs text-muted"><iconify-icon icon="lucide:cloud-check" width="14" class="text-okink" aria-hidden="true"></iconify-icon>Saved to your account</span>
-            <button type="button" class="inline-flex min-h-[44px] items-center font-medium underline underline-offset-4 focus-ring">Change name</button>
+            <button data-go="#b1" type="button" class="inline-flex min-h-[44px] items-center font-medium underline underline-offset-4 focus-ring">Change name</button>
           </p>
           <p class="mt-1 text-xs text-muted">Once saved, the option labels use the name. Picking &ldquo;No name&rdquo; keeps it on the draft (the Director still uses it in chat) but drops it from the video.</p>
         </div>
@@ -194,7 +194,7 @@ tailwind.config = {
 
       <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
         <!-- C1 -->
-        <div class="rounded-[12px] border border-divider bg-panel p-5">
+        <div id="c1" class="rounded-[12px] border border-divider bg-panel p-5">
           <div class="mb-1 flex items-start justify-between gap-4">
             <h3 class="font-sans text-base font-semibold">Your own script</h3>
             <span class="shrink-0 text-sm font-medium">$30</span>
@@ -206,27 +206,27 @@ tailwind.config = {
             <span id="c1-need" class="inline-flex items-center gap-1.5 text-askink"><iconify-icon icon="lucide:pen-line" width="14" aria-hidden="true"></iconify-icon>Write your script, or remove this option</span>
             <span>0 / 3,000</span>
           </div>
-          <button type="button" class="mt-4 inline-flex min-h-[44px] items-center gap-2 rounded-[12px] border border-divider bg-panel hover:bg-secondary px-4 text-sm font-medium transition-colors duration-160 focus-ring">
+          <button data-go="#c2" data-note="an empty script is removed straight away; one with text asks first." type="button" class="mt-4 inline-flex min-h-[44px] items-center gap-2 rounded-[12px] border border-divider bg-panel hover:bg-secondary px-4 text-sm font-medium transition-colors duration-160 focus-ring">
             <iconify-icon icon="lucide:trash-2" width="16" aria-hidden="true"></iconify-icon>Remove script
           </button>
           <p class="mt-3 text-xs text-muted">An empty script saves (it&rsquo;s a draft) but can&rsquo;t be sent: Review&rsquo;s Send is disabled with this same message. Removing an empty script needs no confirmation.</p>
         </div>
 
         <!-- C2 -->
-        <div class="rounded-[12px] border border-divider bg-espresso/10 p-4">
+        <div id="c2" class="rounded-[12px] border border-divider bg-espresso/10 p-4">
           <div role="dialog" aria-modal="true" aria-labelledby="c2-title" aria-describedby="c2-body" class="rounded-[12px] border border-divider bg-panel p-6 shadow-[0_12px_40px_rgba(0,0,0,0.12)]">
             <h2 id="c2-title" class="mb-2 text-2xl font-semibold tracking-tight">Remove your script?</h2>
             <p id="c2-body" class="mb-5 text-sm leading-relaxed text-muted">What you&rsquo;ve written (128 characters) will be deleted, and $30 comes off your total. This can&rsquo;t be undone.</p>
             <div class="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
-              <button type="button" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-alertborder bg-panel hover:bg-alertbg px-5 text-sm font-medium text-alertink transition-colors duration-160 focus-ring">Delete script</button>
-              <button type="button" autofocus class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] bg-espresso text-cream px-5 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Keep script</button>
+              <button data-go="#c3" type="button" class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] border border-alertborder bg-panel hover:bg-alertbg px-5 text-sm font-medium text-alertink transition-colors duration-160 focus-ring">Delete script</button>
+              <button data-go="#c1" data-note="the dialog closes and the script stays." type="button" autofocus class="inline-flex min-h-[44px] items-center justify-center rounded-[12px] bg-espresso text-cream px-5 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Keep script</button>
             </div>
           </div>
           <p class="mt-3 px-1 text-xs text-muted">Focus starts on Keep script. Escape = keep. Also asked when the script option is removed from the Scene Card, by a template switch, or by accepting a Director suggestion that drops it.</p>
         </div>
 
         <!-- C3 -->
-        <div class="space-y-3">
+        <div id="c3" class="space-y-3">
           <div role="status" class="flex items-start gap-3 rounded-[12px] border border-divider bg-panel p-5 text-sm">
             <iconify-icon icon="lucide:circle-check" width="20" class="mt-0.5 shrink-0 text-okink" aria-hidden="true"></iconify-icon>
             <div>
@@ -256,11 +256,11 @@ tailwind.config = {
               <p class="mb-1 font-semibold">Pick one: your name, or resale</p>
               <p class="mb-4">This video says your name, so Maya can&rsquo;t sell it to anyone else. Nothing was changed and nothing was sent.</p>
               <div class="space-y-2">
-                <button type="button" class="flex w-full min-h-[48px] items-center justify-between gap-3 rounded-[12px] border border-divider bg-panel hover:border-espresso px-4 text-left text-sm transition-colors duration-160 focus-ring">
+                <button data-go="#b2" data-note="resale turns off, and the total is the server’s new quote." type="button" class="flex w-full min-h-[48px] items-center justify-between gap-3 rounded-[12px] border border-divider bg-panel hover:border-espresso px-4 text-left text-sm transition-colors duration-160 focus-ring">
                   <span><span class="font-medium">Keep my name</span><span class="block text-xs text-muted">Only you get the video</span></span>
                   <span class="shrink-0 font-medium">+$85</span>
                 </button>
-                <button type="button" class="flex w-full min-h-[48px] items-center justify-between gap-3 rounded-[12px] border border-divider bg-panel hover:border-espresso px-4 text-left text-sm transition-colors duration-160 focus-ring">
+                <button data-go="#a-label" data-note="the name comes off the video and resale stays on." type="button" class="flex w-full min-h-[48px] items-center justify-between gap-3 rounded-[12px] border border-divider bg-panel hover:border-espresso px-4 text-left text-sm transition-colors duration-160 focus-ring">
                   <span><span class="font-medium">Remove my name</span><span class="block text-xs text-muted">Maya may resell it later</span></span>
                   <span class="shrink-0 text-muted">Included</span>
                 </button>
@@ -330,5 +330,140 @@ tailwind.config = {
 
   </main>
 </div>
+<!-- DESIGN WALK-THROUGH (same block in every design). Buttons and links jump to the
+     state they lead to, here or in another design. Nothing is saved, sent or charged.
+     data-go="#id" or "NN-file.html#id" sets the destination; data-note explains an
+     action whose result isn't drawn. On p.superdesign.dev, draft links work as before. -->
+<style>
+  [id] { scroll-margin-top: 100px; }
+  .walk-flash { outline: 3px solid #84485D !important; outline-offset: 6px; border-radius: 12px; }
+  #walk-note { position: fixed; left: 50%; bottom: 16px; z-index: 60; transform: translateX(-50%); width: max-content; max-width: calc(100% - 32px); padding: 12px 16px; border-radius: 12px; background: #302720; color: #FDF8F3; font: 400 14px/1.45 Inter, sans-serif; box-shadow: 0 12px 40px rgba(0,0,0,.2); }
+  #walk-note[hidden] { display: none; }
+  @media print { #walk-note, #walk-menu { display: none !important; } }
+</style>
+<script>
+(function () {
+  var F = {
+    entrance: '02-boutique-entrance-connected.html', dashboard: '03-creator-dashboard-linked-navigation.html',
+    director: '04-linked-ai-director-workspace.html', detail: '05-creator-detail-modal-connected-navigation.html',
+    ask: '06-linked-ask-question-modal.html', review: '07-linked-review-scene-card-page.html',
+    sent: '08-send-confirmation.html', decline: '09-decline-confirmation-modal-with-navigation.html',
+    saved: '10-saved-ideas.html'
+  };
+  // href="#name" links that point at an app route rather than this page.
+  var ROUTES = {
+    home: F.entrance, collection: F.entrance, studio: F.director, saved: F.saved,
+    'sign-in': '16-sign-in.html#a-label', 'creator-sign-in': '16-sign-in.html#c-label',
+    catalog: '17-ai-director-live-states.html#catalog', rules: '13-creator-limits.html#limits-panel',
+    'limits-panel': '13-creator-limits.html#limits-panel', 'custom-request': '19-custom-request-pending.html#a-label',
+    requests: F.dashboard, 'creator-requests': F.dashboard, request: F.detail
+  };
+  // Superdesign draft links, by the first block of the draft id.
+  var DRAFTS = {
+    '048b6b8a': F.director, '82277dd9': F.entrance, '48723685': F.review, 'a98b81cb': F.sent,
+    'c6e6d108': F.detail, '2b65d4ed': F.dashboard, '5d2c9ba0': F.ask, '7fc2a528': F.decline,
+    '5a21d2ca': F.review, 'b7e484e4': F.saved
+  };
+  var here = location.pathname.split('/').pop();
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var noteEl, noteTimer;
+
+  function note(text) {
+    if (!noteEl) {
+      noteEl = document.createElement('div');
+      noteEl.id = 'walk-note';
+      noteEl.setAttribute('role', 'status');
+      noteEl.hidden = true;
+      document.body.appendChild(noteEl);
+    }
+    noteEl.textContent = 'Design only: ' + text;
+    noteEl.hidden = false;
+    clearTimeout(noteTimer);
+    noteTimer = setTimeout(function () { noteEl.hidden = true; }, 6000);
+  }
+
+  function show(el) {
+    var box = /-(label|title)$/.test(el.id) ? (el.closest('section') || el) : el;
+    el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+    if (!box.matches('a,button,input,select,textarea,[tabindex]')) box.setAttribute('tabindex', '-1');
+    box.focus({ preventScroll: true });
+    box.classList.add('walk-flash');
+    setTimeout(function () { box.classList.remove('walk-flash'); }, 1600);
+  }
+
+  function go(dest) {
+    var parts = dest.split('#'), file = parts[0], id = parts[1];
+    if (file && file !== here) { location.href = dest; return; }
+    var el = id ? document.getElementById(id) : null;
+    if (el) show(el); else window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+  }
+
+  function toggleMenu(btn) {
+    var menu = document.getElementById('walk-menu');
+    if (!menu) {
+      var nav = document.querySelector('header nav');
+      if (!nav) { note('the menu isn’t drawn for this page.'); return; }
+      menu = document.createElement('div');
+      menu.id = 'walk-menu';
+      menu.className = 'md:hidden border-t border-divider bg-cream px-4 py-2';
+      menu.hidden = true;
+      Array.prototype.forEach.call(nav.querySelectorAll('a'), function (a) {
+        var link = a.cloneNode(true);
+        link.removeAttribute('id');
+        link.className = 'flex min-h-[48px] items-center text-base font-medium focus-ring';
+        menu.appendChild(link);
+      });
+      btn.closest('header').appendChild(menu);
+      btn.setAttribute('aria-controls', 'walk-menu');
+    }
+    menu.hidden = !menu.hidden;
+    btn.setAttribute('aria-expanded', String(!menu.hidden));
+    if (!menu.hidden) { var first = menu.querySelector('a'); if (first) first.focus(); }
+  }
+
+  document.addEventListener('keydown', function (e) {
+    var menu = document.getElementById('walk-menu');
+    if (e.key === 'Escape' && menu && !menu.hidden) {
+      var btn = document.querySelector('[aria-controls="walk-menu"]');
+      toggleMenu(btn); btn.focus();
+    }
+  });
+
+  document.addEventListener('click', function (e) {
+    var t = e.target.closest('a,button');
+    if (!t || t.disabled || t.getAttribute('aria-disabled') === 'true') return;
+    var dest = t.getAttribute('data-go'), text = t.getAttribute('data-note');
+    var href = t.tagName === 'A' ? (t.getAttribute('href') || '') : '';
+
+    if (t.tagName === 'BUTTON' && !dest && t.hasAttribute('aria-expanded') && /menu/i.test(t.textContent)) {
+      e.preventDefault(); toggleMenu(t); return;
+    }
+    if (!dest && href.indexOf('p.superdesign.dev/draft/') > -1) {
+      if (location.hostname === 'p.superdesign.dev') return;
+      dest = DRAFTS[href.split('/draft/')[1].slice(0, 8)];
+      if (!dest) return;
+    }
+    if (!dest && href.charAt(0) === '#') {
+      var name = href.slice(1);
+      if (name && document.getElementById(name)) dest = '#' + name;
+      else if (ROUTES[name]) dest = ROUTES[name];
+      else if (!text) text = 'this page isn’t designed yet.';
+    }
+    if (!dest && !text && t.tagName === 'BUTTON') {
+      text = document.body.getAttribute('data-walk-default') || 'this button’s next state isn’t drawn yet.';
+    }
+    if (!dest && !text) return;
+
+    e.preventDefault();
+    if (dest) go(dest);
+    if (text) note(text);
+  });
+
+  if (location.hash) {
+    var target = document.getElementById(location.hash.slice(1));
+    if (target) setTimeout(function () { show(target); }, 300);
+  }
+})();
+</script>
 </body>
 </html>
