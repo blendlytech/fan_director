@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>After-shoot letter - Maya Atelier</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&family=Pinyon+Script&display=swap" rel="stylesheet">
+<script>
+tailwind.config = {
+  theme: {
+    extend: {
+      fontFamily: { serif: ['Cormorant Garamond', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'], script: ['Pinyon Script', 'cursive'] },
+      colors: {
+        cream: '#FDF8F3', panel: '#FFFFFF', secondary: '#F5F0EB', espresso: '#302720', muted: '#70625C',
+        rose: '#E4A4BD', rosehover: '#D595AE', deeprose: '#84485D', divider: '#DED3CB',
+        okbg: '#EEF4EC', okborder: '#C4D9BF', okink: '#4F7A48',
+        askbg: '#F8EFE4', askborder: '#E3C8A6', askink: '#7A5530',
+        paper: '#FBF3EC', blush: '#F3DDE3'
+      },
+      transitionDuration: { '160': '160ms' }
+    }
+  }
+}
+</script>
+<style>
+  body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin: 0; }
+  html { background-color: #FDF8F3; }
+  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
+  .focus-ring:focus-visible { outline: 2px solid #302720; outline-offset: 2px; }
+  .paper-edge { background-image: radial-gradient(circle at 20% 0%, rgba(228,164,189,0.18), transparent 55%), radial-gradient(circle at 100% 100%, rgba(132,72,93,0.10), transparent 50%); }
+</style>
+</head>
+<body>
+<div class="bg-cream font-sans text-espresso min-h-screen">
+
+  <!--
+    DESIGN 22: After-shoot letter (doc 12 §8). Staging design.
+
+    Rules this design encodes:
+    - The letter is a free surprise: never listed, priced or mentioned to the fan before delivery.
+    - It is written only from beats the creator ticks as having happened, plus the creator's notes.
+    - Nothing is sent without the creator's approval. The creator can send it back with changes,
+      change or remove the P.S., or choose not to send a letter.
+    - The P.S. idea comes from the creator's own ideas list. No price, discount, deadline or pressure.
+    - "Let me know" starts a draft and tells the creator; nothing is charged or sent.
+    - The AI-help line stays on until counsel decides (doc 12 §11).
+    - Letter text in this design is a non-explicit placeholder. Real letters are explicit to the level
+      of the approved video; the bracketed line marks where.
+  -->
+
+  <header class="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-divider">
+    <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 h-[80px] flex items-center justify-between gap-4">
+      <div class="flex items-center gap-4 sm:gap-6 min-w-0">
+        <a href="#requests" class="inline-flex min-h-[44px] items-center font-serif text-2xl sm:text-3xl font-medium tracking-tight focus-ring">Maya Atelier</a>
+        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-secondary text-muted border border-divider">Staging design</span>
+      </div>
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="#requests" class="inline-flex min-h-[44px] items-center text-sm font-medium text-deeprose hover:text-muted transition-colors duration-160 focus-ring">Requests</a>
+        <a href="#completed" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Completed</a>
+        <a href="#settings" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Settings</a>
+      </nav>
+      <button type="button" aria-expanded="false" class="md:hidden inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-[12px] px-3 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
+        <iconify-icon icon="lucide:menu" width="18"></iconify-icon>
+        Menu
+      </button>
+    </div>
+  </header>
+
+  <main class="max-w-[1120px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-20">
+
+    <!-- ============================================================
+         A. CREATOR SETTINGS: MY IDEAS LIST
+         ============================================================ -->
+    <section aria-labelledby="a-label" class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 items-start">
+      <div>
+        <p id="a-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A · Creator settings: ideas I&rsquo;d love to make</p>
+        <div class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
+          <h3 class="mb-1 font-sans text-base font-semibold">Your ideas</h3>
+          <p class="mb-5 text-sm text-muted">Letters can end with a P.S. hinting at one of these. Write them the way you&rsquo;d say them. Up to 10.</p>
+          <ul class="space-y-2">
+            <li class="flex items-center justify-between gap-3 rounded-[10px] border border-divider bg-cream px-3 py-2 text-sm">
+              <span>A vampire night: candlelight, black lace and me hungry for you</span>
+              <button type="button" aria-label="Edit idea" class="inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-[10px] text-muted hover:bg-secondary focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon></button>
+            </li>
+            <li class="flex items-center justify-between gap-3 rounded-[10px] border border-divider bg-cream px-3 py-2 text-sm">
+              <span>A slow massage-oil scene in the Vintage Lounge, just the two of us</span>
+              <button type="button" aria-label="Edit idea" class="inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-[10px] text-muted hover:bg-secondary focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon></button>
+            </li>
+            <li class="flex items-center justify-between gap-3 rounded-[10px] border border-divider bg-cream px-3 py-2 text-sm">
+              <span>A lazy morning-after scene in the Floral Studio, soft light and no rush</span>
+              <button type="button" aria-label="Edit idea" class="inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-[10px] text-muted hover:bg-secondary focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon></button>
+            </li>
+          </ul>
+          <button type="button" class="mt-4 inline-flex min-h-[44px] items-center gap-2 rounded-[12px] border border-divider px-4 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
+            <iconify-icon icon="lucide:plus" width="16" aria-hidden="true"></iconify-icon>Add an idea
+          </button>
+          <p class="mt-4 text-xs text-muted">3 of 10 &middot; each up to 200 characters &middot; checked against the platform rules when you save</p>
+        </div>
+      </div>
+      <aside class="space-y-3 text-sm text-muted lg:pt-10">
+        <p class="font-semibold text-espresso">Rules</p>
+        <ul class="list-disc space-y-2 pl-5">
+          <li>Ideas must be things the creator actually offers, within their own limits.</li>
+          <li>With no ideas saved, letters have no P.S.</li>
+          <li>Ideas are never shown to fans as a list.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <!-- ============================================================
+         B. CREATOR: WHAT HAPPENED ON THE DAY
+         ============================================================ -->
+    <section aria-labelledby="b-label" class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 items-start">
+      <div>
+        <p id="b-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">B · Request detail, after filming: write a letter to Sam</p>
+        <div class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
+          <div class="mb-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+            <div>
+              <h3 class="mb-1 font-sans text-base font-semibold">A surprise letter for Sam</h3>
+              <p class="text-sm text-muted">Sam doesn&rsquo;t know about it. It arrives with the video, free.</p>
+            </div>
+            <label class="inline-flex min-h-[44px] shrink-0 cursor-pointer items-center gap-3 text-sm font-medium">
+              <span>Send a letter</span>
+              <span class="relative inline-flex h-6 w-11 items-center rounded-full bg-espresso" aria-hidden="true"><span class="absolute left-6 h-5 w-5 rounded-full bg-panel"></span></span>
+              <input type="checkbox" checked class="sr-only" aria-label="Send a letter with this video">
+            </label>
+          </div>
+
+          <fieldset>
+            <legend class="mb-3 text-sm font-semibold">What made it into the video?</legend>
+            <div class="space-y-2">
+              <label class="flex min-h-[44px] cursor-pointer items-start gap-3 rounded-[10px] border border-divider px-3 py-2.5 text-sm">
+                <input type="checkbox" checked class="mt-0.5 h-4 w-4 accent-espresso">
+                <span><span class="font-mono text-xs text-muted">0:00</span> &nbsp;Greeting Sam on the velvet sofa</span>
+              </label>
+              <label class="flex min-h-[44px] cursor-pointer items-start gap-3 rounded-[10px] border border-divider px-3 py-2.5 text-sm">
+                <input type="checkbox" checked class="mt-0.5 h-4 w-4 accent-espresso">
+                <span><span class="font-mono text-xs text-muted">0:50</span> &nbsp;Massage oil with Leo</span>
+              </label>
+              <label class="flex min-h-[44px] cursor-pointer items-start gap-3 rounded-[10px] border border-divider px-3 py-2.5 text-sm">
+                <input type="checkbox" checked class="mt-0.5 h-4 w-4 accent-espresso">
+                <span><span class="font-mono text-xs text-muted">2:10</span> &nbsp;Leo and Maya, POV for Sam</span>
+              </label>
+              <label class="flex min-h-[44px] cursor-pointer items-start gap-3 rounded-[10px] border border-dashed border-divider px-3 py-2.5 text-sm text-muted">
+                <input type="checkbox" class="mt-0.5 h-4 w-4 accent-espresso">
+                <span><span class="font-mono text-xs">3:40</span> &nbsp;Record player moment <span class="italic">(didn&rsquo;t happen)</span></span>
+              </label>
+              <label class="flex min-h-[44px] cursor-pointer items-start gap-3 rounded-[10px] border border-divider px-3 py-2.5 text-sm">
+                <input type="checkbox" checked class="mt-0.5 h-4 w-4 accent-espresso">
+                <span><span class="font-mono text-xs text-muted">4:30</span> &nbsp;Closing words to Sam</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <label for="notes" class="mb-2 mt-6 block text-sm font-semibold">Anything that changed, or that you loved? <span class="font-normal text-muted">(optional)</span></label>
+          <textarea id="notes" rows="3" class="w-full resize-y rounded-[12px] border border-divider bg-cream px-4 py-3 text-base focus-ring">Leo and I couldn&rsquo;t stop laughing at the start. The oil part went on longer because neither of us wanted to stop.</textarea>
+          <div class="mt-2 text-right text-xs text-muted">112 / 1,000</div>
+
+          <div class="mt-6 flex flex-col gap-3 sm:flex-row">
+            <button type="button" class="inline-flex min-h-[44px] items-center justify-center gap-2 rounded-[12px] bg-espresso px-5 text-sm font-medium text-cream hover:bg-espresso/90 transition-colors duration-160 focus-ring">
+              <iconify-icon icon="lucide:feather" width="16" aria-hidden="true"></iconify-icon>Write the letter
+            </button>
+          </div>
+        </div>
+      </div>
+      <aside class="space-y-3 text-sm text-muted lg:pt-10">
+        <p class="font-semibold text-espresso">Rules</p>
+        <ul class="list-disc space-y-2 pl-5">
+          <li>Beat labels are the script&rsquo;s short headings, never its full text.</li>
+          <li>The letter uses only ticked beats and the notes.</li>
+          <li>Notes are checked against the platform rules on save.</li>
+          <li>With the switch off, no letter is written or sent.</li>
+        </ul>
+      </aside>
+    </section>
+
+    <!-- ============================================================
+         C. CREATOR: REVIEW THE LETTER
+         ============================================================ -->
+    <section aria-labelledby="c-label">
+      <p id="c-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">C · Creator: review before it goes with the video</p>
+      <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 items-start">
+
+        <article class="rounded-[12px] border border-divider bg-panel p-5 sm:p-8">
+          <div class="mb-6 flex flex-wrap items-center gap-2 text-xs">
+            <span class="inline-flex items-center gap-1.5 rounded-full border border-divider bg-secondary px-2.5 py-1 font-medium text-muted"><iconify-icon icon="lucide:sparkles" width="12" aria-hidden="true"></iconify-icon>Drafted with AI from your notes</span>
+            <span class="inline-flex items-center gap-1.5 rounded-full border border-divider bg-secondary px-2.5 py-1 font-medium text-muted">Version 2 &middot; changed paragraph 2</span>
+          </div>
+          <div class="space-y-4 font-serif text-xl leading-relaxed">
+            <p>Sam,</p>
+            <p>I&rsquo;m still thinking about last night. The lamps were low, the velvet was warm, and the second that oil touched my skin I forgot anyone was watching but you.</p>
+            <p class="rounded-[10px] border border-askborder bg-askbg px-3 py-2">I couldn&rsquo;t stop smiling for you, even with the camera right there beside me.
+              <span class="mt-2 flex items-start gap-1.5 font-sans text-xs text-askink"><iconify-icon icon="lucide:triangle-alert" width="14" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>May touch &ldquo;Showing my face&rdquo;. Check this line, then edit or confirm it.</span>
+            </p>
+            <p class="font-sans text-sm italic text-muted">[Explicit memories of the ticked moments appear here in the real letter.]</p>
+            <p>Every word I said to you, I meant.</p>
+            <p>Yours, still warm,<br><span class="font-script text-4xl text-deeprose">Maya</span></p>
+            <p class="border-t border-divider pt-4 italic">P.S. Making that for you was so much fun that I already have an idea of my own&hellip; candlelight, black lace, and me in a very hungry mood. I think you&rsquo;d love it. Let me know &#128536;</p>
+          </div>
+        </article>
+
+        <div class="space-y-4">
+          <div class="rounded-[12px] border border-divider bg-panel p-5">
+            <p class="mb-3 text-sm font-semibold">P.S. idea</p>
+            <div class="space-y-2 text-sm">
+              <label class="flex min-h-[44px] cursor-pointer items-start gap-3 rounded-[10px] border border-espresso bg-secondary px-3 py-2"><input type="radio" name="ps" checked class="mt-1 h-4 w-4 accent-espresso">A vampire night</label>
+              <label class="flex min-h-[44px] cursor-pointer items-start gap-3 rounded-[10px] border border-divider px-3 py-2"><input type="radio" name="ps" class="mt-1 h-4 w-4 accent-espresso">A lazy morning-after scene</label>
+              <label class="flex min-h-[44px] cursor-pointer items-start gap-3 rounded-[10px] border border-divider px-3 py-2"><input type="radio" name="ps" class="mt-1 h-4 w-4 accent-espresso">No P.S.</label>
+            </div>
+          </div>
+
+          <div class="rounded-[12px] border border-divider bg-panel p-5">
+            <label for="changes" class="mb-2 block text-sm font-semibold">Send back with changes</label>
+            <textarea id="changes" rows="3" placeholder="e.g. Softer opening, and mention how the record kept skipping." class="w-full resize-y rounded-[12px] border border-divider bg-cream px-4 py-3 text-base focus-ring"></textarea>
+            <button type="button" class="mt-3 inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[12px] border border-divider px-4 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
+              <iconify-icon icon="lucide:refresh-cw" width="16" aria-hidden="true"></iconify-icon>Rewrite with my changes
+            </button>
+            <p class="mt-2 text-xs text-muted">4 of 10 rewrites left for this request</p>
+          </div>
+
+          <div class="rounded-[12px] border border-divider bg-panel p-5">
+            <button type="button" class="inline-flex min-h-[44px] w-full items-center justify-center gap-2 rounded-[12px] bg-rose px-4 text-sm font-medium text-espresso hover:bg-rosehover transition-colors duration-160 focus-ring">
+              <iconify-icon icon="lucide:check" width="16" aria-hidden="true"></iconify-icon>Approve letter
+            </button>
+            <p class="mt-2 flex items-start gap-1.5 text-xs text-askink"><iconify-icon icon="lucide:lock" width="12" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>Check the highlighted line first.</p>
+            <div class="mt-3 flex flex-col gap-2 sm:flex-row lg:flex-col">
+              <button type="button" class="inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-[12px] px-4 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon>Edit it myself</button>
+              <button type="button" class="inline-flex min-h-[44px] flex-1 items-center justify-center gap-2 rounded-[12px] px-4 text-sm font-medium text-muted hover:bg-secondary transition-colors duration-160 focus-ring">Don&rsquo;t send a letter</button>
+            </div>
+            <p class="mt-4 border-t border-divider pt-3 text-xs text-muted">Approving attaches the letter to Sam&rsquo;s delivery. It isn&rsquo;t sent until the video is.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================
+         D. FAN: THE LETTER ARRIVES WITH THE VIDEO
+         ============================================================ -->
+    <section aria-labelledby="d-label">
+      <p id="d-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">D · Fan: delivery page, below the video</p>
+      <div class="rounded-[16px] border border-divider bg-secondary p-4 sm:p-8 lg:p-12">
+        <p class="mb-6 flex items-center justify-center gap-2 text-sm text-muted"><iconify-icon icon="lucide:mail-open" width="16" class="text-deeprose" aria-hidden="true"></iconify-icon>Maya left you something with your video</p>
+
+        <article class="paper-edge relative mx-auto max-w-[640px] rounded-[6px] border border-blush bg-paper px-6 py-10 shadow-[0_24px_60px_-30px_rgba(48,39,32,0.45)] sm:px-12 sm:py-14">
+          <span class="absolute right-6 top-6 inline-flex h-12 w-12 items-center justify-center rounded-full bg-deeprose/90 text-cream shadow-md sm:right-10 sm:top-10" aria-hidden="true">
+            <span class="font-script text-2xl leading-none">M</span>
+          </span>
+          <p class="mb-8 font-sans text-[11px] uppercase tracking-[0.25em] text-deeprose/80">The morning after</p>
+          <div class="space-y-5 font-serif text-xl leading-[1.7] text-espresso sm:text-[22px]">
+            <p class="font-script text-4xl text-deeprose">Sam,</p>
+            <p>I&rsquo;m still thinking about last night. The lamps were low, the velvet was warm, and the second that oil touched my skin I forgot anyone was watching but you.</p>
+            <p>Leo and I couldn&rsquo;t stop laughing at the start, and then, very suddenly, we weren&rsquo;t laughing at all.</p>
+            <p class="font-sans text-sm italic text-muted">[Explicit memories of the shoot appear here in the real letter.]</p>
+            <p>Every word I said to you, I meant.</p>
+            <p class="pt-2 text-lg italic">Yours, still warm,</p>
+            <p class="-mt-3 font-script text-5xl text-deeprose">Maya</p>
+            <p class="border-t border-blush pt-5 text-lg italic">P.S. Making that for you was so much fun that I already have an idea of my own&hellip; candlelight, black lace, and me in a very hungry mood. I think you&rsquo;d love it. Let me know &#128536;</p>
+          </div>
+        </article>
+
+        <div class="mx-auto mt-8 flex max-w-[640px] flex-col items-center gap-3 sm:flex-row sm:justify-center">
+          <button type="button" class="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-[12px] bg-rose px-6 text-sm font-medium text-espresso hover:bg-rosehover transition-colors duration-160 focus-ring sm:w-auto">
+            <iconify-icon icon="lucide:heart" width="16" aria-hidden="true"></iconify-icon>Tell Maya you&rsquo;d love it
+          </button>
+          <button type="button" class="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-[12px] border border-divider bg-panel px-6 text-sm font-medium hover:bg-cream transition-colors duration-160 focus-ring sm:w-auto">
+            <iconify-icon icon="lucide:download" width="16" aria-hidden="true"></iconify-icon>Save letter (PDF)
+          </button>
+        </div>
+        <p class="mx-auto mt-5 max-w-[640px] text-center text-xs text-muted">Maya wrote this with help from AI. Only you can see it.</p>
+      </div>
+      <p class="mt-3 text-xs text-muted">The AI-help line stays until counsel decides (doc 12 &sect;11). The PDF uses the same layout. With no P.S., the &ldquo;Tell Maya&rdquo; button is not shown.</p>
+    </section>
+
+    <!-- ============================================================
+         E. FAN: AFTER "TELL MAYA YOU'D LOVE IT"
+         ============================================================ -->
+    <section aria-labelledby="e-label" class="max-w-[640px]">
+      <p id="e-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">E · Fan: after tapping the button</p>
+      <div role="status" class="flex items-start gap-3 rounded-[12px] border border-okborder bg-okbg p-5 text-sm">
+        <iconify-icon icon="lucide:heart-handshake" width="20" class="mt-0.5 shrink-0 text-okink" aria-hidden="true"></iconify-icon>
+        <div>
+          <p class="mb-1 font-semibold">Maya knows you&rsquo;d love it.</p>
+          <p class="mb-3 text-muted">Her idea is waiting in your studio as a new draft. Shape it whenever you like. Nothing is charged or sent to Maya until you send a request.</p>
+          <a href="#studio" class="inline-flex min-h-[44px] items-center gap-2 font-medium text-deeprose hover:underline focus-ring">Open the draft<iconify-icon icon="lucide:arrow-right" width="16" aria-hidden="true"></iconify-icon></a>
+        </div>
+      </div>
+      <p class="mt-3 text-xs text-muted">If the idea no longer validates against Maya&rsquo;s catalog, the draft opens empty with her idea as a note, never silently changed. The button can be used once per letter.</p>
+    </section>
+
+  </main>
+</div>
+</body>
+</html>

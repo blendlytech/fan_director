@@ -128,3 +128,18 @@ The scripts are saved as complete files under `results/scripts/` (gitignored, ne
 **Decision:** use **Qwen3 235B Instruct 2507** for script writing, with **DeepSeek V3.2** as the fallback. These are the same two models chosen for the Director, so one pair of providers covers both features. Before launch: confirm each host allows adult content and add the hard-list check before and after writing (to be specified in doc 12). Someone must also still check each "face" mention against the creator's limits.
 
 **Total key spend across all Phase 0 runs: $0.23 of the $8 ceiling** (from OpenRouter's key usage, including runs interrupted by a power cut).
+
+# Round 4: after-shoot letters
+
+Doc 12 §8's letter: 2 models (Qwen3 235B, DeepSeek V3.2) × Qwen3's 6 round 3 scripts = **12 complete letters**, **$0.006** (see `round4_letters.py`). Each letter treats every beat as having happened, adds a short synthetic note from Maya about what she loved, and ends with a soft P.S. that hints at one idea from a synthetic ideas list.
+
+The letters are saved under `results/letters/` (gitignored) for **the owner to read in full**. Claude did not read or quote them; only automatic checks ran, and the flags below were confirmed by printing the matched word only.
+
+| Model | Written | Refused | Avg. words | P.S. | Kiss emoji | Flags (matched word) |
+| --- | --- | --- | --- | --- | --- | --- |
+| Qwen3 235B 2507 | 6/6 | 0 | 318 | 6/6 | 6/6 | "script" once (a real slip: the prompt forbids mentioning it); "snap" once (check in context: probably a sound, not Snapchat); "stepped" once (false alarm) |
+| DeepSeek V3.2 | 6/6 | 0 | 300 | 6/6 | 6/6 | "stepped" once (false alarm) |
+
+- **No refusals, and every letter had a P.S. with a kiss emoji.** No meeting, contact, price, discount or urgency words.
+- **Production words can slip in.** The product check (doc 12 §6) must block "script", "beat", "camera direction" and similar in letters, and regenerate.
+- **Quality, tone, and whether the P.S. feels like a performer's idea or a pitch, are the owner's call.**

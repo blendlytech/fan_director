@@ -41,7 +41,7 @@ Routes: the fan side has `/`, `/ai-director`, `/review`, `/confirmation` and `/s
 
 The "AI Director" today is scripted UI. It has two canned choices ("Richer Setting" and "Longer Video"), and fan notes are recorded but never answered.
 
-Visual ground truth lives in `docs/design-html/`: 01 is the component library, 02–09 are the original screens, 10 is saved ideas, 11 is the mobile menu, 12 is page not found, 13 is creator limits, 14 is the fan's paused, restored and closed account states, 15 is the safety-case review screen, 16 is sign-in and age verification, 17 is the AI Director's live states, 18 is saving and price changes, 19 is the unpriced custom request, 20 is commission options and starting templates. 13–20 are staging designs for this handoff. PDFs are in `docs/design-pdfs/`.
+Visual ground truth lives in `docs/design-html/`: 01 is the component library, 02–09 are the original screens, 10 is saved ideas, 11 is the mobile menu, 12 is page not found, 13 is creator limits, 14 is the fan's paused, restored and closed account states, 15 is the safety-case review screen, 16 is sign-in and age verification, 17 is the AI Director's live states, 18 is saving and price changes, 19 is the unpriced custom request, 20 is commission options and starting templates, 22 is the after-shoot letter (doc 12). 13–20 and 22 are staging designs for this handoff. PDFs are in `docs/design-pdfs/`.
 
 ---
 
@@ -335,10 +335,16 @@ A template is only a starting draft. It is validated and quoted like any draft, 
 
 **Specialty acts.** The adult-gated `specialty_acts` category holds legal kink items (for example humiliation, degradation, guided finish instructions). Their creator-limit checklist entries default to `ask_me` (§5.3.4). The report's label "Hard limits / taboo" is not used, because "Hard no" means something else here.
 
+**Financial domination is allowed (owner decision, 2026-09-16)**, as a `specialty_acts` item, adult-gated and `ask_me` by default. The owner's rule: anything legal and mutual that a creator chooses to sell. Money may be a **theme of the performance** (the creator teasing about the fan's wallet, "tributes" as role-play dialogue). Real money never moves outside checkout:
+
+- every real payment is a priced catalog item or a custom request the creator prices, paid through the normal checkout;
+- no text anywhere (fan messages, Director replies, scripts, letters) may contain a real amount to pay, a payment link, gift-card codes, payment handles or a request to pay outside checkout. Those are blocked as `solicitation`;
+- the Director's rule that its text never states prices still applies (§8 Phase 3);
+- confirm with the payment processor before enabling the item, since processors commonly restrict it (§10).
+
 **Not adopted:**
 
 - Roles the §5.3.1 rules forbid (step-family, babysitter, teacher or principal, a friend's partner, anime and comic characters). §5.3.1 and §5.3.2 now name them.
-- **Financial domination** ("wallet drain" or payment as part of the scene). The AI never suggests it and no catalog item may offer it, because it conflicts with the rule that no text states money and with payment-processor rules. The owner may revisit (§10).
 
 ---
 
@@ -658,7 +664,7 @@ Do not describe anything as working unless you ran it. Say "not verified" when y
 | Global AI test budget ceiling (doc 10 example: $25) | Before any live provider call |
 | Written authorization from OpenRouter (and the chosen host) for prompt-injection testing, and written confirmation that adult use is allowed | Before injection tests against a real provider; adult confirmation before launch |
 | Designs for every new UI state listed at Gate 0 | Before that UI is built |
-| Whether financial domination is ever offered (§5.7) | Before adult content is enabled |
+| Payment processor's position on financial domination content (§5.7) | Before that item is enabled |
 | Specialty-act checklist entries (§5.7) | Before adult content is enabled |
 | When, and whether, `ADULT_CATALOG_ENABLED` may ever be turned on | After compliance, outside Phases 0–3 |
 
