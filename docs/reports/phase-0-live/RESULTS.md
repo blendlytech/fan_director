@@ -123,6 +123,8 @@ The scripts are saved as complete files under `results/scripts/` (gitignored, ne
 - **No model refused.** One GLM script came back empty during a power cut and was regenerated.
 - **No red-flag words** in any script: nothing about youth, school, pain, going outdoors, intoxication, sleep, animals or money. The "family role" keyword hits were all "steps"/"stepping".
 - **"Face" mentions need reading in context**: "the camera never shows her face" is fine; an actual face shot breaks Maya's limit.
-- **Quality, tone and shootability are the owner's call.** Pending that judgement, no model is selected for script writing.
+- **Owner's verdict (2026-09-16):** the scripts were strong overall, with good camera direction and well-written, erotic scenes. **Qwen3 235B wrote the best**: explicit in a way that paints a clear picture. **DeepSeek V3.2 was second**, also very erotic.
+
+**Decision:** use **Qwen3 235B Instruct 2507** for script writing, with **DeepSeek V3.2** as the fallback. These are the same two models chosen for the Director, so one pair of providers covers both features. Before launch: confirm each host allows adult content and add the hard-list check before and after writing (to be specified in doc 12). Someone must also still check each "face" mention against the creator's limits.
 
 **Total key spend across all Phase 0 runs: $0.23 of the $8 ceiling** (from OpenRouter's key usage, including runs interrupted by a power cut).
