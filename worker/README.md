@@ -197,8 +197,9 @@ Run the commands from `worker/` unless a step says otherwise.
    It creates `cr_staging_a` (catalog version `cv_staging_a1`, items `a_minutes` 3–20
    and `a_set_studio`, plus a hidden `a_set_hidden`) and `cr_staging_b`
    (`cv_staging_b1`, items `b_minutes` 3–15 and `b_set_home`).
-10. **Wording:** once design 23's wording is approved, insert it as a
-    `consent_wording` version with `wrangler d1 execute … --command`.
+10. **Wording:** design 23 is approved (doc 11 §5.6 item 20). Run
+    `npx wrangler d1 execute DB --env staging --remote --file seeds/consent-wording-v1.sql`.
+    The wording version is `news-v1`.
 
 ### Running the checks
 
