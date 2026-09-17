@@ -1,6 +1,6 @@
 # Phase 0 gate report — Fan Director Studio
 
-> **Owner note, 2026-09-16.** Received from Astra and committed as written. The `docs/reports/phase-0-eval/` files it lists were not pushed and are not in this repository. The browser suite it could not run passed 24/24 (and unit tests 67/67) on the owner's machine at `fbc5324`. The §8.6 decisions are recorded in doc 11 §5.6, items 13–16, and **Gate 0 is approved**.
+> **Owner note, 2026-09-16.** Received from Astra and committed as written. The `docs/reports/phase-0-eval/` files it lists were not pushed and are not in this repository. The browser suite it could not run passed 24/24 (and unit tests 67/67) on the owner's machine at `fbc5324`. The §8.6 decisions are recorded in doc 11 §5.6, items 13–16. All Gate 0 decisions are now made; starting Phase 1 waits for the owner's go-ahead.
 
 Date: 2026-09-16 (UTC). Repository: `blendlytech/fan_director`.
 Baseline: initial audit at `73fa9253b9aa31af6b2eb77d758153d4566179d7`; revised against `main` at `e471f36`. Fetched fd93133, 7e74744, b9873c9, ba387da and e471f36, preserving local report work by rebase. No remote push or deployment.
