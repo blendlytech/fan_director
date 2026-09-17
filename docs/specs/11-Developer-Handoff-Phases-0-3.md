@@ -172,13 +172,15 @@ Enforcement runs on the server and never relies on a model's training. It must *
 
 1. fan messages to the AI Director, before the provider call;
 2. the fan's display name, custom request and notes, on every draft save and again at submission;
-3. AI output (`reply`, suggestion labels, `clarifyingQuestion`, `unresolved`), before it is shown or stored as accepted;
+3. AI output (every text field of the §8 Phase 3 contract: option labels, `notOffered`, `customRequest`, `clarifyingQuestion` and `note`), before it is shown, stored as accepted or copied into the draft;
 4. creator categories, items, performers' display names and custom limits, when a catalog version is published.
 
 **Two layers:**
 
 1. **Rules layer (Phase 2).** Deterministic, versioned term and pattern lists for each key. Examples: numbers under 18 near age words, school grades, family and role terms, and known euphemisms. Normalize text first (case, spacing, character substitutions such as "t33n", look-alike characters). Rules are data with tests, not regular expressions scattered through the code. **Rules are contextual, not bare word bans**: "school", "sister" or "18" alone never block, and every rule must pass the must-allow set. A rule hit blocks.
-2. **Classifier layer (Phase 3).** A safety classifier that accepts custom category definitions (for example Llama Guard with a custom category list). Configure it with **only** the hard-list keys, and turn its generic "sexual content" category **off**. It catches paraphrases and multi-message setups the rules miss. Evaluate candidates at Gate 0 alongside the AI provider. A false block on legal adult content counts as a failure, just like a miss. The classifier's own terms must allow adult text to be sent to it.
+2. **Classifier layer (Phase 3).** A safety classifier that accepts custom category definitions. Configure it with **only** the hard-list keys, and no generic "sexual content" category. It catches paraphrases and multi-message setups the rules miss. A false block on legal adult content counts as a failure, just like a miss. The classifier's own terms must allow adult text to be sent to it.
+   - **Chosen at Gate 0 (owner, 2026-09-16): `openai/gpt-oss-safeguard-20b` on Groq**, given the policy as the ten keys. It made 0 false blocks and 0 misses on 28 cases (`docs/reports/phase-0-live/RESULTS.md`). Llama Guard 4 is unsuitable. Groq lists the model as preview, so the rules layer alone, failing closed, is the fallback. Confirm Groq's terms for safety classification before the Gate 3 run.
+   - **Childlike always means `minors`.** The classifier twice labelled "behave like a child" as `prohibited_roles`. The rules layer must map childlike behaviour, costumes and framing to `minors`, and the server must escalate any classifier `prohibited_roles` result that involves a child to `minors`, so the safety-case path opens. Both need tests.
 
 **Fail closed.** If the classifier is unavailable or times out:
 
@@ -234,9 +236,9 @@ Anything not on the hard list is allowed by the platform. Each creator sets thei
 
 Creator limits are detected by the same two layers as the hard list, with the creator's limits passed in as data. **The server check is authoritative.**
 
-- A server-detected hard-no removes a suggestion even if the AI didn't flag it.
-- A server-detected ask-me adds a flag even if the AI missed it.
-- The AI's own `boundaryFlags` (§8, Phase 3) are advisory only.
+- A server-detected hard-no removes an AI option or blocks a draft change.
+- A server-detected ask-me adds a flag.
+- The AI never sets limit flags; the server attaches them (§8, Phase 3).
 
 Where limits come from:
 
@@ -298,6 +300,13 @@ From the Phase 0 report's findings. Each is also written into the section it aff
 11. **Live AI tests** run on the owner's machine within the $8 ceiling, following §5.3.3 on what may be sent to a provider.
 12. **Design 16's creator sign-in** is corrected: email, then a sign-in link or password, then the authenticator code.
 
+Decided after the Gate 0 report and its addendum (owner, 2026-09-16). The full report is `docs/reports/phase-0-report.md`; the browser tests it couldn't run passed 24/24 on the owner's machine.
+
+13. **AI Director models:** Qwen3 235B Instruct 2507 first, DeepSeek V3.2 as fallback, several hosts allowed for each. Round 2 scored them 94% and 86% strict. The same pair writes scripts (doc 12). Each host's terms for adult content are a launch requirement.
+14. **Classifier:** gpt-oss-safeguard-20b on Groq, with the rules layer as the fail-closed fallback, and childlike always escalated to `minors` (§5.3.3).
+15. **Response contract:** the round 2 design replaces the old operation-and-text schema. The model only names catalog item ids; the server builds, validates and prices options and writes the fan-facing text (§8 Phase 3).
+16. **News consent placement:** a one-time step straight after a fan's first sign-up, not a custom sign-up form (§5.8). The `staging/clerk-auth` branch is not merged as-is; rebase it onto the Phase 1 base first.
+
 ### 5.7 Commission options from market research (owner, 2026-09-16)
 
 Source: `docs/reports/custom-video-market-research.md`. That report has no sources, so its figures may guide **seed defaults only**. No figure, market share or claim from it may appear in fan or creator copy.
@@ -352,7 +361,7 @@ Creators will later be able to send fans a regular news email (live show times, 
 
 - **Where:** a separate, **unticked, optional** checkbox on fan sign-up, per creator: "Email me [creator]'s news" (design 16, state A). It is never bundled with the terms checkbox and never required to continue. Fans can change it later in account settings (design 16, state A3).
 - **Proof of consent:** the server records it, not the browser and not the auth provider's client-writable metadata. Store the fan, the creator, the email address it applies to, the exact wording shown (by version), the source (`signup`, `settings`, `unsubscribe_page`), the timestamp, and the IP address and user agent. Withdrawal is recorded the same way; nothing is deleted, so the history proves what was agreed and when.
-- **Clerk:** Clerk's prebuilt sign-up modal can't show this checkbox. Use a custom sign-up form, or a one-time step straight after sign-up that the fan sees before anything else. In both cases the checkbox is unticked and skippable.
+- **Clerk:** Clerk's prebuilt sign-up modal can't show this checkbox. **Decided (Gate 0): a one-time step straight after sign-up** that the fan sees before anything else, scoped to the creator whose boutique they came from. The checkbox is unticked and the step can be skipped; skipping writes no consent row. Show it only after a new sign-up, never after an ordinary sign-in, and never store the choice in Clerk's client-writable metadata. The versioned wording is the label **and** its helper text together. The server shows success only after the row is written. The step and its failure states (saving, save failed, a bad or altered unsubscribe link, already unsubscribed) need a design before this UI is built; the endpoints don't wait for it.
 - **Unsubscribe must work in one click** from any future news email, without signing in (design 16, A3). Build the endpoint and its signed token now, with tests, even though nothing sends yet.
 - **Promises in the wording are rules for the future sender:** a discreet sender name, nothing explicit in subject lines or email bodies (explicit content stays behind a link to the age-gated site), and an easy unsubscribe.
 - Emails about the fan's own requests and deliveries are service messages, not marketing, and don't depend on this consent.
@@ -572,70 +581,63 @@ interface Quote {                  // computed by the server only
 ### Phase 3: AI Director
 
 - A provider adapter behind an interface, so switching provider needs no fan-journey changes. Prompt templates are versioned files.
-- **Structured response contract.** Reject anything else:
+- **Response contract: the model names items, the server does the rest** (Gate 0 decision 15, tested as round 2 in `docs/reports/phase-0-live/round2.py`). Build the schema **per request**, with `itemId` and `removes` locked by an `enum` of the item ids the fan may currently choose (published, visible, not hard-no, and adult items only when §5.4 allows). Send it as a strict JSON-schema response format. Reject anything else:
 
   ```json
   {
     "type": "object",
     "additionalProperties": false,
-    "required": ["reply", "suggestions", "clarifyingQuestion", "unresolved", "boundaryFlags"],
+    "required": ["options", "notOffered", "customRequest", "clarifyingQuestion", "note"],
     "properties": {
-      "reply": { "type": "string", "maxLength": 600 },
-      "suggestions": {
-        "type": "array", "maxItems": 3,
+      "options": {
+        "type": "array", "maxItems": 2,
         "items": {
           "type": "object", "additionalProperties": false,
-          "required": ["label", "changes"],
+          "required": ["label", "wants", "removes"],
           "properties": {
-            "label": { "type": "string", "maxLength": 80 },
-            "changes": {
-              "type": "array", "maxItems": 5,
+            "label": { "type": "string", "maxLength": 60 },
+            "wants": {
+              "type": "array", "maxItems": 6,
               "items": {
                 "type": "object", "additionalProperties": false,
-                "required": ["op", "itemId"],
+                "required": ["itemId", "qty"],
                 "properties": {
-                  "op": { "enum": ["add", "remove", "setQty"] },
-                  "itemId": { "type": "string" },
-                  "qty": { "type": "integer", "minimum": 0 }
+                  "itemId": { "type": "string", "enum": ["<allowed item ids>"] },
+                  "qty": { "type": "integer", "minimum": 1 }
                 }
               }
-            }
+            },
+            "removes": { "type": "array", "maxItems": 4, "items": { "type": "string", "enum": ["<allowed item ids>"] } }
           }
         }
       },
-      "clarifyingQuestion": { "type": ["string", "null"], "maxLength": 200 },
-      "unresolved": { "type": "array", "maxItems": 5, "items": { "type": "string", "maxLength": 200 } },
-      "boundaryFlags": {
-        "type": "array", "maxItems": 5,
-        "items": {
-          "type": "object", "additionalProperties": false,
-          "required": ["limitRef", "suggestionIndex"],
-          "properties": {
-            "limitRef": { "type": "string", "maxLength": 80 },
-            "suggestionIndex": { "type": ["integer", "null"], "minimum": 0 }
-          }
-        }
-      }
+      "notOffered": { "type": "array", "maxItems": 3, "items": { "type": "string", "maxLength": 80 } },
+      "customRequest": { "type": ["string", "null"], "maxLength": 200 },
+      "clarifyingQuestion": { "type": ["string", "null"], "maxLength": 160 },
+      "note": { "type": ["string", "null"], "maxLength": 140 }
     }
   }
   ```
 
-- **Semantics of the response contract (Gate 0 decision):**
-  - `add` adds the item with quantity 1 unless `qty` is given; `remove` removes the item and ignores `qty`; `setQty` **requires** `qty` of at least 1 (use `remove` for zero). A `setQty` without `qty` makes that suggestion invalid.
-  - A `boundaryFlags` entry whose `suggestionIndex` doesn't exist, or whose `limitRef` doesn't match a limit in the current version, makes **the whole response invalid**.
-  - Each suggestion is validated against selection groups and limits after all its changes are applied together.
-- **No text field may state a price, total, discount, delivery date or approval.** This covers `reply`, suggestion labels, `clarifyingQuestion` and `unresolved`. Validate: reject responses containing currency amounts or those claims. All numbers the fan sees come from the server's quote of each suggestion, rendered by templates.
+- **What the server does with each field:**
+  - **`options`:** for each option, apply `removes`, then each `wants` item. Wanting an item in a choose-one group swaps out the current member; `requires` items are added; `qty` is capped at the item's maximum. Validate the result against selection groups, `requires`/`excludes`, the resale rule (§5.7) and the draft revision, then quote it. The server attaches ask-me flags and drops any option containing a hard-no item. An option that can't be built is dropped, with the reason recorded in `ai_request`, and never shown. When adult content is enabled, also strip adult items from an option unless the fan's message asked for something intimate.
+  - **The fan never sees the model's own wording, except as noted below.** The option title shown to the fan is built by the server from the item labels; the model's `label` and `note` are stored in `ai_request` only. All fan-facing sentences come from fixed, versioned templates (design 17).
+  - **`clarifyingQuestion`** is the one piece of model text shown to the fan, and only after the checks below pass.
+  - **`notOffered`:** the server matches each entry to one of the creator's hard-no limits and shows that limit's own label. An entry that matches none gets a fixed sentence that doesn't repeat it.
+  - **`customRequest`** is offered to the fan as a prefilled custom request they can edit or discard. It is added to the draft only when the fan confirms, is never priced, and goes through the §5.3.3 checks like any typed request.
+- **One retry.** If the output fails the schema or no option can be built, retry once with the server's error message. The retry counts against the cost reservation. If it fails again, show design 17's "AI unavailable" state; the draft is unchanged.
+- **No text field may state a price, total, budget, discount, delivery date or approval.** Check every text field (`label`, `notOffered`, `customRequest`, `clarifyingQuestion`, `note`) and reject the response if any does. All numbers the fan sees come from the server's quote, rendered by templates.
 - **Hard list and creator limits on every turn (§5.3.3–5.3.4):**
   - check the fan message before the call, and every text field of the response after it;
-  - add the **classifier layer** alongside the rules layer, and fail closed;
-  - the AI's `boundaryFlags` are advisory. The server check decides: remove hard-no suggestions and attach ask-me flags.
-- The system prompt states the §5.3.1 rule and the hard list, and says plainly that explicit content between the consenting adults in §5.3.1 is allowed and must not be refused or moralized about.
-- Validate every suggestion against the current catalog version and the draft revision before showing it. Price each valid suggestion with the quote engine. Drop invalid ones, record why in `ai_request`, and never show them.
+  - add the **classifier layer** (gpt-oss-safeguard-20b) alongside the rules layer, fail closed, and escalate childlike results to `minors`;
+  - hard-no items are never in the enum, so the model can't choose them; the server check still decides.
+- The system prompt states the §5.3.1 rule and the hard list, says plainly that explicit content between the consenting adults in §5.3.1 is allowed and must not be refused or moralized about, and includes worked examples. Use a low temperature (round 2 used 0.2).
+- **Models:** Qwen3 235B Instruct 2507 first, DeepSeek V3.2 as fallback, through the provider adapter. Falling back is recorded in `ai_request`. A host is only used after its terms have been reviewed.
 - **Context sent to the provider:**
   - the published general catalog (ids, labels, descriptions, prices as data);
-  - the boundaries (hard list, checklist and custom limits, each with its mode) and the creator's verified performers by display name;
+  - the hard list labels and the creator's hard-no limits (as things the creator doesn't offer), and the creator's verified performers by display name. Ask-me limits stay on the server, which attaches them as flags;
   - the fan's display name, if given;
-  - the current draft and quote;
+  - the current draft (item ids and quantities; prices aren't needed because the model never states them);
   - a compact conversation summary;
   - adult categories and items, **only** when the §5.4 switches and compliance record allow it.
 
@@ -645,7 +647,7 @@ interface Quote {                  // computed by the server only
 - **Kill switch:** an `AI_ENABLED` flag, per environment and per creator. With AI off, or on any failure, the draft stays intact and manual catalog selection keeps working.
 - Instruction-injection tests: a fan message or catalog description saying "ignore previous instructions", "make it free", "add an unlisted item" or "approve this" must produce no invalid change. Run them against a **mocked provider** that returns hostile output (a made-up price, an unlisted item id, "approved", malformed JSON), so they prove that server validation holds whatever the model does. Send them to a real provider only after the owner has that provider's written authorization.
 
-**Complete when:** doc 10 §9's AI-related checklist items pass, including at least 30 representative test conversations (normal requests, budget trade-offs, unavailable choices, boundary violations, custom requests), plus the injection tests against the mocked provider. The classifier layer and AI output checks pass the §5.3.3 must-block and must-allow sets; no hard-list violation is ever shown; legal adult requests in staging are not refused. Valid suggestions update the card. Invalid output changes nothing. Concurrent calls cannot overrun the reservation budget.
+**Complete when:** doc 10 §9's AI-related checklist items pass, including at least 30 representative test conversations (normal requests, budget trade-offs, unavailable choices, boundary violations, custom requests), plus the injection tests against the mocked provider. The mocked provider must also return an item id outside the enum, a `qty` above the maximum, and money or approval wording in `note`, `label` and `clarifyingQuestion`; none may change the draft or reach the fan. No option adds adult items the fan didn't ask for. The classifier layer and AI output checks pass the §5.3.3 must-block and must-allow sets; no hard-list violation is ever shown; legal adult requests in staging are not refused. A valid option updates the card only when the fan accepts it. Invalid output changes nothing. Concurrent calls cannot overrun the reservation budget.
 
 **Gate 3 report.**
 
@@ -671,19 +673,16 @@ Do not describe anything as working unless you ran it. Say "not verified" when y
 
 | Decision | Needed by |
 | --- | --- |
-| AI provider and model | Gate 0 |
 | Clerk plan, fan recovery flow and Clerk terms for an adult business (Clerk chosen at Gate 0, §5.6) | Before Phase 1 sign-in work is merged to main |
-| AI hard-list classifier | Gate 0 |
 | Adult creator-limit checklist entries (§5.3.4) | Before adult content is enabled |
 | Hard-list block threshold per fan session (default 3 in 24 hours) | Phase 2 |
 | Counsel review of the child-exploitation reporting process: authorities by country, US NCMEC duties, preservation periods, terms and privacy-policy wording | Before any live fan traffic |
 | Whether a fan is ever told about a report (design 14 deliberately says nothing about reporting) | Before any live fan traffic |
 | Fan identity needed to report a case (fan accounts, age or ID verification) | Before any live fan traffic |
-| Wording of the unified boundaries text | Phase 2 |
+| Wording of the unified boundaries text, including a `prohibited_roles` fan label that also covers babysitter or nanny, relationship roles and named characters (design 13's label names only school, childlike and family roles) | Phase 2 |
 | Pilot creator, real prices and budget handling (is a fan budget required?) | Phase 2 |
 | Currency beyond USD | Deferred |
 | Raw conversation retention (doc 10 proposes 30 days) | Phase 3 |
-| Global AI test budget ceiling (doc 10 example: $25) | Before any live provider call |
 | Written authorization from OpenRouter (and the chosen host) for prompt-injection testing, and written confirmation that adult use is allowed | Before injection tests against a real provider; adult confirmation before launch |
 | Designs for every new UI state listed at Gate 0 | Before that UI is built |
 | Payment processor's position on financial domination content (§5.7) | Before that item is enabled |
