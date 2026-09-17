@@ -204,7 +204,22 @@ Run the commands from `worker/` unless a step says otherwise.
 
 ### Running the checks
 
-The frontend doesn't call the API yet, so the checks run from the browser console:
+The frontend doesn't call the API yet, so the checks run against the deployed site
+from a browser. `scripts/staging-checklist.mjs` drives them:
+
+```sh
+node scripts/staging-checklist.mjs creator          # also: fanA-first, fanA-again, fanB
+node scripts/staging-checklist.mjs unsubscribe --token <token>
+```
+
+It opens a window on the staging site and waits for a sign-in. **Copy the link from
+the email and paste it into that window's address bar**: clicking it opens your normal
+browser, which is a different browser to Clerk, and the sign-in never reaches the
+window running the checks. Each scenario then runs its calls with a fresh session
+token and no cookies, prints the results and appends them to the git-ignored
+`.staging-evidence.json`. `fanA-first` records its draft id for the later scenarios.
+
+The manual fallback, one call at a time:
 
 1. On the staging site, sign in as the account a check needs.
 2. Open DevTools > Console, paste all of `scripts/staging-console.js`, and press Enter.

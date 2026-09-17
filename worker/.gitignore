@@ -1,3 +1,5 @@
 node_modules
 .wrangler
 dist
+.staging-evidence.json
+.staging-checklist-state.json
