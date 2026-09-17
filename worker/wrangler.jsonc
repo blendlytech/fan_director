@@ -61,9 +61,9 @@
       ],
       "vars": {
         "ENVIRONMENT": "staging",
-        "APP_ORIGIN": "https://fan-director-studio-staging.scmillsc0809.workers.dev",
+        "APP_ORIGIN": "https://fan-director-studio-staging.blendly.workers.dev",
         "CLERK_ISSUER": "https://superb-crawdad-9550.clerk.accounts.dev",
-        "CLERK_AUTHORIZED_PARTIES": "https://fan-director-studio-staging.scmillsc0809.workers.dev",
+        "CLERK_AUTHORIZED_PARTIES": "https://fan-director-studio-staging.blendly.workers.dev",
         "AI_ENABLED": "false",
         "ADULT_CATALOG_ENABLED": "false"
       }

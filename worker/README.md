@@ -154,7 +154,8 @@ HMAC-SHA256 over `v1.<payload>` with the Worker secret `UNSUBSCRIBE_SIGNING_KEY`
 Nothing below has been done. Each step needs the owner's Cloudflare or Clerk account.
 
 **Decided (doc 11 §5.6 item 19):** staging runs at
-`https://fan-director-studio-staging.scmillsc0809.workers.dev` with a Clerk
+`https://fan-director-studio-staging.blendly.workers.dev` (Cloudflare account
+blendly.tech@gmail.com; the public demo is on a different account) with a Clerk
 **development** instance. Development instances include every paid feature,
 TOTP included, and are capped at 100 users. A production instance needs a domain
 the owner controls, plus Clerk Pro.
