@@ -1,0 +1,10 @@
+# Copy to worker/.dev.vars (gitignored) for `wrangler dev`. Never commit real values.
+# Staging values are set only with `wrangler secret put <NAME> --env staging`.
+
+# Clerk Dashboard > API keys > "JWKS public key" (PEM). One line with \n escapes is fine.
+CLERK_JWT_KEY="-----BEGIN PUBLIC KEY-----\n...\n-----END PUBLIC KEY-----"
+# Clerk Dashboard > API keys > Secret key (development instance only here).
+CLERK_SECRET_KEY="sk_test_..."
+# 32+ random bytes, base64. Generate with:
+#   node -e "console.log(require('crypto').randomBytes(32).toString('base64'))"
+UNSUBSCRIBE_SIGNING_KEY="..."
