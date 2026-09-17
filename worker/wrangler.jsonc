@@ -55,15 +55,15 @@
         {
           "binding": "DB",
           "database_name": "fan-director-staging",
-          "database_id": "00000000-0000-0000-0000-000000000000",
+          "database_id": "5411bfbd-0b73-49f4-b866-30d26076fe9b",
           "migrations_dir": "migrations"
         }
       ],
       "vars": {
         "ENVIRONMENT": "staging",
-        "APP_ORIGIN": "https://REPLACE-staging-origin",
+        "APP_ORIGIN": "https://fan-director-studio-staging.scmillsc0809.workers.dev",
         "CLERK_ISSUER": "https://superb-crawdad-9550.clerk.accounts.dev",
-        "CLERK_AUTHORIZED_PARTIES": "https://REPLACE-staging-origin",
+        "CLERK_AUTHORIZED_PARTIES": "https://fan-director-studio-staging.scmillsc0809.workers.dev",
         "AI_ENABLED": "false",
         "ADULT_CATALOG_ENABLED": "false"
       }
