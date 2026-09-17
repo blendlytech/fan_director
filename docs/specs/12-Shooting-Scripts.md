@@ -1,4 +1,4 @@
-# Fan Director Studio: AI Shooting Scripts, After-Shoot Letters and Follow-Ups
+# Fan Director Studio: AI Shooting Scripts and After-Shoot Letters
 
 Date: 2026-09-16
 Owner: Clay Mills
@@ -104,7 +104,7 @@ Needs a design before any UI is built (design 21, not yet drawn). It has these s
 - **Out of date:** the Scene Card changed after the script was written.
 - **Unavailable:** AI off, budget reached or checks failed twice. The creator can still film without a script.
 
-## 8. The after-shoot letter and the follow-up note
+## 8. The after-shoot letter
 
 ### 8.1 The after-shoot letter
 
@@ -137,27 +137,19 @@ Owner idea, 2026-09-16. After the video is filmed, the AI turns the script into 
 
 **Output:** `{ paragraphs: string[], signOff }`. The server runs the §6 checks 4–6 on every field, a production-word check (script, beat, camera direction and similar) and a scope check that every moment traces to a ticked beat or the notes (anything it can't match is highlighted for the creator, as in §6).
 
-### 8.2 The follow-up note (proposed by the owner 2026-09-16; details below are Claude's recommendations, owner confirms)
+### 8.2 No follow-up note (owner decision, 2026-09-16)
 
-Some days after delivery, a second, shorter note goes out. The creator still can't stop thinking about the video (one or two explicit moments, plainly), really wants to do it again, has been thinking about some ideas, and asks whether the fan wants to hear them. **It never describes an idea, and it never mentions a price.**
+There is no follow-up message after the letter. A second note asking to "do it again" would make the letter look like it was written to sell. Ongoing marketing to fans belongs in a separate, opt-in mailing list (possible future doc 13), never in these messages.
 
-- **Timing:** 5 days after the fan **first opens** the video (creator can set 3 to 10). A "can't stop thinking about it" note makes no sense to a fan who hasn't watched yet.
-- **Skipped when:** the fan never opened the video; there is an open complaint, dispute or refund; the fan has already started a new request with this creator; or the fan has turned off notes from creators.
-- **One per video, never a second nudge.** If the fan doesn't answer, nothing else is sent.
-- **Approved up front.** The creator approves the letter and the follow-up together at delivery, so there is no extra work later. They can cancel the follow-up any time before it sends.
-- **The fan's answer is a real action.** The note has one button, "Yes, tell me". Tapping it notifies the creator, who replies with ideas in their own words or from an AI draft built from their ideas list, which they approve. Because the fan asked, the pitch is invited, not pushed. There is no "No" button to feel guilty about.
-- **Voice:** as §8.1, 60 to 120 words.
-- **Output:** `{ paragraphs: string[], signOff }`, with the same checks as §8.1 plus a check that no idea, price or deadline appears.
+### 8.3 Delivery, honesty and tests
 
-### 8.3 Both messages
+**Delivery:** rendered by the server into a stylised letter (a PDF and an in-app view) in the creator's brand colours. Only the fan who commissioned the video can open it. It is never resold, even when the video may be.
 
-**Delivery:** rendered by the server into a stylised letter (a PDF and an in-app view) in the creator's brand colours. Only the fan who commissioned the video can open them. They are never resold, even when the video may be.
+**Honesty.** The letter goes out as the creator's own message, because the creator reads, edits and approves it. Lawsuits have been brought over fans paying for messages they believed creators wrote themselves, so counsel decides before launch whether the letter must say it was written with AI help (§11). Until then, build the renderer with the disclosure line switched on.
 
-**Honesty.** They go out as the creator's own messages, because the creator reads, edits and approves them. Lawsuits have been brought over fans paying for messages they believed creators wrote themselves, and the follow-up is also marketing. Counsel decides before launch whether the messages must say they were written with AI help, and whether fans need an opt-out from follow-ups (§11). Until then, build the renderer with the disclosure line switched on and give fans a "notes from creators" setting.
+**Tests:** the same automated checks as scripts, plus production-word, repetition, solicitation and "nothing invented" cases passed straight to the checker. In the quality set (§9), each card also gets a letter from 2 different ticked-beat selections, and **the owner reads all of them in full** before Gate S.
 
-**Tests:** the same automated checks as scripts, plus production-word, repetition, solicitation and "nothing invented" cases passed straight to the checker. In the quality set (§9), each card also gets a letter and a follow-up from 2 different ticked-beat selections, and **the owner reads all of them in full** before Gate S.
-
-**Design 22** (`docs/design-html/22-after-shoot-letter.html`) was drawn for the first version. Its P.S. (states C and D) and "Tell Maya you'd love it" state (E) are **superseded**: redraw them for the no-P.S. letter and the follow-up note once the owner confirms §8.2.
+**Design 22** (`docs/design-html/22-after-shoot-letter.html`): the creator's tick-and-notes step, the letter review with changes, and the stylised letter the fan receives.
 
 ## 9. Tests and Gate S
 
@@ -192,9 +184,7 @@ Some days after delivery, a second, shorter note goes out. The creator still can
 | --- | --- |
 | Is script writing free for creators, included in a plan, or metered? | Before Gate S |
 | Generations and revisions per request (default 10) and monthly allowance per creator | Before Gate S |
-| Follow-up note details: timing, skip rules, approving it up front, the "Yes, tell me" button (§8.2) | Before design 22 is redrawn |
-| Counsel: whether the follow-up note needs an opt-out for fans (§8.3) | Before the follow-up launches |
-| Counsel: whether fans must be told the letter and follow-up were written with AI help (§8.3) | Before the letter launches |
+| Counsel: whether fans must be told the letter was written with AI help (§8.3) | Before the letter launches |
 | Script retention after delivery (proposed 90 days) | Before Gate S |
 | Counsel: AI-assisted labelling duties, and whether stored explicit scripts add record-keeping duties | Before launch |
 | Written confirmation from each allowed host that adult use is permitted | Before launch |

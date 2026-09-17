@@ -44,9 +44,8 @@ tailwind.config = {
     - The letter is a free surprise: never listed, priced or mentioned to the fan before delivery.
     - It is written only from beats the creator ticks as having happened, plus the creator's notes.
     - Nothing is sent without the creator's approval. The creator can send it back with changes,
-      change or remove the P.S., or choose not to send a letter.
-    - The P.S. idea comes from the creator's own ideas list. No price, discount, deadline or pressure.
-    - "Let me know" starts a draft and tells the creator; nothing is charged or sent.
+      edit it, or choose not to send a letter.
+    - Raw voice: mostly the explicit moments, plainly named. No scenery, no P.S., no future-video ask.
     - The AI-help line stays on until counsel decides (doc 12 §11).
     - Letter text in this design is a non-explicit placeholder. Real letters are explicit to the level
       of the approved video; the bracketed line marks where.
@@ -73,50 +72,11 @@ tailwind.config = {
   <main class="max-w-[1120px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-20">
 
     <!-- ============================================================
-         A. CREATOR SETTINGS: MY IDEAS LIST
-         ============================================================ -->
-    <section aria-labelledby="a-label" class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 items-start">
-      <div>
-        <p id="a-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A · Creator settings: ideas I&rsquo;d love to make</p>
-        <div class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
-          <h3 class="mb-1 font-sans text-base font-semibold">Your ideas</h3>
-          <p class="mb-5 text-sm text-muted">Letters can end with a P.S. hinting at one of these. Write them the way you&rsquo;d say them. Up to 10.</p>
-          <ul class="space-y-2">
-            <li class="flex items-center justify-between gap-3 rounded-[10px] border border-divider bg-cream px-3 py-2 text-sm">
-              <span>A vampire night: candlelight, black lace and me hungry for you</span>
-              <button type="button" aria-label="Edit idea" class="inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-[10px] text-muted hover:bg-secondary focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon></button>
-            </li>
-            <li class="flex items-center justify-between gap-3 rounded-[10px] border border-divider bg-cream px-3 py-2 text-sm">
-              <span>A slow massage-oil scene in the Vintage Lounge, just the two of us</span>
-              <button type="button" aria-label="Edit idea" class="inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-[10px] text-muted hover:bg-secondary focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon></button>
-            </li>
-            <li class="flex items-center justify-between gap-3 rounded-[10px] border border-divider bg-cream px-3 py-2 text-sm">
-              <span>A lazy morning-after scene in the Floral Studio, soft light and no rush</span>
-              <button type="button" aria-label="Edit idea" class="inline-flex min-h-[44px] min-w-[44px] shrink-0 items-center justify-center rounded-[10px] text-muted hover:bg-secondary focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon></button>
-            </li>
-          </ul>
-          <button type="button" class="mt-4 inline-flex min-h-[44px] items-center gap-2 rounded-[12px] border border-divider px-4 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
-            <iconify-icon icon="lucide:plus" width="16" aria-hidden="true"></iconify-icon>Add an idea
-          </button>
-          <p class="mt-4 text-xs text-muted">3 of 10 &middot; each up to 200 characters &middot; checked against the platform rules when you save</p>
-        </div>
-      </div>
-      <aside class="space-y-3 text-sm text-muted lg:pt-10">
-        <p class="font-semibold text-espresso">Rules</p>
-        <ul class="list-disc space-y-2 pl-5">
-          <li>Ideas must be things the creator actually offers, within their own limits.</li>
-          <li>With no ideas saved, letters have no P.S.</li>
-          <li>Ideas are never shown to fans as a list.</li>
-        </ul>
-      </aside>
-    </section>
-
-    <!-- ============================================================
-         B. CREATOR: WHAT HAPPENED ON THE DAY
+         A. CREATOR: WHAT HAPPENED ON THE DAY
          ============================================================ -->
     <section aria-labelledby="b-label" class="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-8 items-start">
       <div>
-        <p id="b-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">B · Request detail, after filming: write a letter to Sam</p>
+        <p id="b-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A · Request detail, after filming: write a letter to Sam</p>
         <div class="rounded-[12px] border border-divider bg-panel p-5 sm:p-6">
           <div class="mb-5 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div>
@@ -179,10 +139,10 @@ tailwind.config = {
     </section>
 
     <!-- ============================================================
-         C. CREATOR: REVIEW THE LETTER
+         B. CREATOR: REVIEW THE LETTER
          ============================================================ -->
     <section aria-labelledby="c-label">
-      <p id="c-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">C · Creator: review before it goes with the video</p>
+      <p id="c-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">B · Creator: review before it goes with the video</p>
       <div class="grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-6 items-start">
 
         <article class="rounded-[12px] border border-divider bg-panel p-5 sm:p-8">
@@ -191,28 +151,18 @@ tailwind.config = {
             <span class="inline-flex items-center gap-1.5 rounded-full border border-divider bg-secondary px-2.5 py-1 font-medium text-muted">Version 2 &middot; changed paragraph 2</span>
           </div>
           <div class="space-y-4 font-serif text-xl leading-relaxed">
-            <p>Sam,</p>
-            <p>I&rsquo;m still thinking about last night. The lamps were low, the velvet was warm, and the second that oil touched my skin I forgot anyone was watching but you.</p>
-            <p class="rounded-[10px] border border-askborder bg-askbg px-3 py-2">I couldn&rsquo;t stop smiling for you, even with the camera right there beside me.
+            <p>Sam.</p>
+            <p>I&rsquo;m still not over it. I don&rsquo;t usually get like that, I swear, but your idea with Leo and me&hellip; I felt like a different person.</p>
+            <p class="rounded-[10px] border border-askborder bg-askbg px-3 py-2">I watched it back twice already and I couldn&rsquo;t stop grinning at the camera the whole time.
               <span class="mt-2 flex items-start gap-1.5 font-sans text-xs text-askink"><iconify-icon icon="lucide:triangle-alert" width="14" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>May touch &ldquo;Showing my face&rdquo;. Check this line, then edit or confirm it.</span>
             </p>
-            <p class="font-sans text-sm italic text-muted">[Explicit memories of the ticked moments appear here in the real letter.]</p>
-            <p>Every word I said to you, I meant.</p>
-            <p>Yours, still warm,<br><span class="font-script text-4xl text-deeprose">Maya</span></p>
-            <p class="border-t border-divider pt-4 italic">P.S. Making that for you was so much fun that I already have an idea of my own&hellip; candlelight, black lace, and me in a very hungry mood. I think you&rsquo;d love it. Let me know &#128536;</p>
+            <p class="font-sans text-sm italic text-muted">[The most explicit moments of the video, named plainly in Maya&rsquo;s words, appear here in the real letter.]</p>
+            <p>Just thinking about it again is doing things to me.</p>
+            <p><span class="font-script text-4xl text-deeprose">Maya</span></p>
           </div>
         </article>
 
         <div class="space-y-4">
-          <div class="rounded-[12px] border border-divider bg-panel p-5">
-            <p class="mb-3 text-sm font-semibold">P.S. idea</p>
-            <div class="space-y-2 text-sm">
-              <label class="flex min-h-[44px] cursor-pointer items-start gap-3 rounded-[10px] border border-espresso bg-secondary px-3 py-2"><input type="radio" name="ps" checked class="mt-1 h-4 w-4 accent-espresso">A vampire night</label>
-              <label class="flex min-h-[44px] cursor-pointer items-start gap-3 rounded-[10px] border border-divider px-3 py-2"><input type="radio" name="ps" class="mt-1 h-4 w-4 accent-espresso">A lazy morning-after scene</label>
-              <label class="flex min-h-[44px] cursor-pointer items-start gap-3 rounded-[10px] border border-divider px-3 py-2"><input type="radio" name="ps" class="mt-1 h-4 w-4 accent-espresso">No P.S.</label>
-            </div>
-          </div>
-
           <div class="rounded-[12px] border border-divider bg-panel p-5">
             <label for="changes" class="mb-2 block text-sm font-semibold">Send back with changes</label>
             <textarea id="changes" rows="3" placeholder="e.g. Softer opening, and mention how the record kept skipping." class="w-full resize-y rounded-[12px] border border-divider bg-cream px-4 py-3 text-base focus-ring"></textarea>
@@ -238,10 +188,10 @@ tailwind.config = {
     </section>
 
     <!-- ============================================================
-         D. FAN: THE LETTER ARRIVES WITH THE VIDEO
+         C. FAN: THE LETTER ARRIVES WITH THE VIDEO
          ============================================================ -->
     <section aria-labelledby="d-label">
-      <p id="d-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">D · Fan: delivery page, below the video</p>
+      <p id="d-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">C · Fan: delivery page, below the video</p>
       <div class="rounded-[16px] border border-divider bg-secondary p-4 sm:p-8 lg:p-12">
         <p class="mb-6 flex items-center justify-center gap-2 text-sm text-muted"><iconify-icon icon="lucide:mail-open" width="16" class="text-deeprose" aria-hidden="true"></iconify-icon>Maya left you something with your video</p>
 
@@ -249,46 +199,24 @@ tailwind.config = {
           <span class="absolute right-6 top-6 inline-flex h-12 w-12 items-center justify-center rounded-full bg-deeprose/90 text-cream shadow-md sm:right-10 sm:top-10" aria-hidden="true">
             <span class="font-script text-2xl leading-none">M</span>
           </span>
-          <p class="mb-8 font-sans text-[11px] uppercase tracking-[0.25em] text-deeprose/80">The morning after</p>
+          <p class="mb-8 font-sans text-[11px] uppercase tracking-[0.25em] text-deeprose/80">After your video</p>
           <div class="space-y-5 font-serif text-xl leading-[1.7] text-espresso sm:text-[22px]">
             <p class="font-script text-4xl text-deeprose">Sam,</p>
-            <p>I&rsquo;m still thinking about last night. The lamps were low, the velvet was warm, and the second that oil touched my skin I forgot anyone was watching but you.</p>
-            <p>Leo and I couldn&rsquo;t stop laughing at the start, and then, very suddenly, we weren&rsquo;t laughing at all.</p>
-            <p class="font-sans text-sm italic text-muted">[Explicit memories of the shoot appear here in the real letter.]</p>
-            <p>Every word I said to you, I meant.</p>
-            <p class="pt-2 text-lg italic">Yours, still warm,</p>
-            <p class="-mt-3 font-script text-5xl text-deeprose">Maya</p>
-            <p class="border-t border-blush pt-5 text-lg italic">P.S. Making that for you was so much fun that I already have an idea of my own&hellip; candlelight, black lace, and me in a very hungry mood. I think you&rsquo;d love it. Let me know &#128536;</p>
+            <p>I&rsquo;m still not over it. I don&rsquo;t usually get like that, I swear, but your idea with Leo and me&hellip; I felt like a different person.</p>
+            <p class="font-sans text-sm italic text-muted">[The most explicit moments of the video, named plainly in Maya&rsquo;s words, appear here in the real letter.]</p>
+            <p>Just thinking about it again is doing things to me.</p>
+            <p class="font-script text-5xl text-deeprose">Maya</p>
           </div>
         </article>
 
         <div class="mx-auto mt-8 flex max-w-[640px] flex-col items-center gap-3 sm:flex-row sm:justify-center">
-          <button type="button" class="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-[12px] bg-rose px-6 text-sm font-medium text-espresso hover:bg-rosehover transition-colors duration-160 focus-ring sm:w-auto">
-            <iconify-icon icon="lucide:heart" width="16" aria-hidden="true"></iconify-icon>Tell Maya you&rsquo;d love it
-          </button>
           <button type="button" class="inline-flex min-h-[48px] w-full items-center justify-center gap-2 rounded-[12px] border border-divider bg-panel px-6 text-sm font-medium hover:bg-cream transition-colors duration-160 focus-ring sm:w-auto">
             <iconify-icon icon="lucide:download" width="16" aria-hidden="true"></iconify-icon>Save letter (PDF)
           </button>
         </div>
         <p class="mx-auto mt-5 max-w-[640px] text-center text-xs text-muted">Maya wrote this with help from AI. Only you can see it.</p>
       </div>
-      <p class="mt-3 text-xs text-muted">The AI-help line stays until counsel decides (doc 12 &sect;11). The PDF uses the same layout. With no P.S., the &ldquo;Tell Maya&rdquo; button is not shown.</p>
-    </section>
-
-    <!-- ============================================================
-         E. FAN: AFTER "TELL MAYA YOU'D LOVE IT"
-         ============================================================ -->
-    <section aria-labelledby="e-label" class="max-w-[640px]">
-      <p id="e-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">E · Fan: after tapping the button</p>
-      <div role="status" class="flex items-start gap-3 rounded-[12px] border border-okborder bg-okbg p-5 text-sm">
-        <iconify-icon icon="lucide:heart-handshake" width="20" class="mt-0.5 shrink-0 text-okink" aria-hidden="true"></iconify-icon>
-        <div>
-          <p class="mb-1 font-semibold">Maya knows you&rsquo;d love it.</p>
-          <p class="mb-3 text-muted">Her idea is waiting in your studio as a new draft. Shape it whenever you like. Nothing is charged or sent to Maya until you send a request.</p>
-          <a href="#studio" class="inline-flex min-h-[44px] items-center gap-2 font-medium text-deeprose hover:underline focus-ring">Open the draft<iconify-icon icon="lucide:arrow-right" width="16" aria-hidden="true"></iconify-icon></a>
-        </div>
-      </div>
-      <p class="mt-3 text-xs text-muted">If the idea no longer validates against Maya&rsquo;s catalog, the draft opens empty with her idea as a note, never silently changed. The button can be used once per letter.</p>
+      <p class="mt-3 text-xs text-muted">The AI-help line stays until counsel decides (doc 12 &sect;11). The PDF uses the same layout. There is no P.S. and no follow-up message.</p>
     </section>
 
   </main>
