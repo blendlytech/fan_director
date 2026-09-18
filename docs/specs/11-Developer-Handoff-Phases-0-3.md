@@ -325,6 +325,11 @@ Decided at the Gate 1 review (owner, 2026-09-17). The Gate 1 report is `docs/rep
     - **No HTTP route issues unsubscribe tokens.** Only the future email sender calls `issueUnsubscribeToken()`.
 19. **Staging runs on workers.dev with a Clerk development instance.** Clerk's development instances include every paid feature, TOTP included, and are capped at 100 users. A production instance needs a domain the owner controls, plus Pro (item 17). Before creator accounts go live, run the first-sign-up timing check again on the production instance, because Clerk's session handling differs between development and production.
 20. **Design 23 approved as drawn (owner, 2026-09-17).** The first wording version is `news-v1`: label "Email me {creator}’s news", helper "Live show times, new videos and when custom videos open. Discreet sender name, nothing explicit in your inbox. Unsubscribe anytime." Wording is one global row, so the UI replaces `{creator}` with the creator's display name. The seed is `worker/seeds/consent-wording-v1.sql`. Also approved: the unsubscribe page needs a confirm button (mail scanners open links), and leaving the step without pressing Continue counts as a skip that writes no row. SMS second factor is off in the Clerk instance, as the `fva` check requires (item 17).
+21. **Gate 1 approved (owner, 2026-09-18).**
+    - Staging runs at `https://fan-director-studio-staging.blendly.workers.dev`, on the blendly.tech@gmail.com Cloudflare account and Clerk development instance `superb-crawdad-9550`. Evidence is in `docs/reports/phase-1-report.md` §0.
+    - Follow-up the owner will do later: in Clerk, turn password and Google sign-in off, switch fans to email link (it is email code now), and turn backup codes on.
+    - The authenticator app (on) and SMS (off) are confirmed correct and need no further checks.
+    - Phase 2 needs its own go-ahead.
 
 ### 5.7 Commission options from market research (owner, 2026-09-16)
 

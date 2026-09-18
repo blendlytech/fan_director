@@ -2,7 +2,7 @@
 
 Date: 2026-09-17. Base: `main` at **dc86106**. Branch: **staging/clerk-auth**.
 
-**Status (updated 2026-09-18): staging is deployed and verified. Six of seven Gate 1 criteria are met on staging. The seventh ("auth as approved") is NOT met, only because the Clerk instance settings still differ from the approved ones (§0.3). Awaiting the owner's Gate 1 decision. Stop here.** No Phase 2 work or consent UI was started.
+**Status: GATE 1 APPROVED by the owner on 2026-09-18.** Staging is deployed and verified, with six of seven criteria met there. The seventh ("auth as approved") was approved with a follow-up: the owner will change the remaining Clerk settings later (password off, Google off, email link instead of code, backup codes on; §0.3). The authenticator app and SMS settings are confirmed correct by the owner. Phase 2 has not started and needs its own go-ahead.
 
 Sections 1–7 below are the original rebuild report of 2026-09-17, kept as written. Where they conflict with §0, §0 is current. In particular, §1's endpoint table predates the Gate 1 review: drafts now live at `/api/creators/:creatorId/drafts/:id`, and the creator draft route and the unsubscribe-link route were removed (doc 11 §5.6 item 18).
 
