@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom'
 import { Header } from '../components/layout/Header'
 import { ProgressTrail } from '../components/layout/ProgressTrail'
+import { LimitsPanel } from '../components/boundaries/CreatorLimits'
 import { Button } from '../components/common/Button'
+import { capabilities } from '../config'
 import { Icon } from '../components/common/Icon'
 import { SceneImage } from '../components/common/SceneImage'
 import { useCommission } from '../state/commission'
@@ -131,8 +133,14 @@ export function ReviewScene() {
                   <div>
                     <h4 className="mb-1 text-sm font-medium text-espresso">Creator Boundaries</h4>
                     <p className="mb-2 text-xs leading-relaxed text-muted">
-                      All options are from Maya&rsquo;s approved catalog. Wardrobe is creator&rsquo;s choice
-                      (non-explicit).
+                      {capabilities.serverCatalog ? (
+                        <>All options are from Maya&rsquo;s approved catalog. Maya&rsquo;s limits are listed below.</>
+                      ) : (
+                        <>
+                          All options are from Maya&rsquo;s approved catalog. Wardrobe is creator&rsquo;s choice
+                          (non-explicit).
+                        </>
+                      )}
                     </p>
                     <p className="text-xs leading-relaxed text-muted">
                       <strong>No payment is taken today.</strong> Maya will review your request first.
@@ -143,6 +151,13 @@ export function ReviewScene() {
             </div>
           </div>
         </div>
+
+        {/* Staging: the limits again before sending, with the hard list in full (doc 11 §5.3.2, design 13 A) */}
+        {capabilities.serverCatalog && (
+          <div className="mt-10">
+            <LimitsPanel boundaries={view.boundaries} creatorName={view.creatorName} id="review-limits" />
+          </div>
+        )}
 
         {/* Final Action Area */}
         <div className="mx-auto mb-20 mt-10 max-w-[600px] text-center">

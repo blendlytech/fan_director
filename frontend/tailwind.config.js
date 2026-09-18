@@ -25,6 +25,10 @@ export default {
           hover: '#D66A5A',
         },
         success: '#8EB486',
+        // Creator limits (design 13): "doesn't do these" is a soft rose tint,
+        // "Ask Maya first" the dashboard's pending tan, softened.
+        limitno: { bg: '#FAEEF2', border: '#E9C6D3' },
+        limitask: { bg: '#F8EFE4', border: '#E3C8A6', ink: '#7A5530' },
         status: {
           new: '#4B9FE3',
           pending: '#D4A574',

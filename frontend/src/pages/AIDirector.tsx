@@ -1,7 +1,9 @@
 import { useRef, useState } from 'react'
 import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { LimitsCard } from '../components/boundaries/CreatorLimits'
 import { Button } from '../components/common/Button'
+import { capabilities } from '../config'
 import { Icon } from '../components/common/Icon'
 import { SceneImage } from '../components/common/SceneImage'
 import { Header } from '../components/layout/Header'
@@ -119,6 +121,11 @@ export function AIDirector() {
           {/* -------------------------------------------------------------- */}
           <div className="flex flex-col lg:col-span-7">
             <div className="mb-8 flex-1 space-y-8">
+              {/* Design 13, state B on phones: the first item in the conversation, so it scrolls with the chat. */}
+              {capabilities.serverCatalog && (
+                <LimitsCard boundaries={view.boundaries} creatorName={view.creatorName} className="lg:hidden" />
+              )}
+
               {/* Turn 1 — fan brief */}
               <Turn speaker="fan">
                 <p className="text-sm leading-relaxed sm:text-base">
@@ -596,20 +603,35 @@ export function AIDirector() {
                     </div>
                   </div>
 
-                  <div className="flex gap-3 rounded-lg border border-divider bg-secondary/50 p-3 text-sm">
-                    <Icon icon="lucide:shield-check" width={16} className="mt-0.5 shrink-0 text-muted" />
-                    <div className="space-y-1 text-[11px] leading-relaxed text-muted">
-                      <p className="mb-1 font-medium text-espresso">Creator Boundaries Apply</p>
-                      <p>
-                        All options are selected from Maya's approved catalog. Wardrobe and setting
-                        adhere to non-explicit guidelines.
-                      </p>
-                      <p>
+                  {capabilities.serverCatalog ? (
+                    <>
+                      {/* Design 13, state B: beside the Scene Card on desktop. */}
+                      <LimitsCard
+                        boundaries={view.boundaries}
+                        creatorName={view.creatorName}
+                        className="hidden lg:block"
+                      />
+                      <p className="text-[11px] leading-relaxed text-muted">
                         Final scope, price, and delivery date require creator review before any
                         payment is taken.
                       </p>
+                    </>
+                  ) : (
+                    <div className="flex gap-3 rounded-lg border border-divider bg-secondary/50 p-3 text-sm">
+                      <Icon icon="lucide:shield-check" width={16} className="mt-0.5 shrink-0 text-muted" />
+                      <div className="space-y-1 text-[11px] leading-relaxed text-muted">
+                        <p className="mb-1 font-medium text-espresso">Creator Boundaries Apply</p>
+                        <p>
+                          All options are selected from Maya's approved catalog. Wardrobe and setting
+                          adhere to non-explicit guidelines.
+                        </p>
+                        <p>
+                          Final scope, price, and delivery date require creator review before any
+                          payment is taken.
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <details className="rounded-lg border border-divider bg-panel">
                     <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-2 px-3 text-xs font-medium text-espresso focus-ring">

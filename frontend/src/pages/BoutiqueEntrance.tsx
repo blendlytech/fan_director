@@ -1,4 +1,7 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { LimitsPanel } from '../components/boundaries/CreatorLimits'
+import { capabilities } from '../config'
 import { Header } from '../components/layout/Header'
 import { Button } from '../components/common/Button'
 import { Icon } from '../components/common/Icon'
@@ -54,6 +57,18 @@ function formatRange(view: CatalogView, setting: SettingId) {
 export function BoutiqueEntrance() {
   const navigate = useNavigate()
   const { view, commit } = useCommission()
+  const { hash } = useLocation()
+
+  // The Director's "Rules for everyone" link lands on the limits panel. The
+  // site scrolls smoothly, and a smooth scroll started mid-navigation gets
+  // cancelled, so this one jumps, after the first paint.
+  useEffect(() => {
+    if (hash !== '#limits-panel') return
+    const frame = requestAnimationFrame(() =>
+      document.getElementById('limits-panel')?.scrollIntoView({ behavior: 'instant', block: 'start' }),
+    )
+    return () => cancelAnimationFrame(frame)
+  }, [hash])
 
   // Starting from a curated scene seeds the draft, so the Director opens on the
   // setting the fan actually picked rather than always on the first one.
@@ -139,6 +154,13 @@ export function BoutiqueEntrance() {
             </Link>
           </div>
         </section>
+
+        {/* Staging: the creator's limits, before planning (design 13, state A) */}
+        {capabilities.serverCatalog && (
+          <div className="mb-16 sm:mb-20">
+            <LimitsPanel boundaries={view.boundaries} creatorName={view.creatorName} />
+          </div>
+        )}
 
         {/* Theme Cards Section */}
         <section className="mb-20 sm:mb-24">
@@ -227,19 +249,22 @@ export function BoutiqueEntrance() {
                   </p>
                 </div>
               </div>
-              <div className="flex items-start gap-4">
-                <div className="mt-1 text-rose">
-                  <Icon icon="lucide:shield-check" width={20} />
+              {/* Staging shows these as data, in the limits panel above; the demo keeps its copy. */}
+              {!capabilities.serverCatalog && (
+                <div className="flex items-start gap-4">
+                  <div className="mt-1 text-rose">
+                    <Icon icon="lucide:shield-check" width={20} />
+                  </div>
+                  <div>
+                    <h4 className="mb-1 font-medium text-espresso">Content Guidelines</h4>
+                    <p className="text-sm text-muted">
+                      Wardrobe is strictly creator-curated. No explicit content, political
+                      endorsements, or commercial promotions are permitted in these personal
+                      commissions.
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h4 className="mb-1 font-medium text-espresso">Content Guidelines</h4>
-                  <p className="text-sm text-muted">
-                    Wardrobe is strictly creator-curated. No explicit content, political
-                    endorsements, or commercial promotions are permitted in these personal
-                    commissions.
-                  </p>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </section>

@@ -107,6 +107,7 @@ export type FocusOption = {
 /** Everything the fan screens read from one catalog version. */
 export type CatalogView = {
   versionId: string
+  creatorName: string
   content: CatalogContent
   settings: SettingOption[]
   focusOptions: FocusOption[]
@@ -174,6 +175,7 @@ export function catalogView(
 
   return {
     versionId,
+    creatorName: opts.creatorName,
     content,
     settings,
     focusOptions: [
