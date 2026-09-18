@@ -15,8 +15,11 @@ describe('draft save and reload', () => {
     expect(saved.status).toBe(200)
     const savedBody = await bodyOf(saved)
     expect(savedBody.draft.revision).toBe(1)
-    expect(savedBody.validation).toBe('pending_phase_2')
-    expect(savedBody.draft.boundaryFlags).toBeNull()
+    // Phase 2: the server's quote comes back with every save, and flags are server-set.
+    expect(savedBody.quote.total).toBe(5000)
+    expect(savedBody.quote.budgetDifference).toBe(7000)
+    expect(savedBody.stale).toBe(false)
+    expect(savedBody.draft.boundaryFlags).toEqual([])
 
     const reloaded = await bodyOf(await call('GET', path(creatorId, id), { token: await fan.token() }))
     expect(reloaded.draft).toEqual(savedBody.draft)

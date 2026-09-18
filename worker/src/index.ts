@@ -1,7 +1,8 @@
 import { requireCreator, requireFan } from './auth'
 import { httpClerk } from './clerk'
 import { getConsent, postConsent, postOnboarding } from './consent'
-import { getDraft, putDraft } from './drafts'
+import { getCatalog, postQuote } from './catalog'
+import { acceptCatalogVersion, getDraft, getDraftQuote, putDraft } from './drafts'
 import { ApiError, assertSameOrigin, errorResponse, json, MUTATING } from './http'
 import type { Deps, Env } from './types'
 import { getUnsubscribe, postUnsubscribe } from './unsubscribe'
@@ -50,6 +51,38 @@ const routes: { method: string; pattern: RegExp; handler: Handler }[] = [
     handler: async (request, env, deps) => {
       const creator = await requireCreator(request, env, deps)
       return json(200, { creatorId: creator.creatorId, displayName: creator.displayName })
+    },
+  },
+  {
+    method: 'GET',
+    pattern: /^\/api\/creators\/([^/]+)\/catalog$/,
+    handler: async (_r, env, _d, [creatorId]) => {
+      assertId(creatorId)
+      return getCatalog(env, creatorId)
+    },
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/creators\/([^/]+)\/quote$/,
+    handler: async (request, env, _d, [creatorId]) => {
+      assertId(creatorId)
+      return postQuote(request, env, creatorId)
+    },
+  },
+  {
+    method: 'GET',
+    pattern: /^\/api\/creators\/([^/]+)\/drafts\/([^/]+)\/quote$/,
+    handler: async (request, env, deps, [creatorId, draftId]) => {
+      assertId(creatorId)
+      return getDraftQuote(env, await requireFan(request, env, deps), creatorId, draftId)
+    },
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/creators\/([^/]+)\/drafts\/([^/]+)\/accept-catalog-version$/,
+    handler: async (request, env, deps, [creatorId, draftId]) => {
+      assertId(creatorId)
+      return acceptCatalogVersion(request, env, deps, await requireFan(request, env, deps), creatorId, draftId)
     },
   },
   {

@@ -123,6 +123,17 @@ export interface Quote {
   customRequestPending: boolean
 }
 
+/**
+ * Set by the server's check, never by the browser or the AI (doc 11 §6).
+ * `display_name` and `fan_script` extend §6's sources, because Phase 2 checks
+ * those draft fields too. A hard no is never a flag: it blocks.
+ */
+export interface BoundaryFlag {
+  source: 'fan_message' | 'custom_request' | 'fan_script' | 'display_name' | 'notes' | 'suggestion'
+  limit: { kind: 'checklist'; key: string } | { kind: 'custom'; id: string }
+  mode: 'ask_me'
+}
+
 /** Typed rejections. A draft is never repaired to make it valid. */
 export type SelectionError =
   | { code: 'unknown_item'; itemId: string }
