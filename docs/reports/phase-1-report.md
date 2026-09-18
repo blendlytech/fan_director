@@ -2,7 +2,81 @@
 
 Date: 2026-09-17. Base: `main` at **dc86106**. Branch: **staging/clerk-auth**.
 
-**Status: implementation ready for review; Gate 1 completion criteria are NOT all met. Stop here.** Remote staging persistence, actual Clerk settings/sign-in and browser regression tests remain unverified because this workspace has no Cloudflare/Clerk credentials and cannot download Chromium. No Phase 2 work or consent UI was started.
+**Status (updated 2026-09-18): staging is deployed and verified. Six of seven Gate 1 criteria are met on staging. The seventh ("auth as approved") is NOT met, only because the Clerk instance settings still differ from the approved ones (§0.3). Awaiting the owner's Gate 1 decision. Stop here.** No Phase 2 work or consent UI was started.
+
+Sections 1–7 below are the original rebuild report of 2026-09-17, kept as written. Where they conflict with §0, §0 is current. In particular, §1's endpoint table predates the Gate 1 review: drafts now live at `/api/creators/:creatorId/drafts/:id`, and the creator draft route and the unsubscribe-link route were removed (doc 11 §5.6 item 18).
+
+## 0. Staging verification (2026-09-18)
+
+**Environment.**
+- Site: `https://fan-director-studio-staging.blendly.workers.dev` (Cloudflare account blendly.tech@gmail.com; the public demo is on a different account). Worker version `ad6e2ca4`.
+- D1 `fan-director-staging` (`5411bfbd…`), all migrations applied. Secrets `CLERK_JWT_KEY`, `CLERK_SECRET_KEY`, `UNSUBSCRIBE_SIGNING_KEY` set.
+- Clerk **development** instance `superb-crawdad-9550`.
+- Seeds: `staging-synthetic.sql` (creators `cr_staging_a`/`cr_staging_b`, bound to real Clerk test users) and `consent-wording-v1.sql` (`news-v1`, design 23 as approved).
+
+**Method.** `worker/scripts/staging-checklist.mjs` drove each scenario in a real Chromium window against the deployed site. Every API call used a fresh Clerk session token as a bearer header, with no cookies.
+- Sessions came from **Clerk sign-in tickets** (`--as`, development key only), because no emailed-link sign-in reached the test window.
+- These are genuine Clerk sessions that the Worker verified end to end. They prove the Worker's behaviour, **not** the Clerk sign-in screens.
+- Raw results are in the git-ignored `worker/.staging-evidence.json`.
+- Test fans: `fan_a+clerk_test@example.com` and `fan_b+clerk_test@example.com`.
+
+### 0.1 Results
+
+| Check | Result |
+| --- | --- |
+| `smoke.mjs` against staging | 7/7 ok |
+| Creator A and creator B, no authenticator: `GET /api/creator/me` | `403 second_factor_required`, `enrol: true`, both |
+| Session token | `v: 2`; `azp` = staging origin; `iss` = the Clerk instance |
+| Fan A first sign-up (user and session created 0 s apart): news step | `onboarding.show: true`, wording `news-v1` |
+| Fan A subscribes, then answers again | `200 subscribed`, then `409 already_answered` |
+| **Fan A saves a draft, then reloads it** | **`200`, revision 1, reload identical** |
+| Hidden item / `a_minutes` qty 21 | `422 selection_rejected` / `422 selection_rejected` |
+| Save with a stale revision | `409 revision_conflict`, current draft returned |
+| Fan A's draft id under creator B | `404` |
+| Creator A's catalog version used under creator B | `422 catalog_version_mismatch` |
+| Fan B reads / writes fan A's draft (twice, on two sign-ins) | `404` / `404`; fan A's draft unchanged afterwards |
+| Fan B never answers; first sign-up (0 s gap) | `onboarding.show: true` |
+| Fan B signs in again, previous session signed out (78 s gap) | `onboarding.show: false`: the 60-second rule alone hides the step |
+| Fan A's second sign-in (26 s gap) | `show: false`, but this is **not** timing evidence: fan A had answered and still had a live session |
+| Unsubscribe token for fan A + creator A: GET twice | `confirm` both times; **no row written** (checked in D1) |
+| POST twice | `done`, then `already_unsubscribed`; **exactly one** `unsubscribed` row, source `unsubscribe_page` |
+| Tampered token | `invalid` |
+| Consent rows | Each has the email from Clerk, an IP and the user agent; `source` `signup` then `unsubscribe_page` |
+| `scan-bundle.mjs` with the three real secret values in the environment | 5 files, no signatures or values found |
+| `npm run test:e2e --prefix frontend` | **24/24** (after pinning the suite to demo mode; see §0.2) |
+| `npm test --prefix frontend` / lint / build | 67/67 / clean / ok |
+| `npm test --prefix worker` / typecheck | 82/82 / clean |
+
+### 0.2 Found and fixed during verification
+
+- **Staging guard:** it now blocks a deploy when the frontend's publishable key belongs to a different Clerk instance than `CLERK_ISSUER`. That exact mismatch was present, and every sign-in would have failed with 401 (cce8e53).
+- **e2e:** a Clerk key in `frontend/.env.local` switched the dev server the suite starts into staging mode, which failed 2 demo-mode tests. `playwright.config.ts` now gives that server an empty key (ef6bad5).
+- **Checklist script:** its `--as` option refuses any Clerk key that isn't a development key, because sign-in tickets work on production instances too (d5a8ae8).
+
+### 0.3 Not verified or not met
+
+- **Clerk instance settings differ from the approved ones** (read from the instance's public configuration, 2026-09-18):
+  - password is **on and required** (approved: off);
+  - Google sign-in is **on** (approved: off);
+  - the email first factor is **code**, not link;
+  - **backup codes are off**.
+  - Correct already: authenticator app on as second factor, SMS off.
+  - **Fans on email link only is therefore NOT met.**
+- **Creator with an authenticator gets 200:** the owner added and verified an authenticator on creator A and chose not to run this check. Not verified. The Worker's side (it refuses without a second factor) is verified above and covered by unit tests.
+- **The real sign-in screens and email-link timing:** not exercised (see Method). Doc 11 §5.6 item 19 already requires re-running the first-sign-up check on the production instance before creators go live.
+- **The `CLERK_SECRET_KEY` in use was pasted into a chat transcript.** Replace it and re-upload before anyone real signs up on this instance.
+
+### 0.4 Gate 1 criteria (current)
+
+| Criterion | Status and evidence |
+| --- | --- |
+| Two creators cannot access each other's drafts | **Met.** No creator draft route exists (removed in the Gate 1 review), and fan drafts are tenant-checked on staging (`404` and `422` above) |
+| One fan cannot retrieve another's draft by ID | **Met on staging.** Fan B: `404` on read and write, twice; fan A's draft unchanged |
+| Save/reload works in staging | **Met on staging.** Save `200` revision 1; reload identical |
+| Every existing test still passes | **Met.** e2e 24/24, unit 67/67, worker 82/82, lint, typecheck, build (2026-09-18) |
+| Auth as approved: fan email links; creator authenticator and backup codes | **NOT MET.** The Worker's enforcement is verified on staging; the Clerk settings differ (§0.3) |
+| Consent and signed unsubscribe | **Met on staging** with approved wording `news-v1` |
+| No backend secrets in the frontend bundle | **Met.** Scan clean against the real values |
 
 ## 1. Built and recovered
 
