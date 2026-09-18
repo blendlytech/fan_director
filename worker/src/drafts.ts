@@ -8,7 +8,7 @@ import type { Deps, DraftContent, Env } from './types'
 import { validateSelections } from '../../shared/domain/validate.ts'
 import { assertOnlyKeys, LIMITS, parseDraftContent, UUID } from './validation'
 
-interface DraftRow {
+export interface DraftRow {
   id: string
   creator_id: string
   catalog_version_id: string
@@ -18,7 +18,7 @@ interface DraftRow {
   updated_at: string
 }
 
-function draftOf(row: DraftRow) {
+export function draftOf(row: DraftRow) {
   const content = JSON.parse(row.content_json) as DraftContent
   return {
     id: row.id,
@@ -31,7 +31,7 @@ function draftOf(row: DraftRow) {
 }
 
 /** The draft with its server quote. A draft saved before Phase 2 may no longer validate: it then says why. */
-async function present(env: Env, row: DraftRow, status = 200): Promise<Response> {
+export async function present(env: Env, row: DraftRow, status = 200): Promise<Response> {
   const draft = draftOf(row)
   const version = await loadVersion(env, row.creator_id, row.catalog_version_id)
   let pricing: Record<string, unknown> = { quote: null, stale: false }
@@ -46,7 +46,7 @@ async function present(env: Env, row: DraftRow, status = 200): Promise<Response>
   return json(status, { draft, ...pricing, updatedAt: row.updated_at })
 }
 
-async function loadOwned(env: Env, fanId: string, creatorId: string, draftId: string): Promise<DraftRow | null> {
+export async function loadOwned(env: Env, fanId: string, creatorId: string, draftId: string): Promise<DraftRow | null> {
   return env.DB.prepare(
     `SELECT id, creator_id, catalog_version_id, revision, content_json, boundary_flags_json, updated_at
        FROM draft WHERE id = ? AND fan_id = ? AND creator_id = ?`,
@@ -55,13 +55,25 @@ async function loadOwned(env: Env, fanId: string, creatorId: string, draftId: st
     .first<DraftRow>()
 }
 
-async function requireOwned(env: Env, fan: FanIdentity, creatorId: string, draftId: string): Promise<DraftRow> {
+export async function requireOwned(env: Env, fan: FanIdentity, creatorId: string, draftId: string): Promise<DraftRow> {
   if (!UUID.test(draftId)) throw new ApiError(404, 'not_found')
   const row = await loadOwned(env, fan.fanId, creatorId, draftId)
   // Another fan's draft, or one in another creator's boutique, looks exactly
   // like a draft that doesn't exist.
   if (!row) throw new ApiError(404, 'not_found')
   return row
+}
+
+/** GET /api/creators/:creatorId/drafts: the fan's most recent draft here, so saving resumes (design 18). */
+export async function getLatestDraft(env: Env, fan: FanIdentity, creatorId: string): Promise<Response> {
+  const row = await env.DB.prepare(
+    `SELECT id, creator_id, catalog_version_id, revision, content_json, boundary_flags_json, updated_at
+       FROM draft WHERE fan_id = ? AND creator_id = ? ORDER BY updated_at DESC LIMIT 1`,
+  )
+    .bind(fan.fanId, creatorId)
+    .first<DraftRow>()
+  if (!row) return json(200, { draft: null })
+  return present(env, row)
 }
 
 export async function getDraft(env: Env, fan: FanIdentity, creatorId: string, draftId: string): Promise<Response> {
@@ -82,7 +94,7 @@ export async function getDraftQuote(env: Env, fan: FanIdentity, creatorId: strin
  * the custom-request policy, the hard list (a block is recorded and answered)
  * and the creator's hard-no limits. Returns the ask-me flags to store.
  */
-async function checkContent(
+export async function checkContent(
   request: Request,
   env: Env,
   deps: Deps,
@@ -111,6 +123,17 @@ async function checkContent(
     })
   }
   return screening.flags
+}
+
+/**
+ * Ask-me flags that came with an accepted Director suggestion (source
+ * 'suggestion'). They can't be recomputed from the draft's text, so they stay
+ * until the creator has seen them: a flag too many is safe, one too few isn't.
+ */
+export async function carriedSuggestionFlags(env: Env, fanId: string, creatorId: string, draftId: string): Promise<BoundaryFlag[]> {
+  const row = await loadOwned(env, fanId, creatorId, draftId)
+  if (!row?.boundary_flags_json) return []
+  return (JSON.parse(row.boundary_flags_json) as BoundaryFlag[]).filter((f) => f.source === 'suggestion')
 }
 
 export async function putDraft(
@@ -152,6 +175,7 @@ export async function putDraft(
 
   const gate = await gateFor(env, creatorId)
   const flags = await checkContent(request, env, deps, fan, version, creatorId, draftId, content, gate)
+  if (expectedRevision !== 0) flags.push(...(await carriedSuggestionFlags(env, fan.fanId, creatorId, draftId)))
   const now = deps.now().toISOString()
   const contentJson = JSON.stringify(content)
   const flagsJson = JSON.stringify(flags)

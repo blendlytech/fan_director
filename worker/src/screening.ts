@@ -101,14 +101,48 @@ export async function recordBlock(
   content: DraftContent,
   blocked: NonNullable<Screening['hardList']>,
 ): Promise<never> {
+  return recordHardListBlock(request, env, deps, fan, {
+    creatorId,
+    creatorName,
+    subjectKind: 'draft',
+    subjectId: draftId,
+    field: blocked.source,
+    hit: blocked.hit,
+    evidence: { draftId, field: blocked.source, content },
+  })
+}
+
+/** A hard-list hit from either layer (rules or classifier). */
+export type BlockHit = Omit<HardListHit, 'layer'> & { layer: 'rules' | 'classifier' }
+
+export interface BlockContext {
+  creatorId: string
+  creatorName: string
+  /** What was being checked: a draft save or an AI Director turn. */
+  subjectKind: 'draft' | 'ai_request'
+  subjectId: string
+  field: string | null
+  hit: BlockHit
+  /** The full request, kept only as safety-case evidence for a `minors` hit. */
+  evidence: Record<string, unknown>
+}
+
+/** The same block handling for draft saves and AI turns (§5.3.3 outcomes). */
+export async function recordHardListBlock(
+  request: Request,
+  env: Env,
+  deps: Deps,
+  fan: FanIdentity,
+  ctx: BlockContext,
+): Promise<never> {
   const now = deps.now()
   const at = now.toISOString()
-  const { hit, source } = blocked
+  const { hit, field: source, creatorId, creatorName } = ctx
   const audit = (action: string, detail: Record<string, unknown>) =>
     env.DB.prepare(
       `INSERT INTO audit_event (id, actor_kind, actor_id, action, subject_kind, subject_id, creator_id, detail_json, created_at)
-       VALUES (?, 'fan', ?, ?, 'draft', ?, ?, ?, ?)`,
-    ).bind(crypto.randomUUID(), fan.fanId, action, draftId, creatorId, JSON.stringify(detail), at)
+       VALUES (?, 'fan', ?, ?, ?, ?, ?, ?, ?)`,
+    ).bind(crypto.randomUUID(), fan.fanId, action, ctx.subjectKind, ctx.subjectId, creatorId, JSON.stringify(detail), at)
 
   await audit('hard_list_block', { key: hit.key, subject: hit.subject, layer: hit.layer, version: hit.version, field: source }).run()
 
@@ -127,7 +161,7 @@ export async function recordBlock(
         evidenceId,
         caseId,
         fan.fanId,
-        JSON.stringify({ draftId, field: source, content, clerkUserId: fan.claims.userId, clerkSessionId: fan.claims.sessionId }),
+        JSON.stringify({ ...ctx.evidence, subjectKind: ctx.subjectKind, subjectId: ctx.subjectId, clerkUserId: fan.claims.userId, clerkSessionId: fan.claims.sessionId }),
         clientIp(request),
         userAgent(request),
         at,
@@ -156,6 +190,26 @@ export async function recordBlock(
     lines: hit.line !== null && lines[hit.line] ? [lines[hit.line]] : lines,
     field: source,
   })
+}
+
+/** Neutral subjects for classifier hits, which don't say which rule matched. Never the fan's wording. */
+export const CLASSIFIER_SUBJECTS: Record<HardListHit['key'], string> = {
+  minors: 'suggests someone under 18',
+  prohibited_roles: 'prohibited role',
+  incest: 'relatives',
+  non_consent: 'without clear consent',
+  bestiality: 'animals',
+  real_third_parties: 'a real third party',
+  unverified_performers: 'an unverified performer',
+  solicitation: 'off-platform contact or payment',
+  illegal_acts: 'an illegal act',
+  hate_harassment: 'hate or harassment',
+}
+
+/** Is AI switched off for this fan (block threshold or a safety case)? */
+export async function aiDisabledFor(env: Env, fanId: string): Promise<boolean> {
+  const row = await env.DB.prepare('SELECT ai_disabled_at FROM fan_restriction WHERE fan_id = ?').bind(fanId).first<{ ai_disabled_at: string | null }>()
+  return Boolean(row?.ai_disabled_at)
 }
 
 function restrict(env: Env, fanId: string, reason: string, at: string): D1PreparedStatement {

@@ -1,3 +1,5 @@
+import type { AiProviders } from './ai/provider'
+
 export interface Env {
   DB: D1Database
   ASSETS: Fetcher
@@ -64,6 +66,8 @@ export interface ClerkSession {
 export interface Deps {
   clerk: ClerkBackend
   now: () => Date
+  /** The AI providers (doc 11 §8 Phase 3). Absent: the Director is unavailable. Mocked in tests. */
+  ai?: AiProviders
 }
 
 export interface DraftSelection {
