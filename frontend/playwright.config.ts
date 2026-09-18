@@ -16,5 +16,9 @@ export default defineConfig({
     command: 'npm run dev',
     url: 'http://localhost:5173',
     reuseExistingServer: true,
+    // The suite tests the demo (no sign-in). A key in .env.local would switch
+    // the app to staging mode; a set-but-empty variable outranks .env files.
+    // A dev server that is already running is reused as it is, key or not.
+    env: { VITE_CLERK_PUBLISHABLE_KEY: '' },
   },
 })

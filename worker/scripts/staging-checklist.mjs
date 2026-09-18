@@ -81,7 +81,9 @@ async function resolveUser(who) {
   if (who.startsWith('user_')) return { userId: who, created: false }
   const found = await clerkApi('GET', `/users?email_address=${encodeURIComponent(who)}`)
   if (Array.isArray(found) && found[0]) return { userId: found[0].id, created: false }
-  const made = await clerkApi('POST', '/users', { email_address: [who] })
+  // Fans have no password by design (email link only); this also works while an
+  // instance still has passwords switched on.
+  const made = await clerkApi('POST', '/users', { email_address: [who], skip_password_requirement: true })
   return { userId: made.id, created: true }
 }
 
@@ -137,6 +139,9 @@ const runInPage = async ({ scenario, state, token }) => {
     await step('consent_after_signin', () => api('GET', '/api/creators/cr_staging_a/consent'))
     await step('reload_draft', () => api('GET', `/api/creators/cr_staging_a/drafts/${enc(state.draftId)}`))
   } else if (scenario === 'fanB') {
+    // Fan B never answers the news step, so whether it shows depends only on the
+    // sign-up timing rule: true on the first run, false on a run 60+ s later.
+    await step('consent_check', () => api('GET', '/api/creators/cr_staging_a/consent'))
     await step('read_other_fans_draft', () => api('GET', `/api/creators/cr_staging_a/drafts/${enc(state.draftId)}`))
     await step('write_other_fans_draft', () => api('PUT', `/api/creators/cr_staging_a/drafts/${enc(state.draftId)}`, draftBody('cv_staging_a1', 1, [{ itemId: 'a_minutes', qty: 9 }])))
   } else if (scenario === 'unsubscribe') {
@@ -163,6 +168,8 @@ if ((scenario === 'fanA-again' || scenario === 'fanB') && !state.draftId) {
 }
 
 const browser = await chromium.launch({ headless: false, args: ['--window-size=1280,940'] })
+// Close the window even when a step throws, so failed runs don't leave it open.
+try {
 const page = await browser.newPage({ viewport: { width: 1280, height: 860 } })
 await page.goto(SITE, { waitUntil: 'networkidle' })
 
@@ -171,7 +178,20 @@ if (needsSignIn && as) {
   const { userId, created } = await resolveUser(as)
   const { token: ticket } = await clerkApi('POST', '/sign_in_tokens', { user_id: userId, expires_in_seconds: 600 })
   console.log(`\nScenario "${scenario}" on ${SITE}\nSigning in as ${userId}${created ? ' (just created)' : ''} with a sign-in ticket...`)
-  await page.goto(`${SITE}/?__clerk_ticket=${encodeURIComponent(ticket)}`, { waitUntil: 'networkidle' })
+  // The app mounts Clerk's modal, not its sign-in page, so nothing redeems a
+  // ?__clerk_ticket= URL on its own. Redeem it with the ticket strategy instead.
+  await page.waitForFunction(() => Boolean(window.Clerk?.loaded), null, { timeout: 60000, polling: 500 })
+  const redeemed = await page.evaluate(async (t) => {
+    try {
+      const attempt = await window.Clerk.client.signIn.create({ strategy: 'ticket', ticket: t })
+      if (attempt.status !== 'complete') return `sign-in status ${attempt.status}`
+      await window.Clerk.setActive({ session: attempt.createdSessionId })
+      return 'ok'
+    } catch (e) {
+      return `error: ${e?.errors?.[0]?.longMessage ?? e?.message ?? String(e)}`
+    }
+  }, ticket)
+  if (redeemed !== 'ok') throw new Error(`Ticket sign-in failed: ${redeemed}`)
   await page.waitForFunction(() => Boolean(window.Clerk?.session), null, { timeout: 60000, polling: 500 })
   const user = await clerkApi('GET', `/users/${userId}`)
   const sessions = await clerkApi('GET', `/sessions?user_id=${userId}&status=active`)
@@ -198,9 +218,14 @@ if (needsSignIn && as) {
 }
 
 const result = await page.evaluate(runInPage, { scenario, state, token })
+// Sign out, as a person would, so this session doesn't stay live: the Worker
+// only counts a sign-up when the fan has exactly one live session.
+if (needsSignIn) await page.evaluate(() => window.Clerk.signOut())
 if (state.signIn) result.signIn = state.signIn
 writeFileSync(statePath, JSON.stringify({ ...state, draftId: result.draftId ?? state.draftId }, null, 2))
 appendFileSync(evidencePath, `${JSON.stringify(result)}\n`)
 console.log(JSON.stringify(result, null, 2))
 console.log(`\nAppended to ${evidencePath}`)
-await browser.close()
+} finally {
+  await browser.close()
+}
