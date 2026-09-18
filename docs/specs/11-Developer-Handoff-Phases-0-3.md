@@ -343,6 +343,13 @@ Decided at the Gate 1 review (owner, 2026-09-17). The Gate 1 report is `docs/rep
       - "Maya chooses the wardrobe." replaces the old wardrobe copy.
       - Staging shows design 13's panel A on the entrance and the review screen, and card B in the Director.
       - Design 13's "Before you send" box (D) waits for Phase 4, when the server checks the fan's text.
+23. **Gate 2 approved (owner, 2026-09-18).**
+24. **Phase 3 decisions (owner, 2026-09-18).**
+    - **Designs 17 and 18 approved as drawn.** Design 17 (states A–F) and design 13's in-chat notices (C1–C3) are the live Director's UI. Design 18 (save status, edits from another window, price changes) is the save UI.
+    - **Staging saves drafts.** Design 18's approval replaces item 22's "staging fan screens don't save": staging saves on every change, and the Director works on that server draft.
+    - **Raw AI conversations are kept for 30 days,** then deleted by a scheduled job. Records of cost, model and outcome stay; they hold no fan wording. Safety-case evidence follows §5.3.3, not this limit.
+    - **Live AI test budget: $8** for Phase 3, enforced by the server's cost reservation and reported at Gate 3.
+    - **Host: OpenRouter for everything.** OpenRouter picks the upstream host, with `data_collection: "deny"` and fallbacks allowed. The upstream host is recorded for each call. The classifier goes through OpenRouter, pinned to Groq. One secret, `OPENROUTER_API_KEY`, set by the owner.
 
 ### 5.7 Commission options from market research (owner, 2026-09-16)
 
@@ -720,8 +727,9 @@ Do not describe anything as working unless you ran it. Say "not verified" when y
 | Wording of the unified boundaries text, including a `prohibited_roles` fan label that also covers babysitter or nanny, relationship roles and named characters (design 13's label names only school, childlike and family roles). Two proposed wordings are in design 24, state E | Phase 2 |
 | Pilot creator, real prices and budget handling (is a fan budget required?) | Phase 2 |
 | Currency beyond USD | Deferred |
-| Raw conversation retention (doc 10 proposes 30 days) | Phase 3 |
-| Written authorization from OpenRouter (and the chosen host) for prompt-injection testing, and written confirmation that adult use is allowed | Before injection tests against a real provider; adult confirmation before launch |
+| ~~Raw conversation retention~~ Decided: 30 days (§5.6 item 24) | Done |
+| Written authorization from OpenRouter (and the upstream hosts it routes to) for prompt-injection testing, and written confirmation that adult use is allowed | Before injection tests against a real provider; adult confirmation before launch |
+| Groq's terms for safety classification of adult text, for the classifier reached through OpenRouter (§5.3.3) | Before launch |
 | Designs for every new UI state listed at Gate 0 | Before that UI is built |
 | Payment processor's position on financial domination content (§5.7) | Before that item is enabled |
 | Specialty-act checklist entries (§5.7) | Before adult content is enabled |
