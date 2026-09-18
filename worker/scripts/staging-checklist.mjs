@@ -2,7 +2,8 @@
 // from genuine Clerk sessions instead of hand-typed console calls.
 //
 //   node scripts/staging-checklist.mjs <scenario> [--url <origin>]
-//   scenarios: creator | fanA-first | fanA-again | fanB | unsubscribe
+//   scenarios: creator | fanA-first | fanA-again | fanB | unsubscribe | phase2 | phase2-stale
+//   (phase2-stale runs after seeds/staging-a-v2.sql publishes cv_staging_a2)
 //
 // A visible browser window opens on the staging site. Sign in there as the
 // account the scenario needs: copy the link out of the email and paste it into
@@ -36,7 +37,7 @@ const args = process.argv.slice(2)
 const scenario = args[0]
 const flag = (name) => { const i = args.indexOf(`--${name}`); return i === -1 ? undefined : args[i + 1] }
 const SITE = flag('url') ?? 'https://fan-director-studio-staging.blendly.workers.dev'
-const scenarios = ['creator', 'fanA-first', 'fanA-again', 'fanB', 'unsubscribe']
+const scenarios = ['creator', 'fanA-first', 'fanA-again', 'fanB', 'unsubscribe', 'phase2', 'phase2-stale']
 if (!scenarios.includes(scenario)) {
   console.error(`Usage: node scripts/staging-checklist.mjs <${scenarios.join(' | ')}> [--url <origin>] [--token <unsubscribe token>]`)
   process.exit(1)
@@ -115,7 +116,7 @@ const runInPage = async ({ scenario, state, token }) => {
   const out = { scenario, at: new Date().toISOString(), steps: {} }
   if (clerk?.session) {
     const claims = JSON.parse(atob((await clerk.session.getToken()).split('.')[1].replace(/-/g, '+').replace(/_/g, '/')))
-    out.claims = { sub: claims.sub, sid: claims.sid, fva: claims.fva, v: claims.v, azp: claims.azp, iss: claims.iss }
+    out.claims = { sub: claims.sub, sid: claims.sid, fva: claims.fva, v: claims.v, azp: claims.azp, iss: claims.iss, sts: claims.sts, act: claims.act, keys: Object.keys(claims) }
   }
   const step = async (name, fn) => { try { out.steps[name] = await fn() } catch (e) { out.steps[name] = { error: String(e) } } }
 
@@ -144,6 +145,33 @@ const runInPage = async ({ scenario, state, token }) => {
     await step('consent_check', () => api('GET', '/api/creators/cr_staging_a/consent'))
     await step('read_other_fans_draft', () => api('GET', `/api/creators/cr_staging_a/drafts/${enc(state.draftId)}`))
     await step('write_other_fans_draft', () => api('PUT', `/api/creators/cr_staging_a/drafts/${enc(state.draftId)}`, draftBody('cv_staging_a1', 1, [{ itemId: 'a_minutes', qty: 9 }])))
+  } else if (scenario === 'phase2') {
+    // Maya's pilot catalog (Phase 2). Maya's defaults + Vintage + the detailed greeting = $145.
+    const catalog = (await api('GET', '/api/creators/cr_maya/catalog', undefined, false)).body
+    const selections = [
+      ...catalog.defaults.filter((s) => s.itemId !== 'maya_greeting_standard'),
+      { itemId: 'maya_setting_vintage', qty: 1 },
+      { itemId: 'maya_greeting_detailed', qty: 1 },
+    ]
+    const mayaBody = (extra) => ({ ...draftBody(catalog.catalogVersionId, 0, selections), draft: { ...draftBody(catalog.catalogVersionId, 0, selections).draft, budget: 15000, ...extra } })
+    const id = crypto.randomUUID()
+    out.phase2DraftId = id
+    await step('maya_save', () => api('PUT', `/api/creators/cr_maya/drafts/${enc(id)}`, mayaBody({})))
+    await step('maya_reload', () => api('GET', `/api/creators/cr_maya/drafts/${enc(id)}`))
+    await step('maya_tampered_qty', () => api('PUT', `/api/creators/cr_maya/drafts/${crypto.randomUUID()}`, { ...mayaBody({}), draft: { ...mayaBody({}).draft, selections: [...selections, { itemId: 'maya_extra_minute', qty: 9 }] } }))
+    await step('maya_tampered_price', () => api('PUT', `/api/creators/cr_maya/drafts/${crypto.randomUUID()}`, { ...mayaBody({}), draft: { ...mayaBody({}).draft, total: 100 } }))
+    await step('maya_hard_no', () => api('PUT', `/api/creators/cr_maya/drafts/${crypto.randomUUID()}`, mayaBody({ customRequest: 'mention the election' })))
+    await step('maya_hard_list_block', () => api('PUT', `/api/creators/cr_maya/drafts/${crypto.randomUUID()}`, mayaBody({ customRequest: 'can we meet in person' })))
+    // Creator A's draft, for the stale-version check after v2 is published.
+    const aId = crypto.randomUUID()
+    out.staleDraftId = aId
+    await step('a_save', () => api('PUT', `/api/creators/cr_staging_a/drafts/${enc(aId)}`, draftBody('cv_staging_a1', 0, [{ itemId: 'a_minutes', qty: 5 }])))
+  } else if (scenario === 'phase2-stale') {
+    const id = state.staleDraftId
+    await step('stale_read', () => api('GET', `/api/creators/cr_staging_a/drafts/${enc(id)}`))
+    await step('stale_edit_refused', () => api('PUT', `/api/creators/cr_staging_a/drafts/${enc(id)}`, draftBody('cv_staging_a1', 1, [{ itemId: 'a_minutes', qty: 6 }])))
+    await step('accept_new_version', () => api('POST', `/api/creators/cr_staging_a/drafts/${enc(id)}/accept-catalog-version`, { expectedRevision: 1, catalogVersionId: 'cv_staging_a2' }))
+    await step('after_accept', () => api('GET', `/api/creators/cr_staging_a/drafts/${enc(id)}`))
   } else if (scenario === 'unsubscribe') {
     // Signed out on purpose: an unsubscribe link works straight from an inbox.
     await step('get_first', () => api('GET', `/api/unsubscribe/${enc(token)}`, undefined, false))
@@ -222,7 +250,12 @@ const result = await page.evaluate(runInPage, { scenario, state, token })
 // only counts a sign-up when the fan has exactly one live session.
 if (needsSignIn) await page.evaluate(() => window.Clerk.signOut())
 if (state.signIn) result.signIn = state.signIn
-writeFileSync(statePath, JSON.stringify({ ...state, draftId: result.draftId ?? state.draftId }, null, 2))
+writeFileSync(statePath, JSON.stringify({
+  ...state,
+  draftId: result.draftId ?? state.draftId,
+  phase2DraftId: result.phase2DraftId ?? state.phase2DraftId,
+  staleDraftId: result.staleDraftId ?? state.staleDraftId,
+}, null, 2))
 appendFileSync(evidencePath, `${JSON.stringify(result)}\n`)
 console.log(JSON.stringify(result, null, 2))
 console.log(`\nAppended to ${evidencePath}`)
