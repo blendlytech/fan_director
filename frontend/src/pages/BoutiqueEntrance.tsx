@@ -4,7 +4,7 @@ import { Button } from '../components/common/Button'
 import { Icon } from '../components/common/Icon'
 import { SceneImage } from '../components/common/SceneImage'
 import { useCommission } from '../state/commission'
-import { money, priceRangeOf, type SettingId } from '../domain/sceneCard'
+import { money, priceRangeOf, type CatalogView, type SettingId } from '../domain/sceneCard'
 
 type ThemeCard = {
   /** Which catalog setting this card starts the fan's draft on. */
@@ -45,15 +45,15 @@ const themeCards: ThemeCard[] = [
   },
 ]
 
-/** "From $145 – $205": the cheapest and dearest build the Director allows. */
-function formatRange(setting: SettingId) {
-  const { min, max } = priceRangeOf(setting)
-  return `From ${money(min)} – ${money(max)}`
+/** "From $145 – $205": derived from the catalog, never written as copy. */
+function formatRange(view: CatalogView, setting: SettingId) {
+  const range = priceRangeOf(view, setting)
+  return range ? `From ${money(range.min)} – ${money(range.max)}` : ''
 }
 
 export function BoutiqueEntrance() {
   const navigate = useNavigate()
-  const { commit } = useCommission()
+  const { view, commit } = useCommission()
 
   // Starting from a curated scene seeds the draft, so the Director opens on the
   // setting the fan actually picked rather than always on the first one.
@@ -165,7 +165,7 @@ export function BoutiqueEntrance() {
                   <p className="mb-6 flex-1 text-sm text-muted">{card.description}</p>
                   <div className="mb-6 flex items-center justify-between">
                     <span className="text-sm font-medium text-espresso">
-                      {formatRange(card.setting)}
+                      {formatRange(view, card.setting)}
                     </span>
                   </div>
                   <Button
@@ -221,7 +221,7 @@ export function BoutiqueEntrance() {
                 <div>
                   <h4 className="mb-1 font-medium text-espresso">Standard Delivery</h4>
                   <p className="text-sm text-muted">
-                    Delivery is typically 7 days{' '}
+                    Delivery is typically {view.deliveryDays} days{' '}
                     <span className="font-medium text-rose">after payment confirmation</span>.
                     Expedited options may be available during the planning phase.
                   </p>

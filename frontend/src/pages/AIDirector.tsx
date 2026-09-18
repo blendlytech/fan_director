@@ -9,11 +9,7 @@ import { ProgressTrail } from '../components/layout/ProgressTrail'
 import { cn } from '../lib/cn'
 import { useCommission } from '../state/commission'
 import {
-  BASE_MINUTES,
   BUDGET,
-  FOCUS_OPTIONS,
-  PER_EXTRA_MINUTE,
-  SETTINGS,
   extraMinutesOf,
   focusOf,
   money,
@@ -40,7 +36,7 @@ const PROMPT_STARTERS: readonly string[] = [
 export function AIDirector() {
   // The draft, its line items and its total live in the fan-journey context so
   // the Review and Confirmation screens read the same numbers this page shows.
-  const { draft, lineItems, total, difference, overBudget, canUndo, commit, addNote, undo } =
+  const { view, draft, lineItems, total, difference, overBudget, deliveryDays, canUndo, commit, addNote, undo } =
     useCommission()
 
   const [message, setMessage] = useState('')
@@ -55,9 +51,9 @@ export function AIDirector() {
   const threadEndRef = useRef<HTMLDivElement>(null)
   const composerRef = useRef<HTMLTextAreaElement>(null)
 
-  const setting = settingOf(draft)
-  const focus = focusOf(draft)
-  const minutes = BASE_MINUTES + extraMinutesOf(draft)
+  const setting = settingOf(view, draft)
+  const focus = focusOf(view, draft)
+  const minutes = view.baseMinutes + extraMinutesOf(draft)
   const removableItem = lineItems.find((item) => item.removable)
 
   const budgetSentence = overBudget
@@ -144,7 +140,7 @@ export function AIDirector() {
                   aria-label="Scene setting"
                   className="grid grid-cols-1 gap-3 sm:grid-cols-3"
                 >
-                  {SETTINGS.map((option) => {
+                  {view.settings.map((option) => {
                     const selected = option.id === draft.setting
                     return (
                       <button
@@ -209,7 +205,7 @@ export function AIDirector() {
               {/* Turn 4 — Director frames the tradeoff */}
               <Turn speaker="director">
                 <p className="text-sm leading-relaxed sm:text-base">
-                  Perfect. Would you prefer a longer video (+{money(PER_EXTRA_MINUTE)}/min) to tell
+                  Perfect. Would you prefer a longer video (+{money(view.perExtraMinute)}/min) to tell
                   more of your story, or focus on a richer setting with detailed greeting within your
                   budget?
                 </p>
@@ -220,9 +216,9 @@ export function AIDirector() {
                   aria-label="Where to spend the budget"
                   className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4"
                 >
-                  {FOCUS_OPTIONS.map((option) => {
+                  {view.focusOptions.map((option) => {
                     const selected = option.id === draft.focus
-                    const optionTotal = previewTotal(draft, {
+                    const optionTotal = previewTotal(view, draft, {
                       focus: option.id,
                       extraMinute: false,
                     })
@@ -320,11 +316,11 @@ export function AIDirector() {
                         Extra minute of runtime
                       </span>
                       <span className="mt-0.5 block text-[11px] text-muted">
-                        +{money(PER_EXTRA_MINUTE)} · {draft.extraMinute ? 'Added' : 'Not added'}
+                        +{money(view.perExtraMinute)} · {draft.extraMinute ? 'Added' : 'Not added'}
                       </span>
                     </span>
                     <span className="shrink-0 text-sm font-medium">
-                      {money(previewTotal(draft, { extraMinute: !draft.extraMinute }))}
+                      {money(previewTotal(view, draft, { extraMinute: !draft.extraMinute }))}
                     </span>
                   </button>
                   <p className="mt-2 text-[11px] leading-relaxed text-muted">
@@ -595,7 +591,7 @@ export function AIDirector() {
                     <div>
                       <p className="mb-0.5 font-medium">Standard Delivery</p>
                       <p className="text-xs leading-relaxed text-muted">
-                        Estimated 7 days after payment confirmation. Subject to creator approval.
+                        Estimated {deliveryDays} days after payment confirmation. Subject to creator approval.
                       </p>
                     </div>
                   </div>

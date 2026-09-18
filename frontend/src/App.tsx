@@ -1,4 +1,5 @@
 import { BrowserRouter, Outlet, Route, Routes } from 'react-router-dom'
+import { CatalogProvider } from './state/CatalogContext'
 import { CommissionProvider } from './state/CommissionContext'
 import { BoutiqueEntrance } from './pages/BoutiqueEntrance'
 import { AIDirector } from './pages/AIDirector'
@@ -15,9 +16,11 @@ import { DeclineConfirmationModal } from './pages/DeclineConfirmationModal'
  *  including "Back to Edit" from Review. The creator side has its own data. */
 function FanJourney() {
   return (
-    <CommissionProvider>
-      <Outlet />
-    </CommissionProvider>
+    <CatalogProvider>
+      <CommissionProvider>
+        <Outlet />
+      </CommissionProvider>
+    </CatalogProvider>
   )
 }
 
