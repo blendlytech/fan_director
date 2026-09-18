@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import type { Locator, Page } from '@playwright/test'
+import { expectedRanges } from './mode.ts'
 
 /* -------------------------------------------------------------------------- */
 /*  Smoke tests for the fan journey: / -> /ai-director -> /review ->           */
@@ -123,16 +124,17 @@ test.describe('fan journey', () => {
     await expect(liveTotal(page)).toHaveText('$125')
   })
 
-  test('entrance cards show the derived price ranges', async ({ page }) => {
+  test('entrance cards show the derived price ranges', async ({ page, request }) => {
+    const ranges = await expectedRanges(request)
     await page.goto('/')
 
     const vintageCard = page.locator('div.rounded-xl').filter({ hasText: 'Vintage Lounge Greeting' })
-    await expect(vintageCard.getByText(/^From \$\d+ – \$\d+$/)).toHaveText('From $145 – $205')
+    await expect(vintageCard.getByText(/^From \$\d+ – \$\d+$/)).toHaveText(ranges.vintage)
 
     const floralCard = page.locator('div.rounded-xl').filter({ hasText: 'Floral Studio Scene' })
-    await expect(floralCard.getByText(/^From \$\d+ – \$\d+$/)).toHaveText('From $155 – $215')
+    await expect(floralCard.getByText(/^From \$\d+ – \$\d+$/)).toHaveText(ranges.floral)
 
     const backstageCard = page.locator('div.rounded-xl').filter({ hasText: 'Intimate Backstage' })
-    await expect(backstageCard.getByText(/^From \$\d+ – \$\d+$/)).toHaveText('From $125 – $185')
+    await expect(backstageCard.getByText(/^From \$\d+ – \$\d+$/)).toHaveText(ranges.backstage)
   })
 })
