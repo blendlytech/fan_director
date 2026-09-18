@@ -15,6 +15,13 @@
 //
 // The unsubscribe scenario needs a token from scripts/issue-unsubscribe-token.mjs,
 // passed as --token <token>.
+//
+// `--as <email or user id>` skips the manual sign-in: the script asks Clerk's
+// Backend API for a one-time sign-in ticket and opens the site with it, creating
+// the user first if that email doesn't exist yet. It needs CLERK_SECRET_KEY in
+// .dev.vars, and sign-in tickets are a development-instance testing feature, so a
+// session made this way is not evidence about the real sign-in UI: it proves what
+// the Worker does with a session, not how the session was obtained.
 import { createRequire } from 'node:module'
 import { appendFileSync, existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -45,6 +52,34 @@ try {
 }
 
 const state = existsSync(statePath) ? JSON.parse(readFileSync(statePath, 'utf8')) : {}
+
+// --- Clerk Backend API, only used by --as. The secret never leaves this process.
+function clerkSecret() {
+  const file = join(here, '..', '.dev.vars')
+  const line = readFileSync(file, 'utf8').split(/\r?\n/).find((l) => l.startsWith('CLERK_SECRET_KEY'))
+  if (!line) throw new Error('CLERK_SECRET_KEY is missing from worker/.dev.vars')
+  return line.slice(line.indexOf('=') + 1).trim().replace(/^"|"$/g, '')
+}
+
+async function clerkApi(method, path, body) {
+  const res = await fetch(`https://api.clerk.com/v1${path}`, {
+    method,
+    headers: { Authorization: `Bearer ${clerkSecret()}`, 'Content-Type': 'application/json' },
+    body: body === undefined ? undefined : JSON.stringify(body),
+  })
+  const data = await res.json().catch(() => null)
+  if (!res.ok) throw new Error(`Clerk ${method} ${path} -> ${res.status} ${JSON.stringify(data)}`)
+  return data
+}
+
+/** Returns { userId, created }: finds the user by id or email, creating the email if new. */
+async function resolveUser(who) {
+  if (who.startsWith('user_')) return { userId: who, created: false }
+  const found = await clerkApi('GET', `/users?email_address=${encodeURIComponent(who)}`)
+  if (Array.isArray(found) && found[0]) return { userId: found[0].id, created: false }
+  const made = await clerkApi('POST', '/users', { email_address: [who] })
+  return { userId: made.id, created: true }
+}
 
 // Runs inside the page. Mirrors scripts/staging-console.js: bearer token per call,
 // no cookies, same paths and bodies.
@@ -127,7 +162,25 @@ const browser = await chromium.launch({ headless: false, args: ['--window-size=1
 const page = await browser.newPage({ viewport: { width: 1280, height: 860 } })
 await page.goto(SITE, { waitUntil: 'networkidle' })
 
-if (needsSignIn) {
+const as = flag('as')
+if (needsSignIn && as) {
+  const { userId, created } = await resolveUser(as)
+  const { token: ticket } = await clerkApi('POST', '/sign_in_tokens', { user_id: userId, expires_in_seconds: 600 })
+  console.log(`\nScenario "${scenario}" on ${SITE}\nSigning in as ${userId}${created ? ' (just created)' : ''} with a sign-in ticket...`)
+  await page.goto(`${SITE}/?__clerk_ticket=${encodeURIComponent(ticket)}`, { waitUntil: 'networkidle' })
+  await page.waitForFunction(() => Boolean(window.Clerk?.session), null, { timeout: 60000, polling: 500 })
+  const user = await clerkApi('GET', `/users/${userId}`)
+  const sessions = await clerkApi('GET', `/sessions?user_id=${userId}&status=active`)
+  const list = Array.isArray(sessions) ? sessions : (sessions.data ?? [])
+  const newest = list.sort((a, b) => b.created_at - a.created_at)[0]
+  state.signIn = {
+    userId,
+    userCreatedAt: new Date(user.created_at).toISOString(),
+    sessionCreatedAt: newest ? new Date(newest.created_at).toISOString() : null,
+    gapSeconds: newest ? Math.round((newest.created_at - user.created_at) / 1000) : null,
+  }
+  console.log('Clerk timings:', JSON.stringify(state.signIn))
+} else if (needsSignIn) {
   console.log(`\nScenario "${scenario}" on ${SITE}`)
   console.log('Sign in IN THIS WINDOW. Copy the link from the email and paste it into this window\'s address bar.')
   console.log('Waiting up to 15 minutes...')
@@ -141,7 +194,8 @@ if (needsSignIn) {
 }
 
 const result = await page.evaluate(runInPage, { scenario, state, token })
-if (result.draftId) writeFileSync(statePath, JSON.stringify({ ...state, draftId: result.draftId }, null, 2))
+if (state.signIn) result.signIn = state.signIn
+writeFileSync(statePath, JSON.stringify({ ...state, draftId: result.draftId ?? state.draftId }, null, 2))
 appendFileSync(evidencePath, `${JSON.stringify(result)}\n`)
 console.log(JSON.stringify(result, null, 2))
 console.log(`\nAppended to ${evidencePath}`)
