@@ -8,3 +8,6 @@
 .env.*
 .superdesign/tmp/
 clerk-cli/
+
+# Playwright MCP snapshots and console logs
+.playwright-mcp/

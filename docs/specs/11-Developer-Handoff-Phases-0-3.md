@@ -330,6 +330,14 @@ Decided at the Gate 1 review (owner, 2026-09-17). The Gate 1 report is `docs/rep
     - Follow-up the owner will do later: in Clerk, turn password and Google sign-in off, switch fans to email link (it is email code now), and turn backup codes on.
     - The authenticator app (on) and SMS (off) are confirmed correct and need no further checks.
     - Phase 2 needs its own go-ahead.
+22. **Phase 2 go-ahead and decisions (owner, 2026-09-18).**
+    - **Hard-list block threshold:** 3 blocks per fan in a rolling 24 hours (§5.3.3). A `minors` hit is still flagged on the first one.
+    - **`prohibited_roles` fan label:** design 24 state E, Option 1, as two lines under one key: "School, babysitter or family roles, including step-family" and "Playing someone else's partner, or a named character from a film, show, game or anime". A blocked message shows the matching line if the rules layer knows which one it was, otherwise both.
+    - **Pilot:** the fictional Maya Atelier, seeded with the §5.2 and §5.7 prices. **A fan budget is optional.** Without one, no budget line is shown. A real creator and real prices come before live traffic.
+    - **The deferred Phase 1 UI comes after Gate 2:** the news consent step (design 23), the unsubscribe page, a "Subscribe again" endpoint and creator authenticator-enrolment routing (design 16).
+    - **"Existing e2e tests pass against staging"** is met by running the same suite against two targets. Against staging, only the mode-specific checks change: the badge and menu copy, and entrance ranges that must equal the ones the catalog API derives.
+    - **Option groups the fan screens don't show yet** (orientation, name use, delivery, rights, resolution) start at their $0 defaults and stay hidden in Phase 2. **The design 20 UI, including the "may resell" disclosure, is a hard prerequisite for Phase 4 submission.**
+    - **Staging fan screens read the catalog and show the server's quote, but don't save** in Phase 2. The save UI (design 18) comes after Gate 2.
 
 ### 5.7 Commission options from market research (owner, 2026-09-16)
 
