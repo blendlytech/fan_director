@@ -19,9 +19,10 @@
 // `--as <email or user id>` skips the manual sign-in: the script asks Clerk's
 // Backend API for a one-time sign-in ticket and opens the site with it, creating
 // the user first if that email doesn't exist yet. It needs CLERK_SECRET_KEY in
-// .dev.vars, and sign-in tickets are a development-instance testing feature, so a
-// session made this way is not evidence about the real sign-in UI: it proves what
-// the Worker does with a session, not how the session was obtained.
+// .dev.vars. Sign-in tickets work on ANY Clerk instance, production included: a
+// secret key can sign in as any user. So --as refuses anything but a development
+// key (sk_test_). A session made this way is not evidence about the real sign-in
+// UI: it proves what the Worker does with a session, not how it was obtained.
 import { createRequire } from 'node:module'
 import { appendFileSync, existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { dirname, join } from 'node:path'
@@ -58,7 +59,10 @@ function clerkSecret() {
   const file = join(here, '..', '.dev.vars')
   const line = readFileSync(file, 'utf8').split(/\r?\n/).find((l) => l.startsWith('CLERK_SECRET_KEY'))
   if (!line) throw new Error('CLERK_SECRET_KEY is missing from worker/.dev.vars')
-  return line.slice(line.indexOf('=') + 1).trim().replace(/^"|"$/g, '')
+  const key = line.slice(line.indexOf('=') + 1).trim().replace(/^"|"$/g, '')
+  // Tickets sign in as anyone. Never let this script do that against production.
+  if (!key.startsWith('sk_test_')) throw new Error('--as only runs with a development Clerk key (sk_test_)')
+  return key
 }
 
 async function clerkApi(method, path, body) {
