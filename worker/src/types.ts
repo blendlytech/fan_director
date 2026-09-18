@@ -12,6 +12,15 @@ export interface Env {
   /** Switches that stay "false" in every deployed environment (doc 11 §5.4). */
   AI_ENABLED: string
   ADULT_CATALOG_ENABLED: string
+  /** AI spending ceiling for this environment, integer micro-dollars ($8 = "8000000"). No value = no AI calls. */
+  AI_BUDGET_CEILING_MICROUSD?: string
+  /** Per-creator ceiling, micro-dollars. Defaults to the environment ceiling. */
+  AI_CREATOR_CEILING_MICROUSD?: string
+  /** Days raw AI conversation text is kept (doc 11 §5.6 item 24). Default 30. */
+  AI_RAW_RETENTION_DAYS?: string
+  /** Director turns per fan per hour, and per creator per hour. */
+  AI_FAN_TURNS_PER_HOUR?: string
+  AI_CREATOR_TURNS_PER_HOUR?: string
 
   // Secrets, set with `wrangler secret put` (locally: worker/.dev.vars).
   /** Clerk instance public key (PEM, SPKI) for networkless session verification. */
@@ -20,6 +29,8 @@ export interface Env {
   CLERK_SECRET_KEY: string
   /** HMAC-SHA256 key for unsubscribe tokens, at least 32 random bytes, base64. */
   UNSUBSCRIBE_SIGNING_KEY: string
+  /** OpenRouter key for the Director and the classifier (doc 11 §5.6 item 24). Absent = AI unavailable. */
+  OPENROUTER_API_KEY?: string
 }
 
 /** The parts of Clerk's Backend API the Worker uses. Mocked in tests. */
