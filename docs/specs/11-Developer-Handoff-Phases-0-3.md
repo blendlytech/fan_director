@@ -338,6 +338,11 @@ Decided at the Gate 1 review (owner, 2026-09-17). The Gate 1 report is `docs/rep
     - **"Existing e2e tests pass against staging"** is met by running the same suite against two targets. Against staging, only the mode-specific checks change: the badge and menu copy, and entrance ranges that must equal the ones the catalog API derives.
     - **Option groups the fan screens don't show yet** (orientation, name use, delivery, rights, resolution) start at their $0 defaults and stay hidden in Phase 2. **The design 20 UI, including the "may resell" disclosure, is a hard prerequisite for Phase 4 submission.**
     - **Staging fan screens read the catalog and show the server's quote, but don't save** in Phase 2. The save UI (design 18) comes after Gate 2.
+    - **Rendered boundaries wording approved (owner, 2026-09-18):**
+      - The checklist labels are "Anything explicit", "Anything political" and "Brand mentions or ads".
+      - "Maya chooses the wardrobe." replaces the old wardrobe copy.
+      - Staging shows design 13's panel A on the entrance and the review screen, and card B in the Director.
+      - Design 13's "Before you send" box (D) waits for Phase 4, when the server checks the fan's text.
 
 ### 5.7 Commission options from market research (owner, 2026-09-16)
 
