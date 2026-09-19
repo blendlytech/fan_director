@@ -91,12 +91,15 @@ export function LiveDirector({ catalogOpen, setCatalogOpen }: { catalogOpen: boo
   async function accept(suggestion: DirectorSuggestion) {
     if (!sync) return
     dispatch({ type: 'busy', id: suggestion.id })
-    const ref = await sync.flush()
-    if (!ref) return dispatch({ type: 'busy', id: null })
-    const res = await api.acceptSuggestion(ref.draftId, suggestion.id, ref.revision)
-    if (res.ok) {
+    // In the save queue, so no autosave can race the accept with an old revision.
+    const res = await sync.exclusive(async (ref) => {
+      const r = await api.acceptSuggestion(ref.draftId, suggestion.id, ref.revision)
       // One undoable step, already saved by the server.
-      sync.adopt(res.body, { asUndoableChange: true })
+      if (r.ok) sync.adopt(r.body, { asUndoableChange: true })
+      return r
+    })
+    if (!res) return dispatch({ type: 'busy', id: null })
+    if (res.ok) {
       return dispatch({ type: 'outcome', suggestionId: suggestion.id, outcome: { kind: 'accepted', totalCents: res.body.quote?.total } })
     }
     if (res.error === 'suggestion_out_of_date') {

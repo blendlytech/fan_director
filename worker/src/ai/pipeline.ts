@@ -253,7 +253,15 @@ async function runTurn(
   // --- 3. The enum and the model call ----------------------------------------
   const allowed = allowedItems(version.content, gate, {
     slots: DIRECTOR_SLOTS_V1,
-    excluded: (item) => checkText(`${item.label}. ${item.description ?? ''}`, ctx).limits.some((l) => l.mode === 'hard_no'),
+    excluded: (item) => {
+      const text = `${item.label}. ${item.description ?? ''}`
+      if (checkText(text, ctx).limits.some((l) => l.mode === 'hard_no')) return true
+      // A custom hard no that shares a significant word with the item keeps it out
+      // of the enum. Paraphrases (e.g. "beach" vs "outdoors") are not caught here:
+      // a creator's own items are expected to respect their own limits (Gate 3 report).
+      const words = significantWords(text, creator)
+      return customLimits.some((c) => c.mode === 'hard_no' && [...significantWords(c.text, creator)].some((w) => words.has(w)))
+    },
   })
   const allowedIds = new Set(allowed.map((e) => e.item.id))
   const maxQty = Math.max(1, ...allowed.map((e) => (e.item.pricing.kind === 'per_unit' ? e.item.pricing.maxQty : 1)))
@@ -302,7 +310,7 @@ async function runTurn(
     if (!parsed.ok) errors.push(...parsed.errors)
     else {
       const texts = textFields(parsed.value)
-      const findings = texts.flatMap((t) => checkOutputText(t.field, t.text))
+      const findings = texts.flatMap((t) => checkOutputText(t.field, t.text, creator))
       const refusalShown = findings.some((f) => f.issue === 'refusal' && f.field === 'clarifyingQuestion')
       if (findings.some((f) => f.issue === 'refusal')) state.detail.refusalWording = true
       const blocking = findings.filter((f) => f.issue !== 'refusal')
@@ -311,13 +319,30 @@ async function runTurn(
       state.detail[`attempt${attempt}Findings`] = findings.map((f) => `${f.field}:${f.issue}`)
 
       for (const t of texts) {
-        const hit = checkText(t.text, ctx).hardList
-        if (hit) errors.push(`a text field breaks the platform rule "${hardListLines(hit.key, creator)[0]}"; never include it`)
+        const check = checkText(t.text, ctx)
+        if (check.hardList) errors.push(`a text field breaks the platform rule "${hardListLines(check.hardList.key, creator)[0]}"; never include it`)
+        // The question is shown word for word: it may never suggest a creator's hard no.
+        // (notOffered names hard-no things by design; customRequest is converted below.)
+        if (t.field === 'clarifyingQuestion') {
+          const hardNo = check.limits.find((l) => l.mode === 'hard_no')
+          if (hardNo) errors.push(`clarifyingQuestion suggests something ${creator} doesn't offer ("${CHECKLIST_LABELS[hardNo.limitKey] ?? 'a creator limit'}"); ask about catalog choices only`)
+        }
       }
       const joined = texts.map((t) => t.text).join('\n')
       if (joined.trim() !== '') {
         outputVerdict = await classify(state, 'classify_output', joined, policy, knownLimitIds)
         if (outputVerdict.key) errors.push(`a text field breaks the platform rule "${hardListLines(outputVerdict.key, creator)[0]}"; never include it`)
+        // A custom hard no the output touches, other than by naming it in notOffered, is refused.
+        const named = new Set(parsed.value.notOffered.map((n) => matchLimit(n, customLimits, ctx, creator)?.key).filter(Boolean))
+        for (const id of outputVerdict.limitIds) {
+          const limit = customLimits.find((c) => c.id === id)
+          if (limit?.mode === 'hard_no' && !named.has(`custom:${id}`) && !(parsed.value.customRequest && !parsed.value.clarifyingQuestion && parsed.value.options.length === 0)) {
+            errors.push(`a text field suggests something ${creator} doesn't offer ("${limit.text}"); list it in notOffered instead`)
+          }
+          if (limit?.mode === 'ask_me') {
+            askFirst.set(`custom:${id}`, { label: limit.text, flag: { source: 'suggestion', limit: { kind: 'custom', id }, mode: 'ask_me' } })
+          }
+        }
       }
 
       if (errors.length === 0) {
@@ -349,7 +374,7 @@ async function runTurn(
   state.detail.drops = drops.map((d) => ({ index: d.index, code: d.reason.code }))
   state.detail.modelLabels = reply.options.length
   for (const entry of reply.notOffered) {
-    const matched = matchLimit(entry, customLimits, ctx)
+    const matched = matchLimit(entry, customLimits, ctx, creator)
     notOffered.set(matched ? matched.key : 'generic', matched ? matched.label : '')
   }
   let customRequest = reply.customRequest
@@ -459,27 +484,30 @@ function matchLimit(
   entry: string,
   custom: Boundaries['custom'],
   ctx: CheckContext,
+  creator: string,
 ): { key: string; label: string } | null {
   const hit = checkText(entry, ctx).limits.find((l) => l.mode === 'hard_no')
   if (hit && CHECKLIST_LABELS[hit.limitKey]) return { key: `checklist:${hit.limitKey}`, label: CHECKLIST_LABELS[hit.limitKey] }
-  const words = significantWords(entry)
+  const words = significantWords(entry, creator)
   for (const c of custom) {
     if (c.mode !== 'hard_no') continue
-    const cw = significantWords(c.text)
+    const cw = significantWords(c.text, creator)
     if ([...words].some((w) => cw.has(w))) return { key: `custom:${c.id}`, label: c.text }
   }
   return null
 }
 
-const STOP = new Set(['the', 'and', 'with', 'for', 'any', 'anything', 'not', 'no', 'dont', 'does', 'doing', 'filming', 'being', 'from', 'that', 'this', 'your', 'you', 'her', 'his', 'their', 'into', 'onto', 'maya'])
-function significantWords(text: string): Set<string> {
+const STOP = new Set(['the', 'and', 'with', 'for', 'any', 'anything', 'not', 'no', 'dont', 'does', 'doing', 'filming', 'being', 'from', 'that', 'this', 'your', 'you', 'her', 'his', 'their', 'into', 'onto'])
+/** Content words for limit matching; the creator's own name never counts as a match. */
+function significantWords(text: string, creator: string): Set<string> {
+  const name = creator.toLowerCase()
   return new Set(
     text
       .toLowerCase()
       .replace(/[^a-z\s]/g, ' ')
       .split(/\s+/)
       .map((w) => w.replace(/(?:ing|s)$/, ''))
-      .filter((w) => w.length >= 4 && !STOP.has(w)),
+      .filter((w) => w.length >= 4 && !STOP.has(w) && w !== name),
   )
 }
 
@@ -696,15 +724,20 @@ export async function acceptSuggestion(
   const prior = row.boundary_flags_json ? (JSON.parse(row.boundary_flags_json) as BoundaryFlag[]).filter((f) => f.source === 'suggestion') : []
   const merged = uniqueBy([...flags, ...prior, ...(JSON.parse(s.flags_json) as BoundaryFlag[])], (f) => JSON.stringify(f))
 
+  // Claim the suggestion first: a decline racing this accept wins or loses as a
+  // whole, and the draft changes only if the claim succeeded (one transaction).
   const results = await env.DB.batch([
+    env.DB.prepare(`UPDATE ai_suggestion SET status = 'accepted', decided_at = ? WHERE id = ? AND status = 'offered'`).bind(at, s.id),
     env.DB.prepare(
       `UPDATE draft SET content_json = ?, boundary_flags_json = ?, revision = revision + 1, updated_at = ?
-        WHERE id = ? AND fan_id = ? AND creator_id = ? AND revision = ?`,
+        WHERE id = ? AND fan_id = ? AND creator_id = ? AND revision = ? AND changes() = 1`,
     ).bind(JSON.stringify(content), JSON.stringify(merged), at, draftId, fan.fanId, creatorId, row.revision),
-    env.DB.prepare(`UPDATE ai_suggestion SET status = 'accepted', decided_at = ? WHERE id = ? AND status = 'offered' AND changes() = 1`).bind(at, s.id),
+    // The draft moved on in between: give the claim back, marked out of date.
+    env.DB.prepare(`UPDATE ai_suggestion SET status = 'out_of_date' WHERE id = ? AND status = 'accepted' AND changes() = 0 AND decided_at = ?`).bind(s.id, at),
   ])
   const updated = (await requireOwned(env, fan, creatorId, draftId))
-  if ((results[0].meta.changes ?? 0) !== 1) throw new ApiError(409, 'suggestion_out_of_date', { current: draftOf(updated) })
+  if ((results[0].meta.changes ?? 0) !== 1) throw new ApiError(409, 'suggestion_already_decided', { current: draftOf(updated) })
+  if ((results[1].meta.changes ?? 0) !== 1) throw new ApiError(409, 'suggestion_out_of_date', { current: draftOf(updated) })
   return present(env, updated)
 }
 

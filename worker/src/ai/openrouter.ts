@@ -54,21 +54,29 @@ export class OpenRouterProvider implements CompletionProvider {
       return { ok: false, kind: timedOut ? 'timeout' : 'network', status: null, usage: null, latencyMs: Date.now() - started }
     }
 
+    // OpenRouter sends 200 headers at once and keeps the body open while the
+    // model works, so the timeout usually fires HERE. That is an unclear
+    // outcome (the generation may still be billed), never an empty reply.
     let payload: Record<string, any> | null = null
     try {
       payload = (await res.json()) as Record<string, any>
-    } catch {
-      payload = null
+    } catch (err) {
+      const timedOut = err instanceof Error && (err.name === 'TimeoutError' || err.name === 'AbortError')
+      return { ok: false, kind: timedOut ? 'timeout' : 'network', status: res.status, usage: null, latencyMs: Date.now() - started }
     }
     const latencyMs = Date.now() - started
     const usage = usageOf(payload)
     if (!res.ok || payload === null || payload.error) {
-      const kind = res.status === 429 ? 'rate_limited' : res.ok && payload === null ? 'empty' : 'http'
+      // A 200 carrying an error mid-generation without a cost figure may still
+      // be billed: treat it as unclear so the reservation is held.
+      if (res.ok && usage.costMicroUsd === null) return { ok: false, kind: 'network', status: res.status, usage, latencyMs }
+      const kind = res.status === 429 ? 'rate_limited' : 'http'
       return { ok: false, kind, status: res.status, usage, latencyMs }
     }
     const content = payload.choices?.[0]?.message?.content
     if (typeof content !== 'string' || content.trim() === '') {
-      return { ok: false, kind: 'empty', status: res.status, usage, latencyMs }
+      // Billed but empty: without a cost figure, keep the reservation (unclear).
+      return { ok: false, kind: usage.costMicroUsd === null ? 'network' : 'empty', status: res.status, usage, latencyMs }
     }
     return { ok: true, content, usage, upstream: typeof payload.provider === 'string' ? payload.provider : null, latencyMs }
   }

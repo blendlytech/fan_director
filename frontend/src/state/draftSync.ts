@@ -47,6 +47,8 @@ export interface DraftSyncValue {
   retry: () => void
   /** Waits until the screen's draft is saved; returns the server reference, or null if it can't be. */
   flush: () => Promise<ServerRef | null>
+  /** Runs a draft-changing server call in the save queue (see useDraftSyncState). Null if there's no saved draft. */
+  exclusive: <T>(fn: (ref: ServerRef) => Promise<T>) => Promise<T | null>
   /** Takes a draft the server already saved (an accepted suggestion) without saving it again. */
   adopt: (response: ServerDraftResponse, opts?: { asUndoableChange?: boolean }) => void
 }
@@ -228,6 +230,32 @@ export function useDraftSyncState(
     return () => window.clearTimeout(timer)
   }, [enabled, contentKey, signedIn, saveNow, server])
 
+  /**
+   * Runs a server write that changes the draft (accepting a suggestion) in the
+   * same one-at-a-time queue as saves, after anything pending is saved, so an
+   * autosave can never race it with a stale revision.
+   */
+  const exclusive = useCallback(
+    async <T,>(fn: (ref: ServerRef) => Promise<T>): Promise<T | null> => {
+      await saveNow()
+      while (inFlight.current) await inFlight.current
+      const ref = serverRef.current
+      if (!ref) return null
+      let result: T | null = null
+      const run = (async () => {
+        result = await fn(ref)
+      })()
+      inFlight.current = run
+      try {
+        await run
+      } finally {
+        inFlight.current = null
+      }
+      return result
+    },
+    [saveNow],
+  )
+
   const flush = useCallback(async (): Promise<ServerRef | null> => {
     await saveNow()
     const dirty = keyOf(contentOf(latest.current.view, latest.current.draft)) !== savedKey.current
@@ -271,9 +299,10 @@ export function useDraftSyncState(
             acceptPriceChange,
             retry,
             flush,
+            exclusive,
             adopt,
           }
         : null,
-    [enabled, signedIn, status, savedAt, server, changedElsewhere, priceChange, pinnedQuote, acceptPriceChange, retry, flush, adopt],
+    [exclusive, enabled, signedIn, status, savedAt, server, changedElsewhere, priceChange, pinnedQuote, acceptPriceChange, retry, flush, adopt],
   )
 }
