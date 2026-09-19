@@ -6,6 +6,7 @@
   "scripts": {
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:live": "vitest run --config vitest.live.config.ts",
     "migrate:local": "wrangler d1 migrations apply DB --local",
     "deploy:staging": "node scripts/staging-guard.mjs && wrangler deploy --env staging"
   },

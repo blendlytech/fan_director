@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { BADGE } from './mode.ts'
 
 /* -------------------------------------------------------------------------- */
 /*  Smoke tests for the catch-all "page not found" route.                     */
@@ -18,7 +19,7 @@ test.describe('page not found', () => {
     await expect(page.getByText('Page not found', { exact: true })).toBeVisible()
     await expect(page.locator('code')).toHaveText('/nope')
 
-    await expect(page.getByText('Demo', { exact: true })).toBeVisible()
+    await expect(page.getByText(BADGE, { exact: true })).toBeVisible()
   })
 
   test('the shown address includes query and hash', async ({ page }) => {

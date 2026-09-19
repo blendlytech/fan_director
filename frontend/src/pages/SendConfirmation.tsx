@@ -5,7 +5,7 @@ import { ProgressTrail } from '../components/layout/ProgressTrail'
 import { Button } from '../components/common/Button'
 import { Icon } from '../components/common/Icon'
 import { useCommission } from '../state/commission'
-import { BUDGET, DELIVERY_DAYS, currency, settingOf } from '../domain/sceneCard'
+import { BUDGET, currency, settingOf } from '../domain/sceneCard'
 
 /* -------------------------------------------------------------------------- */
 /*  The end of the fan journey — in a demo with no backend.                    */
@@ -19,7 +19,7 @@ import { BUDGET, DELIVERY_DAYS, currency, settingOf } from '../domain/sceneCard'
 
 export function SendConfirmation() {
   const [saveAttempted, setSaveAttempted] = useState(false)
-  const { draft, total, difference, overBudget } = useCommission()
+  const { view, draft, total, difference, overBudget, deliveryDays } = useCommission()
 
   const orderDetails = [
     { icon: 'lucide:calculator', label: 'Estimated Price', value: currency.format(total), note: 'Subject to approval' },
@@ -37,7 +37,7 @@ export function SendConfirmation() {
           note: `Under ${currency.format(BUDGET)} budget`,
         },
     // No payment exists, so there is no date to count from — only the rule.
-    { icon: 'lucide:calendar-clock', label: 'Est. Delivery', value: `${DELIVERY_DAYS} days`, note: 'After payment confirmation' },
+    { icon: 'lucide:calendar-clock', label: 'Est. Delivery', value: `${deliveryDays} days`, note: 'After payment confirmation' },
   ]
 
   const nextSteps = [
@@ -55,7 +55,7 @@ export function SendConfirmation() {
     },
     {
       title: '4. Delivery',
-      body: `Your final video would be delivered securely, typically within ${DELIVERY_DAYS} days of payment.`,
+      body: `Your final video would be delivered securely, typically within ${deliveryDays} days of payment.`,
     },
   ]
 
@@ -99,7 +99,7 @@ export function SendConfirmation() {
           </div>
 
           <div className="p-8">
-            <h2 className="mb-6 font-serif text-2xl font-medium text-espresso">{settingOf(draft).sceneTitle}</h2>
+            <h2 className="mb-6 font-serif text-2xl font-medium text-espresso">{settingOf(view, draft).sceneTitle}</h2>
 
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-3">
               {orderDetails.map((detail) => (

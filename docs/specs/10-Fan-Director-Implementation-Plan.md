@@ -15,6 +15,8 @@ Use Cloudflare Pages for the frontend, a Worker for the backend, D1 for applicat
 
 > **Deviation (2026-09-16, owner-approved):** the hosted demo uses **Workers Static Assets** instead of Pages, because Cloudflare now recommends Workers for new sites and a later Worker backend can live in the same project. It is static files only (no Worker script, no bindings) — see `frontend/wrangler.jsonc`. Read "Pages" below as "Workers Static Assets" for the frontend.
 
+> **Production Domain & Contact Email (2026-09-18, owner-purchased):** The owner has purchased the web domain `studiolens.me` (website: `www.studiolens.me`) and email `info@studiolens.me` to market and host the web application "Fan Director Studio". Staging continues to use `workers.dev`.
+
 This is a build plan, not a statement that those services are configured. The attached design describes a prototype. The current repository was not inspected for this document; Phase 0 must reconcile this plan with actual code and project instructions before implementation.
 
 ## 2. Scope and decisions
@@ -121,7 +123,7 @@ R2 stores files; it does not automatically create an adaptive streaming ladder. 
 | R2 Standard | 10 GB-month storage, 1 million Class A operations and 10 million Class B operations monthly free; internet egress free | Review asset growth and operations at 70% of allowance; usage beyond allowances may be billed |
 | Cloudflare Stream | $5/month per 1,000 stored minutes of capacity; $1 per 1,000 delivered minutes | Use when managed playback is worth the additional charge |
 | AI provider | Separate usage bill | Governed by backend budget and creator allowances |
-| Authentication/email/domain | Provider and existing account dependent | Include in launch budget; free Cloudflare hosting does not cover these automatically |
+| Authentication/email/domain | Provider and existing account dependent; domain `studiolens.me` (`www.studiolens.me`) and email `info@studiolens.me` purchased by owner | Include in launch budget; free Cloudflare hosting does not cover these automatically |
 
 Cloudflare limits and pricing were checked September 16, 2026. Free-tier suitability must be confirmed with the actual workload; waiting for a remote AI response is different from consuming Worker CPU. Benchmark validation, authentication and database work together before assuming Workers Free is sufficient.
 
@@ -138,7 +140,7 @@ Sources: [Workers limits](https://developers.cloudflare.com/workers/platform/lim
 | 2 — Catalog and estimates | Persist versioned catalog, enforce boundaries, server quote calculation and draft revision checks | Source examples calculate exactly; stale quotes require acceptance; browser tampering cannot alter authoritative prices |
 | 3 — AI Director | Provider adapter, structured suggestions, context limits, usage reservations, fallback and kill switch | Valid suggestions update the card; invalid output changes nothing; concurrent calls cannot overrun the configured reservation budget |
 | 4 — Submission and review | Explicit submit, immutable versions, creator queue, questions, changes, acceptance, approval and decline | A full fan-to-creator round trip works; old versions cannot approve new scope; no false payment confirmation |
-| 5 — Media and operations | R2 demo assets, captions, production domain settings, metrics, deletion/retention tasks and recovery procedure | Demo seeks and plays on desktop/mobile; private records are not public; staged recovery succeeds |
+| 5 — Media and operations | R2 demo assets, captions, production domain settings (`www.studiolens.me`), metrics, deletion/retention tasks and recovery procedure | Demo seeks and plays on desktop/mobile; private records are not public; staged recovery succeeds |
 | 6 — Controlled pilot | Small invited creator cohort, measured conversations, usability review and cost report | Launch checklist passes and observed quality/cost support a proposed subscription allowance |
 
 Phases 1–4 are the main dependency chain. Public-demo media work can proceed once the asset approach is settled. Do not promise a completion date until Phase 0 identifies the actual remaining work and external setup dependencies.
@@ -183,5 +185,6 @@ Track errors, latency, usage reservations, actual charges, database growth and m
 | Commercial subscription collection | Separate from fan commission payments | Processor suitability and entitlement/billing workflow |
 | Retention | Short-lived raw conversation history | Operational needs, provider behavior and final privacy wording |
 | Video scope | Demo/previews only; finished work delivered externally | Revisit only if creators demonstrate a need for private hosting |
+| Production domain & contact email | `www.studiolens.me` / `info@studiolens.me` | Purchased by owner (2026-09-18) to host and market "Fan Director Studio" |
 
 The next implementation step is Phase 0: inspect the current repository and confirm the provider, authentication and catalog contracts. Then implement persistence and server-side pricing before connecting live AI.

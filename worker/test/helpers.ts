@@ -2,6 +2,8 @@ import { env } from 'cloudflare:workers'
 import { exportSPKI, generateKeyPair, SignJWT, type CryptoKey as JoseKey } from 'jose'
 import { handleApi } from '../src/index'
 import type { ClerkBackend, ClerkSession, ClerkUser, Deps, Env } from '../src/types'
+import type { CatalogContent } from '../../shared/domain/types.ts'
+import { publishStatements } from '../src/publish'
 
 export const ORIGIN = 'https://app.test'
 export const ISSUER = 'https://clerk.test'
@@ -117,6 +119,8 @@ export interface CallOptions {
   rawBody?: string
   origin?: string | null
   headers?: Record<string, string>
+  /** Test-process configuration only, e.g. the adult switch (doc 11 §5.6 item 3). */
+  env?: Partial<Env>
 }
 
 export async function call(method: string, path: string, opts: CallOptions = {}): Promise<Response> {
@@ -128,7 +132,36 @@ export async function call(method: string, path: string, opts: CallOptions = {})
   if (opts.rawBody !== undefined) body = opts.rawBody
   else if (opts.body !== undefined) body = JSON.stringify(opts.body)
   if (body !== undefined && !headers['Content-Type']) headers['Content-Type'] = 'application/json'
-  return handleApi(new Request(`${ORIGIN}${path}`, { method, headers, body }), testEnv, deps)
+  return handleApi(new Request(`${ORIGIN}${path}`, { method, headers, body }), { ...testEnv, ...opts.env }, deps)
+}
+
+type Statement = { sql: string; params: (string | number | null)[] }
+
+export async function runStatements(statements: Statement[]): Promise<void> {
+  await testEnv.DB.batch(statements.map((s) => testEnv.DB.prepare(s.sql).bind(...s.params)))
+}
+
+export interface PublishedBoutique {
+  creatorId: string
+  catalogId: string
+  catalogVersionId: string
+}
+
+/** A creator whose catalog is published by the same statements as the admin script. */
+export async function publishedBoutique(content: CatalogContent, name = 'Maya'): Promise<PublishedBoutique> {
+  const b = { creatorId: uid('cr'), catalogId: uid('cat'), catalogVersionId: uid('cv') }
+  await runStatements(publishStatements({
+    creatorId: b.creatorId, catalogId: b.catalogId, versionId: b.catalogVersionId, version: 1, content, now: now(),
+    createCreator: { displayName: name },
+  }))
+  return b
+}
+
+/** Publishes the next version, retiring the current one. Returns its id. */
+export async function publishNext(b: PublishedBoutique, content: CatalogContent, version = 2): Promise<string> {
+  const versionId = uid('cv')
+  await runStatements(publishStatements({ creatorId: b.creatorId, catalogId: b.catalogId, versionId, version, content, now: now() }))
+  return versionId
 }
 
 export async function bodyOf(res: Response): Promise<Record<string, any>> {

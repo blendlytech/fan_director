@@ -1,7 +1,11 @@
 import { requireCreator, requireFan } from './auth'
 import { httpClerk } from './clerk'
 import { getConsent, postConsent, postOnboarding } from './consent'
-import { getDraft, putDraft } from './drafts'
+import { getCatalog, postQuote } from './catalog'
+import { acceptCatalogVersion, getDraft, getDraftQuote, getLatestDraft, putDraft } from './drafts'
+import { openRouterProviders } from './ai/openrouter'
+import { acceptSuggestion, declineSuggestion, getDirector, postDirectorTurn } from './ai/pipeline'
+import { purgeExpired } from './ai/retention'
 import { ApiError, assertSameOrigin, errorResponse, json, MUTATING } from './http'
 import type { Deps, Env } from './types'
 import { getUnsubscribe, postUnsubscribe } from './unsubscribe'
@@ -54,6 +58,38 @@ const routes: { method: string; pattern: RegExp; handler: Handler }[] = [
   },
   {
     method: 'GET',
+    pattern: /^\/api\/creators\/([^/]+)\/catalog$/,
+    handler: async (_r, env, _d, [creatorId]) => {
+      assertId(creatorId)
+      return getCatalog(env, creatorId)
+    },
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/creators\/([^/]+)\/quote$/,
+    handler: async (request, env, _d, [creatorId]) => {
+      assertId(creatorId)
+      return postQuote(request, env, creatorId)
+    },
+  },
+  {
+    method: 'GET',
+    pattern: /^\/api\/creators\/([^/]+)\/drafts\/([^/]+)\/quote$/,
+    handler: async (request, env, deps, [creatorId, draftId]) => {
+      assertId(creatorId)
+      return getDraftQuote(env, await requireFan(request, env, deps), creatorId, draftId)
+    },
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/creators\/([^/]+)\/drafts\/([^/]+)\/accept-catalog-version$/,
+    handler: async (request, env, deps, [creatorId, draftId]) => {
+      assertId(creatorId)
+      return acceptCatalogVersion(request, env, deps, await requireFan(request, env, deps), creatorId, draftId)
+    },
+  },
+  {
+    method: 'GET',
     pattern: /^\/api\/creators\/([^/]+)\/drafts\/([^/]+)$/,
     handler: async (request, env, deps, [creatorId, draftId]) => {
       assertId(creatorId)
@@ -66,6 +102,47 @@ const routes: { method: string; pattern: RegExp; handler: Handler }[] = [
     handler: async (request, env, deps, [creatorId, draftId]) => {
       assertId(creatorId)
       return putDraft(request, env, deps, await requireFan(request, env, deps), creatorId, draftId)
+    },
+  },
+  // Phase 3: the latest draft (design 18) and the AI Director (doc 11 §8 Phase 3).
+  {
+    method: 'GET',
+    pattern: /^\/api\/creators\/([^/]+)\/drafts$/,
+    handler: async (request, env, deps, [creatorId]) => {
+      assertId(creatorId)
+      return getLatestDraft(env, await requireFan(request, env, deps), creatorId)
+    },
+  },
+  {
+    method: 'GET',
+    pattern: /^\/api\/creators\/([^/]+)\/drafts\/([^/]+)\/director$/,
+    handler: async (request, env, deps, [creatorId, draftId]) => {
+      assertId(creatorId)
+      return getDirector(env, deps, await requireFan(request, env, deps), creatorId, draftId)
+    },
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/creators\/([^/]+)\/drafts\/([^/]+)\/director$/,
+    handler: async (request, env, deps, [creatorId, draftId]) => {
+      assertId(creatorId)
+      return postDirectorTurn(request, env, deps, await requireFan(request, env, deps), creatorId, draftId)
+    },
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/creators\/([^/]+)\/drafts\/([^/]+)\/director\/suggestions\/([^/]+)\/accept$/,
+    handler: async (request, env, deps, [creatorId, draftId, suggestionId]) => {
+      assertId(creatorId)
+      return acceptSuggestion(request, env, deps, await requireFan(request, env, deps), creatorId, draftId, suggestionId)
+    },
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/creators\/([^/]+)\/drafts\/([^/]+)\/director\/suggestions\/([^/]+)\/decline$/,
+    handler: async (request, env, deps, [creatorId, draftId, suggestionId]) => {
+      assertId(creatorId)
+      return declineSuggestion(env, deps, await requireFan(request, env, deps), creatorId, draftId, suggestionId)
     },
   },
   {
@@ -128,7 +205,16 @@ export function createHandler(makeDeps: (env: Env) => Deps): ExportedHandler<Env
       }
       return env.ASSETS.fetch(request)
     },
+    // Daily: delete raw AI conversation text past its retention period.
+    async scheduled(_controller, env, ctx) {
+      ctx.waitUntil(purgeExpired(env, new Date()))
+    },
   }
 }
 
-export default createHandler((env) => ({ clerk: httpClerk(env.CLERK_SECRET_KEY), now: () => new Date() }))
+export default createHandler((env) => ({
+  clerk: httpClerk(env.CLERK_SECRET_KEY),
+  now: () => new Date(),
+  // No key, no AI: the Director reports itself unavailable.
+  ai: env.OPENROUTER_API_KEY ? openRouterProviders(env.OPENROUTER_API_KEY) : undefined,
+}))

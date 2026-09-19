@@ -20,11 +20,15 @@ export default defineConfig(async () => {
             CLERK_JWT_KEY: 'set-per-test',
             CLERK_SECRET_KEY: 'unused-in-tests',
             UNSUBSCRIBE_SIGNING_KEY: 'dGVzdC1vbmx5LXVuc3Vic2NyaWJlLWtleS0zMi1ieXRlcyEh',
+            // Overrides any key in .dev.vars: ordinary tests only ever use the mocked provider.
+            OPENROUTER_API_KEY: 'unused-in-tests',
           },
         },
       }),
     ],
     test: {
+      // The live suite calls a real provider: only `npm run test:live` runs it.
+      exclude: ['test/live/**', 'node_modules/**'],
       setupFiles: ['./test/apply-migrations.ts'],
     },
   }

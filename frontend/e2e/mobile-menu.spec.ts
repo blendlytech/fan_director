@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import type { Page } from '@playwright/test'
+import { BADGE } from './mode.ts'
 
 /* -------------------------------------------------------------------------- */
 /*  The header's mobile menu: a disclosure (not a modal) below the md          */
@@ -50,8 +51,8 @@ test.describe('mobile menu', () => {
     await expect(
       panel(page).getByText('Demo — nothing you make here is saved or sent.'),
     ).toBeVisible()
-    // The header's Demo badge is untouched.
-    await expect(page.locator('header').getByText('Demo', { exact: true })).toBeVisible()
+    // The header's badge is untouched.
+    await expect(page.locator('header').getByText(BADGE, { exact: true })).toBeVisible()
   })
 
   test('activating a row navigates and closes the menu', async ({ page }) => {

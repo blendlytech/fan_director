@@ -5,7 +5,8 @@
 // The top level is local development. `--env staging` is the only deployable
 // environment. Database ids are placeholders until the owner provisions them;
 // scripts/staging-guard.mjs refuses to deploy while they are.
-// Secrets (never in this file): CLERK_JWT_KEY, CLERK_SECRET_KEY, UNSUBSCRIBE_SIGNING_KEY.
+// Secrets (never in this file): CLERK_JWT_KEY, CLERK_SECRET_KEY, UNSUBSCRIBE_SIGNING_KEY,
+// and OPENROUTER_API_KEY (Phase 3; optional: without it the Director says it's unavailable).
 {
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "fan-director-studio-development",
@@ -64,9 +65,15 @@
         "APP_ORIGIN": "https://fan-director-studio-staging.blendly.workers.dev",
         "CLERK_ISSUER": "https://superb-crawdad-9550.clerk.accounts.dev",
         "CLERK_AUTHORIZED_PARTIES": "https://fan-director-studio-staging.blendly.workers.dev",
-        "AI_ENABLED": "false",
-        "ADULT_CATALOG_ENABLED": "false"
-      }
+        // Phase 3: the owner OK'd the AI Director on staging (2026-09-18). Adult stays off.
+        "AI_ENABLED": "true",
+        "ADULT_CATALOG_ENABLED": "false",
+        // Phase 3 (doc 11 §5.6 item 24): $3 of the owner's $8 test budget; the rest is for local live runs.
+        "AI_BUDGET_CEILING_MICROUSD": "3000000",
+        "AI_RAW_RETENTION_DAYS": "30"
+      },
+      // Daily clean-up of raw AI conversation text (src/ai/retention.ts).
+      "triggers": { "crons": ["17 3 * * *"] }
     }
   }
 }

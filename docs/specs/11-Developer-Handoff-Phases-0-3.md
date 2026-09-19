@@ -30,6 +30,7 @@ This is a **design demo**, not a product. Nothing below is a backend.
 | --- | --- |
 | Frontend | `frontend/`: Vite 8, React 19, TypeScript 6, Tailwind v3, react-router v7, oxlint |
 | Hosting | Static build on Cloudflare **Workers Static Assets**, Worker name `fan-director-studio`, <https://fan-director-studio.scmillsc0809.workers.dev>. `frontend/wrangler.jsonc` has no Worker script and no bindings |
+| Production Domain & Email | Purchased by owner: `www.studiolens.me` (`studiolens.me`) and `info@studiolens.me` to market and host the production web application "Fan Director Studio" (fulfills Clerk production custom domain requirements). Staging remains on `workers.dev` during Phases 1–3 |
 | Backend | **None.** No Worker code, D1, R2, auth, AI or payments |
 | Fan draft | In-memory React state (`src/state/CommissionContext.tsx` + pure reducer `src/state/commissionReducer.ts`). Lost on full page reload |
 | Catalog | **Hardcoded constants** in `src/domain/sceneCard.ts` (see §4) |
@@ -330,6 +331,29 @@ Decided at the Gate 1 review (owner, 2026-09-17). The Gate 1 report is `docs/rep
     - Follow-up the owner will do later: in Clerk, turn password and Google sign-in off, switch fans to email link (it is email code now), and turn backup codes on.
     - The authenticator app (on) and SMS (off) are confirmed correct and need no further checks.
     - Phase 2 needs its own go-ahead.
+22. **Phase 2 go-ahead and decisions (owner, 2026-09-18).**
+    - **Hard-list block threshold:** 3 blocks per fan in a rolling 24 hours (§5.3.3). A `minors` hit is still flagged on the first one.
+    - **`prohibited_roles` fan label:** design 24 state E, Option 1, as two lines under one key: "School, babysitter or family roles, including step-family" and "Playing someone else's partner, or a named character from a film, show, game or anime". A blocked message shows the matching line if the rules layer knows which one it was, otherwise both.
+    - **Pilot:** the fictional Maya Atelier, seeded with the §5.2 and §5.7 prices. **A fan budget is optional.** Without one, no budget line is shown. A real creator and real prices come before live traffic.
+    - **The deferred Phase 1 UI comes after Gate 2:** the news consent step (design 23), the unsubscribe page, a "Subscribe again" endpoint and creator authenticator-enrolment routing (design 16).
+    - **"Existing e2e tests pass against staging"** is met by running the same suite against two targets. Against staging, only the mode-specific checks change: the badge and menu copy, and entrance ranges that must equal the ones the catalog API derives.
+    - **Option groups the fan screens don't show yet** (orientation, name use, delivery, rights, resolution) start at their $0 defaults and stay hidden in Phase 2. **The design 20 UI, including the "may resell" disclosure, is a hard prerequisite for Phase 4 submission.**
+    - **Staging fan screens read the catalog and show the server's quote, but don't save** in Phase 2. The save UI (design 18) comes after Gate 2.
+    - **Rendered boundaries wording approved (owner, 2026-09-18):**
+      - The checklist labels are "Anything explicit", "Anything political" and "Brand mentions or ads".
+      - "Maya chooses the wardrobe." replaces the old wardrobe copy.
+      - Staging shows design 13's panel A on the entrance and the review screen, and card B in the Director.
+      - Design 13's "Before you send" box (D) waits for Phase 4, when the server checks the fan's text.
+23. **Gate 2 approved (owner, 2026-09-18).**
+24. **Phase 3 decisions (owner, 2026-09-18).**
+    - **Designs 17 and 18 approved as drawn.** Design 17 (states A–F) and design 13's in-chat notices (C1–C3) are the live Director's UI. Design 18 (save status, edits from another window, price changes) is the save UI.
+    - **Staging saves drafts.** Design 18's approval replaces item 22's "staging fan screens don't save": staging saves on every change, and the Director works on that server draft.
+    - **Raw AI conversations are kept for 30 days,** then deleted by a scheduled job. Records of cost, model and outcome stay; they hold no fan wording. Safety-case evidence follows §5.3.3, not this limit.
+    - **Live AI test budget: $8** for Phase 3, enforced by the server's cost reservation and reported at Gate 3.
+    - **Host: OpenRouter for everything.** OpenRouter picks the upstream host, with `data_collection: "deny"` and fallbacks allowed. The upstream host is recorded for each call. The classifier goes through OpenRouter, pinned to Groq. One secret, `OPENROUTER_API_KEY`, set by the owner.
+25. **Production domain and contact email secured (owner, 2026-09-18).**
+    - **Web domain:** `studiolens.me` (website: `www.studiolens.me`) purchased to market and host the production web application "Fan Director Studio". This satisfies the requirement in item 19 for a production domain controlled by the owner (required for Clerk production instance and custom origin).
+    - **Email address:** `info@studiolens.me` secured for application marketing, contact, administrative inquiries, and verified communications.
 
 ### 5.7 Commission options from market research (owner, 2026-09-16)
 
@@ -707,14 +731,16 @@ Do not describe anything as working unless you ran it. Say "not verified" when y
 | Wording of the unified boundaries text, including a `prohibited_roles` fan label that also covers babysitter or nanny, relationship roles and named characters (design 13's label names only school, childlike and family roles). Two proposed wordings are in design 24, state E | Phase 2 |
 | Pilot creator, real prices and budget handling (is a fan budget required?) | Phase 2 |
 | Currency beyond USD | Deferred |
-| Raw conversation retention (doc 10 proposes 30 days) | Phase 3 |
-| Written authorization from OpenRouter (and the chosen host) for prompt-injection testing, and written confirmation that adult use is allowed | Before injection tests against a real provider; adult confirmation before launch |
+| ~~Raw conversation retention~~ Decided: 30 days (§5.6 item 24) | Done |
+| Written authorization from OpenRouter (and the upstream hosts it routes to) for prompt-injection testing, and written confirmation that adult use is allowed | Before injection tests against a real provider; adult confirmation before launch |
+| Groq's terms for safety classification of adult text, for the classifier reached through OpenRouter (§5.3.3) | Before launch |
 | Designs for every new UI state listed at Gate 0 | Before that UI is built |
 | Payment processor's position on financial domination content (§5.7) | Before that item is enabled |
 | Specialty-act checklist entries (§5.7) | Before adult content is enabled |
 | Counsel: email consent wording and record-keeping for the target countries (§5.8) | Before any news email is sent |
 | News email feature: sender, frequency, content and whether it is part of a creator subscription (future spec) | After the pilot |
 | When, and whether, `ADULT_CATALOG_ENABLED` may ever be turned on | After compliance, outside Phases 0–3 |
+| Production domain and email for launch and Clerk production instance | **Decided:** Purchased `www.studiolens.me` (`studiolens.me`) and `info@studiolens.me` for "Fan Director Studio" (§5.6 item 25) |
 
 ---
 

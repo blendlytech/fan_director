@@ -1,15 +1,17 @@
 import { Link } from 'react-router-dom'
 import { Header } from '../components/layout/Header'
 import { ProgressTrail } from '../components/layout/ProgressTrail'
+import { LimitsPanel } from '../components/boundaries/CreatorLimits'
 import { Button } from '../components/common/Button'
+import { capabilities } from '../config'
 import { Icon } from '../components/common/Icon'
 import { SceneImage } from '../components/common/SceneImage'
 import { useCommission } from '../state/commission'
-import { BUDGET, DELIVERY_DAYS, briefOf, currency, includedComponents, settingOf } from '../domain/sceneCard'
+import { BUDGET, briefOf, currency, includedComponents, settingOf } from '../domain/sceneCard'
 
 export function ReviewScene() {
-  const { draft, lineItems, total, difference, overBudget } = useCommission()
-  const setting = settingOf(draft)
+  const { view, draft, lineItems, total, difference, overBudget, deliveryDays } = useCommission()
+  const setting = settingOf(view, draft)
 
   return (
     <div className="flex min-h-screen flex-col bg-cream">
@@ -63,7 +65,7 @@ export function ReviewScene() {
           <div className="border-b border-divider p-6 sm:p-10">
             <h3 className="mb-6 text-xs font-semibold uppercase tracking-wider text-muted">Included Components</h3>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-              {includedComponents(draft).map((item) => (
+              {includedComponents(view, draft).map((item) => (
                 <div key={item.label} className="rounded-xl border border-divider bg-panel p-5">
                   <div className="mb-2 flex items-center gap-2">
                     <Icon icon={item.icon} width={20} className="text-rose" />
@@ -119,7 +121,7 @@ export function ReviewScene() {
                   <div>
                     <h4 className="mb-1 text-sm font-medium text-espresso">Standard Delivery</h4>
                     <p className="text-xs leading-relaxed text-muted">
-                      Estimated {DELIVERY_DAYS} days after payment confirmation. Subject to final creator approval.
+                      Estimated {deliveryDays} days after payment confirmation. Subject to final creator approval.
                     </p>
                   </div>
                 </div>
@@ -131,8 +133,14 @@ export function ReviewScene() {
                   <div>
                     <h4 className="mb-1 text-sm font-medium text-espresso">Creator Boundaries</h4>
                     <p className="mb-2 text-xs leading-relaxed text-muted">
-                      All options are from Maya&rsquo;s approved catalog. Wardrobe is creator&rsquo;s choice
-                      (non-explicit).
+                      {capabilities.serverCatalog ? (
+                        <>All options are from Maya&rsquo;s approved catalog. Maya&rsquo;s limits are listed below.</>
+                      ) : (
+                        <>
+                          All options are from Maya&rsquo;s approved catalog. Wardrobe is creator&rsquo;s choice
+                          (non-explicit).
+                        </>
+                      )}
                     </p>
                     <p className="text-xs leading-relaxed text-muted">
                       <strong>No payment is taken today.</strong> Maya will review your request first.
@@ -143,6 +151,13 @@ export function ReviewScene() {
             </div>
           </div>
         </div>
+
+        {/* Staging: the limits again before sending, with the hard list in full (doc 11 §5.3.2, design 13 A) */}
+        {capabilities.serverCatalog && (
+          <div className="mt-10">
+            <LimitsPanel boundaries={view.boundaries} creatorName={view.creatorName} id="review-limits" />
+          </div>
+        )}
 
         {/* Final Action Area */}
         <div className="mx-auto mb-20 mt-10 max-w-[600px] text-center">

@@ -1,7 +1,12 @@
 import { useRef, useState } from 'react'
-import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
+import { LimitsCard } from '../components/boundaries/CreatorLimits'
+import { Turn } from '../components/director/Turn'
+import { LiveDirector } from '../components/director/LiveDirector'
+import { SceneCardSaveArea } from '../components/save/SceneCardSaveArea'
+import { useDraftSync } from '../state/draftSync'
 import { Button } from '../components/common/Button'
+import { capabilities } from '../config'
 import { Icon } from '../components/common/Icon'
 import { SceneImage } from '../components/common/SceneImage'
 import { Header } from '../components/layout/Header'
@@ -9,11 +14,7 @@ import { ProgressTrail } from '../components/layout/ProgressTrail'
 import { cn } from '../lib/cn'
 import { useCommission } from '../state/commission'
 import {
-  BASE_MINUTES,
   BUDGET,
-  FOCUS_OPTIONS,
-  PER_EXTRA_MINUTE,
-  SETTINGS,
   extraMinutesOf,
   focusOf,
   money,
@@ -40,7 +41,7 @@ const PROMPT_STARTERS: readonly string[] = [
 export function AIDirector() {
   // The draft, its line items and its total live in the fan-journey context so
   // the Review and Confirmation screens read the same numbers this page shows.
-  const { draft, lineItems, total, difference, overBudget, canUndo, commit, addNote, undo } =
+  const { view, draft, lineItems, total, difference, overBudget, deliveryDays, canUndo, commit, addNote, undo } =
     useCommission()
 
   const [message, setMessage] = useState('')
@@ -49,15 +50,19 @@ export function AIDirector() {
   // actually saved. This is component-local state that resets on navigation,
   // and nothing is ever persisted, so the button must never claim otherwise.
   const [saveAttempted, setSaveAttempted] = useState(false)
+  // Staging: the live Director (design 17) and saving (design 18). The demo keeps the scripted page.
+  const live = capabilities.aiDirector
+  const sync = useDraftSync()
+  const [catalogOpen, setCatalogOpen] = useState(false)
 
   const settingGroupRef = useRef<HTMLDivElement>(null)
   const focusGroupRef = useRef<HTMLDivElement>(null)
   const threadEndRef = useRef<HTMLDivElement>(null)
   const composerRef = useRef<HTMLTextAreaElement>(null)
 
-  const setting = settingOf(draft)
-  const focus = focusOf(draft)
-  const minutes = BASE_MINUTES + extraMinutesOf(draft)
+  const setting = settingOf(view, draft)
+  const focus = focusOf(view, draft)
+  const minutes = view.baseMinutes + extraMinutesOf(draft)
   const removableItem = lineItems.find((item) => item.removable)
 
   const budgetSentence = overBudget
@@ -65,6 +70,8 @@ export function AIDirector() {
     : `${money(difference)} under budget`
 
   function focusGroup(target: EditTarget) {
+    // Live Director: the Scene Card's Edit links open Maya's catalog (design 17 F).
+    if (live) return setCatalogOpen(true)
     const container = target === 'setting' ? settingGroupRef.current : focusGroupRef.current
     if (!container) return
     container.scrollIntoView({ block: 'center', behavior: 'smooth' })
@@ -122,7 +129,21 @@ export function AIDirector() {
           {/* Column 1 — conversation                                         */}
           {/* -------------------------------------------------------------- */}
           <div className="flex flex-col lg:col-span-7">
+            {live && (
+              <>
+                {/* Design 13, state B on phones, above the conversation. */}
+                <LimitsCard boundaries={view.boundaries} creatorName={view.creatorName} className="mb-8 lg:hidden" />
+                <LiveDirector catalogOpen={catalogOpen} setCatalogOpen={setCatalogOpen} />
+              </>
+            )}
+            {!live && (
+            <>
             <div className="mb-8 flex-1 space-y-8">
+              {/* Design 13, state B on phones: the first item in the conversation, so it scrolls with the chat. */}
+              {capabilities.serverCatalog && (
+                <LimitsCard boundaries={view.boundaries} creatorName={view.creatorName} className="lg:hidden" />
+              )}
+
               {/* Turn 1 — fan brief */}
               <Turn speaker="fan">
                 <p className="text-sm leading-relaxed sm:text-base">
@@ -144,7 +165,7 @@ export function AIDirector() {
                   aria-label="Scene setting"
                   className="grid grid-cols-1 gap-3 sm:grid-cols-3"
                 >
-                  {SETTINGS.map((option) => {
+                  {view.settings.map((option) => {
                     const selected = option.id === draft.setting
                     return (
                       <button
@@ -209,7 +230,7 @@ export function AIDirector() {
               {/* Turn 4 — Director frames the tradeoff */}
               <Turn speaker="director">
                 <p className="text-sm leading-relaxed sm:text-base">
-                  Perfect. Would you prefer a longer video (+{money(PER_EXTRA_MINUTE)}/min) to tell
+                  Perfect. Would you prefer a longer video (+{money(view.perExtraMinute)}/min) to tell
                   more of your story, or focus on a richer setting with detailed greeting within your
                   budget?
                 </p>
@@ -220,9 +241,9 @@ export function AIDirector() {
                   aria-label="Where to spend the budget"
                   className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4"
                 >
-                  {FOCUS_OPTIONS.map((option) => {
+                  {view.focusOptions.map((option) => {
                     const selected = option.id === draft.focus
-                    const optionTotal = previewTotal(draft, {
+                    const optionTotal = previewTotal(view, draft, {
                       focus: option.id,
                       extraMinute: false,
                     })
@@ -320,11 +341,11 @@ export function AIDirector() {
                         Extra minute of runtime
                       </span>
                       <span className="mt-0.5 block text-[11px] text-muted">
-                        +{money(PER_EXTRA_MINUTE)} · {draft.extraMinute ? 'Added' : 'Not added'}
+                        +{money(view.perExtraMinute)} · {draft.extraMinute ? 'Added' : 'Not added'}
                       </span>
                     </span>
                     <span className="shrink-0 text-sm font-medium">
-                      {money(previewTotal(draft, { extraMinute: !draft.extraMinute }))}
+                      {money(previewTotal(view, draft, { extraMinute: !draft.extraMinute }))}
                     </span>
                   </button>
                   <p className="mt-2 text-[11px] leading-relaxed text-muted">
@@ -410,6 +431,8 @@ export function AIDirector() {
                 </div>
               </form>
             </div>
+            </>
+            )}
           </div>
 
           {/* -------------------------------------------------------------- */}
@@ -423,6 +446,9 @@ export function AIDirector() {
               >
                 {/* Header */}
                 <div className="border-b border-divider bg-secondary p-6">
+                  {sync && <SceneCardSaveArea sync={sync} onChangeChoices={() => setCatalogOpen(true)} />}
+                  {!sync && (
+                  <>
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <span className="inline-flex items-center rounded-full border border-rose bg-panel px-2.5 py-1 text-xs font-medium text-espresso shadow-sm">
                       <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-rose" />
@@ -455,6 +481,8 @@ export function AIDirector() {
                       </>
                     )}
                   </p>
+                  </>
+                  )}
                   <h2 className="mb-2 text-[28px] leading-tight">{setting.sceneTitle}</h2>
                   <p className="text-sm text-muted">
                     A cinematic personalized message for your anniversary.
@@ -595,25 +623,40 @@ export function AIDirector() {
                     <div>
                       <p className="mb-0.5 font-medium">Standard Delivery</p>
                       <p className="text-xs leading-relaxed text-muted">
-                        Estimated 7 days after payment confirmation. Subject to creator approval.
+                        Estimated {deliveryDays} days after payment confirmation. Subject to creator approval.
                       </p>
                     </div>
                   </div>
 
-                  <div className="flex gap-3 rounded-lg border border-divider bg-secondary/50 p-3 text-sm">
-                    <Icon icon="lucide:shield-check" width={16} className="mt-0.5 shrink-0 text-muted" />
-                    <div className="space-y-1 text-[11px] leading-relaxed text-muted">
-                      <p className="mb-1 font-medium text-espresso">Creator Boundaries Apply</p>
-                      <p>
-                        All options are selected from Maya's approved catalog. Wardrobe and setting
-                        adhere to non-explicit guidelines.
-                      </p>
-                      <p>
+                  {capabilities.serverCatalog ? (
+                    <>
+                      {/* Design 13, state B: beside the Scene Card on desktop. */}
+                      <LimitsCard
+                        boundaries={view.boundaries}
+                        creatorName={view.creatorName}
+                        className="hidden lg:block"
+                      />
+                      <p className="text-[11px] leading-relaxed text-muted">
                         Final scope, price, and delivery date require creator review before any
                         payment is taken.
                       </p>
+                    </>
+                  ) : (
+                    <div className="flex gap-3 rounded-lg border border-divider bg-secondary/50 p-3 text-sm">
+                      <Icon icon="lucide:shield-check" width={16} className="mt-0.5 shrink-0 text-muted" />
+                      <div className="space-y-1 text-[11px] leading-relaxed text-muted">
+                        <p className="mb-1 font-medium text-espresso">Creator Boundaries Apply</p>
+                        <p>
+                          All options are selected from Maya's approved catalog. Wardrobe and setting
+                          adhere to non-explicit guidelines.
+                        </p>
+                        <p>
+                          Final scope, price, and delivery date require creator review before any
+                          payment is taken.
+                        </p>
+                      </div>
                     </div>
-                  </div>
+                  )}
 
                   <details className="rounded-lg border border-divider bg-panel">
                     <summary className="flex min-h-[44px] cursor-pointer list-none items-center justify-between gap-2 px-3 text-xs font-medium text-espresso focus-ring">
@@ -712,29 +755,6 @@ export function AIDirector() {
 /* -------------------------------------------------------------------------- */
 /*  Small presentational pieces                                               */
 /* -------------------------------------------------------------------------- */
-
-function Turn({ speaker, children }: { speaker: 'fan' | 'director'; children: ReactNode }) {
-  const isDirector = speaker === 'director'
-  return (
-    <article className="flex gap-4">
-      <span
-        aria-hidden
-        className={cn(
-          'flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
-          isDirector
-            ? 'bg-espresso text-cream'
-            : 'border border-divider bg-secondary text-muted',
-        )}
-      >
-        <Icon icon={isDirector ? 'lucide:sparkles' : 'lucide:user'} width={15} />
-      </span>
-      <div className="w-full space-y-4 pt-1">
-        <h3 className="sr-only">{isDirector ? 'AI Director' : 'You'}</h3>
-        {children}
-      </div>
-    </article>
-  )
-}
 
 function SelectionChip({ label }: { label: string }) {
   return (

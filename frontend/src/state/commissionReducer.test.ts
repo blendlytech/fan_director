@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
-import { INITIAL_DRAFT, buildLineItems, sumOf, type Draft } from '../domain/sceneCard'
+import { INITIAL_DRAFT, buildLineItems, localQuote, sumOf, type Draft } from '../domain/sceneCard'
+import { DEMO_VIEW } from './catalog'
 import {
   INITIAL_STATE,
   commissionReducer,
@@ -25,7 +26,8 @@ function frozen(state: CommissionState): CommissionState {
   return deepFreeze(structuredClone(state))
 }
 
-const totalOf = (draft: Draft) => sumOf(buildLineItems(draft))
+/** Whole dollars, priced from Maya's catalog by the shared quote module. */
+const totalOf = (draft: Draft) => sumOf(buildLineItems(DEMO_VIEW, draft, localQuote(DEMO_VIEW, draft))) / 100
 
 function run(state: CommissionState, actions: CommissionAction[]): CommissionState {
   return actions.reduce(commissionReducer, state)

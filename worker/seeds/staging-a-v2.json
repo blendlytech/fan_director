@@ -1,0 +1,9 @@
+{"categories":[
+    {"key":"length_format","contentRating":"general","hidden":false,"items":[
+      {"id":"a_minutes","label":"Video length","contentRating":"general","hidden":false,"pricing":{"kind":"per_unit","unitLabel":"minute","amountPerUnit":1800,"minQty":3,"maxQty":20}}
+    ]},
+    {"key":"setting","contentRating":"general","hidden":false,"items":[
+      {"id":"a_set_studio","label":"Studio set","contentRating":"general","hidden":false,"pricing":{"kind":"included"}},
+      {"id":"a_set_hidden","label":"Hidden set (must be rejected)","contentRating":"general","hidden":true,"pricing":{"kind":"fixed","amount":2500}}
+    ]}
+  ]}

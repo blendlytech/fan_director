@@ -13,8 +13,9 @@
     "noUnusedParameters": false,
     "exactOptionalPropertyTypes": false,
     "isolatedModules": true,
+    "allowImportingTsExtensions": true,
     "skipLibCheck": true,
     "noEmit": true
   },
-  "include": ["src", "test"]
+  "include": ["src", "test", "../shared"]
 }

@@ -1,5 +1,6 @@
 // Refuses a staging deploy while wrangler.jsonc still holds placeholders, if
 // a switch that must stay off in every deployed environment is on (doc 11 §5.4),
+// if AI is on without a ceiling inside the approved test budget,
 // or if the frontend's Clerk publishable key belongs to a different Clerk
 // instance than CLERK_ISSUER (every session would then fail with 401).
 import { existsSync, readFileSync } from 'node:fs'
@@ -22,7 +23,14 @@ else {
   for (const [key, value] of Object.entries(staging.vars ?? {})) {
     if (String(value).includes('REPLACE')) problems.push(`var ${key} still has a placeholder`)
   }
-  if (staging.vars?.AI_ENABLED !== 'false') problems.push('AI_ENABLED must be "false"')
+  // AI may be on in staging only with a spending ceiling inside the owner's
+  // approved Phase 3 test budget ($8, doc 11 §5.6 item 24).
+  const ai = staging.vars?.AI_ENABLED
+  const ceiling = String(staging.vars?.AI_BUDGET_CEILING_MICROUSD ?? '')
+  if (ai !== 'false' && ai !== 'true') problems.push('AI_ENABLED must be "true" or "false"')
+  if (ai === 'true' && !(/^\d+$/.test(ceiling) && Number(ceiling) > 0 && Number(ceiling) <= 8_000_000)) {
+    problems.push('AI_ENABLED is "true" but AI_BUDGET_CEILING_MICROUSD is missing or above the approved $8 (8000000)')
+  }
   if (staging.vars?.ADULT_CATALOG_ENABLED !== 'false') problems.push('ADULT_CATALOG_ENABLED must be "false"')
   if (staging.observability?.enabled !== false) problems.push('observability must stay disabled (tokens travel in URLs)')
   const keyProblem = checkPublishableKey(staging.vars?.CLERK_ISSUER)

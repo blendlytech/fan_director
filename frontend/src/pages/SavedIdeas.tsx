@@ -36,8 +36,8 @@ const REAL_STUDIO_POINTS = [
 ] as const
 
 export function SavedIdeas() {
-  const { draft, total } = useCommission()
-  const setting = settingOf(draft)
+  const { view, draft, total } = useCommission()
+  const setting = settingOf(view, draft)
 
   return (
     <div className="flex min-h-screen flex-col bg-cream">
@@ -83,7 +83,7 @@ export function SavedIdeas() {
               {setting.sceneTitle}
             </h3>
             <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted">
-              {includedComponents(draft).map((item) => (
+              {includedComponents(view, draft).map((item) => (
                 <span key={item.label} className="inline-flex items-center gap-1.5">
                   <Icon icon={item.icon} width={16} className="text-rose" />
                   {item.value}

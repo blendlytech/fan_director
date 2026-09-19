@@ -5,6 +5,10 @@ staging Worker in `worker/` on the `staging/clerk-auth` branch, which isn't
 provisioned or deployed. The specs below describe decisions and plans, not
 running systems.
 
+The production web domain `www.studiolens.me` (`studiolens.me`) and contact
+email `info@studiolens.me` have been purchased to market and host the web
+application "Fan Director Studio". Staging runs on `workers.dev` during development.
+
 ```
 docs/
 ├── specs/            what to build and why
