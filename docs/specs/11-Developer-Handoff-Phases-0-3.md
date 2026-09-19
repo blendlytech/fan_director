@@ -354,6 +354,13 @@ Decided at the Gate 1 review (owner, 2026-09-17). The Gate 1 report is `docs/rep
 25. **Production domain and contact email secured (owner, 2026-09-18).**
     - **Web domain:** `studiolens.me` (website: `www.studiolens.me`) purchased to market and host the production web application "Fan Director Studio". This satisfies the requirement in item 19 for a production domain controlled by the owner (required for Clerk production instance and custom origin).
     - **Email address:** `info@studiolens.me` secured for application marketing, contact, administrative inquiries, and verified communications.
+26. **Gate 3 approved, and Phase 4 decisions (owner, 2026-09-19).**
+    - **Gate 3 approved.** Its three live-AI criteria (the live conversations, the classifier on the §5.3.3 sets, and legal adult requests not refused) carry forward. They must pass in a live run once OpenRouter approves the account, before the Director is switched on for real fans.
+    - **Phase 4 scope** follows doc 10 §5 and §7: explicit submit, immutable versions, a creator queue, questions, proposed changes, fan acceptance, approval and decline.
+    - **Fan screens are built without new designs.** The sent state, the request list and detail, the reply to a question and the acceptance of a proposal reuse existing components and styles, and the Gate 4 report lists them as undesigned. Design 08's success screen is **not** used: its order number, email updates and payment link would be false claims (§3 rule 1). The creator screens follow designs 03, 05, 06 and 09.
+    - **In-app notices only.** Phase 4 sends no email. Status shows when the fan or creator opens the site, and nothing says an email was sent.
+    - **Sending locks the draft**, one request per draft. A custom request must be priced by the creator (a proposed change) before approval. The fan can withdraw at any time before approval. Messages are at most 500 characters.
+    - **Payment stays off-platform.** After approval, the creator may mark "payment received on your platform". It is always labelled creator-reported, with actor and time recorded, and it starts no timer (doc 10 §5). The platform never says the fan paid.
 
 ### 5.7 Commission options from market research (owner, 2026-09-16)
 
