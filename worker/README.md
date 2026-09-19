@@ -202,7 +202,7 @@ blendly.tech@gmail.com; the public demo is on a different account) with a Clerk
 TOTP included, and are capped at 100 users. A production instance needs a domain
 the owner controls, plus Clerk Pro. The owner has purchased the domain
 `studiolens.me` (website: `www.studiolens.me`) and contact email `info@studiolens.me`
-to market and host the production web application "Fan Director Audio".
+to market and host the production web application "Fan Director Studio".
 
 Run the commands from `worker/` unless a step says otherwise.
 

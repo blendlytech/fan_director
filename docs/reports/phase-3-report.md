@@ -7,7 +7,8 @@ Nothing below is described as working unless it was run. "Not verified" means it
 test suites are built and deployed to staging. **No real AI call has been made yet**
 (spend: $0). `OPENROUTER_API_KEY` isn't set on staging, so the live Director there
 shows design 17 D ("unavailable"). The Gate 3 criteria that need a real model are
-marked **not verified**. They need the key and one live run to close.
+marked **not verified**. They need the key and one live run to close. The owner has
+deferred that run to production, pending OpenRouter's approval (§5 item 1).
 
 ---
 
@@ -154,12 +155,11 @@ code: not verified.**
 
 ## 5. Open questions for the owner
 
-1. **Set the key:** `npx wrangler secret put OPENROUTER_API_KEY --env staging`. Until then the staging Director is unavailable.
-2. **The live run:** approve `npm run test:live` (capped at $5, using the key in `worker/.dev.vars`) plus the signed-in staging checklist. Together they close the three "not verified" criteria.
-3. **Re-running the suites** on the final code before merging to `main`.
-4. **Naming:** the domain notes committed today (`88714df`) call the product "Fan Director **Audio**"; everywhere else it's "Fan Director Studio". Is that intended?
-5. **Housekeeping:** `.agents/`, `skills-lock.json` and `mcp-gemini-server/` are now git-ignored, not committed. Say if any of them should be in the repo.
-6. From §10, still open: Groq's terms for safety classification (a launch item), and whether adult content is ever enabled.
+1. **The live run is deferred to production (owner, 2026-09-18).** The owner's OpenRouter approval is still pending, with no known timeline. Until it arrives, `OPENROUTER_API_KEY` can't be set and the live suite can't run. The three "not verified" criteria in §3 stay open. They are **carried forward**, to be closed by a live run once the key exists, before the Director is switched on for real fans. Until then the staging Director shows design 17 D ("unavailable"), and manual selection keeps working.
+2. **Re-running the suites** on the final code before merging to `main`.
+3. **Naming (resolved, owner, 2026-09-18):** "Fan Director Audio" in the domain notes was a typo. All eight occurrences now read "Fan Director Studio".
+4. **Housekeeping:** `.agents/`, `skills-lock.json` and `mcp-gemini-server/` are now git-ignored, not committed. Say if any of them should be in the repo.
+5. From §10, still open: Groq's terms for safety classification (a launch item), and whether adult content is ever enabled.
 
 ## 6. Designs needed
 

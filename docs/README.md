@@ -7,7 +7,7 @@ running systems.
 
 The production web domain `www.studiolens.me` (`studiolens.me`) and contact
 email `info@studiolens.me` have been purchased to market and host the web
-application "Fan Director Audio". Staging runs on `workers.dev` during development.
+application "Fan Director Studio". Staging runs on `workers.dev` during development.
 
 ```
 docs/

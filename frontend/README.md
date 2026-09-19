@@ -118,7 +118,7 @@ npx wrangler deploy     # uploads dist/ as the fan-director-studio Worker
 
 ## Production & Marketing Domain
 
-- **Application:** Fan Director Audio
+- **Application:** Fan Director Studio
 - **Website:** <https://www.studiolens.me> (`studiolens.me`)
 - **Contact Email:** <info@studiolens.me>
 

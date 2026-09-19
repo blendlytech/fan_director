@@ -30,7 +30,7 @@ This is a **design demo**, not a product. Nothing below is a backend.
 | --- | --- |
 | Frontend | `frontend/`: Vite 8, React 19, TypeScript 6, Tailwind v3, react-router v7, oxlint |
 | Hosting | Static build on Cloudflare **Workers Static Assets**, Worker name `fan-director-studio`, <https://fan-director-studio.scmillsc0809.workers.dev>. `frontend/wrangler.jsonc` has no Worker script and no bindings |
-| Production Domain & Email | Purchased by owner: `www.studiolens.me` (`studiolens.me`) and `info@studiolens.me` to market and host the production web application "Fan Director Audio" (fulfills Clerk production custom domain requirements). Staging remains on `workers.dev` during Phases 1–3 |
+| Production Domain & Email | Purchased by owner: `www.studiolens.me` (`studiolens.me`) and `info@studiolens.me` to market and host the production web application "Fan Director Studio" (fulfills Clerk production custom domain requirements). Staging remains on `workers.dev` during Phases 1–3 |
 | Backend | **None.** No Worker code, D1, R2, auth, AI or payments |
 | Fan draft | In-memory React state (`src/state/CommissionContext.tsx` + pure reducer `src/state/commissionReducer.ts`). Lost on full page reload |
 | Catalog | **Hardcoded constants** in `src/domain/sceneCard.ts` (see §4) |
@@ -352,7 +352,7 @@ Decided at the Gate 1 review (owner, 2026-09-17). The Gate 1 report is `docs/rep
     - **Live AI test budget: $8** for Phase 3, enforced by the server's cost reservation and reported at Gate 3.
     - **Host: OpenRouter for everything.** OpenRouter picks the upstream host, with `data_collection: "deny"` and fallbacks allowed. The upstream host is recorded for each call. The classifier goes through OpenRouter, pinned to Groq. One secret, `OPENROUTER_API_KEY`, set by the owner.
 25. **Production domain and contact email secured (owner, 2026-09-18).**
-    - **Web domain:** `studiolens.me` (website: `www.studiolens.me`) purchased to market and host the production web application "Fan Director Audio". This satisfies the requirement in item 19 for a production domain controlled by the owner (required for Clerk production instance and custom origin).
+    - **Web domain:** `studiolens.me` (website: `www.studiolens.me`) purchased to market and host the production web application "Fan Director Studio". This satisfies the requirement in item 19 for a production domain controlled by the owner (required for Clerk production instance and custom origin).
     - **Email address:** `info@studiolens.me` secured for application marketing, contact, administrative inquiries, and verified communications.
 
 ### 5.7 Commission options from market research (owner, 2026-09-16)
@@ -740,7 +740,7 @@ Do not describe anything as working unless you ran it. Say "not verified" when y
 | Counsel: email consent wording and record-keeping for the target countries (§5.8) | Before any news email is sent |
 | News email feature: sender, frequency, content and whether it is part of a creator subscription (future spec) | After the pilot |
 | When, and whether, `ADULT_CATALOG_ENABLED` may ever be turned on | After compliance, outside Phases 0–3 |
-| Production domain and email for launch and Clerk production instance | **Decided:** Purchased `www.studiolens.me` (`studiolens.me`) and `info@studiolens.me` for "Fan Director Audio" (§5.6 item 25) |
+| Production domain and email for launch and Clerk production instance | **Decided:** Purchased `www.studiolens.me` (`studiolens.me`) and `info@studiolens.me` for "Fan Director Studio" (§5.6 item 25) |
 
 ---
 

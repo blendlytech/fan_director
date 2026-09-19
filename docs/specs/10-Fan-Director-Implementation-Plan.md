@@ -15,7 +15,7 @@ Use Cloudflare Pages for the frontend, a Worker for the backend, D1 for applicat
 
 > **Deviation (2026-09-16, owner-approved):** the hosted demo uses **Workers Static Assets** instead of Pages, because Cloudflare now recommends Workers for new sites and a later Worker backend can live in the same project. It is static files only (no Worker script, no bindings) — see `frontend/wrangler.jsonc`. Read "Pages" below as "Workers Static Assets" for the frontend.
 
-> **Production Domain & Contact Email (2026-09-18, owner-purchased):** The owner has purchased the web domain `studiolens.me` (website: `www.studiolens.me`) and email `info@studiolens.me` to market and host the web application "Fan Director Audio". Staging continues to use `workers.dev`.
+> **Production Domain & Contact Email (2026-09-18, owner-purchased):** The owner has purchased the web domain `studiolens.me` (website: `www.studiolens.me`) and email `info@studiolens.me` to market and host the web application "Fan Director Studio". Staging continues to use `workers.dev`.
 
 This is a build plan, not a statement that those services are configured. The attached design describes a prototype. The current repository was not inspected for this document; Phase 0 must reconcile this plan with actual code and project instructions before implementation.
 
@@ -185,6 +185,6 @@ Track errors, latency, usage reservations, actual charges, database growth and m
 | Commercial subscription collection | Separate from fan commission payments | Processor suitability and entitlement/billing workflow |
 | Retention | Short-lived raw conversation history | Operational needs, provider behavior and final privacy wording |
 | Video scope | Demo/previews only; finished work delivered externally | Revisit only if creators demonstrate a need for private hosting |
-| Production domain & contact email | `www.studiolens.me` / `info@studiolens.me` | Purchased by owner (2026-09-18) to host and market "Fan Director Audio" |
+| Production domain & contact email | `www.studiolens.me` / `info@studiolens.me` | Purchased by owner (2026-09-18) to host and market "Fan Director Studio" |
 
 The next implementation step is Phase 0: inspect the current repository and confirm the provider, authentication and catalog contracts. Then implement persistence and server-side pricing before connecting live AI.
