@@ -65,7 +65,8 @@
         "APP_ORIGIN": "https://fan-director-studio-staging.blendly.workers.dev",
         "CLERK_ISSUER": "https://superb-crawdad-9550.clerk.accounts.dev",
         "CLERK_AUTHORIZED_PARTIES": "https://fan-director-studio-staging.blendly.workers.dev",
-        "AI_ENABLED": "false",
+        // Phase 3: the owner OK'd the AI Director on staging (2026-09-18). Adult stays off.
+        "AI_ENABLED": "true",
         "ADULT_CATALOG_ENABLED": "false",
         // Phase 3 (doc 11 §5.6 item 24): $3 of the owner's $8 test budget; the rest is for local live runs.
         "AI_BUDGET_CEILING_MICROUSD": "3000000",
