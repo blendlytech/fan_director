@@ -2,6 +2,22 @@ import { requireCreator, requireFan } from './auth'
 import { httpClerk } from './clerk'
 import { getConsent, postConsent, postOnboarding } from './consent'
 import { getCatalog, postQuote } from './catalog'
+import {
+  acceptProposal,
+  approveCommission,
+  askQuestion,
+  declineCommission,
+  getCreatorCommission,
+  getFanCommission,
+  listCreatorCommissions,
+  listFanCommissions,
+  proposeChanges,
+  rejectProposal,
+  replyToQuestion,
+  reportPayment,
+  submitDraft,
+  withdrawCommission,
+} from './commissions'
 import { acceptCatalogVersion, getDraft, getDraftQuote, getLatestDraft, putDraft } from './drafts'
 import { openRouterProviders } from './ai/openrouter'
 import { acceptSuggestion, declineSuggestion, getDirector, postDirectorTurn } from './ai/pipeline'
@@ -168,6 +184,76 @@ const routes: { method: string; pattern: RegExp; handler: Handler }[] = [
       assertId(creatorId)
       return postOnboarding(request, env, deps, await requireFan(request, env, deps), creatorId)
     },
+  },
+  // Phase 4: sending a draft and the creator's review (doc 11 §5.6 item 26).
+  {
+    method: 'POST',
+    pattern: /^\/api\/creators\/([^/]+)\/drafts\/([^/]+)\/submit$/,
+    handler: async (request, env, deps, [creatorId, draftId]) => {
+      assertId(creatorId)
+      return submitDraft(request, env, deps, await requireFan(request, env, deps), creatorId, draftId)
+    },
+  },
+  { method: 'GET', pattern: /^\/api\/commissions$/, handler: async (request, env, deps) => listFanCommissions(env, await requireFan(request, env, deps)) },
+  {
+    method: 'GET',
+    pattern: /^\/api\/commissions\/([^/]+)$/,
+    handler: async (request, env, deps, [id]) => getFanCommission(env, await requireFan(request, env, deps), id),
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/commissions\/([^/]+)\/reply$/,
+    handler: async (request, env, deps, [id]) => replyToQuestion(request, env, deps, await requireFan(request, env, deps), id),
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/commissions\/([^/]+)\/versions\/([^/]+)\/accept$/,
+    handler: async (request, env, deps, [id, versionId]) => acceptProposal(request, env, deps, await requireFan(request, env, deps), id, versionId),
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/commissions\/([^/]+)\/versions\/([^/]+)\/reject$/,
+    handler: async (request, env, deps, [id, versionId]) => rejectProposal(env, deps, await requireFan(request, env, deps), id, versionId),
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/commissions\/([^/]+)\/withdraw$/,
+    handler: async (request, env, deps, [id]) => withdrawCommission(env, deps, await requireFan(request, env, deps), id),
+  },
+  {
+    method: 'GET',
+    pattern: /^\/api\/creator\/commissions$/,
+    handler: async (request, env, deps) => listCreatorCommissions(request, env, await requireCreator(request, env, deps)),
+  },
+  {
+    method: 'GET',
+    pattern: /^\/api\/creator\/commissions\/([^/]+)$/,
+    handler: async (request, env, deps, [id]) => getCreatorCommission(env, await requireCreator(request, env, deps), id),
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/creator\/commissions\/([^/]+)\/question$/,
+    handler: async (request, env, deps, [id]) => askQuestion(request, env, deps, await requireCreator(request, env, deps), id),
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/creator\/commissions\/([^/]+)\/propose$/,
+    handler: async (request, env, deps, [id]) => proposeChanges(request, env, deps, await requireCreator(request, env, deps), id),
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/creator\/commissions\/([^/]+)\/approve$/,
+    handler: async (request, env, deps, [id]) => approveCommission(request, env, deps, await requireCreator(request, env, deps), id),
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/creator\/commissions\/([^/]+)\/decline$/,
+    handler: async (request, env, deps, [id]) => declineCommission(request, env, deps, await requireCreator(request, env, deps), id),
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/creator\/commissions\/([^/]+)\/payment-reported$/,
+    handler: async (request, env, deps, [id]) => reportPayment(env, deps, await requireCreator(request, env, deps), id),
   },
   { method: 'GET', pattern: /^\/api\/unsubscribe\/([^/]+)$/, handler: async (_r, env, _d, [token]) => getUnsubscribe(env, token) },
   { method: 'POST', pattern: /^\/api\/unsubscribe\/([^/]+)$/, handler: (request, env, deps, [token]) => postUnsubscribe(request, env, deps, token) },

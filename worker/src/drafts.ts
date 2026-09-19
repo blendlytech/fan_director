@@ -16,6 +16,13 @@ export interface DraftRow {
   content_json: string
   boundary_flags_json: string | null
   updated_at: string
+  /** Set once the fan sends it (Phase 4). A sent draft never changes again. */
+  submitted_at: string | null
+}
+
+/** Phase 4: a sent draft is locked; the request carries it from here. */
+export function assertNotSubmitted(row: DraftRow): void {
+  if (row.submitted_at) throw new ApiError(409, 'draft_submitted')
 }
 
 export function draftOf(row: DraftRow) {
@@ -48,7 +55,7 @@ export async function present(env: Env, row: DraftRow, status = 200): Promise<Re
 
 export async function loadOwned(env: Env, fanId: string, creatorId: string, draftId: string): Promise<DraftRow | null> {
   return env.DB.prepare(
-    `SELECT id, creator_id, catalog_version_id, revision, content_json, boundary_flags_json, updated_at
+    `SELECT id, creator_id, catalog_version_id, revision, content_json, boundary_flags_json, updated_at, submitted_at
        FROM draft WHERE id = ? AND fan_id = ? AND creator_id = ?`,
   )
     .bind(draftId, fanId, creatorId)
@@ -64,11 +71,15 @@ export async function requireOwned(env: Env, fan: FanIdentity, creatorId: string
   return row
 }
 
-/** GET /api/creators/:creatorId/drafts: the fan's most recent draft here, so saving resumes (design 18). */
+/**
+ * GET /api/creators/:creatorId/drafts: the fan's most recent draft here, so
+ * saving resumes (design 18). A sent draft is never resumed: after sending,
+ * the fan starts a new one.
+ */
 export async function getLatestDraft(env: Env, fan: FanIdentity, creatorId: string): Promise<Response> {
   const row = await env.DB.prepare(
-    `SELECT id, creator_id, catalog_version_id, revision, content_json, boundary_flags_json, updated_at
-       FROM draft WHERE fan_id = ? AND creator_id = ? ORDER BY updated_at DESC LIMIT 1`,
+    `SELECT id, creator_id, catalog_version_id, revision, content_json, boundary_flags_json, updated_at, submitted_at
+       FROM draft WHERE fan_id = ? AND creator_id = ? AND submitted_at IS NULL ORDER BY updated_at DESC LIMIT 1`,
   )
     .bind(fan.fanId, creatorId)
     .first<DraftRow>()
@@ -167,6 +178,7 @@ export async function putDraft(
     // A draft is never edited, or created, on an old version: the fan accepts the new one first.
     const current = expectedRevision === 0 ? null : await loadOwned(env, fan.fanId, creatorId, draftId)
     if (expectedRevision !== 0 && !current) throw new ApiError(404, 'not_found')
+    if (current) assertNotSubmitted(current)
     throw new ApiError(409, 'catalog_version_stale', {
       currentCatalogVersionId: version.currentVersionId,
       ...(current ? { current: draftOf(current) } : {}),
@@ -192,7 +204,7 @@ export async function putDraft(
     // Atomic compare-and-set: owner, tenant and catalog version never change here.
     const updated = await env.DB.prepare(
       `UPDATE draft SET content_json = ?, boundary_flags_json = ?, revision = revision + 1, updated_at = ?
-        WHERE id = ? AND fan_id = ? AND creator_id = ? AND catalog_version_id = ? AND revision = ?`,
+        WHERE id = ? AND fan_id = ? AND creator_id = ? AND catalog_version_id = ? AND revision = ? AND submitted_at IS NULL`,
     )
       .bind(contentJson, flagsJson, now, draftId, fan.fanId, creatorId, catalogVersionId, expectedRevision)
       .run()
@@ -202,6 +214,7 @@ export async function putDraft(
   const current = await loadOwned(env, fan.fanId, creatorId, draftId)
   // Someone else's id (or another boutique's) is indistinguishable from none.
   if (!current) throw new ApiError(404, 'not_found')
+  assertNotSubmitted(current)
   if (current.catalog_version_id !== catalogVersionId) throw new ApiError(422, 'catalog_version_mismatch')
   const currentBody = (await (await present(env, current)).json()) as Record<string, unknown>
   throw new ApiError(409, 'revision_conflict', { current: currentBody.draft, quote: currentBody.quote ?? null })
@@ -221,6 +234,7 @@ export async function acceptCatalogVersion(
   draftId: string,
 ): Promise<Response> {
   const row = await requireOwned(env, fan, creatorId, draftId)
+  assertNotSubmitted(row)
   const body = await readJsonBody(request, 1_024)
   assertOnlyKeys(body, ['expectedRevision', 'catalogVersionId'], 'invalid_request')
   if (!Number.isInteger(body.expectedRevision) || typeof body.catalogVersionId !== 'string') {
@@ -235,7 +249,7 @@ export async function acceptCatalogVersion(
   const flags = await checkContent(request, env, deps, fan, version, creatorId, draftId, content, await gateFor(env, creatorId))
   const updated = await env.DB.prepare(
     `UPDATE draft SET catalog_version_id = ?, boundary_flags_json = ?, revision = revision + 1, updated_at = ?
-      WHERE id = ? AND fan_id = ? AND creator_id = ? AND revision = ?`,
+      WHERE id = ? AND fan_id = ? AND creator_id = ? AND revision = ? AND submitted_at IS NULL`,
   )
     .bind(version.id, JSON.stringify(flags), deps.now().toISOString(), draftId, fan.fanId, creatorId, body.expectedRevision)
     .run()

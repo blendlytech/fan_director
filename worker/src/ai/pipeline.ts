@@ -5,7 +5,7 @@ import { quote } from '../../../shared/domain/quote.ts'
 import type { BoundaryFlag, Boundaries, GateOptions, Quote, Selection } from '../../../shared/domain/types.ts'
 import type { FanIdentity } from '../auth'
 import { gateFor, loadVersion, type VersionRow } from '../catalog'
-import { checkContent, draftOf, present, requireOwned, type DraftRow } from '../drafts'
+import { assertNotSubmitted, checkContent, draftOf, present, requireOwned, type DraftRow } from '../drafts'
 import { ApiError, json, readJsonBody } from '../http'
 import { checkText, checkTexts, RULESET_VERSION, type CheckContext } from '../rules/check'
 import { aiDisabledFor, CLASSIFIER_SUBJECTS, recordHardListBlock, type BlockHit } from '../screening'
@@ -107,6 +107,7 @@ export async function postDirectorTurn(
   draftId: string,
 ): Promise<Response> {
   const row = await requireOwned(env, fan, creatorId, draftId)
+  assertNotSubmitted(row)
   const body = await readJsonBody(request, MESSAGE_BODY_BYTES)
   assertOnlyKeys(body, ['requestId', 'expectedRevision', 'message'], 'invalid_request')
   const config = aiConfig(env)
@@ -703,6 +704,7 @@ export async function acceptSuggestion(
   suggestionId: string,
 ): Promise<Response> {
   const row = await requireOwned(env, fan, creatorId, draftId)
+  assertNotSubmitted(row)
   const s = await loadSuggestion(env, fan, draftId, suggestionId)
   const body = await readJsonBody(request, 1_024)
   assertOnlyKeys(body, ['expectedRevision'], 'invalid_request')
@@ -730,7 +732,7 @@ export async function acceptSuggestion(
     env.DB.prepare(`UPDATE ai_suggestion SET status = 'accepted', decided_at = ? WHERE id = ? AND status = 'offered'`).bind(at, s.id),
     env.DB.prepare(
       `UPDATE draft SET content_json = ?, boundary_flags_json = ?, revision = revision + 1, updated_at = ?
-        WHERE id = ? AND fan_id = ? AND creator_id = ? AND revision = ? AND changes() = 1`,
+        WHERE id = ? AND fan_id = ? AND creator_id = ? AND revision = ? AND submitted_at IS NULL AND changes() = 1`,
     ).bind(JSON.stringify(content), JSON.stringify(merged), at, draftId, fan.fanId, creatorId, row.revision),
     // The draft moved on in between: give the claim back, marked out of date.
     env.DB.prepare(`UPDATE ai_suggestion SET status = 'out_of_date' WHERE id = ? AND status = 'accepted' AND changes() = 0 AND decided_at = ?`).bind(s.id, at),

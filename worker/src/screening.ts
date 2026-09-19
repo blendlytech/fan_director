@@ -118,8 +118,8 @@ export type BlockHit = Omit<HardListHit, 'layer'> & { layer: 'rules' | 'classifi
 export interface BlockContext {
   creatorId: string
   creatorName: string
-  /** What was being checked: a draft save or an AI Director turn. */
-  subjectKind: 'draft' | 'ai_request'
+  /** What was being checked: a draft save, an AI Director turn, or a message on a sent request. */
+  subjectKind: 'draft' | 'ai_request' | 'commission'
   subjectId: string
   field: string | null
   hit: BlockHit
@@ -167,6 +167,10 @@ export async function recordHardListBlock(
         at,
       ),
       env.DB.prepare(`UPDATE fan SET status = 'suspended' WHERE id = ?`).bind(fan.fanId),
+      // Sent requests too: the creator never receives them (§5.3.3, doc 11 §5.6 item 26).
+      env.DB.prepare(
+        `UPDATE commission SET status = 'withheld', updated_at = ? WHERE fan_id = ? AND status IN ('in_review', 'question_open', 'proposal_open')`,
+      ).bind(at, fan.fanId),
       restrict(env, fan.fanId, 'minors', at),
       audit('safety_case_opened', { caseId, key: 'minors' }),
     ])
