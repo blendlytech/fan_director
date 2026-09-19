@@ -6,6 +6,7 @@ import { CommissionContext, type CommissionValue } from './commission'
 import { CREATOR_ID, useCatalog } from './catalog'
 import { BUDGET, buildLineItems, localQuote, selectionsOf, type Draft } from '../domain/sceneCard'
 import { INITIAL_STATE, commissionReducer } from './commissionReducer'
+import { DraftSyncContext, useDraftSyncState } from './draftSync'
 
 /* -------------------------------------------------------------------------- */
 /*  Shared state for the fan journey.                                          */
@@ -18,14 +19,16 @@ import { INITIAL_STATE, commissionReducer } from './commissionReducer'
 /*  Draft and undo history move together through one reducer — see             */
 /*  commissionReducer.ts.                                                      */
 /*                                                                            */
-/*  This is in-memory only. Nothing is persisted; nothing is sent anywhere,   */
-/*  except, in staging, the choices themselves to the quote endpoint, which   */
-/*  prices them and stores nothing.                                           */
+/*  In the public demo this is in-memory only: nothing is persisted or sent.  */
+/*  In staging the choices go to the quote endpoint (which stores nothing),   */
+/*  and a signed-in fan's draft saves to their account (draftSync.ts).        */
 /* -------------------------------------------------------------------------- */
 
 export function CommissionProvider({ children }: { children: ReactNode }) {
   const [state, dispatch] = useReducer(commissionReducer, INITIAL_STATE)
-  const { view } = useCatalog()
+  const { view, source } = useCatalog()
+  // Staging, signed in: saves on every change (design 18). Null in the demo.
+  const sync = useDraftSyncState(view, source === 'server', state.draft, dispatch)
 
   const commit = useCallback(
     (changes: Partial<Draft>) => dispatch({ type: 'commit', changes }),
@@ -40,8 +43,9 @@ export function CommissionProvider({ children }: { children: ReactNode }) {
   const local = useMemo(() => localQuote(view, state.draft), [view, state.draft])
   const serverQuote = useServerQuote(view.versionId, selections, key)
   // The server's figures are authoritative in staging (doc 11 §3 rule 3); the
-  // shared module's identical preview shows until they arrive.
-  const quote = serverQuote ?? local
+  // shared module's identical preview shows until they arrive. After a catalog
+  // change the draft keeps its old prices until the fan accepts (design 18 C).
+  const quote = sync?.pinnedQuote ?? serverQuote ?? local
 
   const value = useMemo<CommissionValue>(() => {
     const lineItems = buildLineItems(view, state.draft, quote)
@@ -63,7 +67,11 @@ export function CommissionProvider({ children }: { children: ReactNode }) {
     }
   }, [view, quote, state.draft, state.history.length, commit, addNote, undo, reset])
 
-  return <CommissionContext.Provider value={value}>{children}</CommissionContext.Provider>
+  return (
+    <CommissionContext.Provider value={value}>
+      <DraftSyncContext.Provider value={sync}>{children}</DraftSyncContext.Provider>
+    </CommissionContext.Provider>
+  )
 }
 
 /**

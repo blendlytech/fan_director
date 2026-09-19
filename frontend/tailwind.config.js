@@ -29,6 +29,16 @@ export default {
         // "Ask Maya first" the dashboard's pending tan, softened.
         limitno: { bg: '#FAEEF2', border: '#E9C6D3' },
         limitask: { bg: '#F8EFE4', border: '#E3C8A6', ink: '#7A5530' },
+        // Director and save states (designs 17 and 18): done, pending, failed.
+        okbg: '#EEF4EC',
+        okborder: '#C4D9BF',
+        okink: '#4F7A48',
+        pendbg: '#F8EFE4',
+        pendborder: '#E3C8A6',
+        pendink: '#7A5530',
+        alertbg: '#FBECE9',
+        alertborder: '#EFC2BA',
+        alertink: '#9E3B2C',
         status: {
           new: '#4B9FE3',
           pending: '#D4A574',

@@ -8,6 +8,8 @@ import { authEnabled } from './auth/clerk'
 export const capabilities = {
   /** Read Maya's catalog and quotes from the staging API (Phase 2). */
   serverCatalog: authEnabled,
-  /** Saving drafts is not wired into the screens yet (design 18, after Gate 2). */
-  persistence: false,
+  /** Signed-in fans' drafts save on every change (design 18, owner-approved 2026-09-18). */
+  persistence: authEnabled,
+  /** The live AI Director (design 17). The server still decides whether AI is on. */
+  aiDirector: authEnabled,
 } as const

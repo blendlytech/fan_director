@@ -227,6 +227,15 @@ export type Draft = {
   focus: FocusId
   extraMinute: boolean
   notes: FanNote[]
+  /**
+   * Staging only (designs 17 and 18): the draft's catalog selections as the
+   * server holds them. When set, they ARE the draft's choices, and setting,
+   * focus and extraMinute are kept as their closest reading for the demo-era
+   * screens. The public demo never sets this, so it behaves exactly as before.
+   */
+  selections?: Selection[]
+  /** Staging only: a custom request the fan confirmed. Never priced (doc 11 §5.1). */
+  customRequest?: string | null
 }
 
 export const INITIAL_DRAFT: Draft = {
@@ -250,7 +259,79 @@ export function extraMinutesOf(draft: Draft): number {
 }
 
 export function minutesOf(view: CatalogView, draft: Draft): number {
-  return view.baseMinutes + extraMinutesOf(draft)
+  return view.baseMinutes + extraMinutesIn(view, draft)
+}
+
+/** Extra minutes, read from the selections when the draft has them (staging). */
+export function extraMinutesIn(view: CatalogView, draft: Draft): number {
+  if (!draft.selections) return extraMinutesOf(draft)
+  return draft.selections.find((s) => s.itemId === view.itemIds.extraMinute)?.qty ?? 0
+}
+
+export type GreetingId = 'standard' | 'detailed'
+
+/** Which greeting the draft has. */
+export function greetingOf(view: CatalogView, draft: Draft): GreetingId {
+  if (!draft.selections) return draft.focus === 'richer' ? 'detailed' : 'standard'
+  return draft.selections.some((s) => s.itemId === view.itemIds.greetingDetailed) ? 'detailed' : 'standard'
+}
+
+/**
+ * A draft read from server selections (staging). setting, focus and
+ * extraMinute get their closest demo-era reading; the selections stay the
+ * truth, so combinations the demo can't build (a standard greeting with no
+ * extra minute) still price and show correctly.
+ */
+export function draftFromSelections(
+  view: CatalogView,
+  selections: Selection[],
+  rest: { notes: FanNote[]; customRequest: string | null },
+): Draft {
+  const setting = view.settings.find((s) => selections.some((x) => x.itemId === s.itemId)) ?? view.settings[0]
+  const detailed = selections.some((s) => s.itemId === view.itemIds.greetingDetailed)
+  const extra = selections.find((s) => s.itemId === view.itemIds.extraMinute)?.qty ?? 0
+  return {
+    setting: setting.id,
+    focus: detailed ? 'richer' : 'longer',
+    extraMinute: detailed ? extra > 0 : extra > 1,
+    notes: rest.notes,
+    selections: selections.map((s) => ({ ...s })),
+    customRequest: rest.customRequest,
+  }
+}
+
+/**
+ * The changes for one pick in the catalog sheet (design 17 F): a setting, a
+ * greeting or a number of extra minutes. Returned as a Partial<Draft> for the
+ * reducer, so it's one undoable step.
+ */
+export function changeChoice(
+  view: CatalogView,
+  draft: Draft,
+  pick: { setting?: SettingId; greeting?: GreetingId; extraMinutes?: number },
+): Partial<Draft> {
+  const current = selectionsOf(view, draft)
+  const { extraMinute, greetingStandard, greetingDetailed } = view.itemIds
+  let next = current.map((s) => ({ ...s }))
+  if (pick.setting !== undefined) {
+    const option = view.settings.find((s) => s.id === pick.setting)
+    if (option) {
+      const settingIds = new Set(view.settings.map((s) => s.itemId))
+      next = next.filter((s) => !settingIds.has(s.itemId))
+      next.push({ itemId: option.itemId, qty: 1 })
+    }
+  }
+  if (pick.greeting !== undefined) {
+    next = next.filter((s) => s.itemId !== greetingStandard && s.itemId !== greetingDetailed)
+    next.push({ itemId: pick.greeting === 'detailed' ? greetingDetailed : greetingStandard, qty: 1 })
+  }
+  if (pick.extraMinutes !== undefined) {
+    const qty = Math.max(0, Math.min(view.maxExtraMinutes, Math.round(pick.extraMinutes)))
+    next = next.filter((s) => s.itemId !== extraMinute)
+    if (qty > 0) next.push({ itemId: extraMinute, qty })
+  }
+  const { selections, ...derived } = draftFromSelections(view, next, { notes: draft.notes, customRequest: draft.customRequest ?? null })
+  return { ...derived, selections, notes: draft.notes }
 }
 
 /** The fan's most recent note, falling back to the brief they opened with. */
@@ -264,6 +345,7 @@ export function briefOf(draft: Draft): string {
  * setting, the greeting and the extra minutes.
  */
 export function selectionsOf(view: CatalogView, draft: Draft): Selection[] {
+  if (draft.selections) return draft.selections.map((s) => ({ ...s }))
   const { base, extraMinute, greetingStandard, greetingDetailed } = view.itemIds
   const setting = settingOf(view, draft)
   const picks = defaultSelections(view.content, GATE).filter(
@@ -409,7 +491,7 @@ export function includedComponents(view: CatalogView, draft: Draft) {
     {
       icon: 'lucide:message-square-heart',
       label: 'Personalization',
-      value: draft.focus === 'richer' ? 'Detailed Greeting' : 'Standard Greeting',
+      value: greetingOf(view, draft) === 'detailed' ? 'Detailed Greeting' : 'Standard Greeting',
     },
   ]
 }

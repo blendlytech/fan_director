@@ -1,7 +1,10 @@
 import { useRef, useState } from 'react'
-import type { ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { LimitsCard } from '../components/boundaries/CreatorLimits'
+import { Turn } from '../components/director/Turn'
+import { LiveDirector } from '../components/director/LiveDirector'
+import { SceneCardSaveArea } from '../components/save/SceneCardSaveArea'
+import { useDraftSync } from '../state/draftSync'
 import { Button } from '../components/common/Button'
 import { capabilities } from '../config'
 import { Icon } from '../components/common/Icon'
@@ -47,6 +50,10 @@ export function AIDirector() {
   // actually saved. This is component-local state that resets on navigation,
   // and nothing is ever persisted, so the button must never claim otherwise.
   const [saveAttempted, setSaveAttempted] = useState(false)
+  // Staging: the live Director (design 17) and saving (design 18). The demo keeps the scripted page.
+  const live = capabilities.aiDirector
+  const sync = useDraftSync()
+  const [catalogOpen, setCatalogOpen] = useState(false)
 
   const settingGroupRef = useRef<HTMLDivElement>(null)
   const focusGroupRef = useRef<HTMLDivElement>(null)
@@ -63,6 +70,8 @@ export function AIDirector() {
     : `${money(difference)} under budget`
 
   function focusGroup(target: EditTarget) {
+    // Live Director: the Scene Card's Edit links open Maya's catalog (design 17 F).
+    if (live) return setCatalogOpen(true)
     const container = target === 'setting' ? settingGroupRef.current : focusGroupRef.current
     if (!container) return
     container.scrollIntoView({ block: 'center', behavior: 'smooth' })
@@ -120,6 +129,15 @@ export function AIDirector() {
           {/* Column 1 — conversation                                         */}
           {/* -------------------------------------------------------------- */}
           <div className="flex flex-col lg:col-span-7">
+            {live && (
+              <>
+                {/* Design 13, state B on phones, above the conversation. */}
+                <LimitsCard boundaries={view.boundaries} creatorName={view.creatorName} className="mb-8 lg:hidden" />
+                <LiveDirector catalogOpen={catalogOpen} setCatalogOpen={setCatalogOpen} />
+              </>
+            )}
+            {!live && (
+            <>
             <div className="mb-8 flex-1 space-y-8">
               {/* Design 13, state B on phones: the first item in the conversation, so it scrolls with the chat. */}
               {capabilities.serverCatalog && (
@@ -413,6 +431,8 @@ export function AIDirector() {
                 </div>
               </form>
             </div>
+            </>
+            )}
           </div>
 
           {/* -------------------------------------------------------------- */}
@@ -426,6 +446,9 @@ export function AIDirector() {
               >
                 {/* Header */}
                 <div className="border-b border-divider bg-secondary p-6">
+                  {sync && <SceneCardSaveArea sync={sync} onChangeChoices={() => setCatalogOpen(true)} />}
+                  {!sync && (
+                  <>
                   <div className="mb-4 flex items-center justify-between gap-3">
                     <span className="inline-flex items-center rounded-full border border-rose bg-panel px-2.5 py-1 text-xs font-medium text-espresso shadow-sm">
                       <span className="mr-1.5 h-1.5 w-1.5 rounded-full bg-rose" />
@@ -458,6 +481,8 @@ export function AIDirector() {
                       </>
                     )}
                   </p>
+                  </>
+                  )}
                   <h2 className="mb-2 text-[28px] leading-tight">{setting.sceneTitle}</h2>
                   <p className="text-sm text-muted">
                     A cinematic personalized message for your anniversary.
@@ -730,29 +755,6 @@ export function AIDirector() {
 /* -------------------------------------------------------------------------- */
 /*  Small presentational pieces                                               */
 /* -------------------------------------------------------------------------- */
-
-function Turn({ speaker, children }: { speaker: 'fan' | 'director'; children: ReactNode }) {
-  const isDirector = speaker === 'director'
-  return (
-    <article className="flex gap-4">
-      <span
-        aria-hidden
-        className={cn(
-          'flex h-8 w-8 shrink-0 items-center justify-center rounded-full',
-          isDirector
-            ? 'bg-espresso text-cream'
-            : 'border border-divider bg-secondary text-muted',
-        )}
-      >
-        <Icon icon={isDirector ? 'lucide:sparkles' : 'lucide:user'} width={15} />
-      </span>
-      <div className="w-full space-y-4 pt-1">
-        <h3 className="sr-only">{isDirector ? 'AI Director' : 'You'}</h3>
-        {children}
-      </div>
-    </article>
-  )
-}
 
 function SelectionChip({ label }: { label: string }) {
   return (

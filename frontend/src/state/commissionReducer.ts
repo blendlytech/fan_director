@@ -20,6 +20,12 @@ export type CommissionAction =
   | { type: 'note'; text: string }
   | { type: 'undo' }
   | { type: 'reset' }
+  /**
+   * Staging: the server's copy replaces the draft (the first load, or a newer
+   * version from another window, design 18 B). Undo history is cleared, so an
+   * undo can never re-apply a change the server has already moved past.
+   */
+  | { type: 'load'; draft: Draft }
 
 export const INITIAL_STATE: CommissionState = { draft: INITIAL_DRAFT, history: [] }
 
@@ -63,5 +69,7 @@ export function commissionReducer(
     }
     case 'reset':
       return INITIAL_STATE
+    case 'load':
+      return { draft: action.draft, history: [] }
   }
 }
