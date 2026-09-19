@@ -3,6 +3,7 @@ import type { CatalogContent, Selection } from '../../shared/domain/types.ts'
 import { PILOT_V1 } from '../../shared/catalog/pilot-v1.ts'
 import { handleApi } from '../src/index'
 import { mockProviders, type MockProvider } from '../src/ai/mock'
+import type { AiProviders } from '../src/ai/provider'
 import type { Deps, Env } from '../src/types'
 import { bodyOf, clerk, clerkUser, ORIGIN, publishedBoutique, testEnv, type TestUser } from './helpers'
 
@@ -51,6 +52,8 @@ export async function directorSetup(opts: {
   draft?: Record<string, unknown>
   env?: Partial<Env>
   name?: string
+  /** The live suite only: real providers instead of the mocks. */
+  providers?: AiProviders
 } = {}): Promise<DirectorSetup> {
   const content = opts.content ?? PILOT_V1
   const b = await publishedBoutique(content, opts.name ?? 'Maya')
@@ -60,7 +63,7 @@ export async function directorSetup(opts: {
   const fan = clerkUser()
   const token = await fan.token({ expiresIn: 3600 })
   const { providers, director, classifier } = mockProviders()
-  const deps: Deps = { clerk, now: () => new Date(), ai: providers }
+  const deps: Deps = { clerk, now: () => new Date(), ai: opts.providers ?? providers }
   const env = { ...AI_ON, ...opts.env }
 
   const api = async (method: string, path: string, body?: unknown, extraEnv?: Partial<Env>) => {

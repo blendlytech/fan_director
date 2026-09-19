@@ -2,7 +2,7 @@
 // from genuine Clerk sessions instead of hand-typed console calls.
 //
 //   node scripts/staging-checklist.mjs <scenario> [--url <origin>]
-//   scenarios: creator | fanA-first | fanA-again | fanB | unsubscribe | phase2 | phase2-stale
+//   scenarios: creator | fanA-first | fanA-again | fanB | unsubscribe | phase2 | phase2-stale | director
 //   (phase2-stale runs after seeds/staging-a-v2.sql publishes cv_staging_a2)
 //
 // A visible browser window opens on the staging site. Sign in there as the
@@ -37,7 +37,7 @@ const args = process.argv.slice(2)
 const scenario = args[0]
 const flag = (name) => { const i = args.indexOf(`--${name}`); return i === -1 ? undefined : args[i + 1] }
 const SITE = flag('url') ?? 'https://fan-director-studio-staging.blendly.workers.dev'
-const scenarios = ['creator', 'fanA-first', 'fanA-again', 'fanB', 'unsubscribe', 'phase2', 'phase2-stale']
+const scenarios = ['creator', 'fanA-first', 'fanA-again', 'fanB', 'unsubscribe', 'phase2', 'phase2-stale', 'director']
 if (!scenarios.includes(scenario)) {
   console.error(`Usage: node scripts/staging-checklist.mjs <${scenarios.join(' | ')}> [--url <origin>] [--token <unsubscribe token>]`)
   process.exit(1)
@@ -172,6 +172,28 @@ const runInPage = async ({ scenario, state, token }) => {
     await step('stale_edit_refused', () => api('PUT', `/api/creators/cr_staging_a/drafts/${enc(id)}`, draftBody('cv_staging_a1', 1, [{ itemId: 'a_minutes', qty: 6 }])))
     await step('accept_new_version', () => api('POST', `/api/creators/cr_staging_a/drafts/${enc(id)}/accept-catalog-version`, { expectedRevision: 1, catalogVersionId: 'cv_staging_a2' }))
     await step('after_accept', () => api('GET', `/api/creators/cr_staging_a/drafts/${enc(id)}`))
+  } else if (scenario === 'director') {
+    // Phase 3 on staging: legal requests only (doc 11 §5.3.3). The one hard-list
+    // step uses a phrase the rules layer blocks before any provider call.
+    const catalog = (await api('GET', '/api/creators/cr_maya/catalog', undefined, false)).body
+    const selections = [...catalog.defaults.filter((s) => !s.itemId.startsWith('maya_setting_')), { itemId: 'maya_setting_vintage', qty: 1 }]
+    const id = crypto.randomUUID()
+    out.directorDraftId = id
+    const body = { ...draftBody(catalog.catalogVersionId, 0, selections), draft: { ...draftBody(catalog.catalogVersionId, 0, selections).draft, budget: 15000 } }
+    await step('save', () => api('PUT', `/api/creators/cr_maya/drafts/${enc(id)}`, body))
+    await step('thread_before', () => api('GET', `/api/creators/cr_maya/drafts/${enc(id)}/director`))
+    const turn = (message, expectedRevision) => api('POST', `/api/creators/cr_maya/drafts/${enc(id)}/director`, { requestId: crypto.randomUUID(), expectedRevision, message })
+    await step('turn_greeting', () => turn('Could the greeting be the detailed one?', 1))
+    const first = out.steps.turn_greeting?.body?.suggestions?.[0]
+    if (first) await step('accept', () => api('POST', `/api/creators/cr_maya/drafts/${enc(id)}/director/suggestions/${enc(first.id)}/accept`, { expectedRevision: 1 }))
+    await step('turn_setting', () => turn('Could we switch to the Floral Studio?', 2))
+    const second = out.steps.turn_setting?.body?.suggestions?.[0]
+    if (second) await step('decline', () => api('POST', `/api/creators/cr_maya/drafts/${enc(id)}/director/suggestions/${enc(second.id)}/decline`, {}))
+    await step('turn_explicit_limit', () => turn('Could it be a naked video?', 2))
+    await step('turn_custom_request', () => turn('Could she hold up a sign with my name?', 2))
+    await step('turn_rules_block', () => turn('an incest theme', 2))
+    await step('thread_after', () => api('GET', `/api/creators/cr_maya/drafts/${enc(id)}/director`))
+    await step('draft_after', () => api('GET', `/api/creators/cr_maya/drafts/${enc(id)}`))
   } else if (scenario === 'unsubscribe') {
     // Signed out on purpose: an unsubscribe link works straight from an inbox.
     await step('get_first', () => api('GET', `/api/unsubscribe/${enc(token)}`, undefined, false))

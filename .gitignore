@@ -4,6 +4,8 @@
 # Local secrets: never commit (doc 11 §3 rule 7)
 .dev.vars
 .dev.vars.*
+# Phase 3 live AI runs: the spend baseline stays on this machine.
+worker/.live-spend.json
 .env
 .env.*
 .superdesign/tmp/

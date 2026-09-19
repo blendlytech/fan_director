@@ -27,6 +27,8 @@ export default defineConfig(async () => {
       }),
     ],
     test: {
+      // The live suite calls a real provider: only `npm run test:live` runs it.
+      exclude: ['test/live/**', 'node_modules/**'],
       setupFiles: ['./test/apply-migrations.ts'],
     },
   }
