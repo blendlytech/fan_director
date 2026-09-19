@@ -116,6 +116,14 @@ npm run build
 npx wrangler deploy     # uploads dist/ as the fan-director-studio Worker
 ```
 
+## Production & Marketing Domain
+
+- **Application:** Fan Director Audio
+- **Website:** <https://www.studiolens.me> (`studiolens.me`)
+- **Contact Email:** <info@studiolens.me>
+
+Purchased by the project owner to market and host the production web application. Staging currently runs on Cloudflare Workers (`workers.dev`) and will transition to this custom domain for production launch.
+
 ## Project layout
 
 ```text
