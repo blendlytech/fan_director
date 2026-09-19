@@ -13,3 +13,11 @@ clerk-cli/
 
 # Playwright MCP snapshots and console logs
 .playwright-mcp/
+
+# Local agent tooling, not part of the app
+.agents/
+skills-lock.json
+mcp-gemini-server/
+
+# Throwaway builds used for comparisons
+frontend/dist-*/
