@@ -103,12 +103,12 @@ const KNOWN_STRICT: string[] = []
 describe('checkOutputText: must-reject (money, delivery time, approval)', () => {
   it('has at least 25 cases, every one flagged', () => {
     expect(MUST_REJECT.length).toBeGreaterThanOrEqual(25)
-    const missed = MUST_REJECT.filter((text) => checkOutputText('field', text).length === 0)
+    const missed = MUST_REJECT.filter((text) => checkOutputText('field', text, 'Maya').length === 0)
     expect(missed).toEqual([])
   })
 
   it('never reports the "refusal" issue for these (they are not model refusals)', () => {
-    const refusals = MUST_REJECT.flatMap((text) => checkOutputText('field', text)).filter((f) => f.issue === 'refusal')
+    const refusals = MUST_REJECT.flatMap((text) => checkOutputText('field', text, 'Maya')).filter((f) => f.issue === 'refusal')
     expect(refusals).toEqual([])
   })
 })
@@ -120,12 +120,12 @@ describe('checkOutputText: must-pass (typical planning questions)', () => {
 
   it('flags none of the must-pass cases, except the recorded KNOWN_STRICT ones', () => {
     const strict = new Set(KNOWN_STRICT)
-    const wronglyFlagged = MUST_PASS.filter((text) => !strict.has(text) && checkOutputText('field', text).length > 0)
+    const wronglyFlagged = MUST_PASS.filter((text) => !strict.has(text) && checkOutputText('field', text, 'Maya').length > 0)
     expect(wronglyFlagged).toEqual([])
   })
 
   it('every KNOWN_STRICT case really is rejected (so it is not sitting there by mistake)', () => {
-    const notActuallyRejected = KNOWN_STRICT.filter((text) => checkOutputText('field', text).length === 0)
+    const notActuallyRejected = KNOWN_STRICT.filter((text) => checkOutputText('field', text, 'Maya').length === 0)
     expect(notActuallyRejected).toEqual([])
   })
 })

@@ -82,7 +82,10 @@ export function checkOutputText(field: string, text: string, creatorName?: strin
   if (creatorName && creatorName.trim()) {
     checks.push({
       issue: 'approval',
-      pattern: new RegExp(`\\b${escapeRe(creatorName.trim())}(?:'ll| will| would| is happy to| agrees| has agreed)\\s+(?:\\w+\\s+)?(?:do|agree|say yes|love to|happily|accept|approve)\\b`, 'i'),
+      pattern: new RegExp(
+        `\\b${escapeRe(creatorName.trim())}(?:'ll| will| would| is happy to| agrees| has agreed)\\s+(?:\\w+\\s+)?(?:do|agree|say yes|love to|happily|accept|approve|include|add|film|shoot|record|make)\\b`,
+        'i',
+      ),
     })
   }
   for (const check of checks) {
