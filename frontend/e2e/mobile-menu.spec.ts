@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 import type { Page } from '@playwright/test'
-import { BADGE } from './mode.ts'
+import { BADGE, E2E_MODE, FAN_LINKS, MENU_NOTE } from './mode.ts'
 
 /* -------------------------------------------------------------------------- */
 /*  The header's mobile menu: a disclosure (not a modal) below the md          */
@@ -39,7 +39,7 @@ test.describe('mobile menu', () => {
     await expect(panel(page)).toHaveAttribute('id', controlled!)
 
     const links = panel(page).getByRole('link')
-    await expect(links).toHaveText(['Collection', 'Your studio', 'Saved ideas'])
+    await expect(links).toHaveText(FAN_LINKS)
     await expect(panel(page).getByRole('link', { name: 'Saved ideas' })).toHaveAttribute(
       'aria-current',
       'page',
@@ -49,7 +49,7 @@ test.describe('mobile menu', () => {
       'page',
     )
     await expect(
-      panel(page).getByText('Demo — nothing you make here is saved or sent.'),
+      panel(page).getByText(MENU_NOTE),
     ).toBeVisible()
     // The header's badge is untouched.
     await expect(page.locator('header').getByText(BADGE, { exact: true })).toBeVisible()
@@ -155,6 +155,10 @@ test.describe('mobile menu', () => {
   })
 
   test('browser Back and Forward never reopen the menu on the creator queue', async ({ page }) => {
+    // Demo only: it opens the demo's own request by name. Staging's queue holds
+    // real requests, and a signed-out visitor sees none of them, so there is
+    // nothing to open. The behaviour itself is not mode-specific.
+    test.skip(E2E_MODE === 'staging', 'Opens the demo’s fixed request; staging has no request to open signed out.')
     // The dashboard's Header stays mounted while its modal routes change, so every
     // step after the first load must be in-app history (no page.goto reloads).
     await page.goto('/creator/requests')

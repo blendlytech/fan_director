@@ -98,7 +98,20 @@ export const requestsCopy = {
   menuStaging: 'Staging — your draft is saved to your account, and you can send it for review.',
   navRequests: 'Your requests',
 
+  /* Saved ideas, staging only. The demo's page is written for a build with no
+     backend ("This demo saves nothing"); staging has saved signed-in fans'
+     drafts since design 18 (owner-approved 2026-09-18), so it can't say that. */
+  savedStagingSignedIn: 'Your draft is saved to your account as you work, so it’s here when you come back. Sending it to the creator is a separate step.',
+  savedStagingSignedOut: 'Sign in to keep your draft on your account. Until then it lives in this tab only, and refreshing clears it.',
+  savedDraftHeadingStaging: 'Your draft',
+  savedDraftHeadingSignedOut: 'In this tab right now — not saved',
+  savedDraftBadgeStaging: 'Draft · saved to your account',
+  savedDraftBadgeSignedOut: 'Draft · this tab only',
+
   // Review page, staging only (the demo copy stays word for word).
+  /** Staging, signed out: sending needs an account, and nothing has been sent. */
+  reviewIntroSignedOut: (creator: string) =>
+    `Sign in to send this to ${creator}. Nothing has been sent, and nothing is charged here.`,
   reviewIntroStaging: (creator: string) =>
     `Sending asks ${creator} to review your Scene Card. They can approve it, suggest changes, or ask you a question, and you’ll see their answer under Your requests. Nothing is charged here.`,
   send: 'Send to Creator',

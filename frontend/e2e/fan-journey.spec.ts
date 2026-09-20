@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 import type { Locator, Page } from '@playwright/test'
-import { expectedRanges } from './mode.ts'
+import { expectedRanges, NEVER_WITHOUT_A_SERVER, NOTHING_SENT_HEADING, REVIEW_NOTICE } from './mode.ts'
 
 /* -------------------------------------------------------------------------- */
 /*  Smoke tests for the fan journey: / -> /ai-director -> /review ->           */
@@ -58,10 +58,14 @@ test.describe('fan journey', () => {
     const totalEstimateValue = totalEstimateLabel.locator('xpath=following-sibling::span[1]')
     await expect(totalEstimateValue).toHaveText('$185.00')
 
+    // Signed out, neither build sends anything — but only the demo may call
+    // itself a demo with no backend (mode.ts).
+    await expect(page.getByText(REVIEW_NOTICE)).toBeVisible()
+
     await page.getByRole('link', { name: 'Send to Creator' }).click()
     await expect(page).toHaveURL('/confirmation')
 
-    await expect(page.getByRole('heading', { level: 1, name: 'Nothing was sent to Maya' })).toBeVisible()
+    await expect(page.getByRole('heading', { level: 1, name: NOTHING_SENT_HEADING })).toBeVisible()
 
     const estimatedPriceCard = page
       .locator('div.rounded-xl')
@@ -73,8 +77,9 @@ test.describe('fan journey', () => {
       .filter({ has: page.getByRole('heading', { level: 3, name: 'Over Budget' }) })
     await expect(overBudgetCard.locator('p').first()).toHaveText('$35.00')
 
-    await expect(page.getByText('Submitted Successfully')).toHaveCount(0)
-    await expect(page.getByText('Order #')).toHaveCount(0)
+    for (const claim of NEVER_WITHOUT_A_SERVER) {
+      await expect(page.getByText(claim)).toHaveCount(0)
+    }
   })
 
   test('undoing once in the Director reverts exactly one change', async ({ page }) => {

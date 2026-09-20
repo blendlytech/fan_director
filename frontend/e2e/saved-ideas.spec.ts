@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import type { Page } from '@playwright/test'
+import { E2E_MODE, SAVED_NOTICE } from './mode.ts'
 
 /* -------------------------------------------------------------------------- */
 /*  Smoke tests for /saved and the Director's "Save idea" button.              */
@@ -33,7 +34,7 @@ test.describe('saved ideas', () => {
     await page.goto('/saved')
 
     await expect(page.getByRole('heading', { level: 1, name: 'Saved ideas' })).toBeVisible()
-    await expect(page.getByText(/This demo saves nothing/)).toBeVisible()
+    await expect(page.getByText(SAVED_NOTICE)).toBeVisible()
     await expect(
       page.getByRole('heading', { level: 3, name: 'Vintage Lounge Greeting' }),
     ).toBeVisible()
@@ -64,6 +65,10 @@ test.describe('saved ideas', () => {
   })
 
   test('the Director\'s Save idea button never claims anything was saved', async ({ page }) => {
+    // Demo only: staging really does save a signed-in fan's draft (design 18,
+    // owner-approved 2026-09-18), so "Not saved — demo" would be the false
+    // claim there. The test below, which no build may fail, covers both.
+    test.skip(E2E_MODE === 'staging', 'Staging saves drafts for real; this is the demo’s honest no-save state.')
     await page.goto('/ai-director')
 
     const saveButton = page.getByRole('button', { name: 'Save idea' })

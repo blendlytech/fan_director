@@ -208,6 +208,10 @@ export function ReviewScene() {
           {/* The demo sends nothing and says so; staging really sends (design 24 A, Phase 4). */}
           {sending ? (
             <p className="mb-8 text-sm text-muted">{copy.reviewIntroStaging(view.creatorName)}</p>
+          ) : capabilities.persistence ? (
+            // Staging, signed out: this build does have a backend, so it can't
+            // borrow the demo's sentence. It just hasn't sent anything.
+            <p className="mb-8 text-sm text-muted">{copy.reviewIntroSignedOut(view.creatorName)}</p>
           ) : (
             <p className="mb-8 text-sm text-muted">
               <span className="font-medium text-espresso">Almost done!</span> In the real studio, sending this would ask
