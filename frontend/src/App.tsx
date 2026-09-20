@@ -7,6 +7,9 @@ import { ReviewScene } from './pages/ReviewScene'
 import { SendConfirmation } from './pages/SendConfirmation'
 import { SavedIdeas } from './pages/SavedIdeas'
 import { NotFound } from './pages/NotFound'
+import { MyRequests } from './pages/MyRequests'
+import { MyRequestDetail } from './pages/MyRequestDetail'
+import { capabilities } from './config'
 import { CreatorDashboard } from './pages/CreatorDashboard'
 import { CreatorDetailModal } from './pages/CreatorDetailModal'
 import { AskQuestionModal } from './pages/AskQuestionModal'
@@ -35,6 +38,14 @@ export default function App() {
           <Route path="/confirmation" element={<SendConfirmation />} />
           <Route path="/saved" element={<SavedIdeas />} />
         </Route>
+        {/* Phase 4, staging only: the requests this fan has sent. The demo has
+            nothing to send, so these paths stay "page not found" there. */}
+        {capabilities.persistence && (
+          <>
+            <Route path="/requests" element={<MyRequests />} />
+            <Route path="/requests/:id" element={<MyRequestDetail />} />
+          </>
+        )}
         <Route path="/creator/requests" element={<CreatorDashboard />}>
           <Route path=":id" element={<CreatorDetailModal />}>
             <Route path="ask" element={<AskQuestionModal />} />

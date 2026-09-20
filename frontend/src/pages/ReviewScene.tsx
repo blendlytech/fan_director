@@ -1,4 +1,7 @@
-import { Link } from 'react-router-dom'
+import { useRef, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { api } from '../api/client'
+import { requestsCopy as copy } from '../copy/requests'
 import { Header } from '../components/layout/Header'
 import { ProgressTrail } from '../components/layout/ProgressTrail'
 import { LimitsPanel } from '../components/boundaries/CreatorLimits'
@@ -17,10 +20,34 @@ import { useDraftSync } from '../state/draftSync'
 export function ReviewScene() {
   const { view, draft, lineItems, total, difference, overBudget, deliveryDays } = useCommission()
   const sync = useDraftSync()
+  const navigate = useNavigate()
   const setting = settingOf(view, draft)
   const blockers = capabilities.serverCatalog ? sendBlockers(view, draft) : []
   const resaleBlocked = sync?.rejection?.error === 'personalised_video_resale_forbidden'
   const sendDisabled = capabilities.serverCatalog && (blockers.length > 0 || resaleBlocked)
+  /** Staging, signed in: Send really sends. The demo keeps its link and its wording. */
+  const sending = Boolean(sync && sync.status !== 'signed_out')
+  const [busy, setBusy] = useState(false)
+  const [sendError, setSendError] = useState<string | null>(null)
+  // One id for this Scene Card: a retried send returns the same request rather than a second one.
+  const clientRequestId = useRef(crypto.randomUUID())
+
+  async function send() {
+    if (!sync) return
+    setBusy(true)
+    setSendError(null)
+    // Runs in the save queue, so the draft is saved first and no autosave can
+    // change its revision underneath the send.
+    const res = await sync.exclusive((ref) => api.submit(ref.draftId, clientRequestId.current, ref.revision, ref.catalogVersionId))
+    setBusy(false)
+    if (res?.ok) {
+      navigate(`/requests/${res.body.commission.id}?sent=1`)
+      return
+    }
+    if (res?.error === 'catalog_version_stale') setSendError(copy.sendStale)
+    else if (res?.error === 'draft_submitted') setSendError(copy.sendAlready)
+    else setSendError(copy.sendFailed)
+  }
 
   return (
     <div className="flex min-h-screen flex-col bg-cream">
@@ -178,11 +205,16 @@ export function ReviewScene() {
 
         {/* Final Action Area */}
         <div className="mx-auto mb-20 mt-10 max-w-[600px] text-center">
-          <p className="mb-8 text-sm text-muted">
-            <span className="font-medium text-espresso">Almost done!</span> In the real studio, sending this would ask
-            Maya to review it within 24-48 hours; she could approve, adjust or decline it. This is a demo with no
-            backend, so nothing will actually be sent, and you won&rsquo;t be notified or asked to pay.
-          </p>
+          {/* The demo sends nothing and says so; staging really sends (design 24 A, Phase 4). */}
+          {sending ? (
+            <p className="mb-8 text-sm text-muted">{copy.reviewIntroStaging(view.creatorName)}</p>
+          ) : (
+            <p className="mb-8 text-sm text-muted">
+              <span className="font-medium text-espresso">Almost done!</span> In the real studio, sending this would ask
+              Maya to review it within 24-48 hours; she could approve, adjust or decline it. This is a demo with no
+              backend, so nothing will actually be sent, and you won&rsquo;t be notified or asked to pay.
+            </p>
+          )}
 
           {capabilities.serverCatalog && resaleBlocked && sync && (
             <div className="mb-6 text-left">
@@ -203,11 +235,21 @@ export function ReviewScene() {
             </div>
           )}
 
+          {sendError && (
+            <p role="alert" className="mb-6 text-sm text-alert">
+              {sendError}
+            </p>
+          )}
+
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
             <Button variant="secondary" to="/ai-director">
               Back to Edit
             </Button>
-            {sendDisabled ? (
+            {sending ? (
+              <Button type="button" variant="primary" icon="lucide:send" disabled={sendDisabled || busy} onClick={() => void send()}>
+                {busy ? copy.sending : copy.send}
+              </Button>
+            ) : sendDisabled ? (
               <Button type="button" variant="primary" icon="lucide:send" disabled>
                 Send to Creator
               </Button>
