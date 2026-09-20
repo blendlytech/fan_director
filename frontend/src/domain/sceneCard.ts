@@ -236,6 +236,10 @@ export type Draft = {
   selections?: Selection[]
   /** Staging only: a custom request the fan confirmed. Never priced (doc 11 §5.1). */
   customRequest?: string | null
+  /** Staging only (design 24 B): what the creator should call the fan. Needed by a `uses_name` item. */
+  fanDisplayName?: string | null
+  /** Staging only (design 20 D): the fan's own script. Needed by a `uses_script` item. */
+  fanScript?: string | null
 }
 
 export const INITIAL_DRAFT: Draft = {
@@ -285,7 +289,7 @@ export function greetingOf(view: CatalogView, draft: Draft): GreetingId {
 export function draftFromSelections(
   view: CatalogView,
   selections: Selection[],
-  rest: { notes: FanNote[]; customRequest: string | null },
+  rest: { notes: FanNote[]; customRequest: string | null; fanDisplayName?: string | null; fanScript?: string | null },
 ): Draft {
   const setting = view.settings.find((s) => selections.some((x) => x.itemId === s.itemId)) ?? view.settings[0]
   const detailed = selections.some((s) => s.itemId === view.itemIds.greetingDetailed)
@@ -297,6 +301,18 @@ export function draftFromSelections(
     notes: rest.notes,
     selections: selections.map((s) => ({ ...s })),
     customRequest: rest.customRequest,
+    fanDisplayName: rest.fanDisplayName ?? null,
+    fanScript: rest.fanScript ?? null,
+  }
+}
+
+/** The fan's own text that travels with the selections (everything but notes). */
+export function textOf(draft: Draft) {
+  return {
+    notes: draft.notes,
+    customRequest: draft.customRequest ?? null,
+    fanDisplayName: draft.fanDisplayName ?? null,
+    fanScript: draft.fanScript ?? null,
   }
 }
 
@@ -330,7 +346,7 @@ export function changeChoice(
     next = next.filter((s) => s.itemId !== extraMinute)
     if (qty > 0) next.push({ itemId: extraMinute, qty })
   }
-  const { selections, ...derived } = draftFromSelections(view, next, { notes: draft.notes, customRequest: draft.customRequest ?? null })
+  const { selections, ...derived } = draftFromSelections(view, next, textOf(draft))
   return { ...derived, selections, notes: draft.notes }
 }
 

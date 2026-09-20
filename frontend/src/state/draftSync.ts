@@ -34,8 +34,25 @@ export interface PriceChange {
   now: ServerQuote
 }
 
+/**
+ * Why the server refused the last save (422). The last saved draft stands.
+ * - `personalised_video_resale_forbidden`: design 24 D, with the conflicting item ids.
+ * - `hard_list_blocked` / `creator_limit_blocked`: design 13 C2/C3, or design 24 B3 for the name.
+ */
+export interface SaveRejection {
+  error: string
+  itemIds: string[]
+  /** For blocks: which text the server flagged (`display_name`, `fan_script`, `custom_request`, `notes`). */
+  field: string | null
+  /** For blocks: the hard-list key or limit label, as the server sent it. */
+  key: string | null
+  lines: string[]
+}
+
 export interface DraftSyncValue {
   status: SaveStatus
+  /** Set after a 422 on save; cleared by the next successful save. */
+  rejection: SaveRejection | null
   savedAt: Date | null
   server: ServerRef | null
   changedElsewhere: boolean
@@ -64,9 +81,9 @@ const DEBOUNCE_MS = 400
 export function contentOf(view: CatalogView, draft: Draft) {
   return {
     selections: selectionsOf(view, draft),
-    fanDisplayName: null,
+    fanDisplayName: draft.fanDisplayName ?? null,
     customRequest: draft.customRequest ?? null,
-    fanScript: null,
+    fanScript: draft.fanScript ?? null,
     notes: draft.notes.slice(-20).map((n) => ({ id: n.id, text: n.text.slice(0, 500) })),
     budget: BUDGET,
   }
@@ -92,6 +109,7 @@ export function useDraftSyncState(
   const [priceChange, setPriceChange] = useState<PriceChange | null>(null)
   const [pinnedQuote, setPinnedQuote] = useState<ServerQuote | null>(null)
   const [reloadNonce, setReloadNonce] = useState(0)
+  const [rejection, setRejection] = useState<SaveRejection | null>(null)
 
   // Mutable state the async save loop reads; React state mirrors it for rendering.
   const serverRef = useRef<ServerRef | null>(null)
@@ -112,7 +130,12 @@ export function useDraftSyncState(
     (res: ServerDraftResponse, mode: 'load' | 'commit' | 'silent') => {
       const d = res.draft
       const v = latest.current.view
-      const next = draftFromSelections(v, d.selections, { notes: d.notes, customRequest: d.customRequest })
+      const next = draftFromSelections(v, d.selections, {
+        notes: d.notes,
+        customRequest: d.customRequest,
+        fanDisplayName: d.fanDisplayName,
+        fanScript: d.fanScript,
+      })
       setRef({ draftId: d.id, revision: d.revision, catalogVersionId: d.catalogVersionId })
       savedKey.current = keyOf(contentOf(v, next))
       if (mode === 'load') dispatch({ type: 'load', draft: next })
@@ -191,6 +214,7 @@ export function useDraftSyncState(
       if (res.ok) {
         setRef({ draftId: res.body.draft.id, revision: res.body.draft.revision, catalogVersionId: res.body.draft.catalogVersionId })
         savedKey.current = key
+        setRejection(null)
         setSavedAt(new Date(res.body.updatedAt))
         // A later change may be waiting; the effect below saves it next.
         setStatus(keyOf(contentOf(latest.current.view, latest.current.draft)) === key ? 'saved' : 'saving')
@@ -209,6 +233,17 @@ export function useDraftSyncState(
         if (found.ok && found.body.draft) takeServerDraft(found.body as ServerDraftResponse, 'load')
         else setStatus('failed')
         return
+      }
+      if (res.status === 422 && res.error) {
+        const body = (res.body ?? {}) as Record<string, unknown>
+        const strings = (v: unknown) => (Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : [])
+        setRejection({
+          error: res.error,
+          itemIds: strings(body.itemIds),
+          field: typeof body.field === 'string' ? body.field : null,
+          key: typeof body.key === 'string' ? body.key : typeof body.label === 'string' ? body.label : null,
+          lines: strings(body.lines),
+        })
       }
       setStatus('failed')
     })()
@@ -290,6 +325,7 @@ export function useDraftSyncState(
       enabled
         ? {
             status: signedIn === false ? 'signed_out' : status,
+            rejection: signedIn === false ? null : rejection,
             savedAt: signedIn === false ? null : savedAt,
             server: signedIn === false ? null : server,
             changedElsewhere,
@@ -303,6 +339,6 @@ export function useDraftSyncState(
             adopt,
           }
         : null,
-    [exclusive, enabled, signedIn, status, savedAt, server, changedElsewhere, priceChange, pinnedQuote, acceptPriceChange, retry, flush, adopt],
+    [exclusive, enabled, signedIn, status, rejection, savedAt, server, changedElsewhere, priceChange, pinnedQuote, acceptPriceChange, retry, flush, adopt],
   )
 }

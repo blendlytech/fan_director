@@ -3,15 +3,24 @@ import { Header } from '../components/layout/Header'
 import { ProgressTrail } from '../components/layout/ProgressTrail'
 import { LimitsPanel } from '../components/boundaries/CreatorLimits'
 import { Button } from '../components/common/Button'
-import { capabilities } from '../config'
 import { Icon } from '../components/common/Icon'
 import { SceneImage } from '../components/common/SceneImage'
-import { useCommission } from '../state/commission'
+import { capabilities } from '../config'
+import { sendBlockers } from '../domain/options'
 import { BUDGET, briefOf, currency, includedComponents, settingOf } from '../domain/sceneCard'
+import { PricingNote } from '../components/options/PricingNote'
+import { ResaleConflict } from '../components/options/ResaleConflict'
+import { VideoNotice } from '../components/options/VideoNotice'
+import { useCommission } from '../state/commission'
+import { useDraftSync } from '../state/draftSync'
 
 export function ReviewScene() {
   const { view, draft, lineItems, total, difference, overBudget, deliveryDays } = useCommission()
+  const sync = useDraftSync()
   const setting = settingOf(view, draft)
+  const blockers = capabilities.serverCatalog ? sendBlockers(view, draft) : []
+  const resaleBlocked = sync?.rejection?.error === 'personalised_video_resale_forbidden'
+  const sendDisabled = capabilities.serverCatalog && (blockers.length > 0 || resaleBlocked)
 
   return (
     <div className="flex min-h-screen flex-col bg-cream">
@@ -150,6 +159,14 @@ export function ReviewScene() {
               </div>
             </div>
           </div>
+
+          {/* Staging (design 24 A): the video's resale/exclusive notice, then the creator's pricing note, in that order. */}
+          {capabilities.serverCatalog && (
+            <div className="space-y-4 border-t border-divider p-6 sm:p-10">
+              <VideoNotice />
+              <PricingNote />
+            </div>
+          )}
         </div>
 
         {/* Staging: the limits again before sending, with the hard list in full (doc 11 §5.3.2, design 13 A) */}
@@ -167,13 +184,38 @@ export function ReviewScene() {
             backend, so nothing will actually be sent, and you won&rsquo;t be notified or asked to pay.
           </p>
 
+          {capabilities.serverCatalog && resaleBlocked && sync && (
+            <div className="mb-6 text-left">
+              <ResaleConflict sync={sync} />
+            </div>
+          )}
+          {capabilities.serverCatalog && !resaleBlocked && blockers.length > 0 && (
+            <div role="alert" className="mb-6 space-y-2 text-left">
+              {blockers.map((line) => (
+                <p
+                  key={line}
+                  className="flex items-start gap-2 rounded-card border border-limitask-border bg-limitask-bg px-4 py-3 text-sm text-limitask-ink"
+                >
+                  <Icon icon="lucide:circle-alert" width={16} className="mt-0.5 shrink-0" />
+                  {line}
+                </p>
+              ))}
+            </div>
+          )}
+
           <div className="flex flex-col justify-center gap-4 sm:flex-row">
             <Button variant="secondary" to="/ai-director">
               Back to Edit
             </Button>
-            <Button variant="primary" icon="lucide:send" to="/confirmation">
-              Send to Creator
-            </Button>
+            {sendDisabled ? (
+              <Button type="button" variant="primary" icon="lucide:send" disabled>
+                Send to Creator
+              </Button>
+            ) : (
+              <Button variant="primary" icon="lucide:send" to="/confirmation">
+                Send to Creator
+              </Button>
+            )}
           </div>
         </div>
       </main>
