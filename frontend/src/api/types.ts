@@ -1,4 +1,4 @@
-import type { Quote } from '../../../shared/domain/types.ts'
+import type { BoundaryFlag, Quote } from '../../../shared/domain/types.ts'
 
 /**
  * The shapes the staging API returns for drafts and the AI Director (doc 11
@@ -72,6 +72,107 @@ export interface ServerDraftContent {
 /** The server's quote: the shared contract (shared/domain/types.ts), computed on the server only. */
 export type ServerQuote = Quote
 export type ServerQuoteLine = Quote['lines'][number]
+
+/* ------------------------- Phase 4: sent requests ------------------------ */
+
+/** As the fan sees it: a withheld request shows as "closed" and nothing says why. */
+export type CommissionStatus =
+  | 'in_review'
+  | 'question_open'
+  | 'proposal_open'
+  | 'approved'
+  | 'declined'
+  | 'withdrawn'
+  | 'closed'
+
+export interface CommissionTerms {
+  catalogVersionId: string
+  selections: ServerSelection[]
+  customRequest: string | null
+  customRequestPriceCents: number | null
+  fanDisplayName: string | null
+  fanScript: string | null
+  totalCents: number
+  deliveryDaysFromPayment: number
+  notes: { id: number; text: string }[]
+}
+
+export interface CommissionVersion {
+  id: string
+  seq: number
+  author: 'fan' | 'creator'
+  status: 'offered' | 'accepted' | 'rejected' | 'superseded'
+  catalogVersionId: string
+  terms: CommissionTerms
+  quote: ServerQuote
+  customRequestPriceCents: number | null
+  contentHash: string
+  fanAcceptedAt: string | null
+  createdAt: string
+  /** Creator view only: ask-me flags. */
+  boundaryFlags?: BoundaryFlag[]
+}
+
+export interface CommissionMessage {
+  id: string
+  authorKind: 'fan' | 'creator'
+  kind: 'question' | 'answer' | 'proposal_note' | 'decline_reason'
+  body: string
+  versionId: string | null
+  createdAt: string
+}
+
+/** Reported by the creator, never confirmed by the platform. */
+export interface ReportedPayment {
+  creatorReported: true
+  reportedAt: string
+}
+
+export interface CommissionView {
+  commission: {
+    id: string
+    creatorId: string
+    creatorName: string
+    status: CommissionStatus
+    currentVersionId: string
+    approvedVersionId: string | null
+    approvedAt: string | null
+    decidedAt: string | null
+    payment: ReportedPayment | null
+    /** What this side may do now (shared/domain/commission.ts actionsFor). */
+    actions: string[]
+    createdAt: string
+    updatedAt: string
+  }
+  versions: CommissionVersion[]
+  messages: CommissionMessage[]
+}
+
+export interface FanCommissionSummary {
+  id: string
+  creatorId: string
+  creatorName: string
+  status: CommissionStatus
+  totalCents: number
+  waitingOnYou: boolean
+  payment: ReportedPayment | null
+  createdAt: string
+  updatedAt: string
+}
+
+export interface CreatorCommissionSummary {
+  id: string
+  status: CommissionStatus
+  /** What the fan asked to be called; not a verified identity. */
+  fanName: string | null
+  totalCents: number
+  customRequest: boolean
+  customRequestPriced: boolean
+  askFirst: number
+  payment: ReportedPayment | null
+  createdAt: string
+  updatedAt: string
+}
 
 export interface ServerDraftResponse {
   draft: ServerDraftContent & {

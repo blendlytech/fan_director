@@ -39,7 +39,7 @@ The owner asked for this prompt, but hasn't said "Gate 2 approved" in writing. A
   - It runs on the blendly.tech@gmail.com Cloudflare account, and Wrangler is logged in there.
   - Clerk development instance `superb-crawdad-9550`.
   - Maya's catalog is `cr_maya` / `cv_maya_1`.
-  - Test fans: `fan_a+clerk_test@example.com` and `fan_c+clerk_test@example.com`.
+  - Test fans: the accounts once named here were deleted on 2026-09-20 (this repository is public and those addresses were working sign-ins). Current accounts: `docs/testing/local-test-accounts.md`, git-ignored.
 - **Signed-in staging checks:** `worker/scripts/staging-checklist.mjs <scenario> --as <email>` (development key only). Auto mode's safety check has blocked it before, so ask the owner to leave auto mode if it does.
 - **Clerk now:** "Require MFA" is off, as it must be (fans would be locked out). The public configuration also shows the authenticator app switched **off**, and that's the owner's call. Don't change Clerk settings, and don't raise the authenticator or SMS settings with the owner except as already recorded in the Gate 2 report.
 - **Running in parallel:** a Gemini agent is building the deferred Phase 1 UI on branch `phase-1-ui`, also from `phase-2`: the design 23 consent step and unsubscribe page, "Subscribe again", and design 16 creator enrolment routing. See "Working alongside the Gemini branch" below.

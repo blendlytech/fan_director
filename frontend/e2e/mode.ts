@@ -15,6 +15,55 @@ export const E2E_MODE: 'demo' | 'staging' = process.env.E2E_MODE === 'staging' ?
 /** The header badge text. */
 export const BADGE = E2E_MODE === 'staging' ? 'Staging' : 'Demo'
 
+/* -------------------------------------------------------------------------- */
+/*  What each build may honestly say about sending (doc 11 §3 rules 1 and 2).  */
+/*                                                                            */
+/*  The demo has no backend and says so. Staging has one: it never calls       */
+/*  itself a demo, and it never says nothing is saved. What both builds share  */
+/*  is that a signed-out visitor has sent nothing, so /confirmation reads the   */
+/*  same in either one. These are written out rather than imported from        */
+/*  src/copy, so rewording a disclaimer has to be a deliberate change here      */
+/*  too, and the e2e project keeps its own compiler settings.                   */
+/* -------------------------------------------------------------------------- */
+
+/** The mobile menu's line about what this build does with your work. */
+export const MENU_NOTE =
+  E2E_MODE === 'staging'
+    ? 'Staging — your draft is saved to your account, and you can send it for review.'
+    : 'Demo — nothing you make here is saved or sent.'
+
+/** What the Review page says above Send, signed out. */
+export const REVIEW_NOTICE =
+  E2E_MODE === 'staging'
+    ? 'Sign in to send this to Maya. Nothing has been sent, and nothing is charged here.'
+    : 'This is a demo with no backend, so nothing will actually be sent, and you won’t be notified or asked to pay.'
+
+/**
+ * The fan links in the header. Staging adds "Your requests", where an answer
+ * to a sent request appears; the demo has nothing to send, so it has no such
+ * page (Phase 4).
+ */
+export const FAN_LINKS =
+  E2E_MODE === 'staging'
+    ? ['Collection', 'Your studio', 'Saved ideas', 'Your requests']
+    : ['Collection', 'Your studio', 'Saved ideas']
+
+/**
+ * What /saved says about keeping your work. The demo has no storage at all;
+ * staging keeps a signed-in fan's draft, and tells a signed-out visitor how
+ * to get that rather than claiming nothing is ever saved.
+ */
+export const SAVED_NOTICE =
+  E2E_MODE === 'staging'
+    ? 'Sign in to keep your draft on your account. Until then it lives in this tab only, and refreshing clears it.'
+    : /This demo saves nothing/
+
+/** The confirmation page, where a signed-out visitor lands in both builds. */
+export const NOTHING_SENT_HEADING = 'Nothing was sent to Maya'
+
+/** Sentences no build may show unless a server really did it. */
+export const NEVER_WITHOUT_A_SERVER = ['Submitted Successfully', 'Order #']
+
 type Ranges = { vintage: string; floral: string; backstage: string }
 
 /** "$145" from cents, the way the app prints whole dollars. */

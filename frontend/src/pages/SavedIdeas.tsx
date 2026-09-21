@@ -1,4 +1,7 @@
 import { Header } from '../components/layout/Header'
+import { capabilities } from '../config'
+import { requestsCopy } from '../copy/requests'
+import { useSignedIn } from '../auth/session'
 import { Button } from '../components/common/Button'
 import { Icon } from '../components/common/Icon'
 import { SceneImage } from '../components/common/SceneImage'
@@ -7,6 +10,11 @@ import { currency, includedComponents, settingOf } from '../domain/sceneCard'
 
 /* -------------------------------------------------------------------------- */
 /*  Saved ideas — in a demo with no backend, no profile and no storage.        */
+/*                                                                            */
+/*  Staging is different and says so: it has saved a signed-in fan's draft    */
+/*  since design 18, so the demo's "this demo saves nothing" would be false   */
+/*  there. Only the three sentences below change, behind the capability flag;  */
+/*  the demo's own wording is untouched.                                       */
 /*                                                                            */
 /*  Built from design draft 10-saved-ideas.html. There is no profile to list   */
 /*  saved drafts from: there is exactly one draft, it lives in the shared      */
@@ -38,6 +46,8 @@ const REAL_STUDIO_POINTS = [
 export function SavedIdeas() {
   const { view, draft, total } = useCommission()
   const setting = settingOf(view, draft)
+  // Always null in the demo, where there is no Clerk and nothing is saved.
+  const signedIn = useSignedIn()
 
   return (
     <div className="flex min-h-screen flex-col bg-cream">
@@ -61,14 +71,24 @@ export function SavedIdeas() {
         >
           <Icon icon="lucide:info" width={20} className="mt-0.5 shrink-0 text-espresso" />
           <p className="text-sm leading-relaxed text-espresso">
-            This demo saves nothing. There&rsquo;s no profile or storage behind it, so ideas aren&rsquo;t
-            kept — and refreshing the page clears the draft you&rsquo;re working on.
+            {!capabilities.persistence ? (
+              <>
+                This demo saves nothing. There&rsquo;s no profile or storage behind it, so ideas aren&rsquo;t
+                kept — and refreshing the page clears the draft you&rsquo;re working on.
+              </>
+            ) : signedIn === true ? (
+              requestsCopy.savedStagingSignedIn
+            ) : (
+              requestsCopy.savedStagingSignedOut
+            )}
           </p>
         </div>
 
         {/* The one draft actually live in memory right now */}
         <h2 className="mb-4 font-sans text-xs font-semibold uppercase tracking-wider text-muted">
-          In this tab right now — not saved
+          {capabilities.persistence && signedIn === true
+            ? requestsCopy.savedDraftHeadingStaging
+            : requestsCopy.savedDraftHeadingSignedOut}
         </h2>
         <div className="mb-14 flex flex-col overflow-hidden rounded-card border border-divider bg-panel shadow-subtle md:flex-row">
           <div className="aspect-[4/3] w-full shrink-0 border-b border-divider md:aspect-auto md:w-2/5 md:border-b-0 md:border-r">
@@ -77,7 +97,9 @@ export function SavedIdeas() {
           <div className="w-full p-6 sm:p-8 md:w-3/5">
             <div className="mb-4 inline-flex items-center gap-1.5 rounded-full border border-divider bg-secondary px-3 py-1 text-xs font-medium text-muted">
               <Icon icon="lucide:file-pen-line" width={12} />
-              Draft · this tab only
+              {capabilities.persistence && signedIn === true
+                ? requestsCopy.savedDraftBadgeStaging
+                : requestsCopy.savedDraftBadgeSignedOut}
             </div>
             <h3 className="mb-3 font-serif text-2xl font-semibold text-espresso sm:text-3xl">
               {setting.sceneTitle}
@@ -110,26 +132,29 @@ export function SavedIdeas() {
           </div>
         </div>
 
-        {/* What the real product would do instead — none of it happening now */}
-        <div className="mb-14">
-          <div className="mb-6">
-            <h2 className="font-serif text-2xl font-semibold tracking-tight text-espresso sm:text-3xl">
-              In the real studio, saved ideas would&hellip;
-            </h2>
-            <p className="mt-1 text-sm text-muted">
-              How this would work in the real product — none of this is happening now.
-            </p>
+        {/* What the real product would do instead — none of it happening now.
+            Staging already does the first of these, so it doesn't promise them. */}
+        {!capabilities.persistence && (
+          <div className="mb-14">
+            <div className="mb-6">
+              <h2 className="font-serif text-2xl font-semibold tracking-tight text-espresso sm:text-3xl">
+                In the real studio, saved ideas would&hellip;
+              </h2>
+              <p className="mt-1 text-sm text-muted">
+                How this would work in the real product — none of this is happening now.
+              </p>
+            </div>
+            <ol className="grid grid-cols-1 gap-4 md:grid-cols-3">
+              {REAL_STUDIO_POINTS.map((point) => (
+                <li key={point.title} className="rounded-card border border-divider bg-panel p-6">
+                  <Icon icon={point.icon} width={24} className="mb-3 text-rose" />
+                  <h3 className="mb-2 font-serif text-xl font-semibold text-espresso">{point.title}</h3>
+                  <p className="text-sm leading-relaxed text-muted">{point.body}</p>
+                </li>
+              ))}
+            </ol>
           </div>
-          <ol className="grid grid-cols-1 gap-4 md:grid-cols-3">
-            {REAL_STUDIO_POINTS.map((point) => (
-              <li key={point.title} className="rounded-card border border-divider bg-panel p-6">
-                <Icon icon={point.icon} width={24} className="mb-3 text-rose" />
-                <h3 className="mb-2 font-serif text-xl font-semibold text-espresso">{point.title}</h3>
-                <p className="text-sm leading-relaxed text-muted">{point.body}</p>
-              </li>
-            ))}
-          </ol>
-        </div>
+        )}
 
         {/* Back */}
         <div className="border-t border-divider pt-8">

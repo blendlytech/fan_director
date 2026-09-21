@@ -6,6 +6,11 @@
 .dev.vars.*
 # Phase 3 live AI runs: the spend baseline stays on this machine.
 worker/.live-spend.json
+# Local-only seeds: they name accounts on one machine's staging, not the product.
+worker/seeds/local-*.sql
+# Sign-in details for staging test accounts. This repo is public, and a Clerk
+# development instance accepts a fixed code, so an address here is a working login.
+docs/testing/local-*.md
 .env
 .env.*
 .superdesign/tmp/
@@ -21,3 +26,5 @@ mcp-gemini-server/
 
 # Throwaway builds used for comparisons
 frontend/dist-*/
+# Stray local D1 state from a mis-pathed --persist-to. The real one is C:\fdsw.
+worker/fdsw/

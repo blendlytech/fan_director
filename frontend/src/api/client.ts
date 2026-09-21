@@ -1,6 +1,14 @@
 import { sessionToken } from '../auth/session'
 import { CREATOR_ID } from '../state/catalog'
-import type { DirectorReply, DirectorThread, ServerDraftContent, ServerDraftResponse } from './types'
+import type {
+  CommissionView,
+  CreatorCommissionSummary,
+  DirectorReply,
+  DirectorThread,
+  FanCommissionSummary,
+  ServerDraftContent,
+  ServerDraftResponse,
+} from './types'
 
 /**
  * The staging API, as the fan's own session. Every call sends the Clerk
@@ -53,4 +61,33 @@ export const api = {
     call<ServerDraftResponse>('POST', `${drafts}/${draftId}/director/suggestions/${suggestionId}/accept`, { expectedRevision }),
   declineSuggestion: (draftId: string, suggestionId: string) =>
     call<{ id: string; status: string }>('POST', `${drafts}/${draftId}/director/suggestions/${suggestionId}/decline`, {}),
+
+  // Phase 4: sending, and the fan's side of a sent request.
+  submit: (draftId: string, clientRequestId: string, expectedRevision: number, catalogVersionId: string) =>
+    call<CommissionView>('POST', `${drafts}/${draftId}/submit`, { clientRequestId, expectedRevision, catalogVersionId }),
+  myRequests: () => call<{ commissions: FanCommissionSummary[] }>('GET', '/api/commissions'),
+  myRequest: (id: string) => call<CommissionView>('GET', `/api/commissions/${encodeURIComponent(id)}`),
+  reply: (id: string, body: string) => call<CommissionView>('POST', `/api/commissions/${encodeURIComponent(id)}/reply`, { body }),
+  acceptProposal: (id: string, versionId: string, contentHash: string) =>
+    call<CommissionView>('POST', `/api/commissions/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}/accept`, { contentHash }),
+  rejectProposal: (id: string, versionId: string) =>
+    call<CommissionView>('POST', `/api/commissions/${encodeURIComponent(id)}/versions/${encodeURIComponent(versionId)}/reject`, {}),
+  withdraw: (id: string) => call<CommissionView>('POST', `/api/commissions/${encodeURIComponent(id)}/withdraw`, {}),
+}
+
+const creatorBase = '/api/creator/commissions'
+
+/** The creator's side (designs 03, 05, 06, 09). Creator calls need a second factor this session. */
+export const creatorApi = {
+  queue: (status?: string) =>
+    call<{ commissions: CreatorCommissionSummary[]; counts: Record<string, number> }>('GET', status ? `${creatorBase}?status=${encodeURIComponent(status)}` : creatorBase),
+  request: (id: string) => call<CommissionView>('GET', `${creatorBase}/${encodeURIComponent(id)}`),
+  ask: (id: string, body: string) => call<CommissionView>('POST', `${creatorBase}/${encodeURIComponent(id)}/question`, { body }),
+  propose: (id: string, expectedVersionId: string, selections: { itemId: string; qty: number }[], customRequestPriceCents: number | null, note: string | null) =>
+    call<CommissionView>('POST', `${creatorBase}/${encodeURIComponent(id)}/propose`, { expectedVersionId, selections, customRequestPriceCents, note }),
+  approve: (id: string, versionId: string, contentHash: string) =>
+    call<CommissionView>('POST', `${creatorBase}/${encodeURIComponent(id)}/approve`, { versionId, contentHash }),
+  decline: (id: string, reason: string | null, internalNote: string | null) =>
+    call<CommissionView>('POST', `${creatorBase}/${encodeURIComponent(id)}/decline`, { reason, internalNote }),
+  reportPayment: (id: string) => call<CommissionView>('POST', `${creatorBase}/${encodeURIComponent(id)}/payment-reported`, {}),
 }

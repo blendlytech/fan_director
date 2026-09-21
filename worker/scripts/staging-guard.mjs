@@ -32,6 +32,12 @@ else {
     problems.push('AI_ENABLED is "true" but AI_BUDGET_CEILING_MICROUSD is missing or above the approved $8 (8000000)')
   }
   if (staging.vars?.ADULT_CATALOG_ENABLED !== 'false') problems.push('ADULT_CATALOG_ENABLED must be "false"')
+  // The creator second factor may be waived for the pilot (doc 11 §5.6 item 27),
+  // but only deliberately: the value has to be spelled out, and the deploy says so.
+  const secondFactor = staging.vars?.CREATOR_SECOND_FACTOR_REQUIRED
+  if (secondFactor !== 'true' && secondFactor !== 'false') {
+    problems.push('CREATOR_SECOND_FACTOR_REQUIRED must be "true" or "false"')
+  }
   if (staging.observability?.enabled !== false) problems.push('observability must stay disabled (tokens travel in URLs)')
   const keyProblem = checkPublishableKey(staging.vars?.CLERK_ISSUER)
   if (keyProblem) problems.push(keyProblem)
@@ -58,5 +64,12 @@ function checkPublishableKey(issuer) {
 if (problems.length) {
   console.error('Staging deploy blocked:\n- ' + problems.join('\n- '))
   process.exit(1)
+}
+if (staging.vars?.CREATOR_SECOND_FACTOR_REQUIRED === 'false') {
+  console.warn(
+    'NOTE: CREATOR_SECOND_FACTOR_REQUIRED is "false". Creators sign in with their email alone,\n' +
+      '      so whoever can read that mailbox can open the queue and approve commissions.\n' +
+      '      This is the pilot exemption (doc 11 §5.6 item 27). Set it back to "true" on Clerk Pro.',
+  )
 }
 console.log('Staging config looks provisioned. Secrets are not checked here: run `wrangler secret list --env staging`.')

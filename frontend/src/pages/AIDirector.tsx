@@ -3,6 +3,9 @@ import { Link } from 'react-router-dom'
 import { LimitsCard } from '../components/boundaries/CreatorLimits'
 import { Turn } from '../components/director/Turn'
 import { LiveDirector } from '../components/director/LiveDirector'
+import { OptionsPanel } from '../components/options/OptionsPanel'
+import { ResaleConflict } from '../components/options/ResaleConflict'
+import { VideoNotice } from '../components/options/VideoNotice'
 import { SceneCardSaveArea } from '../components/save/SceneCardSaveArea'
 import { useDraftSync } from '../state/draftSync'
 import { Button } from '../components/common/Button'
@@ -446,7 +449,14 @@ export function AIDirector() {
               >
                 {/* Header */}
                 <div className="border-b border-divider bg-secondary p-6">
-                  {sync && <SceneCardSaveArea sync={sync} onChangeChoices={() => setCatalogOpen(true)} />}
+                  {sync &&
+                    (sync.rejection?.error === 'personalised_video_resale_forbidden' ? (
+                      <div className="mb-4">
+                        <ResaleConflict sync={sync} />
+                      </div>
+                    ) : (
+                      <SceneCardSaveArea sync={sync} onChangeChoices={() => setCatalogOpen(true)} />
+                    ))}
                   {!sync && (
                   <>
                   <div className="mb-4 flex items-center justify-between gap-3">
@@ -613,6 +623,18 @@ export function AIDirector() {
                     </div>
                   )}
                 </div>
+
+                {sync && (
+                  <div className="border-t border-divider p-6">
+                    <VideoNotice />
+                  </div>
+                )}
+
+                {sync && (
+                  <div className="border-t border-divider p-6">
+                    <OptionsPanel sync={sync} />
+                  </div>
+                )}
 
                 {/* Delivery + boundaries */}
                 <div className="space-y-5 border-t border-divider p-6">

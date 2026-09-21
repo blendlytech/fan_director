@@ -5,6 +5,8 @@ import { normalizeContent } from '../../../shared/domain/catalog.ts'
 import { catalogView, type CatalogView } from '../domain/sceneCard'
 
 export const CREATOR_ID = PILOT_CREATOR_ID
+/** The pilot creator's name, for screens that run outside the catalog provider. */
+export const CREATOR_NAME = PILOT_CREATOR_NAME
 
 /** The public demo: Maya's bundled catalog, with the demo's own ranges. */
 export const DEMO_VIEW = catalogView(PILOT_V1, PILOT_VERSION_ID, { creatorName: PILOT_CREATOR_NAME, ranges: 'demo' })

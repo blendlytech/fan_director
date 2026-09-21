@@ -1,6 +1,8 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { authEnabled } from '../../auth/clerk'
+import { capabilities } from '../../config'
+import { requestsCopy } from '../../copy/requests'
 import { cn } from '../../lib/cn'
 import { Icon } from '../common/Icon'
 import { AuthControls } from './AuthControls'
@@ -12,6 +14,8 @@ const fanLinks: HeaderLink[] = [
   { label: 'Collection', to: '/' },
   { label: 'Your studio', to: '/ai-director' },
   { label: 'Saved ideas', to: '/saved' },
+  // Staging only (Phase 4): where an answer to a sent request appears.
+  ...(capabilities.persistence ? [{ label: requestsCopy.navRequests, to: '/requests' }] : []),
 ]
 
 /** Tailwind's `md` breakpoint — the desktop nav takes over from here. */
@@ -180,7 +184,7 @@ export function Header({ links = fanLinks }: { links?: HeaderLink[] }) {
         <AuthControls variant="menu" />
         <p className="flex items-center gap-2 px-4 py-4 text-xs text-muted sm:px-6">
           <Icon icon="lucide:info" width={16} className="shrink-0" />
-          Demo — nothing you make here is saved or sent.
+          {capabilities.persistence ? requestsCopy.menuStaging : 'Demo — nothing you make here is saved or sent.'}
         </p>
       </nav>
     </header>

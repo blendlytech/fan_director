@@ -1,0 +1,335 @@
+# Phase 4 report: submission and creator review (Gate 4)
+
+Branch `phase-4`, code at `0460836`; staging version `c0d02366-82cd-422e-b250-859133692335`.
+2026-09-20. Format: doc 11 §9.
+Nothing below is described as working unless it was run. "Not verified" means it wasn't.
+
+**Summary:** sending a draft, the immutable versions, the creator's queue and decisions,
+the fan's request pages and the creator's screens are built and tested. The round trip
+passes end to end against real local D1 in the worker suite, and the screens were checked
+in a browser at 375, 768 and 1280 px against fixtures. **Migration 0004 and the Phase 4
+code are both on staging** (deployed 2026-09-20 with the owner's OK, version
+`b5b677f0-74b1-45a2-8567-563e5f3c4c4a`), and the e2e suite passes against the deployed
+site signed out. The creator account exists and `cr_maya` is linked to it, and **the
+full round trip passed by hand on staging** on 2026-09-20, along with the demo suite,
+the staging suite and the browser checks. Gate 3's three live-AI
+criteria stay carried forward: `OPENROUTER_API_KEY` is still unset and no live AI call
+has been made (spend: $0).
+
+**Testing from here is the owner's, by hand** (their decision, 2026-09-20). The step-by-step
+scripts are in `docs/testing/`: the demo suite, the staging suite, the creator account
+setup, the round trip and the browser checks.
+
+---
+
+## 1. What was built
+
+56 files changed from `main` (6,600 lines added, 81 removed), in six commits:
+
+| Commit | What |
+| --- | --- |
+| `cc37236` | Doc 11 §5.6 item 26: Gate 3 approved and the Phase 4 decisions |
+| `8623b37` | `shared/domain/commission.ts`: the state machine, `approveProblem`, the terms hash |
+| `f840f7e` | Output checks: a regression from the Phase 3 review fixes |
+| `ee71c9f` | Migration 0004, the 14 endpoints, and the worker tests |
+| `1624988` | Design 20 and design 24 B–D options UI (staging only) |
+| `121a0cd` | The fan's screens: a real Send on Review, `/requests`, `/requests/:id` |
+| `2185098` | The creator's screens on real data, the e2e mode split, the new unit tests |
+| `3ebd51d` | The owner's project brief (docs only) |
+
+### Shared domain
+
+`shared/domain/commission.ts` (pure, unit-tested):
+
+- the statuses and the transitions each actor may take, with `withheld` for a `minors`
+  safety case, which the creator never sees;
+- `approveProblem(status, currentVersion, claim)`: approval is allowed only for the
+  commission's **current** version, **accepted by the fan**, with a **matching content
+  hash**, and with any custom request **priced**;
+- `canonicalTerms` / `termsHash`: SHA-256 over canonical JSON, identical in the worker
+  and the browser, so a hash on screen means the same terms the server holds;
+- `MESSAGE_MAX = 500` (design 06).
+
+### Worker
+
+`worker/migrations/0004_submissions.sql`:
+
+- `draft.submitted_at`, which locks a sent draft (`putDraft` and the Director return 409
+  `draft_submitted`);
+- `commission`: one per draft, `UNIQUE(draft_id)` and `UNIQUE(fan_id, client_request_id)`
+  so a retried send is idempotent; status, current and approved version, approved hash,
+  `payment_reported_at` / `payment_reported_by`;
+- `commission_version`: immutable, with triggers copied from `catalog_version` — terms
+  can't change, status only moves forward, nothing is deleted;
+- `commission_message`: append-only, ≤ 500 characters. A decline's internal note goes to
+  `audit_event` only and never to the fan.
+
+`worker/src/commissions.ts` holds all fourteen endpoints. Every state change is one
+compare-and-set on `(status, current_version_id)` inside a single `DB.batch`, so two
+racing actions can't both win; the loser gets a typed 409 carrying the state that won.
+
+| Actor | Method and path | What it does |
+| --- | --- | --- |
+| Fan | `POST /api/creators/:c/drafts/:d/submit` | Revalidates through `validateForSubmission`, records a hard-list block, withholds a `minors` case, creates the commission and version 1 (fan-authored, accepted) and locks the draft |
+| Fan | `GET /api/commissions`, `GET /api/commissions/:id` | Their own requests; a withheld one reads as "closed" and says no more |
+| Fan | `POST /api/commissions/:id/reply` | Answers a question; the text is screened like any fan text |
+| Fan | `POST …/versions/:v/accept` · `/reject` | A stale version or hash returns 409 |
+| Fan | `POST …/:id/withdraw` | Any time before a decision |
+| Creator | `GET /api/creator/commissions?status=` · `/:id` | The queue with counts, and one request. Withheld requests never appear |
+| Creator | `POST …/:id/question` · `/propose` · `/approve` · `/decline` · `/payment-reported` | The decisions; the server prices every proposal itself |
+
+Every transition writes an `audit_event`.
+
+### Frontend (staging only, behind `capabilities`; the demo is unchanged)
+
+- **The fan's side** (`121a0cd`): Review's Send calls submit inside `draftSync.exclusive()`
+  and navigates only after a 201; `/requests` and `/requests/:id` show the status in plain
+  words, the version history with a diff, the creator's question and a reply box, accept
+  and reject, and withdraw. All wording is in `src/copy/requests.ts`.
+- **The creator's side** (`2185098`), a **separate route tree** behind
+  `capabilities.persistence`, so the demo keeps its own mock queue, its own copy and its
+  own routes and never loads this code:
+  - `pages/creator/CreatorQueue.tsx` — design 03 from `GET /api/creator/commissions`;
+  - `pages/creator/CreatorRequest.tsx` — design 05, with the decision panel;
+  - `pages/creator/ProposeChanges.tsx` — design 05's "Propose Changes";
+  - `pages/creator/CreatorAskModal.tsx`, `CreatorDeclineModal.tsx` — designs 06 and 09;
+  - `copy/creatorRequests.ts` — every creator-facing sentence, in one place;
+  - `domain/creatorProposal.ts` — the proposal editor's rules, pure and tested.
+- **Approve sends the exact `versionId` and `contentHash` on screen**, and the button is
+  offered only when the server's `actions` include `approve`; otherwise the screen says
+  why not (an unpriced custom request, an unaccepted proposal, an open question).
+- **What was dropped in staging, because the server holds no such thing:** the fan's
+  platform handle and avatar, the reference image, a "Requested Delivery" date, and
+  "Awaiting Payment" as a status. The fan's name is labelled **Not verified**.
+- **Payment** is only ever the creator's own report: "You marked payment as received on
+  <date>", with "Fans pay you on your own platform. Nothing is charged here, and nothing
+  is checked here." It starts no timer.
+- **Dev-only preview** `/__preview/creator` (`src/dev/`) mounts these screens and the
+  fan's against fixtures, for browser checks. Production builds drop it.
+
+### Wording made honest where staging does more than the demo (§3 rules 1 and 2)
+
+Approved by the owner, 2026-09-20, as written:
+
+| Screen | The demo (unchanged) | Staging |
+| --- | --- | --- |
+| Review, signed out | "This is a demo with no backend…" | "Sign in to send this to Maya. Nothing has been sent, and nothing is charged here." |
+| Mobile menu | "Demo — nothing you make here is saved or sent." | "Staging — your draft is saved to your account, and you can send it for review." |
+| `/saved` notice | "This demo saves nothing…" | Signed in: "Your draft is saved to your account as you work…" · Signed out: "Sign in to keep your draft on your account…" |
+| `/saved` draft badge | "Draft · this tab only" | "Draft · saved to your account" (signed in) |
+| `/saved` "In the real studio…" | Shown | Hidden: staging already does the first of the three |
+
+The `/saved` lines were a **Phase 3 gap**, not a Phase 4 one: staging has saved signed-in
+fans' drafts since design 18 shipped (2026-09-18), while the page still said it saved
+nothing. The mode split in the e2e suite is what surfaced it.
+
+## 2. Test evidence
+
+All run on `2185098` unless noted.
+
+| Command | Result |
+| --- | --- |
+| `npm test` (worker) | **384 passed (384)**, 19 files, including `commissions` (26 cases) and `domain/commission` (19) |
+| `npm run typecheck` (worker) | Clean |
+| `npm test` (frontend) | **144 passed (144)**, 8 files (108 before this phase) |
+| `npm run lint` (frontend) | Clean, no warnings |
+| `npx tsc -b` (frontend) | Clean |
+| `npm run test:e2e` (demo) | **24 passed, 4 skipped** (the staging-only spec) |
+| `E2E_MODE=staging E2E_BASE_URL=<staging> npx playwright test`, against the deployed site | **24 passed, 5 skipped, 0 failed** |
+| `npm run test:live` (real OpenRouter) | **Not run.** The key is still unset |
+
+The staging run needed two test changes, both made and both in the suite now:
+
+- The commission endpoints answer **403 `cross_origin`** to a POST with no `Origin`
+  header, because the CSRF check runs before authentication, and **401** to the same
+  POST from the site's own origin. The spec asserts both gates in that order.
+- Three fan-journey tests drive the demo's Director radio groups, which staging's
+  Director (designs 17 and 20) doesn't have, and the staging Director has no undo
+  control. They are now demo-only, with a staging counterpart that proves the same
+  invariant through the controls staging does have: a choice made in the Director is
+  the total Review shows. Five tests are skipped in staging mode for reasons the
+  suite states; `docs/testing/02-staging-e2e.md` lists them.
+
+**The demo suite has not been re-run since those e2e files changed.** It is the first
+item in `docs/testing/01-demo-e2e.md`.
+
+**The demo is unchanged.** Two production demo builds, one from `121a0cd` and one from
+`2185098`, were served and rendered with every off-machine request blocked:
+
+- **10 routes × 2 widths (375 and 1280) = 20 captures of `#root`: byte-identical.**
+- The CSS bundle gained exactly four utility rules — `.m-8`, `.max-w-[60ch]`,
+  `.border-alert/40`, `.accent-rose-deep` — all from the staging-only screens. Nothing was
+  removed, nothing changed, and the shared rules keep their order. No demo element carries
+  any of the four, which the identical HTML confirms.
+
+**Browser checks (375, 768, 1280 px).** A script walked all 13 preview scenarios at each
+width — the queue, a request needing a decision, ask, decline, waiting on the fan, changes
+proposed, approved, payment reported, declined, and the four fan screens — and recorded:
+**no sideways scroll on any page or modal, no interactive control under 40 px, and none of
+the banned claims** (`you paid`, `payment confirmed`, `we charged`, `email sent`,
+`Awaiting Payment`). Screenshots are in the session's `.playwright-mcp/phase4/` (git-ignored).
+The propose → accept-price → send → `proposal_open` flow, and approve and payment-reported,
+were exercised by hand in the preview and behaved as the server's rules describe.
+
+**Staging (today):**
+
+1. `git push origin phase-4` (`121a0cd..3ebd51d`), with the owner's OK.
+2. `wrangler d1 migrations apply DB --env staging --remote`: **0004 applied**, 17 commands.
+   Verified: `commission`, `commission_version` and `commission_message` exist,
+   `draft.submitted_at` exists, and `commission` holds 0 rows.
+3. **Deployed**, with the owner's OK: frontend rebuilt from `.env.local` first,
+   `scan-bundle.mjs` found no secret signatures in the five built files,
+   `staging-guard.mjs` passed, then `npm run deploy:staging`. Version
+   **`b5b677f0-74b1-45a2-8567-563e5f3c4c4a`**, cron `17 3 * * *` re-registered, adult off,
+   AI ceiling unchanged at 3,000,000 µUSD.
+4. Verified live afterwards: the site returns 200; `/api/commissions`,
+   `/api/commissions/:id`, `/api/creator/commissions` and `/api/creator/commissions/:id`
+   answer **401** where they answered 404 before the deploy; a POST with no `Origin`
+   answers 403 `cross_origin`; `wrangler secret list --env staging` shows
+   `CLERK_JWT_KEY`, `CLERK_SECRET_KEY` and `UNSUBSCRIBE_SIGNING_KEY`, and no
+   `OPENROUTER_API_KEY`.
+5. **The creator account, 2026-09-20 (with the owner's OK).** A Clerk user was created
+   through the Backend API with its email pre-verified — a development-instance test
+   identity that needs no mailbox — and `cr_maya.clerk_user_id` was set to it on remote
+   staging (`linked: 1`, `status: active`). No Clerk instance setting was touched. The
+   address and its fixed sign-in code are a working login for the queue, so they are
+   kept in `docs/testing/local-test-accounts.md`, which `.gitignore` excludes: this
+   repository is public.
+
+   Verified by signing in as that account through Clerk's Frontend API with the staging
+   origin, then calling the deployed site: `/api/creator/commissions` answers **200**
+   `{"commissions":[],"counts":{}}` and `/api/commissions` **200** `{"commissions":[]}`.
+   The session carried `fva: [0,-1]` — no second factor ever verified — so the waiver in
+   deviation 8 is confirmed working on staging, not merely configured. The two sessions
+   made for the check were revoked afterwards.
+
+   The test identity is right for proving the round trip and wrong for a real creator:
+   it only works on a development instance, and anyone who knows the address can sign in
+   as Maya. Replacing it with a real mailbox is part of the Clerk Pro work
+   (`docs/testing/03-creator-account-setup.md` §1).
+6. **Test accounts rotated, 2026-09-20 (owner: "push and rotate as you think").**
+   Checking the creator's address against the repository showed that this repository is
+   **public** and that the Phase 1–3 fan accounts `fan_a`, `fan_b` and `fan_c` were
+   already committed in four files, together with the fixed code. On a Clerk development
+   instance that pair is a working sign-in, so those were live logins, not fixtures.
+
+   The three Clerk users were **deleted**, and one fan account with a random local part
+   was created for the round trip. Their `fan` rows and 3 drafts were left in the staging
+   database: Clerk never reissues a deleted user id, so those rows can no longer be
+   authenticated as, and re-registering an old address yields a different id and a
+   different, empty fan. `commission` was 0 rows throughout, so nothing of substance was
+   ever behind them.
+
+   The new fan was verified the same way as the creator: `/api/commissions` **200**
+   `{"commissions":[]}`, and `/api/creator/commissions` **403** `not_a_creator` —
+   confirming the creator boundary from the fan's side on the deployed site. Sessions
+   revoked afterwards.
+
+   No code referenced the deleted accounts (`git grep` across `worker/scripts` and
+   `frontend/e2e` is empty); only prose did. The Phase 1 and Phase 2 reports still name
+   them, deliberately, as the record of runs that did happen — `docs/testing/README.md`
+   and the two handoff prompts say they are gone.
+7. **The manual test scripts passed**, run by the owner's team on 2026-09-20: the demo
+   suite (doc 01), the staging suite (doc 02), the round trip (doc 04) and the browser
+   checks (doc 05).
+
+## 3. Completion criteria (doc 10 §8 Phase 4, and the Gate 4 table in the plan)
+
+| Criterion | Status | Evidence |
+| --- | --- | --- |
+| A full fan-to-creator round trip works | **Met** | `commissions.test.ts` "question → answer → proposal → acceptance → approval → payment reported" on real local D1, and by hand on staging through the screens: `docs/testing/04-round-trip-staging.md`, passed 2026-09-20 |
+| Old versions cannot approve new scope | **Met** | `domain/commission.test.ts`: an older version, an unaccepted version, a changed hash and an unpriced custom request are each refused. `commissions.test.ts`: approving a superseded version returns 409 `version_not_current`, a stale hash 409 `hash_mismatch`, and accepting a stale proposal hash changes nothing |
+| No false payment confirmation | **Met** | "no response claims the fan paid or was charged" (worker); `copy/claims.test.ts` sweeps every sentence of both copy modules for payment and notification claims; the browser check repeats it on the rendered screens. Payment is always the creator's own report, with actor and time recorded, and starts no timer |
+| Duplicate submit, simultaneous tabs | **Met** | The same `clientRequestId` returns the same request; two concurrent submits create exactly one; a stale revision and a locked draft each return 409 |
+| Races have exactly one winner | **Met** | approve vs withdraw, propose vs withdraw, and decline vs accept-proposal, each on real local D1 |
+| Hard list at submission | **Met** | A blocked draft can't be sent and the block is recorded; a `minors` answer opens a safety case, suspends the fan and withholds the request; a fan's reply is screened like any fan text |
+| Tenant isolation | **Met** | Another fan and another creator see nothing (404); a non-creator gets 403; a creator without a second factor gets 403 `second_factor_required` |
+| Records that cannot change | **Met** | A version's terms and a decided request are immutable at the database level |
+| Existing suites and the demo | **Met, except the demo e2e re-run** | §2: worker 381, frontend 144, lint, typecheck and 20 identical demo renders. The demo suite passed at `2185098`; it has not been re-run since the e2e files changed (doc `docs/testing/01-demo-e2e.md`) |
+| UI at 375, 768 and 1280 | **Met for the screens; not verified signed in on staging** | §2's browser checks, against fixtures in the dev preview. `docs/testing/05-browser-checks.md` covers the signed-in pass |
+| Gate 3's three live-AI criteria | **Carried forward** | Still no key, still $0 spent (doc 11 §5.6 item 26) |
+| The endpoints refuse a caller with no session, live | **Met** | The staging e2e suite against the deployed site: 401 on all four read paths, 403 `cross_origin` then 401 on the state changes |
+
+## 4. Deviations
+
+1. **The creator's screens are a separate route tree, not a branch inside the demo's
+   pages.** It is the only way to guarantee the demo build is untouched; the cost is that
+   the two versions of designs 03/05/06/09 now live side by side.
+2. **Design 05's free-text "New Total" is not built.** The server derives every price
+   (§3 rule 3), so the creator edits the *choices* instead, and the only number typed is
+   the custom request's price, which no catalog covers. The editor is held inside the
+   catalog's own selection limits, and the figure it shows is labelled as a preview that
+   the server re-prices on send.
+3. **Design 05's fan handle, avatar, reference image and requested delivery date, and
+   design 03's "Awaiting Payment" status, are dropped in staging**, as the plan said: no
+   record holds them.
+4. **The fan's screens have no design** (owner decision, doc 11 §5.6 item 26). They reuse
+   existing components and styles. Design 08's success screen is not used.
+5. **The `/saved` wording was fixed for staging** although the false claim predates this
+   phase (§1). The demo's wording is untouched.
+6. **The ask and decline modals refuse to show a form** when the request has moved on,
+   rather than letting a URL open a form the server would reject.
+7. **The staging e2e round trip is written against what a signed-out caller can prove**
+   (every commission endpoint refuses them; the screens ask for a sign-in and claim
+   nothing). Playwright has no Clerk session, so the signed-in round trip stays a manual
+   step for the owner.
+8. **The creator's second factor is waived for the first creators** (owner, 2026-09-20;
+   doc 11 §5.6 item 27 now amends item 17). Clerk MFA needs the Pro plan, and the plan
+   waits on revenue from those creators. It is a switch, `CREATOR_SECOND_FACTOR_REQUIRED`,
+   and only the exact string `"false"` waives it: staging sets that, while local
+   development and the test suite keep `"true"` so the rule stays exercised. Nothing else
+   is relaxed — the account must still be an invited, active, linked, unbanned creator,
+   and a fan session still gets `not_a_creator`. Three tests cover the waiver, the
+   refusals under it, and that any other value still demands a second factor.
+   `staging-guard.mjs` refuses a deploy unless the value is one of the two words, and
+   prints what waiving it costs: a creator account is then only as safe as its mailbox.
+   Staging was redeployed for this: version `c0d02366-82cd-422e-b250-859133692335`.
+
+## 5. Open questions for the owner
+
+1. **Gate 4's criteria are met and the branch is ready to merge.** One decision is
+   deferred, not open: the creator signs in with a
+   development-instance test identity, which must be swapped for a real mailbox before a
+   real creator uses the site — same piece of work as restoring the second factor when
+   Clerk Pro arrives (§4 deviation 8).
+2. **Testing is the owner's from here** (their instruction, 2026-09-20). `docs/testing/`
+   holds the five scripts. The first to run is the demo suite, which has not been run
+   since the e2e files changed. The staging suite passed against the deployed site after
+   those changes.
+3. **Gate 3's live-AI criteria** remain carried forward until OpenRouter approves the
+   account and the key is set. Not raised again here.
+4. **The project brief describes intake this phase doesn't collect** — a fan handle, a
+   requested budget and a delivery target on the creator's queue, and "payment
+   instructions" generated on approval. Say whether those should become real fields, or
+   whether the brief should follow the build.
+5. **Merging `phase-4` to `main`** has not been asked for or done.
+6. **The custom-request path cannot be tested by hand on staging.** A custom request only
+   enters a draft through the AI Director's offer, and the Director is off there without
+   an OpenRouter key. So "a custom request must be priced before approval" is provable
+   only in the worker suite until the key exists. It is not a gap in the rule, which the
+   server enforces either way.
+
+## 6. Designs needed
+
+- **The fan's request pages** (`/requests`, `/requests/:id`, the sent state, the reply box,
+  the proposal accept/reject) are undesigned, as decided. They should get a design before
+  real fans see them.
+- **The creator's "propose changes" editor**: design 05 draws a free-text total, which the
+  server can't accept. The built editor needs a design of its own.
+- **A signed-out creator state**: the queue currently shows a plain sentence.
+- Still open from Phase 3: the fan-facing groups beyond `DIRECTOR_SLOTS_V1`, and a
+  designed "sign in to use the Director" state.
+
+## 7. Costs and ceilings
+
+| Item | Amount |
+| --- | --- |
+| AI (OpenRouter) | **$0.00**. No live call has been made; the `ai_call` ledger is empty |
+| Cloudflare | $0. Staging is on the Workers free plan (D1, one cron). Migration 0004 wrote 17 commands |
+| Phase 3 AI budget | $8, unchanged and unspent |
+| Staging ceiling | `AI_BUDGET_CEILING_MICROUSD` = 3,000,000 ($3), unchanged |
+| `ADULT_CATALOG_ENABLED` | `false` in every environment, unchanged |
+
+**Gate 4 stops here.** The staging deploy and the creator account were done with the
+owner's go-ahead. What remains is the owner's own: the round trip and the browser
+checks in `docs/testing/`, and then the decision to merge.

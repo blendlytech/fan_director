@@ -121,12 +121,12 @@ describe('routing', () => {
     expect(res.status).toBe(404)
   })
 
-  it('has no send, submission, AI or token-issuing routes', async () => {
+  // Submission exists from Phase 4, only at /api/creators/:c/drafts/:d/submit (commissions.test.ts).
+  it('has no email, stray submission, AI or token-issuing routes', async () => {
     const fan = clerkUser()
     const token = await fan.token()
     for (const [method, path] of [
       ['POST', '/api/drafts/x/submit'],
-      ['POST', '/api/creators/cr/drafts/x/submit'],
       ['POST', '/api/ai/director'],
       ['POST', '/api/email/send'],
       ['POST', '/api/creators/cr/unsubscribe-link'],

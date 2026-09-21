@@ -5,6 +5,8 @@ import { capabilities } from '../config'
 import { Header } from '../components/layout/Header'
 import { Button } from '../components/common/Button'
 import { Icon } from '../components/common/Icon'
+import { PricingNote } from '../components/options/PricingNote'
+import { TemplatePicker } from '../components/options/TemplatePicker'
 import { SceneImage } from '../components/common/SceneImage'
 import { useCommission } from '../state/commission'
 import { money, priceRangeOf, type CatalogView, type SettingId } from '../domain/sceneCard'
@@ -159,6 +161,14 @@ export function BoutiqueEntrance() {
         {capabilities.serverCatalog && (
           <div className="mb-16 sm:mb-20">
             <LimitsPanel boundaries={view.boundaries} creatorName={view.creatorName} />
+          </div>
+        )}
+
+        {/* Staging (design 20 A): start from one of the creator's own templates, and her pricing note. */}
+        {capabilities.serverCatalog && (
+          <div className="mb-16 space-y-8 sm:mb-20">
+            <TemplatePicker />
+            <PricingNote />
           </div>
         )}
 
