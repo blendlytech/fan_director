@@ -362,6 +362,13 @@ Decided at the Gate 1 review (owner, 2026-09-17). The Gate 1 report is `docs/rep
     - **Sending locks the draft**, one request per draft. A custom request must be priced by the creator (a proposed change) before approval. The fan can withdraw at any time before approval. Messages are at most 500 characters.
     - **Payment stays off-platform.** After approval, the creator may mark "payment received on your platform". It is always labelled creator-reported, with actor and time recorded, and it starts no timer (doc 10 §5). The platform never says the fan paid.
 
+27. **The creator second factor is waived for the first creators (owner, 2026-09-20).** This amends item 17, which requires an authenticator app on every creator account.
+    - **The decision:** the first few creators sign in with their email alone. Clerk's multi-factor authentication needs the Pro plan, the plan needs capital, and the capital comes from those creators' sign-ups. The second factor returns when the plan is upgraded.
+    - **How it is built:** the environment variable `CREATOR_SECOND_FACTOR_REQUIRED`. The Worker demands a verified second factor unless the value is exactly `"false"`, so a missing, empty or misspelt value still demands one. Staging sets `"false"`; local development and the test suite keep `"true"`, so the rule stays exercised. `staging-guard.mjs` refuses to deploy unless the value is one of the two words, and prints what waiving it means. The enforcement code in `requireCreator` is untouched and ready.
+    - **Nothing else is waived.** The account must still be an invited creator, `active`, linked by `clerk_user_id`, not banned and not locked; every creator query is still scoped by `creator_id`; and a fan session still gets `not_a_creator`.
+    - **What it costs:** a creator account is then only as safe as its mailbox. Whoever can read that inbox can open the queue, read fans' private requests and approve commissions. Choose those mailboxes accordingly, and keep the list of exempt creators short.
+    - **Turning it back on** is one variable and a deploy; item 17's authenticator-with-backup-codes requirement stands for every creator after the pilot, and is a launch requirement before real fan traffic (§10).
+
 ### 5.7 Commission options from market research (owner, 2026-09-16)
 
 Source: `docs/reports/custom-video-market-research.md`. That report has no sources, so its figures may guide **seed defaults only**. No figure, market share or claim from it may appear in fan or creator copy.

@@ -37,7 +37,10 @@
     "CLERK_ISSUER": "https://superb-crawdad-9550.clerk.accounts.dev",
     "CLERK_AUTHORIZED_PARTIES": "http://localhost:8787,http://localhost:5173",
     "AI_ENABLED": "false",
-    "ADULT_CATALOG_ENABLED": "false"
+    "ADULT_CATALOG_ENABLED": "false",
+    // Required here, so the test suite and local development exercise the rule.
+    // Only staging waives it, deliberately (doc 11 §5.6 item 27).
+    "CREATOR_SECOND_FACTOR_REQUIRED": "true"
   },
   "env": {
     "staging": {
@@ -68,6 +71,11 @@
         // Phase 3: the owner OK'd the AI Director on staging (2026-09-18). Adult stays off.
         "AI_ENABLED": "true",
         "ADULT_CATALOG_ENABLED": "false",
+        // Pilot exemption (doc 11 §5.6 item 27, owner 2026-09-20): Clerk MFA is a
+        // Pro feature, and Pro waits on revenue from the first creators. Until
+        // then a creator signs in with their email alone. Set back to "true" the
+        // day the plan is upgraded; the enforcement code is still there.
+        "CREATOR_SECOND_FACTOR_REQUIRED": "false",
         // Phase 3 (doc 11 §5.6 item 24): $3 of the owner's $8 test budget; the rest is for local live runs.
         "AI_BUDGET_CEILING_MICROUSD": "3000000",
         "AI_RAW_RETENTION_DAYS": "30"

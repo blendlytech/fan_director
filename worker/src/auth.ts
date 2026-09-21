@@ -94,10 +94,26 @@ export async function requireFan(request: Request, env: Env, deps: Deps): Promis
 }
 
 /**
+ * Whether this environment demands a verified second factor from creators.
+ * Only the exact string "false" turns it off, so a typo, an empty value or a
+ * missing variable all still demand one (doc 11 §5.6 items 17 and 27).
+ */
+export function creatorSecondFactorRequired(env: Env): boolean {
+  return env.CREATOR_SECOND_FACTOR_REQUIRED !== 'false'
+}
+
+/**
  * A creator: invited by the owner (row linked to this Clerk user and active),
  * with an authenticator app enrolled and a second factor verified in this
  * session. Clerk's "require MFA" would also force fans, so it's enforced here
  * (doc 11 §5.6 item 17).
+ *
+ * The pilot exemption (§5.6 item 27, owner 2026-09-20): Clerk MFA needs the Pro
+ * plan, which waits on revenue from the first creators, so an environment may
+ * set CREATOR_SECOND_FACTOR_REQUIRED="false" and let those creators in on their
+ * email sign-in alone. Everything else still applies — the account must be an
+ * invited, active creator, and it must not be banned or locked. The check below
+ * is left intact for the day the plan is upgraded.
  */
 export async function requireCreator(request: Request, env: Env, deps: Deps): Promise<CreatorIdentity> {
   const claims = await verifySession(request, env)
@@ -111,7 +127,7 @@ export async function requireCreator(request: Request, env: Env, deps: Deps): Pr
   const secondFactorVerified = claims.fva !== null && claims.fva[1] >= 0
   const user = await deps.clerk.getUser(claims.userId)
   if (!user || user.banned || user.locked) throw new ApiError(403, 'not_a_creator')
-  if (!user.totpEnabled || !secondFactorVerified) {
+  if (creatorSecondFactorRequired(env) && (!user.totpEnabled || !secondFactorVerified)) {
     throw new ApiError(403, 'second_factor_required', { enrol: !user.totpEnabled })
   }
   return { creatorId: creator.id, displayName: creator.display_name, claims }

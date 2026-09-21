@@ -320,6 +320,46 @@ describe('who can see and do what', () => {
     expect((await bodyOf(res)).error).toBe('second_factor_required')
   })
 
+  /**
+   * The pilot exemption (doc 11 §5.6 item 27): while Clerk MFA is out of reach,
+   * an environment may waive the creator's second factor. Only that one check is
+   * waived, and only when the value is exactly "false".
+   */
+  describe('with CREATOR_SECOND_FACTOR_REQUIRED="false"', () => {
+    const waived = { CREATOR_SECOND_FACTOR_REQUIRED: 'false' }
+
+    it('lets the creator in on their email sign-in alone', async () => {
+      const s = await sent()
+      // No `fva` claim at all: this session never saw a second factor.
+      const res = await call('GET', `/api/creator/commissions/${s.id}`, { token: await s.b.owner.token(), env: waived })
+      expect(res.status).toBe(200)
+      expect((await bodyOf(res)).commission.id).toBe(s.id)
+    })
+
+    it('still refuses everyone who is not this creator', async () => {
+      const s = await sent()
+      const fan = await call('GET', `/api/creator/commissions/${s.id}`, { token: await s.fan.token(), env: waived })
+      expect(fan.status).toBe(403)
+      expect((await bodyOf(fan)).error).toBe('not_a_creator')
+
+      const other = await boutique('Other')
+      const stranger = await call('GET', `/api/creator/commissions/${s.id}`, { token: await other.owner.token(), env: waived })
+      expect(stranger.status).toBe(404)
+    })
+
+    it('fails safe: any other value still demands a second factor', async () => {
+      const s = await sent()
+      for (const value of ['true', 'False', '', '0', 'no']) {
+        const res = await call('GET', `/api/creator/commissions/${s.id}`, {
+          token: await s.b.owner.token(),
+          env: { CREATOR_SECOND_FACTOR_REQUIRED: value },
+        })
+        expect(res.status, value).toBe(403)
+        expect((await bodyOf(res)).error, value).toBe('second_factor_required')
+      }
+    })
+  })
+
   it("the decline's internal note is never shown to the fan", async () => {
     const s = await sent()
     await creatorCall(s, 'POST', `/api/creator/commissions/${s.id}/decline`, { reason: 'I can’t film this one.', internalNote: 'PRIVATE-NOTE-123' })

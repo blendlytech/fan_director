@@ -10,7 +10,7 @@ Read them in this order:
 | --- | --- | --- | --- |
 | 01 | [Demo e2e suite](01-demo-e2e.md) | The automated suite against the public demo build | ~3 min |
 | 02 | [Staging e2e suite](02-staging-e2e.md) | The same suite against the deployed staging site | ~3 min |
-| 03 | [Creator account setup](03-creator-account-setup.md) | One-time: a Clerk creator with an authenticator, linked to `cr_maya` | ~15 min |
+| 03 | [Creator account setup](03-creator-account-setup.md) | One-time: a Clerk creator account linked to `cr_maya` (no authenticator needed) | ~10 min |
 | 04 | [The Phase 4 round trip](04-round-trip-staging.md) | Fan sends → creator reviews → approval → payment, by hand on staging | ~30 min |
 | 05 | [Browser checks](05-browser-checks.md) | The Phase 4 screens at 375, 768 and 1280 px | ~20 min |
 

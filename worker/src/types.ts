@@ -14,6 +14,14 @@ export interface Env {
   /** Switches that stay "false" in every deployed environment (doc 11 §5.4). */
   AI_ENABLED: string
   ADULT_CATALOG_ENABLED: string
+  /**
+   * Whether a creator session must carry a verified second factor (doc 11 §5.6
+   * item 17). Anything other than the exact string "false" means required, so a
+   * missing or misspelt value fails safe. "false" is the pilot exemption while
+   * Clerk MFA is out of reach on the free plan (§5.6 item 27): it is a real
+   * reduction in protection, and only the owner sets it.
+   */
+  CREATOR_SECOND_FACTOR_REQUIRED?: string
   /** AI spending ceiling for this environment, integer micro-dollars ($8 = "8000000"). No value = no AI calls. */
   AI_BUDGET_CEILING_MICROUSD?: string
   /** Per-creator ceiling, micro-dollars. Defaults to the environment ceiling. */

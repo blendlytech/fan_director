@@ -128,7 +128,7 @@ All run on `2185098` unless noted.
 
 | Command | Result |
 | --- | --- |
-| `npm test` (worker) | **381 passed (381)**, 19 files, including `commissions` (23 cases) and `domain/commission` (19) |
+| `npm test` (worker) | **384 passed (384)**, 19 files, including `commissions` (26 cases) and `domain/commission` (19) |
 | `npm run typecheck` (worker) | Clean |
 | `npm test` (frontend) | **144 passed (144)**, 8 files (108 before this phase) |
 | `npm run lint` (frontend) | Clean, no warnings |
@@ -231,14 +231,27 @@ were exercised by hand in the preview and behaved as the server's rules describe
    (every commission endpoint refuses them; the screens ask for a sign-in and claim
    nothing). Playwright has no Clerk session, so the signed-in round trip stays a manual
    step for the owner.
+8. **The creator's second factor is waived for the first creators** (owner, 2026-09-20;
+   doc 11 §5.6 item 27 now amends item 17). Clerk MFA needs the Pro plan, and the plan
+   waits on revenue from those creators. It is a switch, `CREATOR_SECOND_FACTOR_REQUIRED`,
+   and only the exact string `"false"` waives it: staging sets that, while local
+   development and the test suite keep `"true"` so the rule stays exercised. Nothing else
+   is relaxed — the account must still be an invited, active, linked, unbanned creator,
+   and a fan session still gets `not_a_creator`. Three tests cover the waiver, the
+   refusals under it, and that any other value still demands a second factor.
+   `staging-guard.mjs` refuses a deploy unless the value is one of the two words, and
+   prints what waiving it costs: a creator account is then only as safe as its mailbox.
+   **Staging needs one more deploy for this to take effect.**
 
 ## 5. Open questions for the owner
 
 1. **The creator account is the one thing blocking the round trip.** Staging runs the
    code and the database is migrated, but `cr_maya.clerk_user_id` is NULL, so no creator
-   session can exist. The owner signs up a Clerk user with an authenticator and links it:
+   session can exist. The owner signs up a Clerk user and links it:
    `docs/testing/03-creator-account-setup.md`. Until then these stay "not verified": the
-   signed-in round trip, and the signed-in browser check of the creator screens.
+   signed-in round trip, and the signed-in browser check of the creator screens. The
+   account no longer needs an authenticator (§4 deviation 8), but staging must be
+   deployed again for that to take effect.
 2. **Testing is the owner's from here** (their instruction, 2026-09-20). `docs/testing/`
    holds the five scripts. The first to run is the demo suite, which has not been run
    since the e2e files changed. The staging suite passed against the deployed site after
