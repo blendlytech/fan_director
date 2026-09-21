@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 import type { Locator, Page } from '@playwright/test'
-import { expectedRanges, NEVER_WITHOUT_A_SERVER, NOTHING_SENT_HEADING, REVIEW_NOTICE } from './mode.ts'
+import { E2E_MODE, expectedRanges, NEVER_WITHOUT_A_SERVER, NOTHING_SENT_HEADING, REVIEW_NOTICE } from './mode.ts'
 
 /* -------------------------------------------------------------------------- */
 /*  Smoke tests for the fan journey: / -> /ai-director -> /review ->           */
@@ -27,10 +27,21 @@ async function beginWithBackstage(page: Page) {
   await expect(page).toHaveURL('/ai-director')
 }
 
+/**
+ * The Director's own controls differ by build, and not by accident: the demo
+ * drives the two radio groups of the original design, while staging shows the
+ * live Director (design 17) with the design 20 option groups and no undo. The
+ * three tests below therefore run against the demo, and the staging test after
+ * them covers the same invariant — a choice made in the Director is the total
+ * Review shows — through the controls staging actually has.
+ */
+const DEMO_DIRECTOR = 'The demo’s Director controls; staging uses design 17 and 20 (see the staging test below).'
+
 test.describe('fan journey', () => {
   test('a total set in the Director survives into Review and Confirmation', async ({
     page,
   }) => {
+    test.skip(E2E_MODE === 'staging', DEMO_DIRECTOR)
     await beginWithBackstage(page)
 
     // Backstage + Longer Video + the extra-minute add-on: 90 base + 80
@@ -83,6 +94,7 @@ test.describe('fan journey', () => {
   })
 
   test('undoing once in the Director reverts exactly one change', async ({ page }) => {
+    test.skip(E2E_MODE === 'staging', 'The staging Director has no undo control.')
     await beginWithBackstage(page)
 
     // Change 1: setting -> Floral (backstage + richer + no extra = $125,
@@ -110,6 +122,7 @@ test.describe('fan journey', () => {
   })
 
   test('re-clicking the selected option does not add an undo step', async ({ page }) => {
+    test.skip(E2E_MODE === 'staging', 'The staging Director has no undo control.')
     await beginWithBackstage(page) // $125
 
     const settings = page.getByRole('radiogroup', { name: 'Scene setting' })
@@ -127,6 +140,34 @@ test.describe('fan journey', () => {
     // would stay at $155.
     await page.getByRole('button', { name: /Undo last change/ }).click()
     await expect(liveTotal(page)).toHaveText('$125')
+  })
+
+  test('staging: a choice made in the Director is the total Review shows', async ({ page }) => {
+    test.skip(E2E_MODE !== 'staging', 'Drives the live Director’s design 20 options, which the demo doesn’t have.')
+    await beginWithBackstage(page)
+
+    const total = liveTotal(page)
+    const before = (await total.textContent())!.trim()
+
+    // A design 20 option with a price of its own. The amount isn't hardcoded:
+    // the catalog decides it, and this test only insists the two screens agree.
+    await page.getByRole('radio', { name: /^4K/ }).check()
+    await expect(total).not.toHaveText(before)
+    const after = (await total.textContent())!.trim()
+
+    await page.locator('a[href="/review"]:visible').first().click()
+    await expect(page).toHaveURL('/review')
+
+    const totalEstimateValue = page
+      .getByText('Total Estimate', { exact: true })
+      .locator('xpath=following-sibling::span[1]')
+    await expect(totalEstimateValue).toHaveText(`${after}.00`)
+
+    // Signed out, staging has sent nothing either — and says so in its own words.
+    await expect(page.getByText(REVIEW_NOTICE)).toBeVisible()
+    for (const claim of NEVER_WITHOUT_A_SERVER) {
+      await expect(page.getByText(claim)).toHaveCount(0)
+    }
   })
 
   test('entrance cards show the derived price ranges', async ({ page, request }) => {

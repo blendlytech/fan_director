@@ -6,6 +6,8 @@
 .dev.vars.*
 # Phase 3 live AI runs: the spend baseline stays on this machine.
 worker/.live-spend.json
+# Local-only seeds: they name accounts on one machine's staging, not the product.
+worker/seeds/local-*.sql
 .env
 .env.*
 .superdesign/tmp/

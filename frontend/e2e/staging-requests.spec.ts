@@ -31,16 +31,27 @@ test.describe('staging: sent requests', () => {
     }
   })
 
-  test('a state change refuses a caller with no session, and changes nothing', async ({ request }) => {
+  test('a state change refuses a caller with no session, and changes nothing', async ({ request, baseURL }) => {
     const id = '00000000-0000-4000-8000-000000000000'
-    for (const path of [
+    const paths = [
       `/api/commissions/${id}/withdraw`,
       `/api/commissions/${id}/reply`,
       `/api/creator/commissions/${id}/approve`,
       `/api/creator/commissions/${id}/payment-reported`,
-    ]) {
-      const res = await request.post(path, { data: {}, headers: { 'Content-Type': 'application/json' } })
-      expect(res.status(), path).toBe(401)
+    ]
+    for (const path of paths) {
+      // Two gates, in this order: a POST from anywhere else is refused as
+      // cross-origin before anything reads a token…
+      const foreign = await request.post(path, { data: {}, headers: { 'Content-Type': 'application/json' } })
+      expect(foreign.status(), `${path} (no Origin)`).toBe(403)
+      expect((await foreign.json()).error, path).toBe('cross_origin')
+
+      // …and our own origin with no session is refused as unauthenticated.
+      const sameOrigin = await request.post(path, {
+        data: {},
+        headers: { 'Content-Type': 'application/json', Origin: baseURL! },
+      })
+      expect(sameOrigin.status(), `${path} (same origin, no session)`).toBe(401)
     }
   })
 

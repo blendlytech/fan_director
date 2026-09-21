@@ -1,16 +1,23 @@
 # Phase 4 report: submission and creator review (Gate 4)
 
-Branch `phase-4`, head `3ebd51d` (code at `2185098`), 2026-09-20. Format: doc 11 §9.
+Branch `phase-4`, code at `2185098`; staging version `b5b677f0-74b1-45a2-8567-563e5f3c4c4a`.
+2026-09-20. Format: doc 11 §9.
 Nothing below is described as working unless it was run. "Not verified" means it wasn't.
 
 **Summary:** sending a draft, the immutable versions, the creator's queue and decisions,
 the fan's request pages and the creator's screens are built and tested. The round trip
 passes end to end against real local D1 in the worker suite, and the screens were checked
-in a browser at 375, 768 and 1280 px against fixtures. **Migration 0004 is applied to
-remote staging; the Phase 4 code is not deployed there** (the owner approved the
-migration and the push, not a deploy), so the signed-in staging round trip is **not
-verified**. Gate 3's three live-AI criteria stay carried forward: `OPENROUTER_API_KEY`
-is still unset and no live AI call has been made (spend: $0).
+in a browser at 375, 768 and 1280 px against fixtures. **Migration 0004 and the Phase 4
+code are both on staging** (deployed 2026-09-20 with the owner's OK, version
+`b5b677f0-74b1-45a2-8567-563e5f3c4c4a`), and the e2e suite passes against the deployed
+site signed out. **The signed-in round trip has not been run**: `cr_maya` still has no
+Clerk creator account linked to it, which the owner will set up. Gate 3's three live-AI
+criteria stay carried forward: `OPENROUTER_API_KEY` is still unset and no live AI call
+has been made (spend: $0).
+
+**Testing from here is the owner's, by hand** (their decision, 2026-09-20). The step-by-step
+scripts are in `docs/testing/`: the demo suite, the staging suite, the creator account
+setup, the round trip and the browser checks.
 
 ---
 
@@ -127,8 +134,23 @@ All run on `2185098` unless noted.
 | `npm run lint` (frontend) | Clean, no warnings |
 | `npx tsc -b` (frontend) | Clean |
 | `npm run test:e2e` (demo) | **24 passed, 4 skipped** (the staging-only spec) |
-| `E2E_MODE=staging npx playwright test` against a local staging-mode dev server | **20 passed, 6 failed, 2 skipped** — see §5 item 2; every failure needs a backend the local server doesn't have |
+| `E2E_MODE=staging E2E_BASE_URL=<staging> npx playwright test`, against the deployed site | **24 passed, 5 skipped, 0 failed** |
 | `npm run test:live` (real OpenRouter) | **Not run.** The key is still unset |
+
+The staging run needed two test changes, both made and both in the suite now:
+
+- The commission endpoints answer **403 `cross_origin`** to a POST with no `Origin`
+  header, because the CSRF check runs before authentication, and **401** to the same
+  POST from the site's own origin. The spec asserts both gates in that order.
+- Three fan-journey tests drive the demo's Director radio groups, which staging's
+  Director (designs 17 and 20) doesn't have, and the staging Director has no undo
+  control. They are now demo-only, with a staging counterpart that proves the same
+  invariant through the controls staging does have: a choice made in the Director is
+  the total Review shows. Five tests are skipped in staging mode for reasons the
+  suite states; `docs/testing/02-staging-e2e.md` lists them.
+
+**The demo suite has not been re-run since those e2e files changed.** It is the first
+item in `docs/testing/01-demo-e2e.md`.
 
 **The demo is unchanged.** Two production demo builds, one from `121a0cd` and one from
 `2185098`, were served and rendered with every off-machine request blocked:
@@ -154,14 +176,26 @@ were exercised by hand in the preview and behaved as the server's rules describe
 2. `wrangler d1 migrations apply DB --env staging --remote`: **0004 applied**, 17 commands.
    Verified: `commission`, `commission_version` and `commission_message` exist,
    `draft.submitted_at` exists, and `commission` holds 0 rows.
-3. **No deploy.** The owner approved the migration only, so the staging Worker still runs
-   the Phase 3 code: `GET /api/commissions` there answers **404**, not 401.
+3. **Deployed**, with the owner's OK: frontend rebuilt from `.env.local` first,
+   `scan-bundle.mjs` found no secret signatures in the five built files,
+   `staging-guard.mjs` passed, then `npm run deploy:staging`. Version
+   **`b5b677f0-74b1-45a2-8567-563e5f3c4c4a`**, cron `17 3 * * *` re-registered, adult off,
+   AI ceiling unchanged at 3,000,000 µUSD.
+4. Verified live afterwards: the site returns 200; `/api/commissions`,
+   `/api/commissions/:id`, `/api/creator/commissions` and `/api/creator/commissions/:id`
+   answer **401** where they answered 404 before the deploy; a POST with no `Origin`
+   answers 403 `cross_origin`; `wrangler secret list --env staging` shows
+   `CLERK_JWT_KEY`, `CLERK_SECRET_KEY` and `UNSUBSCRIBE_SIGNING_KEY`, and no
+   `OPENROUTER_API_KEY`.
+5. **No signed-in run.** `cr_maya.clerk_user_id` is still NULL, so no creator session can
+   exist yet and `commission` still holds 0 rows. `docs/testing/03-creator-account-setup.md`
+   is the owner's next step.
 
 ## 3. Completion criteria (doc 10 §8 Phase 4, and the Gate 4 table in the plan)
 
 | Criterion | Status | Evidence |
 | --- | --- | --- |
-| A full fan-to-creator round trip works | **Met in the worker suite; not verified signed in on staging** | `commissions.test.ts` "question → answer → proposal → acceptance → approval → payment reported" on real local D1. The staging run needs a deploy and a creator account (§5) |
+| A full fan-to-creator round trip works | **Met in the worker suite; not verified signed in on staging** | `commissions.test.ts` "question → answer → proposal → acceptance → approval → payment reported" on real local D1. Staging now runs the code, but the round trip needs the creator account the owner will make: `docs/testing/04-round-trip-staging.md` |
 | Old versions cannot approve new scope | **Met** | `domain/commission.test.ts`: an older version, an unaccepted version, a changed hash and an unpriced custom request are each refused. `commissions.test.ts`: approving a superseded version returns 409 `version_not_current`, a stale hash 409 `hash_mismatch`, and accepting a stale proposal hash changes nothing |
 | No false payment confirmation | **Met** | "no response claims the fan paid or was charged" (worker); `copy/claims.test.ts` sweeps every sentence of both copy modules for payment and notification claims; the browser check repeats it on the rendered screens. Payment is always the creator's own report, with actor and time recorded, and starts no timer |
 | Duplicate submit, simultaneous tabs | **Met** | The same `clientRequestId` returns the same request; two concurrent submits create exactly one; a stale revision and a locked draft each return 409 |
@@ -169,9 +203,10 @@ were exercised by hand in the preview and behaved as the server's rules describe
 | Hard list at submission | **Met** | A blocked draft can't be sent and the block is recorded; a `minors` answer opens a safety case, suspends the fan and withholds the request; a fan's reply is screened like any fan text |
 | Tenant isolation | **Met** | Another fan and another creator see nothing (404); a non-creator gets 403; a creator without a second factor gets 403 `second_factor_required` |
 | Records that cannot change | **Met** | A version's terms and a decided request are immutable at the database level |
-| Existing suites and the demo | **Met** | §2: worker 381, frontend 144, lint, typecheck, demo e2e 24, and 20 identical demo renders |
-| UI at 375, 768 and 1280 | **Met for the screens; not verified signed in on staging** | §2's browser checks, against fixtures in the dev preview |
+| Existing suites and the demo | **Met, except the demo e2e re-run** | §2: worker 381, frontend 144, lint, typecheck and 20 identical demo renders. The demo suite passed at `2185098`; it has not been re-run since the e2e files changed (doc `docs/testing/01-demo-e2e.md`) |
+| UI at 375, 768 and 1280 | **Met for the screens; not verified signed in on staging** | §2's browser checks, against fixtures in the dev preview. `docs/testing/05-browser-checks.md` covers the signed-in pass |
 | Gate 3's three live-AI criteria | **Carried forward** | Still no key, still $0 spent (doc 11 §5.6 item 26) |
+| The endpoints refuse a caller with no session, live | **Met** | The staging e2e suite against the deployed site: 401 on all four read paths, 403 `cross_origin` then 401 on the state changes |
 
 ## 4. Deviations
 
@@ -199,18 +234,15 @@ were exercised by hand in the preview and behaved as the server's rules describe
 
 ## 5. Open questions for the owner
 
-1. **The staging deploy, the creator account and the signed-in round trip are still
-   pending.** The migration is applied, but until the Worker is deployed and a Clerk
-   creator user with an authenticator is linked to `cr_maya` (the owner signs up; I put
-   the id in a never-committed local seed), the round trip on staging can't run, and
-   these stay "not verified": the signed-in round trip, the signed-in UI check, and the
-   new staging e2e spec.
-2. **Three e2e tests are written for the demo's Director controls** — the fan journey's
-   total, undo and re-click tests drive radio groups that staging's Director (designs 17
-   and 20) doesn't use. They fail in staging mode for that reason, not because of a false
-   claim. They need staging-shaped counterparts, or an explicit demo-only marking. Two
-   more (the entrance ranges, and the new API tests) fail only because a local dev server
-   has no API, and should pass against a deployed staging.
+1. **The creator account is the one thing blocking the round trip.** Staging runs the
+   code and the database is migrated, but `cr_maya.clerk_user_id` is NULL, so no creator
+   session can exist. The owner signs up a Clerk user with an authenticator and links it:
+   `docs/testing/03-creator-account-setup.md`. Until then these stay "not verified": the
+   signed-in round trip, and the signed-in browser check of the creator screens.
+2. **Testing is the owner's from here** (their instruction, 2026-09-20). `docs/testing/`
+   holds the five scripts. The first to run is the demo suite, which has not been run
+   since the e2e files changed. The staging suite passed against the deployed site after
+   those changes.
 3. **Gate 3's live-AI criteria** remain carried forward until OpenRouter approves the
    account and the key is set. Not raised again here.
 4. **The project brief describes intake this phase doesn't collect** — a fan handle, a
@@ -218,6 +250,11 @@ were exercised by hand in the preview and behaved as the server's rules describe
    instructions" generated on approval. Say whether those should become real fields, or
    whether the brief should follow the build.
 5. **Merging `phase-4` to `main`** has not been asked for or done.
+6. **The custom-request path cannot be tested by hand on staging.** A custom request only
+   enters a draft through the AI Director's offer, and the Director is off there without
+   an OpenRouter key. So "a custom request must be priced before approval" is provable
+   only in the worker suite until the key exists. It is not a gap in the rule, which the
+   server enforces either way.
 
 ## 6. Designs needed
 
