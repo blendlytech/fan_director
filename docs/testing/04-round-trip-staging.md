@@ -4,10 +4,11 @@ This is the Gate 4 criterion "a full fan-to-creator round trip works". Everythin
 here happens in a real browser against the deployed staging site, with real Clerk
 sessions and the real staging database.
 
-**Before you start:** doc 03 must be finished — the creator queue has to open for
-you. You also need a **second** account for the fan, signed in somewhere the
-creator is not: two browsers, or one normal window and one private window. Keep
-them side by side; several steps go back and forth.
+**Before you start:** the creator account is already made and linked; its sign-in
+details are in `docs/testing/local-creator-account.md` (git-ignored). You also need
+a **second** account for the fan, signed in somewhere the creator is not: two
+browsers, or one normal window and one private window. Keep them side by side;
+several steps go back and forth.
 
 Write down the request reference ("Request A1D04E21") from step B4. Every later
 step refers to the same request.
@@ -20,7 +21,7 @@ step refers to the same request.
 | --- | --- | --- |
 | A1 | <https://fan-director-studio-staging.blendly.workers.dev> | The site loads and the header badge says **Staging** |
 | A2 | The header, fan window | **Sign in** and **Create account** are offered |
-| A3 | `/creator/requests`, creator window | "Request Queue" opens (doc 03 step 6) |
+| A3 | `/creator/requests`, creator window | "Request Queue" opens, empty (doc 03 §4) |
 
 ---
 

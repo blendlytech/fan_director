@@ -10,8 +10,10 @@ passes end to end against real local D1 in the worker suite, and the screens wer
 in a browser at 375, 768 and 1280 px against fixtures. **Migration 0004 and the Phase 4
 code are both on staging** (deployed 2026-09-20 with the owner's OK, version
 `b5b677f0-74b1-45a2-8567-563e5f3c4c4a`), and the e2e suite passes against the deployed
-site signed out. **The signed-in round trip has not been run**: `cr_maya` still has no
-Clerk creator account linked to it, which the owner will set up. Gate 3's three live-AI
+site signed out. The creator account now exists and `cr_maya` is linked to it, and a
+signed-in call to `/api/creator/commissions` on the deployed site answers 200 with an
+empty queue. **The signed-in round trip through the interface has still not been run**:
+nothing has been sent on staging and `commission` holds 0 rows. Gate 3's three live-AI
 criteria stay carried forward: `OPENROUTER_API_KEY` is still unset and no live AI call
 has been made (spend: $0).
 
@@ -187,15 +189,34 @@ were exercised by hand in the preview and behaved as the server's rules describe
    answers 403 `cross_origin`; `wrangler secret list --env staging` shows
    `CLERK_JWT_KEY`, `CLERK_SECRET_KEY` and `UNSUBSCRIBE_SIGNING_KEY`, and no
    `OPENROUTER_API_KEY`.
-5. **No signed-in run.** `cr_maya.clerk_user_id` is still NULL, so no creator session can
-   exist yet and `commission` still holds 0 rows. `docs/testing/03-creator-account-setup.md`
-   is the owner's next step.
+5. **The creator account, 2026-09-20 (with the owner's OK).** A Clerk user was created
+   through the Backend API with its email pre-verified — a development-instance test
+   identity that needs no mailbox — and `cr_maya.clerk_user_id` was set to it on remote
+   staging (`linked: 1`, `status: active`). No Clerk instance setting was touched. The
+   address and its fixed sign-in code are a working login for the queue, so they are
+   kept in `docs/testing/local-creator-account.md`, which `.gitignore` excludes: this
+   repository is public.
+
+   Verified by signing in as that account through Clerk's Frontend API with the staging
+   origin, then calling the deployed site: `/api/creator/commissions` answers **200**
+   `{"commissions":[],"counts":{}}` and `/api/commissions` **200** `{"commissions":[]}`.
+   The session carried `fva: [0,-1]` — no second factor ever verified — so the waiver in
+   deviation 8 is confirmed working on staging, not merely configured. The two sessions
+   made for the check were revoked afterwards.
+
+   The test identity is right for proving the round trip and wrong for a real creator:
+   it only works on a development instance, and anyone who knows the address can sign in
+   as Maya. Replacing it with a real mailbox is part of the Clerk Pro work
+   (`docs/testing/03-creator-account-setup.md` §1).
+6. **Still no signed-in run through the interface.** `commission` holds 0 rows; nothing
+   has been sent on staging. `docs/testing/04-round-trip-staging.md` is the owner's next
+   step, and it is now unblocked.
 
 ## 3. Completion criteria (doc 10 §8 Phase 4, and the Gate 4 table in the plan)
 
 | Criterion | Status | Evidence |
 | --- | --- | --- |
-| A full fan-to-creator round trip works | **Met in the worker suite; not verified signed in on staging** | `commissions.test.ts` "question → answer → proposal → acceptance → approval → payment reported" on real local D1. Staging now runs the code, but the round trip needs the creator account the owner will make: `docs/testing/04-round-trip-staging.md` |
+| A full fan-to-creator round trip works | **Met in the worker suite; not verified through the interface on staging** | `commissions.test.ts` "question → answer → proposal → acceptance → approval → payment reported" on real local D1. Staging runs the code, the creator account is linked and its queue answers 200 signed in, but no request has been sent through the screens: `docs/testing/04-round-trip-staging.md` |
 | Old versions cannot approve new scope | **Met** | `domain/commission.test.ts`: an older version, an unaccepted version, a changed hash and an unpriced custom request are each refused. `commissions.test.ts`: approving a superseded version returns 409 `version_not_current`, a stale hash 409 `hash_mismatch`, and accepting a stale proposal hash changes nothing |
 | No false payment confirmation | **Met** | "no response claims the fan paid or was charged" (worker); `copy/claims.test.ts` sweeps every sentence of both copy modules for payment and notification claims; the browser check repeats it on the rendered screens. Payment is always the creator's own report, with actor and time recorded, and starts no timer |
 | Duplicate submit, simultaneous tabs | **Met** | The same `clientRequestId` returns the same request; two concurrent submits create exactly one; a stale revision and a locked draft each return 409 |
@@ -245,12 +266,14 @@ were exercised by hand in the preview and behaved as the server's rules describe
 
 ## 5. Open questions for the owner
 
-1. **The creator account is the one thing blocking the round trip.** Staging runs the
-   code and the database is migrated, but `cr_maya.clerk_user_id` is NULL, so no creator
-   session can exist. The owner signs up a Clerk user and links it:
-   `docs/testing/03-creator-account-setup.md`. Until then these stay "not verified": the
-   signed-in round trip, and the signed-in browser check of the creator screens. The
-   account no longer needs an authenticator (§4 deviation 8), and staging already carries that change.
+1. **The round trip is unblocked; running it is the owner's.** The creator account is
+   made and linked and its queue answers 200 signed in (§2 item 5), so
+   `docs/testing/04-round-trip-staging.md` can be run. These stay "not verified" until
+   it is: the round trip through the interface, and the signed-in browser check of the
+   creator screens. One decision is deferred, not open: the creator signs in with a
+   development-instance test identity, which must be swapped for a real mailbox before a
+   real creator uses the site — same piece of work as restoring the second factor when
+   Clerk Pro arrives (§4 deviation 8).
 2. **Testing is the owner's from here** (their instruction, 2026-09-20). `docs/testing/`
    holds the five scripts. The first to run is the demo suite, which has not been run
    since the e2e files changed. The staging suite passed against the deployed site after
@@ -289,5 +312,6 @@ were exercised by hand in the preview and behaved as the server's rules describe
 | Staging ceiling | `AI_BUDGET_CEILING_MICROUSD` = 3,000,000 ($3), unchanged |
 | `ADULT_CATALOG_ENABLED` | `false` in every environment, unchanged |
 
-**Gate 4 stops here.** The staging deploy, the creator account and the signed-in round
-trip need the owner's go-ahead.
+**Gate 4 stops here.** The staging deploy and the creator account were done with the
+owner's go-ahead. What remains is the owner's own: the round trip and the browser
+checks in `docs/testing/`, and then the decision to merge.

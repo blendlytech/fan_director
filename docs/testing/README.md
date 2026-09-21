@@ -10,11 +10,11 @@ Read them in this order:
 | --- | --- | --- | --- |
 | 01 | [Demo e2e suite](01-demo-e2e.md) | The automated suite against the public demo build | ~3 min |
 | 02 | [Staging e2e suite](02-staging-e2e.md) | The same suite against the deployed staging site | ~3 min |
-| 03 | [Creator account setup](03-creator-account-setup.md) | One-time: a Clerk creator account linked to `cr_maya` (no authenticator needed) | ~10 min |
+| 03 | [Creator account setup](03-creator-account-setup.md) | **Done.** The creator account and how to sign in as it | ~2 min to read |
 | 04 | [The Phase 4 round trip](04-round-trip-staging.md) | Fan sends → creator reviews → approval → payment, by hand on staging | ~30 min |
 | 05 | [Browser checks](05-browser-checks.md) | The Phase 4 screens at 375, 768 and 1280 px | ~20 min |
 
-Do 03 before 04: the round trip's creator half cannot run without it.
+Read 03 before 04: it holds the creator's sign-in details, which the round trip needs.
 
 ## What is already true, and what isn't
 
@@ -29,13 +29,16 @@ Do 03 before 04: the round trip's creator half cannot run without it.
   Migration 0004 is applied to the remote staging D1 (`commission`,
   `commission_version`, `commission_message`, `draft.submitted_at`).
 - The staging e2e suite passed against the deployed site: 24 passed, 5 skipped.
+- The creator account exists and `cr_maya` is linked to it. Signed in as that
+  account, `/api/creator/commissions` and `/api/commissions` both answer 200 on the
+  deployed site, with a session carrying no verified second factor (doc 03).
 
 **Not verified — these documents exist to close them:**
 
 - The demo suite has not been re-run since the e2e files were last edited (doc 01).
-- No signed-in run of anything on staging: no request has ever been sent there, and
-  `commission` holds 0 rows (docs 03, 04).
-- No signed-in browser check of the creator screens (doc 05).
+- Nothing has been exercised through the interface while signed in. No request has
+  ever been sent on staging and `commission` holds 0 rows (doc 04).
+- No signed-in browser check of the creator screens (docs 03 §4, 05).
 
 ## The environment
 
@@ -44,7 +47,7 @@ Do 03 before 04: the round trip's creator half cannot run without it.
 | Staging site | <https://fan-director-studio-staging.blendly.workers.dev> |
 | Clerk instance | `superb-crawdad-9550` (development) |
 | Staging D1 | `fan-director-staging` |
-| Pilot creator | `cr_maya` ("Maya") |
+| Pilot creator | `cr_maya` ("Maya"), linked. Sign-in details: `local-creator-account.md`, git-ignored |
 | Public demo | Untouched by any of this. Never deploy to it while testing |
 
 ## Three traps that have already cost time
