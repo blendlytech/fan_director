@@ -26,3 +26,5 @@ mcp-gemini-server/
 
 # Throwaway builds used for comparisons
 frontend/dist-*/
+# Stray local D1 state from a mis-pathed --persist-to. The real one is C:\fdsw.
+worker/fdsw/
