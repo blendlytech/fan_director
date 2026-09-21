@@ -41,7 +41,7 @@ You are a coding agent joining **Fan Director Studio**, a staging web app on Clo
   - Signed-in calls need `Authorization: Bearer <Clerk session token>`, from `useAuth().getToken()`. Cookies are never read.
   - Every POST must be same-origin.
 - **The staging boutique's creator id is `cr_maya`.** Consent wording version `news-v1` is seeded.
-- **Staging test fans:** `fan_a+clerk_test@example.com` and `fan_c+clerk_test@example.com` (Clerk test emails; the verification code is `424242`).
+- **Staging test fans:** the accounts named here were deleted on 2026-09-20 — this repository is public, and a Clerk test address plus its fixed code is a working sign-in. The current fan and creator accounts are in `docs/testing/local-test-accounts.md`, which `.gitignore` excludes. Never commit an address.
   - Test creators: `cr_staging_a` and `cr_staging_b`.
   - `worker/scripts/staging-checklist.mjs` signs in by Clerk sign-in ticket (`--as <email>`, development key only).
   - `worker/scripts/issue-unsubscribe-token.mjs` makes unsubscribe tokens, with the key in the environment. Ask the owner for it; never print it.

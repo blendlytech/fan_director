@@ -6,12 +6,12 @@ sign in, and §4 if you want to see it for yourself before starting doc 04.
 
 **The sign-in details are not in this repository.** It is public, and on a Clerk
 development instance an address plus its fixed code is a working login for the creator
-queue. They are in `docs/testing/local-creator-account.md` on the owner's machine,
+queue. They are in `docs/testing/local-test-accounts.md` on the owner's machine,
 which `.gitignore` keeps out of every commit.
 
 | Thing | Where |
 | --- | --- |
-| Creator email and sign-in code | `local-creator-account.md`, next to this file |
+| Creator email and sign-in code | `local-test-accounts.md`, next to this file |
 | Database row | `cr_maya`, `status: active`, `linked: 1` |
 
 > **No authenticator app is needed** for the first creators (doc 11 §5.6 item 27,
@@ -31,15 +31,15 @@ which `.gitignore` keeps out of every commit.
 1. Open <https://fan-director-studio-staging.blendly.workers.dev> in a browser where
    you are **not** signed in as a fan. A private window is easiest, and you will want
    a second one for the fan side of doc 04 — one Clerk user cannot be both sides.
-2. Sign in with the email from `local-creator-account.md`.
+2. Sign in with the email from `local-test-accounts.md`.
 3. When Clerk asks for the emailed code, type the code from that same file. Nothing is
    sent to a real mailbox and nothing arrives; the code is fixed.
 
 ### Why that address works, and what it costs
 
 The creator's address is a **test identity** on a Clerk development instance: it skips
-real email delivery and always takes one fixed code. The three fan accounts already on
-the instance use the same trick.
+real email delivery and always takes one fixed code. The fan account for doc 04 uses
+the same trick, and is in the same file.
 
 It is the right tool for proving the round trip today and the wrong one for a real
 creator. It only works on a development instance, so it will not survive the move to
@@ -73,7 +73,7 @@ npx wrangler d1 execute DB --env staging --remote --json --command "SELECT id, d
 Expected: `"display_name": "Maya"`, `"status": "active"`, `"linked": 1`.
 
 To hand the creator role to a different account, run the `UPDATE` from §2 with that
-user's Clerk id, then update `local-creator-account.md`. Only one Clerk user can be
+user's Clerk id, then update `local-test-accounts.md`. Only one Clerk user can be
 Maya at a time — the column is a single value, so the previous account loses access
 the moment the new one is set, which is also how a leaked address is closed off.
 

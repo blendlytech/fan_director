@@ -194,7 +194,7 @@ were exercised by hand in the preview and behaved as the server's rules describe
    identity that needs no mailbox — and `cr_maya.clerk_user_id` was set to it on remote
    staging (`linked: 1`, `status: active`). No Clerk instance setting was touched. The
    address and its fixed sign-in code are a working login for the queue, so they are
-   kept in `docs/testing/local-creator-account.md`, which `.gitignore` excludes: this
+   kept in `docs/testing/local-test-accounts.md`, which `.gitignore` excludes: this
    repository is public.
 
    Verified by signing in as that account through Clerk's Frontend API with the staging
@@ -208,9 +208,31 @@ were exercised by hand in the preview and behaved as the server's rules describe
    it only works on a development instance, and anyone who knows the address can sign in
    as Maya. Replacing it with a real mailbox is part of the Clerk Pro work
    (`docs/testing/03-creator-account-setup.md` §1).
-6. **Still no signed-in run through the interface.** `commission` holds 0 rows; nothing
+6. **Test accounts rotated, 2026-09-20 (owner: "push and rotate as you think").**
+   Checking the creator's address against the repository showed that this repository is
+   **public** and that the Phase 1–3 fan accounts `fan_a`, `fan_b` and `fan_c` were
+   already committed in four files, together with the fixed code. On a Clerk development
+   instance that pair is a working sign-in, so those were live logins, not fixtures.
+
+   The three Clerk users were **deleted**, and one fan account with a random local part
+   was created for the round trip. Their `fan` rows and 3 drafts were left in the staging
+   database: Clerk never reissues a deleted user id, so those rows can no longer be
+   authenticated as, and re-registering an old address yields a different id and a
+   different, empty fan. `commission` was 0 rows throughout, so nothing of substance was
+   ever behind them.
+
+   The new fan was verified the same way as the creator: `/api/commissions` **200**
+   `{"commissions":[]}`, and `/api/creator/commissions` **403** `not_a_creator` —
+   confirming the creator boundary from the fan's side on the deployed site. Sessions
+   revoked afterwards.
+
+   No code referenced the deleted accounts (`git grep` across `worker/scripts` and
+   `frontend/e2e` is empty); only prose did. The Phase 1 and Phase 2 reports still name
+   them, deliberately, as the record of runs that did happen — `docs/testing/README.md`
+   and the two handoff prompts say they are gone.
+7. **Still no signed-in run through the interface.** `commission` holds 0 rows; nothing
    has been sent on staging. `docs/testing/04-round-trip-staging.md` is the owner's next
-   step, and it is now unblocked.
+   step, and it is now unblocked on both sides.
 
 ## 3. Completion criteria (doc 10 §8 Phase 4, and the Gate 4 table in the plan)
 

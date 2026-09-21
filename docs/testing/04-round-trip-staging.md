@@ -4,11 +4,15 @@ This is the Gate 4 criterion "a full fan-to-creator round trip works". Everythin
 here happens in a real browser against the deployed staging site, with real Clerk
 sessions and the real staging database.
 
-**Before you start:** the creator account is already made and linked; its sign-in
-details are in `docs/testing/local-creator-account.md` (git-ignored). You also need
-a **second** account for the fan, signed in somewhere the creator is not: two
-browsers, or one normal window and one private window. Keep them side by side;
-several steps go back and forth.
+**Before you start:** both accounts already exist. The creator is made and linked to
+`cr_maya`, and a fan account is ready; sign-in details for both are in
+`docs/testing/local-test-accounts.md` (git-ignored, because this repository is
+public). Sign in as them **in separate browsers**, or one normal window and one
+private window — one Clerk user cannot be both sides, and several steps go back and
+forth between them.
+
+The old `fan_a`/`fan_b`/`fan_c` accounts from Phases 1–3 were deleted on 2026-09-20:
+their addresses had been published in this repository. Use the fan in the local file.
 
 Write down the request reference ("Request A1D04E21") from step B4. Every later
 step refers to the same request.
@@ -27,7 +31,8 @@ step refers to the same request.
 
 ## Part B — The fan builds and sends
 
-**B1.** In the fan window, sign in (email link or code) with the fan's account.
+**B1.** In the fan window, sign in with the fan account from
+`local-test-accounts.md`. The code is the same fixed one; nothing is emailed.
 
 **B2.** From the entrance, press **Begin Your Vision — Vintage Lounge Greeting**.
 You land on `/ai-director`.

@@ -47,10 +47,20 @@ Read 03 before 04: it holds the creator's sign-in details, which the round trip 
 | Staging site | <https://fan-director-studio-staging.blendly.workers.dev> |
 | Clerk instance | `superb-crawdad-9550` (development) |
 | Staging D1 | `fan-director-staging` |
-| Pilot creator | `cr_maya` ("Maya"), linked. Sign-in details: `local-creator-account.md`, git-ignored |
+| Pilot creator | `cr_maya` ("Maya"), linked and verified |
+| Test accounts | Creator and fan sign-ins: `local-test-accounts.md`, git-ignored |
 | Public demo | Untouched by any of this. Never deploy to it while testing |
 
-## Three traps that have already cost time
+**This repository is public.** On a Clerk development instance an address plus its
+fixed code is a working sign-in, so no test account's address belongs in a commit.
+The Phase 1–3 fan accounts `fan_a`/`fan_b`/`fan_c` had been committed and were
+deleted from Clerk on 2026-09-20; the reports that name them are left as the record
+of those runs, but the accounts no longer exist. Before committing anything that
+names an account, run `git grep -n "clerk_test\|424242"`. It should return only the
+Phase 1 and Phase 2 reports and this paragraph; a hit anywhere else is an account
+about to be published.
+
+## Four traps that have already cost time
 
 1. **`npm run test:e2e` reuses a dev server that is already running.** If one is up
    with a Clerk key, the demo suite silently runs in staging mode and fails on copy
@@ -59,6 +69,9 @@ Read 03 before 04: it holds the creator's sign-in details, which the round trip 
    frontend before deploying, or the old bundle ships with the new Worker.
 3. **Photos are dead links.** Three of the four reference photos 404, by design. A
    missing image is not a test failure; the app draws its own fallback.
+4. **The older docs name accounts that are gone.** `fan_a`/`fan_b`/`fan_c` appear in
+   the Phase 1–3 reports and handoff prompts. They were deleted; use the fan in
+   `local-test-accounts.md`.
 
 ## When something fails
 
