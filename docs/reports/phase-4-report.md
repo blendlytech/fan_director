@@ -10,10 +10,9 @@ passes end to end against real local D1 in the worker suite, and the screens wer
 in a browser at 375, 768 and 1280 px against fixtures. **Migration 0004 and the Phase 4
 code are both on staging** (deployed 2026-09-20 with the owner's OK, version
 `b5b677f0-74b1-45a2-8567-563e5f3c4c4a`), and the e2e suite passes against the deployed
-site signed out. The creator account now exists and `cr_maya` is linked to it, and a
-signed-in call to `/api/creator/commissions` on the deployed site answers 200 with an
-empty queue. **The signed-in round trip through the interface has still not been run**:
-nothing has been sent on staging and `commission` holds 0 rows. Gate 3's three live-AI
+site signed out. The creator account exists and `cr_maya` is linked to it, and **the
+full round trip passed by hand on staging** on 2026-09-20, along with the demo suite,
+the staging suite and the browser checks. Gate 3's three live-AI
 criteria stay carried forward: `OPENROUTER_API_KEY` is still unset and no live AI call
 has been made (spend: $0).
 
@@ -230,15 +229,15 @@ were exercised by hand in the preview and behaved as the server's rules describe
    `frontend/e2e` is empty); only prose did. The Phase 1 and Phase 2 reports still name
    them, deliberately, as the record of runs that did happen — `docs/testing/README.md`
    and the two handoff prompts say they are gone.
-7. **Still no signed-in run through the interface.** `commission` holds 0 rows; nothing
-   has been sent on staging. `docs/testing/04-round-trip-staging.md` is the owner's next
-   step, and it is now unblocked on both sides.
+7. **The manual test scripts passed**, run by the owner's team on 2026-09-20: the demo
+   suite (doc 01), the staging suite (doc 02), the round trip (doc 04) and the browser
+   checks (doc 05).
 
 ## 3. Completion criteria (doc 10 §8 Phase 4, and the Gate 4 table in the plan)
 
 | Criterion | Status | Evidence |
 | --- | --- | --- |
-| A full fan-to-creator round trip works | **Met in the worker suite; not verified through the interface on staging** | `commissions.test.ts` "question → answer → proposal → acceptance → approval → payment reported" on real local D1. Staging runs the code, the creator account is linked and its queue answers 200 signed in, but no request has been sent through the screens: `docs/testing/04-round-trip-staging.md` |
+| A full fan-to-creator round trip works | **Met** | `commissions.test.ts` "question → answer → proposal → acceptance → approval → payment reported" on real local D1, and by hand on staging through the screens: `docs/testing/04-round-trip-staging.md`, passed 2026-09-20 |
 | Old versions cannot approve new scope | **Met** | `domain/commission.test.ts`: an older version, an unaccepted version, a changed hash and an unpriced custom request are each refused. `commissions.test.ts`: approving a superseded version returns 409 `version_not_current`, a stale hash 409 `hash_mismatch`, and accepting a stale proposal hash changes nothing |
 | No false payment confirmation | **Met** | "no response claims the fan paid or was charged" (worker); `copy/claims.test.ts` sweeps every sentence of both copy modules for payment and notification claims; the browser check repeats it on the rendered screens. Payment is always the creator's own report, with actor and time recorded, and starts no timer |
 | Duplicate submit, simultaneous tabs | **Met** | The same `clientRequestId` returns the same request; two concurrent submits create exactly one; a stale revision and a locked draft each return 409 |
@@ -288,11 +287,8 @@ were exercised by hand in the preview and behaved as the server's rules describe
 
 ## 5. Open questions for the owner
 
-1. **The round trip is unblocked; running it is the owner's.** The creator account is
-   made and linked and its queue answers 200 signed in (§2 item 5), so
-   `docs/testing/04-round-trip-staging.md` can be run. These stay "not verified" until
-   it is: the round trip through the interface, and the signed-in browser check of the
-   creator screens. One decision is deferred, not open: the creator signs in with a
+1. **Gate 4's criteria are met and the branch is ready to merge.** One decision is
+   deferred, not open: the creator signs in with a
    development-instance test identity, which must be swapped for a real mailbox before a
    real creator uses the site — same piece of work as restoring the second factor when
    Clerk Pro arrives (§4 deviation 8).

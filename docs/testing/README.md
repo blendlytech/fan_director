@@ -33,12 +33,10 @@ Read 03 before 04: it holds the creator's sign-in details, which the round trip 
   account, `/api/creator/commissions` and `/api/commissions` both answer 200 on the
   deployed site, with a session carrying no verified second factor (doc 03).
 
-**Not verified — these documents exist to close them:**
-
-- The demo suite has not been re-run since the e2e files were last edited (doc 01).
-- Nothing has been exercised through the interface while signed in. No request has
-  ever been sent on staging and `commission` holds 0 rows (doc 04).
-- No signed-in browser check of the creator screens (docs 03 §4, 05).
+**All five scripts passed on 2026-09-20**, run by the owner's team: the demo suite,
+the staging suite, the creator account, the full round trip on staging and the browser
+checks at 375, 768 and 1280 px. Re-run them after any change to the screens, the
+commission endpoints or the e2e files.
 
 ## The environment
 
