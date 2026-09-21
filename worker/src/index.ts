@@ -22,7 +22,7 @@ import { acceptCatalogVersion, getDraft, getDraftQuote, getLatestDraft, putDraft
 import { openRouterProviders } from './ai/openrouter'
 import { acceptSuggestion, declineSuggestion, getDirector, postDirectorTurn } from './ai/pipeline'
 import { purgeExpired } from './ai/retention'
-import { ApiError, assertSameOrigin, errorResponse, json, MUTATING } from './http'
+import { ApiError, assertSameOrigin, canonicalRedirect, errorResponse, json, MUTATING } from './http'
 import type { Deps, Env } from './types'
 import { getUnsubscribe, postUnsubscribe } from './unsubscribe'
 import { assertId } from './validation'
@@ -285,6 +285,12 @@ export async function handleApi(request: Request, env: Env, deps: Deps): Promise
 export function createHandler(makeDeps: (env: Env) => Deps): ExportedHandler<Env> {
   return {
     async fetch(request, env) {
+      // Before anything else: the app is served from one canonical host only,
+      // so no browser ever gets a page it would then post from a second origin
+      // (see canonicalRedirect, and assertSameOrigin below it).
+      const redirect = canonicalRedirect(request, env.APP_ORIGIN)
+      if (redirect) return redirect
+
       const url = new URL(request.url)
       if (url.pathname === '/api' || url.pathname.startsWith('/api/')) {
         return handleApi(request, env, makeDeps(env))

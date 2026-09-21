@@ -61,6 +61,10 @@ node scripts/smoke.mjs http://localhost:8787
 Every response is JSON with `Cache-Control: no-store, private`. Errors are
 `{ "error": "<code>" }` with a stable code and nothing echoed from the request.
 Every `POST`/`PUT` must carry `Origin` equal to `APP_ORIGIN`, otherwise `403 cross_origin`.
+`APP_ORIGIN` is one string, not a list. What makes that safe once the Worker answers
+on several hostnames is `canonicalRedirect` in `src/http.ts`: anything arriving on
+another hostname is redirected to `APP_ORIGIN` before it is served, so a browser is
+never handed a page it would then post from a second origin.
 Signed-in routes need `Authorization: Bearer <Clerk session token>`; cookies are never read for sign-in.
 
 | Method | Path | Who | Result |
@@ -219,6 +223,15 @@ Run the commands from `worker/` unless a step says otherwise.
    `wrangler.jsonc` under `env.staging`.
 4. **Origins:** set the staging `APP_ORIGIN` and `CLERK_AUTHORIZED_PARTIES` to the
    staging URL, and `CLERK_ISSUER` to the Frontend API URL. None of these are secrets.
+
+   **Phase 5 (2026-09-20):** the owner chose to serve staging from
+   `https://www.studiolens.me`, with the apex and the workers.dev host redirecting
+   to it and `APP_ORIGIN` staying a single canonical string (option (a)). The code
+   is in place, but **the cutover has not happened**: `studiolens.me` is registered
+   and is not yet a zone on the Cloudflare account, so `APP_ORIGIN` still names the
+   workers.dev host. The three cutover steps are written out in the comment block
+   in `wrangler.jsonc` under `env.staging`, and the test script is
+   `docs/testing/06-custom-domain.md`.
 5. **Secrets**, only ever with `wrangler secret put`, never in files:
    ```sh
    npx wrangler secret put CLERK_JWT_KEY --env staging

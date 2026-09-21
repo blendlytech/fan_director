@@ -5,7 +5,13 @@ export interface Env {
   ASSETS: Fetcher
 
   ENVIRONMENT: 'development' | 'staging' | 'test'
-  /** The site's own origin, e.g. https://fan-director-studio-staging.example.workers.dev */
+  /**
+   * The site's one canonical origin, e.g. https://www.studiolens.me. Two things
+   * derive from it and must not drift apart: `assertSameOrigin` rejects a
+   * mutating request whose `Origin` is anything else, and `canonicalRedirect`
+   * sends every request arriving on another hostname here first, so no browser
+   * is ever handed a page it would post from a second origin.
+   */
   APP_ORIGIN: string
   /** Clerk Frontend API URL, the session token's `iss`. */
   CLERK_ISSUER: string

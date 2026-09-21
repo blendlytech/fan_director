@@ -45,8 +45,28 @@
   "env": {
     "staging": {
       "name": "fan-director-studio-staging",
+      // Stays true: the owner chose to keep the old hostname alive (2026-09-20).
+      // It answers, and `canonicalRedirect` in src/http.ts sends it to
+      // APP_ORIGIN, so every doc and bookmark still lands somewhere real.
       "workers_dev": true,
       "preview_urls": false,
+      // ---------------------------------------------------------------------
+      // CUSTOM DOMAIN — NOT YET ACTIVE. studiolens.me is registered but is not
+      // a zone on this Cloudflare account (checked 2026-09-20: the account has
+      // zero zones). Deploying with the block below while that is true FAILS.
+      //
+      // The whole cutover, once the zone is added and its nameservers resolve:
+      //   1. uncomment "routes" below,
+      //   2. change APP_ORIGIN to https://www.studiolens.me,
+      //   3. npm run build --prefix frontend, then deploy env staging.
+      // The apex is listed so studiolens.me resolves; canonicalRedirect sends
+      // it to www, so no separate redirect rule is needed.
+      //
+      // "routes": [
+      //   { "pattern": "www.studiolens.me", "custom_domain": true },
+      //   { "pattern": "studiolens.me", "custom_domain": true }
+      // ],
+      // ---------------------------------------------------------------------
       "observability": { "enabled": false },
       "secrets": { "required": ["CLERK_JWT_KEY", "CLERK_SECRET_KEY", "UNSUBSCRIBE_SIGNING_KEY"] },
       "assets": {
@@ -65,9 +85,17 @@
       ],
       "vars": {
         "ENVIRONMENT": "staging",
+        // STILL THE OLD HOST, deliberately: the studiolens.me zone does not
+        // exist yet, and pointing this at a hostname that does not resolve
+        // would send every visitor of the working staging site nowhere.
+        // This is step 2 of the cutover noted above — one line.
         "APP_ORIGIN": "https://fan-director-studio-staging.blendly.workers.dev",
         "CLERK_ISSUER": "https://superb-crawdad-9550.clerk.accounts.dev",
-        "CLERK_AUTHORIZED_PARTIES": "https://fan-director-studio-staging.blendly.workers.dev",
+        // Both hosts during the cutover; drop the workers.dev entry once the
+        // domain has been live long enough that no old session is still going.
+        // An origin nothing can be served from yet is inert: `azp` is only ever
+        // compared for equality (src/auth.ts), never matched by suffix.
+        "CLERK_AUTHORIZED_PARTIES": "https://fan-director-studio-staging.blendly.workers.dev,https://www.studiolens.me",
         // Phase 3: the owner OK'd the AI Director on staging (2026-09-18). Adult stays off.
         "AI_ENABLED": "true",
         "ADULT_CATALOG_ENABLED": "false",

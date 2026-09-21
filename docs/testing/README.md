@@ -13,8 +13,13 @@ Read them in this order:
 | 03 | [Creator account setup](03-creator-account-setup.md) | **Done.** The creator account and how to sign in as it | ~2 min to read |
 | 04 | [The Phase 4 round trip](04-round-trip-staging.md) | Fan sends → creator reviews → approval → payment, by hand on staging | ~30 min |
 | 05 | [Browser checks](05-browser-checks.md) | The Phase 4 screens at 375, 768 and 1280 px | ~20 min |
+| 06 | [The custom domain](06-custom-domain.md) | **Not runnable yet.** Staging on `www.studiolens.me` once the domain is live | ~15 min |
 
 Read 03 before 04: it holds the creator's sign-in details, which the round trip needs.
+
+Doc 06 is written and waiting. It cannot be run until `studiolens.me` is added to
+the Cloudflare account and the cutover is deployed — both are set out at the top of
+that document, and both are the owner's to do.
 
 ## What is already true, and what isn't
 
@@ -42,7 +47,7 @@ commission endpoints or the e2e files.
 
 | Thing | Value |
 | --- | --- |
-| Staging site | <https://fan-director-studio-staging.blendly.workers.dev> |
+| Staging site | <https://fan-director-studio-staging.blendly.workers.dev> — still the live one; the move to `www.studiolens.me` is built but not deployed (doc 06) |
 | Clerk instance | `superb-crawdad-9550` (development) |
 | Staging D1 | `fan-director-staging` |
 | Pilot creator | `cr_maya` ("Maya"), linked and verified |
