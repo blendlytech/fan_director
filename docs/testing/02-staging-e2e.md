@@ -5,7 +5,9 @@ proves two things: staging never borrows the demo's disclaimers, and every
 commission endpoint refuses a caller with no session.
 
 **Expected: 24 passed, 5 skipped, 0 failed.** This exact result was seen on
-2026-09-20 against version `b5b677f0-74b1-45a2-8567-563e5f3c4c4a`.
+2026-09-20 against version `b5b677f0-74b1-45a2-8567-563e5f3c4c4a`; the current
+version is `c0d02366-82cd-422e-b250-859133692335`, which only changes the creator
+second-factor rule.
 
 ## 1. Run it
 

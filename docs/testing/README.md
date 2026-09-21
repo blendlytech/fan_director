@@ -24,7 +24,8 @@ Do 03 before 04: the round trip's creator half cannot run without it.
   (at commit `2185098`).
 - The public demo's rendered HTML is identical to the previous commit on 10 routes
   at two widths; the CSS gained four unused utility rules.
-- Staging is deployed with the Phase 4 code. Version `b5b677f0-74b1-45a2-8567-563e5f3c4c4a`.
+- Staging is deployed with the Phase 4 code and the second-factor waiver. Version
+  `c0d02366-82cd-422e-b250-859133692335`.
   Migration 0004 is applied to the remote staging D1 (`commission`,
   `commission_version`, `commission_message`, `draft.submitted_at`).
 - The staging e2e suite passed against the deployed site: 24 passed, 5 skipped.

@@ -18,7 +18,8 @@ creator screens. This closes that.
 > whoever can read that inbox can open the queue, read fans' private requests and
 > approve commissions — so pick the mailbox with that in mind. And **the exemption
 > only applies once staging is deployed with it**; if the site still asks you for an
-> authenticator code, the deploy carrying this change has not happened yet.
+> authenticator code, the deploy carrying this change has not happened yet. Staging
+> carries it as of version `c0d02366-82cd-422e-b250-859133692335`.
 >
 > Do not change any Clerk instance setting. The authenticator stays available and
 > SMS stays off; this is our own Worker's rule, not Clerk's.

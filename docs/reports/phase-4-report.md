@@ -1,6 +1,6 @@
 # Phase 4 report: submission and creator review (Gate 4)
 
-Branch `phase-4`, code at `2185098`; staging version `b5b677f0-74b1-45a2-8567-563e5f3c4c4a`.
+Branch `phase-4`, code at `0460836`; staging version `c0d02366-82cd-422e-b250-859133692335`.
 2026-09-20. Format: doc 11 §9.
 Nothing below is described as working unless it was run. "Not verified" means it wasn't.
 
@@ -241,7 +241,7 @@ were exercised by hand in the preview and behaved as the server's rules describe
    refusals under it, and that any other value still demands a second factor.
    `staging-guard.mjs` refuses a deploy unless the value is one of the two words, and
    prints what waiving it costs: a creator account is then only as safe as its mailbox.
-   **Staging needs one more deploy for this to take effect.**
+   Staging was redeployed for this: version `c0d02366-82cd-422e-b250-859133692335`.
 
 ## 5. Open questions for the owner
 
@@ -250,8 +250,7 @@ were exercised by hand in the preview and behaved as the server's rules describe
    session can exist. The owner signs up a Clerk user and links it:
    `docs/testing/03-creator-account-setup.md`. Until then these stay "not verified": the
    signed-in round trip, and the signed-in browser check of the creator screens. The
-   account no longer needs an authenticator (§4 deviation 8), but staging must be
-   deployed again for that to take effect.
+   account no longer needs an authenticator (§4 deviation 8), and staging already carries that change.
 2. **Testing is the owner's from here** (their instruction, 2026-09-20). `docs/testing/`
    holds the five scripts. The first to run is the demo suite, which has not been run
    since the e2e files changed. The staging suite passed against the deployed site after
