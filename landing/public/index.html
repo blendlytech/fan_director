@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fan Director Studio — custom requests, already scoped</title>
+    <meta
+      name="description"
+      content="A boutique link for creators. Fans plan their custom video from your menu, at your prices, inside your limits. You approve every request. Payment stays on your platform."
+    />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      /* Tokens from docs/specs/02-design-system.md */
+      :root {
+        --bg: #fdf8f3;
+        --panel: #ffffff;
+        --secondary: #f5f0eb;
+        --text: #302720;
+        --muted: #70625c;
+        --divider: #ded3cb;
+        --rose: #e4a4bd;
+        --deeprose: #84485d;
+        --success: #8eb486;
+        --shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+        --radius: 12px;
+        --serif: 'Cormorant Garamond', Georgia, serif;
+        --sans: 'Inter', system-ui, -apple-system, sans-serif;
+      }
+      *, *::before, *::after { box-sizing: border-box; }
+      html { scroll-behavior: smooth; }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--text);
+        font: 400 16px/1.5 var(--sans);
+        -webkit-font-smoothing: antialiased;
+      }
+      h1, h2, h3 { font-family: var(--serif); font-weight: 600; line-height: 1.15; letter-spacing: -0.01em; margin: 0; }
+      p { margin: 0; }
+      a { color: inherit; }
+      :focus-visible { outline: 2px solid var(--text); outline-offset: 2px; border-radius: 4px; }
+
+      .wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+      @media (min-width: 768px) { .wrap { padding: 0 32px; } }
+
+      .skip { position: absolute; left: -9999px; }
+      .skip:focus { left: 16px; top: 16px; background: var(--panel); padding: 8px 12px; z-index: 10; }
+
+      .label { font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--deeprose); }
+      .muted { color: var(--muted); }
+
+      .btn {
+        display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+        min-height: 48px; padding: 0 22px; border-radius: var(--radius);
+        font: 500 15px/1 var(--sans); text-decoration: none; cursor: pointer;
+        transition: background-color 160ms ease-out, border-color 160ms ease-out;
+      }
+      .btn-primary { background: var(--text); color: var(--bg); border: 1px solid var(--text); }
+      .btn-primary:hover { background: var(--deeprose); border-color: var(--deeprose); }
+      .btn-secondary { background: var(--panel); color: var(--text); border: 1px solid var(--divider); }
+      .btn-secondary:hover { border-color: var(--text); }
+
+      /* Header */
+      header { border-bottom: 1px solid var(--divider); background: rgba(253, 248, 243, 0.92); position: sticky; top: 0; z-index: 5; backdrop-filter: blur(8px); }
+      .bar { display: flex; align-items: center; justify-content: space-between; min-height: 68px; gap: 16px; }
+      .brand { font-family: var(--serif); font-size: 24px; font-weight: 600; text-decoration: none; }
+      nav ul { display: none; list-style: none; margin: 0; padding: 0; gap: 28px; }
+      nav a { font-size: 14px; font-weight: 500; text-decoration: none; }
+      nav a:hover { color: var(--deeprose); }
+      @media (min-width: 860px) { nav ul { display: flex; } }
+      .bar .btn { min-height: 44px; padding: 0 16px; font-size: 14px; }
+
+      /* Hero */
+      .hero { padding: 56px 0 72px; display: grid; gap: 48px; align-items: center; }
+      @media (min-width: 960px) { .hero { grid-template-columns: 1.1fr 0.9fr; padding: 88px 0 104px; } }
+      .hero h1 { font-size: clamp(40px, 6vw, 60px); margin: 14px 0 20px; }
+      .hero .lede { font-size: 18px; color: var(--muted); max-width: 34em; }
+      .cta-row { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+      .offer-line { margin-top: 18px; font-size: 14px; color: var(--muted); }
+      .offer-line strong { color: var(--text); font-weight: 600; }
+
+      /* Example Scene Card */
+      .card {
+        background: var(--panel); border: 1px solid var(--divider); border-radius: var(--radius);
+        box-shadow: var(--shadow); padding: 24px;
+      }
+      @media (min-width: 768px) { .card { padding: 32px; } }
+      .scene-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 4px; }
+      .scene-head h2 { font-size: 28px; }
+      .tag { font-size: 12px; padding: 3px 8px; border-radius: 6px; background: var(--secondary); border: 1px solid var(--divider); color: var(--muted); white-space: nowrap; }
+      .lines { list-style: none; margin: 20px 0 0; padding: 0; }
+      .lines li { display: flex; justify-content: space-between; gap: 16px; padding: 12px 0; border-top: 1px solid var(--divider); font-size: 15px; }
+      .lines li span:last-child { font-variant-numeric: tabular-nums; }
+      .total { display: flex; justify-content: space-between; padding-top: 14px; border-top: 1px solid var(--text); font-weight: 600; }
+      .total span:last-child { font-family: var(--serif); font-size: 26px; font-variant-numeric: tabular-nums; }
+      .fineprint { font-size: 12px; color: var(--muted); margin-top: 8px; }
+      .decisions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 22px; }
+      .decisions span {
+        display: flex; align-items: center; justify-content: center; min-height: 40px;
+        border: 1px solid var(--divider); border-radius: 10px; font-size: 13px; font-weight: 500; color: var(--muted);
+      }
+      .decisions span:first-child { background: var(--text); border-color: var(--text); color: var(--bg); }
+
+      /* Sections */
+      section { padding: 72px 0; }
+      .band { background: var(--panel); border-top: 1px solid var(--divider); border-bottom: 1px solid var(--divider); }
+      .section-head { max-width: 40em; margin-bottom: 40px; }
+      .section-head h2 { font-size: clamp(30px, 4vw, 40px); margin-top: 10px; }
+      .section-head p { margin-top: 14px; color: var(--muted); font-size: 17px; }
+
+      .grid-3 { display: grid; gap: 16px; }
+      @media (min-width: 768px) { .grid-3 { grid-template-columns: repeat(3, 1fr); gap: 24px; } }
+      .pain h3 { font-size: 24px; margin-bottom: 8px; }
+      .pain p { color: var(--muted); }
+
+      .steps { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; counter-reset: step; }
+      @media (min-width: 768px) { .steps { grid-template-columns: repeat(2, 1fr); gap: 24px; } }
+      @media (min-width: 1040px) { .steps { grid-template-columns: repeat(4, 1fr); } }
+      .steps li { counter-increment: step; }
+      .steps li::before {
+        content: counter(step); display: inline-flex; align-items: center; justify-content: center;
+        width: 36px; height: 36px; border-radius: 50%; background: var(--secondary); border: 1px solid var(--divider);
+        font-family: var(--serif); font-size: 20px; font-weight: 600; margin-bottom: 14px;
+      }
+      .steps h3 { font-size: 22px; margin-bottom: 6px; }
+      .steps p { color: var(--muted); font-size: 15px; }
+
+      .control { display: grid; gap: 0; border-top: 1px solid var(--divider); }
+      @media (min-width: 768px) { .control { grid-template-columns: 1fr 1fr; column-gap: 48px; } }
+      .control div { padding: 20px 0; border-bottom: 1px solid var(--divider); }
+      .control h3 { font-family: var(--sans); font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+      .control p { color: var(--muted); font-size: 15px; }
+
+      /* Plans */
+      .plans { display: grid; gap: 16px; align-items: start; }
+      @media (min-width: 860px) { .plans { grid-template-columns: 1fr 1fr; gap: 24px; } }
+      .plan h3 { font-size: 30px; }
+      .price { margin: 10px 0 4px; font-family: var(--serif); font-size: 40px; font-weight: 600; }
+      .price small { font-family: var(--sans); font-size: 15px; font-weight: 400; color: var(--muted); }
+      .plan > p { color: var(--muted); font-size: 15px; }
+      .plan ul { list-style: none; margin: 22px 0 0; padding: 0; }
+      .plan li { display: flex; gap: 10px; padding: 9px 0; border-top: 1px solid var(--divider); font-size: 15px; }
+      .plan li::before { content: ''; flex: none; width: 8px; height: 8px; margin-top: 8px; border-radius: 50%; background: var(--success); }
+      .plan li .status { margin-left: auto; }
+      .plan-pro { border-color: var(--deeprose); box-shadow: 0 0 0 1px var(--deeprose), var(--shadow); }
+      .ribbon { display: inline-block; font-size: 12px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--bg); background: var(--deeprose); padding: 4px 10px; border-radius: 6px; margin-bottom: 14px; }
+      .status { font-size: 11px; font-weight: 500; padding: 2px 7px; border-radius: 6px; background: var(--secondary); border: 1px solid var(--divider); color: var(--muted); white-space: nowrap; align-self: center; }
+      .terms { margin-top: 18px; padding: 14px 16px; background: var(--secondary); border-radius: 10px; font-size: 14px; }
+      .plan .btn { width: 100%; margin-top: 22px; }
+
+      .extras { display: grid; gap: 16px; margin-top: 24px; align-items: start; }
+      @media (min-width: 860px) { .extras { grid-template-columns: 1fr 1fr; gap: 24px; } }
+      .extras h3 { font-size: 24px; margin-bottom: 8px; }
+      .extras .card:not(.plan) p { color: var(--muted); font-size: 15px; }
+
+      /* FAQ */
+      .faq { max-width: 760px; }
+      details { border-bottom: 1px solid var(--divider); }
+      details:first-of-type { border-top: 1px solid var(--divider); }
+      summary {
+        cursor: pointer; list-style: none; padding: 20px 32px 20px 0; position: relative;
+        font-family: var(--serif); font-size: 22px; font-weight: 600;
+      }
+      summary::-webkit-details-marker { display: none; }
+      summary::after { content: '+'; position: absolute; right: 4px; top: 18px; font-family: var(--sans); font-size: 22px; color: var(--muted); }
+      details[open] summary::after { content: '–'; }
+      details p { padding: 0 0 20px; color: var(--muted); }
+      details p + p { margin-top: -8px; }
+
+      /* Closing CTA */
+      .closing { text-align: center; }
+      .closing h2 { font-size: clamp(32px, 4.5vw, 46px); max-width: 16em; margin: 10px auto 0; }
+      .closing p { color: var(--muted); margin: 16px auto 0; max-width: 34em; }
+      .closing .cta-row { justify-content: center; }
+
+      footer { border-top: 1px solid var(--divider); padding: 32px 0; font-size: 14px; color: var(--muted); }
+      footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+
+      @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        * { transition: none !important; }
+      }
+    </style>
+  </head>
+  <body>
+    <a class="skip" href="#main">Skip to content</a>
+
+    <header>
+      <div class="wrap bar">
+        <a class="brand" href="/">Fan Director Studio</a>
+        <nav aria-label="Main">
+          <ul>
+            <li><a href="#how">How it works</a></li>
+            <li><a href="#plans">Plans</a></li>
+            <li><a href="#faq">Questions</a></li>
+          </ul>
+        </nav>
+        <a class="btn btn-primary apply-link" href="mailto:info@studiolens.me">Apply</a>
+      </div>
+    </header>
+
+    <main id="main">
+      <!-- Hero -->
+      <div class="wrap hero">
+        <div>
+          <p class="label">For cam models and clip creators</p>
+          <h1>Custom requests that arrive scoped, priced and inside your limits.</h1>
+          <p class="lede">
+            Put one boutique link in your bio. Fans plan their custom video from your menu, at your prices, and
+            see your limits before they ask. You get a clear Scene Card to approve, adjust, question or decline.
+            Payment and delivery stay on the platform you already use.
+          </p>
+          <div class="cta-row">
+            <a class="btn btn-primary apply-link" href="mailto:info@studiolens.me">Apply as a founding creator</a>
+            <a class="btn btn-secondary" href="https://fan-director-studio.scmillsc0809.workers.dev/" target="_blank" rel="noopener">
+              Try the fan side
+            </a>
+          </div>
+          <p class="offer-line">
+            <strong>The first 50 creators get Pro free for 3 months.</strong> No card, nothing charged automatically.
+            The fan-side demo uses a fictional creator.
+          </p>
+        </div>
+
+        <figure class="card" aria-label="Example Scene Card, for illustration" style="margin: 0">
+          <div class="scene-head">
+            <h2>Scene Card</h2>
+            <span class="tag">Example</span>
+          </div>
+          <p class="muted" style="font-size: 14px">What lands in your queue. Every line comes from your menu.</p>
+          <ul class="lines" id="example-lines">
+            <li data-cents="9000"><span>Custom video, 3 minutes</span><span>$90</span></li>
+            <li data-cents="3500"><span>Velvet lounge set</span><span>$35</span></li>
+            <li data-cents="2000"><span>Personal greeting, their name</span><span>$20</span></li>
+          </ul>
+          <div class="total"><span>Estimate</span><span id="example-total">$145</span></div>
+          <p class="fineprint">Final only when you approve. Delivery time counts from payment.</p>
+          <div class="decisions" aria-hidden="true">
+            <span>Approve</span><span>Propose changes</span><span>Ask a question</span><span>Decline</span>
+          </div>
+        </figure>
+      </div>
+
+      <!-- Problems -->
+      <section class="band" aria-labelledby="pain-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">Sound familiar?</p>
+            <h2 id="pain-title">Customs pay well. Scoping them doesn't pay at all.</h2>
+          </div>
+          <div class="grid-3">
+            <div class="pain">
+              <h3>The endless DM thread</h3>
+              <p>"What would it cost if…" twenty messages in, and they still haven't said what they want or what they'll spend.</p>
+            </div>
+            <div class="pain">
+              <h3>The limit-pusher</h3>
+              <p>Saying no to the same off-limits ask, again, while you're trying to stay friendly and keep the sale.</p>
+            </div>
+            <div class="pain">
+              <h3>"Why does exclusive cost more?"</h3>
+              <p>Explaining resale rights, rush fees and add-ons one fan at a time, without sounding defensive.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- How it works -->
+      <section id="how" aria-labelledby="how-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">How it works</p>
+            <h2 id="how-title">Your menu does the scoping. You make the call.</h2>
+          </div>
+          <ol class="steps">
+            <li>
+              <h3>We set you up</h3>
+              <p>Together we turn your rates into a menu: lengths, sets, outfits, add-ons and your limits.</p>
+            </li>
+            <li>
+              <h3>Share your link</h3>
+              <p>One boutique link for your bio, cam profile or pinned post. Fans browse without an account.</p>
+            </li>
+            <li>
+              <h3>Fans build a Scene Card</h3>
+              <p>They pick from your menu and watch the price add up, line by line. Anything off-menu reaches you unpriced.</p>
+            </li>
+            <li>
+              <h3>You decide</h3>
+              <p>Approve, propose changes, ask a question or decline. The fan pays you where you already get paid.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <!-- What you control -->
+      <section class="band" aria-labelledby="control-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">Always yours</p>
+            <h2 id="control-title">You set every price and every limit.</h2>
+          </div>
+          <div class="control">
+            <div>
+              <h3>Your prices, nobody else's</h3>
+              <p>Every total is worked out from the prices you set. Nothing is invented, discounted or haggled.</p>
+            </div>
+            <div>
+              <h3>Add-ons fans understand</h3>
+              <p>Extra minutes, rush delivery, 4K and exclusive rights, each priced by you and explained on the card.</p>
+            </div>
+            <div>
+              <h3>Limits up front</h3>
+              <p>Mark things "ask me" or "hard no". Fans see them before they plan, so you stop saying no in DMs.</p>
+            </div>
+            <div>
+              <h3>A floor no one can cross</h3>
+              <p>Some requests are never allowed, whatever the menu says: anything involving minors, family roles or non-consent, among others.</p>
+            </div>
+            <div>
+              <h3>Nothing happens without you</h3>
+              <p>No request is accepted, and no price is final, until you approve that exact version.</p>
+            </div>
+            <div>
+              <h3>We never touch your money</h3>
+              <p>No cut of your customs. Fans pay you on OnlyFans, Fansly, ManyVids, in tokens, or however you take payment today.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Plans -->
+      <section id="plans" aria-labelledby="plans-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">Plans</p>
+            <h2 id="plans-title">Start free. Founding creators get Pro on us.</h2>
+          </div>
+
+          <div class="plans">
+            <div class="card plan">
+              <h3>Free</h3>
+              <p class="price">$0</p>
+              <p>Everything you need to take structured requests.</p>
+              <ul>
+                <li>Your boutique link</li>
+                <li>Your menu, prices and add-ons</li>
+                <li>Your limits, shown to every fan</li>
+                <li>Request queue: approve, change, ask, decline</li>
+                <li>Fans plan by hand from your menu</li>
+              </ul>
+              <a class="btn btn-secondary apply-link" href="mailto:info@studiolens.me">Apply</a>
+            </div>
+
+            <div class="card plan plan-pro">
+              <span class="ribbon">Founding offer · 50 creators</span>
+              <h3>Pro</h3>
+              <p class="price">Free <small>for your first 3 months</small></p>
+              <p>For the first 50 creators who join.</p>
+              <ul>
+                <li>Everything in Free</li>
+                <li>
+                  AI Director: guides fans through your menu, suggesting only what you sell at your prices
+                  <span class="status">In final testing</span>
+                </li>
+                <li>Private shooting scripts for approved requests <span class="status">Planned</span></li>
+                <li>A direct line to the founder, and a say in what we build next</li>
+              </ul>
+              <p class="terms">
+                We'll tell you Pro's price before your free months end. There's no card on file, so nothing is ever
+                charged automatically. In return we ask for honest feedback, and a testimonial only if you're happy
+                and only with your OK.
+              </p>
+              <a class="btn btn-primary apply-link" href="mailto:info@studiolens.me">Claim a founding spot</a>
+            </div>
+          </div>
+
+          <div class="extras">
+            <!-- White-glove offer: owner's option A (2026-10-01). Paid after launch, never upfront. -->
+            <div class="card plan">
+              <h3>White-glove setup</h3>
+              <p class="price">$99 <small>founding price, paid after you're live</small></p>
+              <p>
+                Every founding creator gets a guided setup: you tell us what to list, and we enter it. With
+                white-glove, we do the thinking.
+              </p>
+              <ul>
+                <li>A 30-minute call, plus your rate card, tip menu or a few past custom requests</li>
+                <li>Your whole menu, written in your voice</li>
+                <li>Add-ons priced from your own rates: exclusive rights, rush, 4K and extra minutes</li>
+                <li>Your limits, drafted for you to approve</li>
+                <li>A launch kit: bio-link text and a few announcement posts</li>
+                <li>A tune-up after your first 10 requests or 30 days, whichever comes first</li>
+              </ul>
+              <p class="terms">
+                Nothing upfront. You pay once your boutique is live and you've approved it. Not happy within 30 days?
+                Full refund.
+              </p>
+              <a class="btn btn-secondary apply-link" data-subject="White-glove setup" href="mailto:info@studiolens.me">
+                Ask about white-glove
+              </a>
+            </div>
+            <div class="card">
+              <h3>Your content, during the founding period</h3>
+              <p>
+                Menus are non-explicit while we launch: greetings, roleplay outfits, sets, styling and personal
+                touches. Adult menus are designed in and will open once the compliance work is done.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section id="faq" class="band" aria-labelledby="faq-title">
+        <div class="wrap">
+          <div class="section-head">
+            <p class="label">Questions</p>
+            <h2 id="faq-title">Before you apply</h2>
+          </div>
+          <div class="faq">
+            <details>
+              <summary>Do you take a cut of my customs?</summary>
+              <p>No. Fan Director Studio never handles commission payments. You agree the price on the Scene Card, the fan pays you on your own platform, and you mark it paid.</p>
+            </details>
+            <details>
+              <summary>Do I have to leave my cam site or fan site?</summary>
+              <p>No. It's a separate link that sits alongside them. You keep your audience, your payouts and your delivery exactly where they are.</p>
+            </details>
+            <details>
+              <summary>What does the AI Director do, and what can't it do?</summary>
+              <p>It helps a fan turn a vague idea into a Scene Card by suggesting options from your menu. It can't invent options, change your prices, get around your limits or approve anything. You approve every request yourself.</p>
+              <p>It's in final testing. Until it's switched on, fans build their card by hand from your menu.</p>
+            </details>
+            <details>
+              <summary>Do fans need an account?</summary>
+              <p>Not to browse your boutique. They sign in with their email to send you a request, so they can follow your answer.</p>
+            </details>
+            <details>
+              <summary>What happens when my 3 free months end?</summary>
+              <p>We'll tell you Pro's price before then. If you don't want it, you move to the Free plan. Nothing is charged automatically, because we never take your card.</p>
+            </details>
+            <details>
+              <summary>How do I join?</summary>
+              <p>Email us at <a href="mailto:info@studiolens.me">info@studiolens.me</a> with where you sell customs and roughly what you charge. We'll reply to set up a time to build your menu together.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <!-- Closing -->
+      <section class="closing" aria-labelledby="closing-title">
+        <div class="wrap">
+          <p class="label">50 founding spots</p>
+          <h2 id="closing-title">Spend your time filming, not scoping.</h2>
+          <p>Apply by email. Tell us where you sell customs and what you charge, and we'll build your menu with you.</p>
+          <div class="cta-row">
+            <a class="btn btn-primary apply-link" href="mailto:info@studiolens.me">Apply as a founding creator</a>
+          </div>
+          <p style="font-size: 14px">or write to <a href="mailto:info@studiolens.me">info@studiolens.me</a></p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="wrap">
+        <span>© 2026 Fan Director Studio</span>
+        <a href="mailto:info@studiolens.me">info@studiolens.me</a>
+      </div>
+    </footer>
+
+    <script>
+      // The example card's total is added up from its lines, like the real Scene Card.
+      ;(function () {
+        var cents = 0
+        document.querySelectorAll('#example-lines [data-cents]').forEach(function (li) {
+          cents += Number(li.getAttribute('data-cents'))
+        })
+        document.getElementById('example-total').textContent = '$' + (cents / 100).toLocaleString('en-US')
+      })()
+
+      // Every Apply link opens an email with a short application to fill in.
+      ;(function () {
+        var body = [
+          'Name you work under:',
+          'Where you sell customs (links):',
+          'What you usually charge for a custom:',
+          'Anything you never do:',
+          'Best way to reach you:',
+        ].join('\n\n')
+        document.querySelectorAll('a.apply-link').forEach(function (a) {
+          var subject = a.getAttribute('data-subject') || 'Founding creator application'
+          var text = subject === 'Founding creator application' ? body : 'Tell us where you sell customs and what you charge:\n\n'
+          a.href = 'mailto:info@studiolens.me?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(text)
+        })
+      })()
+    </script>
+  </body>
+</html>
