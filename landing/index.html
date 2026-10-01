@@ -1,0 +1,719 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#281928" />
+    <title>Fan Director Studio — Your spotlight. Your rules.</title>
+    <meta
+      name="description"
+      content="A personal custom-video boutique for models and creators. Let fans explore your menu, see your prices, and send clear requests. You make the final call."
+    />
+    <meta
+      property="og:title"
+      content="Fan Director Studio — Your spotlight. Your rules."
+    />
+    <meta
+      property="og:description"
+      content="Custom videos. Clear requests. Completely on your terms. Meet your new link in bio."
+    />
+    <meta property="og:type" content="website" />
+    <meta
+      property="og:image"
+      content="https://studiolens-landing.blendly.workers.dev/assets/creator-portrait.webp"
+    />
+    <link rel="icon" href="assets/brandmark.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Manrope:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="preload"
+      href="assets/creator-portrait.webp"
+      as="image"
+      fetchpriority="high"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="scroll-progress" aria-hidden="true"></div>
+    <header class="site-header">
+      <a class="brand" href="#" aria-label="Fan Director Studio home"
+        ><img src="assets/brandmark.svg" width="44" height="44" alt="" /><span
+          >fan director<small>STUDIO</small></span
+        ></a
+      >
+      <nav class="desktop-nav" aria-label="Main navigation">
+        <a href="#how-it-works">How it works</a
+        ><a href="#your-studio">Your studio</a
+        ><a href="#plans">The founding offer</a>
+      </nav>
+      <a
+        class="button button-small button-lime header-apply"
+        href="mailto:info@studiolens.me?subject=Founding%20creator%20application"
+        data-apply
+        >Get your boutique <span aria-hidden="true">↗</span></a
+      >
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-label="Open navigation"
+        aria-expanded="false"
+        aria-controls="mobile-nav"
+      >
+        <span></span><span></span>
+      </button>
+      <nav
+        id="mobile-nav"
+        class="mobile-nav"
+        aria-label="Mobile navigation"
+        hidden
+      >
+        <a href="#how-it-works">How it works</a
+        ><a href="#your-studio">Your studio</a
+        ><a href="#plans">The founding offer</a
+        ><a href="mailto:info@studiolens.me" data-apply>Get your boutique ↗</a>
+      </nav>
+    </header>
+    <main id="main">
+      <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-orbit orbit-one" aria-hidden="true"></div>
+        <div class="hero-orbit orbit-two" aria-hidden="true"></div>
+        <div class="hero-inner wrap">
+          <div class="hero-copy">
+            <p class="eyebrow">
+              <span class="status-dot"></span> FOR MODELS. FOR CREATORS. FOR
+              YOU.
+            </p>
+            <h1 id="hero-title">Your spotlight.<br /><em>Your rules.</em></h1>
+            <p class="hero-description">
+              Turn “can you make me a video?” into a request worth opening.
+            </p>
+            <p class="hero-detail">
+              Your own custom-video boutique. Fans choose from your menu, see
+              your rates, and respect your boundaries. You make the final call.
+            </p>
+            <div class="hero-actions">
+              <a
+                class="button button-lime"
+                href="mailto:info@studiolens.me"
+                data-apply
+                >Make it yours <span aria-hidden="true">↗</span></a
+              ><a class="text-link light" href="#your-studio"
+                ><span class="play-icon" aria-hidden="true">▷</span> Take a look
+                inside</a
+              >
+            </div>
+            <p class="hero-note">
+              First 50 creators: <strong>3 months of Pro, on us.</strong
+              ><br />No card. No automatic charges.
+            </p>
+          </div>
+          <div class="hero-visual">
+            <div class="portrait-frame" data-depth="0.09">
+              <img
+                src="assets/creator-portrait.webp"
+                width="1122"
+                height="1402"
+                alt="Editorial portrait of a confident creator in a burgundy jacket"
+                fetchpriority="high"
+              />
+              <div class="portrait-caption">
+                <span>THE MAIN CHARACTER?</span><strong>Always you.</strong>
+              </div>
+            </div>
+            <div class="floating-tag" data-depth="-0.06">
+              <span class="sparkle" aria-hidden="true">✳</span> A little
+              structure.<br />A lot more you.
+            </div>
+            <div class="scene-card" data-depth="-0.12">
+              <div class="card-top">
+                <span
+                  ><span class="status-dot"></span> A CLEARER KIND OF
+                  REQUEST</span
+                ><span aria-hidden="true">↗</span>
+              </div>
+              <h2>A video, just for them.</h2>
+              <p class="card-caption">Your menu. Every detail accounted for.</p>
+              <div class="scene-line">
+                <span>Custom video <small>3 minutes</small></span
+                ><strong>$90</strong>
+              </div>
+              <div class="scene-line">
+                <span>Velvet studio set</span><strong>$35</strong>
+              </div>
+              <div class="scene-line">
+                <span>Personal greeting</span><strong>$20</strong>
+              </div>
+              <div class="scene-total">
+                <span>Request estimate</span
+                ><strong>$145<span>.00</span></strong>
+              </div>
+              <div class="approval">
+                <span aria-hidden="true">✓</span> Nothing is final until you say
+                yes.
+              </div>
+              <p class="example-label">
+                Illustrative Scene Card · example prices
+              </p>
+            </div>
+            <span class="hero-index" aria-hidden="true"
+              >01 / MADE FOR YOUR WORLD</span
+            >
+          </div>
+        </div>
+        <a class="scroll-cue" href="#the-difference"
+          ><span aria-hidden="true">↓</span> LESS ADMIN. MORE MAIN CHARACTER.</a
+        >
+      </section>
+      <div
+        class="ticker"
+        aria-label="Your menu. Your rates. Your boundaries. Your final say."
+      >
+        <div class="ticker-track" aria-hidden="true">
+          <span
+            >YOUR MENU <b>✳</b> YOUR RATES <b>✳</b> YOUR BOUNDARIES
+            <b>✳</b> YOUR FINAL SAY <b>✳</b></span
+          ><span
+            >YOUR MENU <b>✳</b> YOUR RATES <b>✳</b> YOUR BOUNDARIES
+            <b>✳</b> YOUR FINAL SAY <b>✳</b></span
+          >
+        </div>
+        <button
+          class="motion-toggle"
+          type="button"
+          aria-pressed="false"
+          aria-label="Pause motion effects"
+          title="Pause motion effects"
+        >
+          <span aria-hidden="true">Ⅱ</span>
+        </button>
+      </div>
+      <section
+        class="difference section wrap"
+        id="the-difference"
+        aria-labelledby="difference-title"
+      >
+        <div class="section-intro reveal">
+          <p class="eyebrow">LET YOUR LINK DO THE EXPLAINING</p>
+          <h2 id="difference-title">
+            They came for you.<br /><em>Not a negotiation.</em>
+          </h2>
+          <p>
+            Custom requests should feel personal. The process doesn’t have to
+            take all day.
+          </p>
+        </div>
+        <div class="difference-grid">
+          <article class="benefit reveal">
+            <span class="feature-number">01 / THE DETAILS</span>
+            <h3>Skip the 20-message<br />warm-up.</h3>
+            <p>
+              Lengths, looks, sets, and personal touches. Let fans put their
+              idea together before it lands in your inbox.
+            </p>
+            <span class="feature-note"
+              >A Scene Card. Not a guessing game. ↗</span
+            >
+          </article>
+          <article class="benefit reveal">
+            <span class="feature-number">02 / THE VALUE</span>
+            <h3>Your extras.<br />Properly priced.</h3>
+            <p>
+              Extra minutes, rush delivery, 4K, exclusive rights. Your add-ons
+              have a price, and fans see exactly why.
+            </p>
+            <span class="feature-note"
+              >Your rate card, doing its thing. ↗</span
+            >
+          </article>
+          <article class="benefit reveal">
+            <span class="feature-number">03 / THE BOUNDARIES</span>
+            <h3>Your “no” doesn’t<br />need a conversation.</h3>
+            <p>
+              Set what’s available, what’s an “ask me,” and what’s off the menu.
+              Your boundaries are part of the experience.
+            </p>
+            <span class="feature-note">Clear before they even ask. ↗</span>
+          </article>
+        </div>
+      </section>
+      <section
+        class="studio-section"
+        id="your-studio"
+        aria-labelledby="studio-title"
+      >
+        <div class="studio-grid wrap">
+          <div class="studio-copy reveal">
+            <p class="eyebrow">MEET YOUR NEW LINK IN BIO</p>
+            <h2 id="studio-title">
+              A little boutique.<br /><em>A big upgrade.</em>
+            </h2>
+            <p>
+              Your fans bring the idea. Your menu brings the clarity. Each
+              choice builds a request you can actually work with.
+            </p>
+            <ul class="check-list">
+              <li>Your looks, lengths, and personal touches</li>
+              <li>Transparent, item-by-item estimates</li>
+              <li>Approve, adjust, ask a question, or decline</li>
+              <li>Payment stays on your usual platform</li>
+            </ul>
+            <a
+              class="text-link light"
+              href="https://fan-director-studio.scmillsc0809.workers.dev/"
+              target="_blank"
+              rel="noopener"
+              >Explore the full fan demo <span aria-hidden="true">↗</span></a
+            >
+            <p class="fine-print">The demo uses a fictional creator.</p>
+          </div>
+          <div class="boutique-demo reveal">
+            <div class="demo-browser">
+              <span aria-hidden="true">● ● ●</span
+              ><span>your personal boutique</span
+              ><span aria-hidden="true">↗</span>
+            </div>
+            <div class="demo-body">
+              <div class="demo-profile">
+                <img
+                  src="assets/creator-portrait.webp"
+                  alt=""
+                  width="54"
+                  height="54"
+                  loading="lazy"
+                />
+                <div>
+                  <span class="eyebrow">THE STUDIO EDIT</span>
+                  <h3>Something just for you.</h3>
+                </div>
+                <span class="demo-badge">DEMO</span>
+              </div>
+              <p class="demo-description">
+                Try a few options. Watch the request come together.
+              </p>
+              <form id="request-builder">
+                <fieldset>
+                  <legend><span>01</span> Make a little time</legend>
+                  <div class="option-row">
+                    <label class="choice"
+                      ><input
+                        type="radio"
+                        name="duration"
+                        value="90"
+                        data-label="3-minute custom video"
+                        checked
+                      /><span>3 minutes<small>$90</small></span></label
+                    ><label class="choice"
+                      ><input
+                        type="radio"
+                        name="duration"
+                        value="150"
+                        data-label="5-minute custom video"
+                      /><span>5 minutes<small>$150</small></span></label
+                    ><label class="choice"
+                      ><input
+                        type="radio"
+                        name="duration"
+                        value="240"
+                        data-label="8-minute custom video"
+                      /><span>8 minutes<small>$240</small></span></label
+                    >
+                  </div>
+                </fieldset>
+                <fieldset>
+                  <legend><span>02</span> Set the scene</legend>
+                  <div class="option-row two-options">
+                    <label class="choice"
+                      ><input
+                        type="radio"
+                        name="setting"
+                        value="0"
+                        data-label="Everyday studio"
+                        checked
+                      /><span
+                        >Everyday studio<small>Included</small></span
+                      ></label
+                    ><label class="choice"
+                      ><input
+                        type="radio"
+                        name="setting"
+                        value="35"
+                        data-label="Velvet studio set"
+                      /><span>Velvet studio<small>+$35</small></span></label
+                    >
+                  </div>
+                </fieldset>
+                <fieldset>
+                  <legend><span>03</span> Make it personal</legend>
+                  <div class="addon-row">
+                    <label class="addon"
+                      ><input
+                        type="checkbox"
+                        name="greeting"
+                        value="20"
+                        data-label="Personal greeting"
+                        checked
+                      /><span>Personal greeting</span
+                      ><strong>+$20</strong></label
+                    ><label class="addon"
+                      ><input
+                        type="checkbox"
+                        name="rush"
+                        value="40"
+                        data-label="Rush delivery"
+                      /><span>Rush delivery</span><strong>+$40</strong></label
+                    >
+                  </div>
+                </fieldset>
+                <div class="demo-total">
+                  <div>
+                    <span>Your request estimate</span
+                    ><small>Subject to creator approval</small>
+                  </div>
+                  <output id="estimate" aria-live="polite" aria-atomic="true"
+                    >$110</output
+                  >
+                </div>
+                <button class="button button-dark demo-submit" type="submit">
+                  Preview your Scene Card <span aria-hidden="true">↗</span>
+                </button>
+                <p class="example-label">
+                  Interactive example · sample prices · nothing is submitted
+                </p>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section
+        class="how-section section wrap"
+        id="how-it-works"
+        aria-labelledby="how-title"
+      >
+        <div class="split-heading reveal">
+          <div>
+            <p class="eyebrow">FROM LINK TO “LET’S MAKE IT”</p>
+            <h2 id="how-title">
+              Less back-and-forth.<br /><em>More creating.</em>
+            </h2>
+          </div>
+          <p>
+            Keep your fans, your platforms, and your creative freedom. Give the
+            requests a better place to start.
+          </p>
+        </div>
+        <div class="steps">
+          <article class="step reveal">
+            <span class="step-icon" aria-hidden="true">01<span>↗</span></span>
+            <h3>Make it yours.</h3>
+            <p>
+              We help turn your rate card or tip menu into a boutique: your
+              looks, your extras, your boundaries.
+            </p>
+          </article>
+          <article class="step reveal">
+            <span class="step-icon" aria-hidden="true">02<span>↗</span></span>
+            <h3>Drop your link.</h3>
+            <p>
+              Add it to your bio, live profile, or pinned post. Fans browse and
+              build their request without an account.
+            </p>
+          </article>
+          <article class="step reveal">
+            <span class="step-icon" aria-hidden="true">03<span>✓</span></span>
+            <h3>You call the shots.</h3>
+            <p>
+              Review the Scene Card. Approve, adjust, question, or decline.
+              Payment and delivery stay where you already work.
+            </p>
+          </article>
+        </div>
+        <div class="ownership-strip reveal">
+          <div><strong>0%</strong><span>commission on your customs</span></div>
+          <span class="ownership-divider"></span>
+          <p>
+            Your talent. Your business. <em>Your money.</em><br /><span
+              >We never process your fans’ payments or take a cut.</span
+            >
+          </p>
+          <img
+            src="assets/brandmark.svg"
+            width="66"
+            height="66"
+            alt=""
+            loading="lazy"
+          />
+        </div>
+      </section>
+      <section
+        class="plans-section section"
+        id="plans"
+        aria-labelledby="plans-title"
+      >
+        <div class="wrap">
+          <div class="section-intro reveal">
+            <p class="eyebrow">EARLY LOOK. FOUNDING PERKS.</p>
+            <h2 id="plans-title">
+              Be part of the<br /><em>opening scene.</em>
+            </h2>
+            <p>
+              We’re inviting our first 50 creators to help shape what comes
+              next. Bring your ideas. We’ll help with the setup.
+            </p>
+          </div>
+          <div class="pricing-grid">
+            <article class="price-card reveal">
+              <p class="eyebrow">YOUR EVERYDAY ESSENTIALS</p>
+              <h3>Free</h3>
+              <p class="price">$0<span>to get started</span></p>
+              <p>A proper home for your custom requests.</p>
+              <ul class="check-list">
+                <li>Your personal boutique link</li>
+                <li>Your menu, rates, add-ons, and boundaries</li>
+                <li>A queue to review and manage requests</li>
+                <li>Fans build requests from your menu</li>
+                <li>Guided setup for founding creators</li>
+              </ul>
+              <a
+                class="button button-outline"
+                href="mailto:info@studiolens.me"
+                data-apply
+                >Start with your boutique <span aria-hidden="true">↗</span></a
+              >
+            </article>
+            <article class="price-card pro-card reveal">
+              <span class="offer-tag">FIRST 50 CREATORS</span>
+              <p class="eyebrow">A LITTLE EXTRA DIRECTION</p>
+              <h3>Founding Pro</h3>
+              <p class="price">On us.<span>for your first 3 months</span></p>
+              <p>Help shape the studio from the inside.</p>
+              <ul class="check-list">
+                <li>Everything in Free</li>
+                <li>
+                  <span
+                    >AI Director to guide fans through your menu
+                    <small class="availability">In final testing</small></span
+                  >
+                </li>
+                <li>
+                  <span
+                    >Private scripts for approved requests
+                    <small class="availability">Planned</small></span
+                  >
+                </li>
+                <li>A direct line to the founder</li>
+                <li>A voice in what we build next</li>
+              </ul>
+              <a
+                class="button button-lime"
+                href="mailto:info@studiolens.me"
+                data-apply
+                >Apply for a founding spot <span aria-hidden="true">↗</span></a
+              >
+              <p class="price-disclaimer">
+                No card required. We’ll share the Pro price before your free
+                months end. Nothing is charged automatically.
+              </p>
+            </article>
+          </div>
+          <aside class="concierge reveal">
+            <span class="concierge-symbol" aria-hidden="true">✳</span>
+            <div>
+              <p class="eyebrow">THE WHITE-GLOVE TREATMENT</p>
+              <h3>Your boutique. Styled for you.</h3>
+              <p>
+                A 30-minute call, a menu written in your voice, add-ons based on
+                your rates, boundaries for your approval, and a launch kit. Plus
+                a tune-up after 10 requests or 30 days, whichever comes first.
+              </p>
+              <small
+                >Pay after your boutique is live and approved. 30-day money-back
+                promise.</small
+              >
+            </div>
+            <div class="concierge-price">
+              <strong>$99<span>one time · founding price</span></strong
+              ><a
+                class="text-link"
+                href="mailto:info@studiolens.me?subject=White-glove%20setup"
+                >Let’s talk <span aria-hidden="true">↗</span></a
+              >
+            </div>
+          </aside>
+        </div>
+      </section>
+      <section
+        class="faq-section section wrap"
+        id="faq"
+        aria-labelledby="faq-title"
+      >
+        <div class="faq-heading reveal">
+          <p class="eyebrow">A FEW GOOD QUESTIONS</p>
+          <h2 id="faq-title">Before your<br /><em>close-up.</em></h2>
+          <p>Something else on your mind?</p>
+          <a class="text-link" href="mailto:info@studiolens.me"
+            >Talk to us <span aria-hidden="true">↗</span></a
+          >
+        </div>
+        <div class="faq-list reveal">
+          <details>
+            <summary>
+              Is this for models or creators?<span aria-hidden="true">+</span>
+            </summary>
+            <p>
+              Both. If fans ask you for personalized videos, greetings, styled
+              scenes, or custom clips, Fan Director Studio gives those requests
+              a clearer starting point. Bring your own audience and your own
+              menu.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Do I need to change platforms?<span aria-hidden="true">+</span>
+            </summary>
+            <p>
+              No. Share your boutique link wherever your fans already find you.
+              Once you approve a request, payment and delivery stay on the
+              platform you already use.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Do you take a cut of my custom videos?<span aria-hidden="true"
+                >+</span
+              >
+            </summary>
+            <p>
+              No. We don’t process fan payments or take a percentage of your
+              customs. Your rates and your earnings stay yours.
+            </p>
+          </details>
+          <details>
+            <summary>
+              Am I committing to every request?<span aria-hidden="true">+</span>
+            </summary>
+            <p>
+              Never. A Scene Card is a request, not a confirmed order. You can
+              approve that version, propose changes, ask a question, or decline.
+              No price is final before your approval.
+            </p>
+          </details>
+          <details>
+            <summary>
+              What can I put on my menu?<span aria-hidden="true">+</span>
+            </summary>
+            <p>
+              At launch, menus support personal greetings, styled scenes,
+              outfits, sets, and personal touches. Set your available options,
+              prices, and boundaries during guided setup. Every request must
+              follow our content rules and the rules of the platform you use.
+            </p>
+          </details>
+          <details>
+            <summary>
+              What does the AI Director do?<span aria-hidden="true">+</span>
+            </summary>
+            <p>
+              The AI Director is in final testing. It is designed to guide fans
+              through your existing menu and prices. It does not set your rates,
+              override your boundaries, accept a request, or replace your
+              approval. Private shooting scripts are planned, not currently
+              available.
+            </p>
+          </details>
+          <details>
+            <summary>
+              What happens after the free Pro months?<span aria-hidden="true"
+                >+</span
+              >
+            </summary>
+            <p>
+              We’ll tell you the Pro price before your three free months end so
+              you can decide. There is no card on file and no automatic charge.
+              We ask founding creators for honest feedback; a testimonial is
+              optional and only used with your permission.
+            </p>
+          </details>
+          <details>
+            <summary>
+              How do I get started?<span aria-hidden="true">+</span>
+            </summary>
+            <p>
+              Apply by email with the name you work under, where fans find you,
+              and your usual custom-video rates. We’ll help you get your menu
+              ready. Your fans can browse without creating an account.
+            </p>
+          </details>
+        </div>
+      </section>
+      <section class="closing" aria-labelledby="closing-title">
+        <div class="closing-orbit" aria-hidden="true"></div>
+        <div class="wrap reveal">
+          <p class="eyebrow">
+            <span class="status-dot"></span> YOUR NEXT CHAPTER STARTS HERE
+          </p>
+          <h2 id="closing-title">More time in<br /><em>your spotlight.</em></h2>
+          <p>
+            A boutique that works around you.<br />Not the other way around.
+          </p>
+          <a
+            class="button button-lime"
+            href="mailto:info@studiolens.me"
+            data-apply
+            >Let’s build your boutique <span aria-hidden="true">↗</span></a
+          ><span class="closing-note"
+            >Founding applications open · Guided setup included</span
+          >
+        </div>
+      </section>
+    </main>
+    <footer class="site-footer wrap">
+      <a
+        class="brand footer-brand"
+        href="#"
+        aria-label="Fan Director Studio home"
+        ><img src="assets/brandmark.svg" alt="" width="40" height="40" /><span
+          >fan director<small>STUDIO</small></span
+        ></a
+      ><span>Made for the person behind the camera.</span
+      ><a href="mailto:info@studiolens.me">Say hello ↗</a
+      ><small>© 2026 Fan Director Studio</small>
+    </footer>
+    <dialog id="scene-dialog" aria-labelledby="dialog-title">
+      <div class="dialog-content">
+        <button
+          class="dialog-close"
+          aria-label="Close Scene Card"
+          type="button"
+        >
+          ×
+        </button>
+        <p class="eyebrow">YOUR REQUEST, ALL TOGETHER</p>
+        <h2 id="dialog-title">One clear Scene Card.</h2>
+        <p class="dialog-note">
+          This is an interactive example. Nothing has been sent.
+        </p>
+        <div id="dialog-lines"></div>
+        <div class="scene-total">
+          <span>Estimated total</span><strong id="dialog-total">$110</strong>
+        </div>
+        <div class="approval">
+          <span aria-hidden="true">✓</span> The creator always has the final
+          say.
+        </div>
+        <a
+          class="button button-dark"
+          href="https://fan-director-studio.scmillsc0809.workers.dev/"
+          target="_blank"
+          rel="noopener"
+          >Explore the full demo <span aria-hidden="true">↗</span></a
+        >
+      </div>
+    </dialog>
+  </body>
+</html>
