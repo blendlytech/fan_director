@@ -14,6 +14,7 @@
 | [14-Name-Exclusivity-and-Letter-Delivery.md](14-Name-Exclusivity-and-Letter-Delivery.md) | **Draft for owner approval** (2026-10-01): every video exclusive as a platform rule, with disclosed non-nude promotional clips; the fan's name on by default (at least two uses in the script); in-app delivery of the after-shoot letter |
 | [15-Director-v2-Fantasy-Interview.md](15-Director-v2-Fantasy-Interview.md) | **Draft for owner approval** (2026-10-01): the Director as Maya's AI assistant, interviewing the fan (3–5 questions, language mirrors the fan) into a confirmed fantasy brief on the Scene Card; explicit as the baseline where adult is on; prices stay server-only |
 | [16-Physical-Items-and-Partners.md](16-Physical-Items-and-Partners.md) | **Draft for owner approval** (2026-10-01): keepsakes the creator wore or used, gifts the fan buys for her to use on camera, address privacy in shipping, and sponsors and affiliates with revenue share and disclosure; a pilot without platform payments, and a later phase with them |
+| [17-Creator-Profile-and-Signature-Fantasy.md](17-Creator-Profile-and-Signature-Fantasy.md) | **Draft for owner approval** (2026-10-01): the profile homepage with a non-explicit intro video and a "Verified 18+" badge; the creator names her AI assistant, which interviews her and writes her explicit signature fantasy (Qwen3), shown in full only behind sign-in and 18+ |
 
 The visual ground truth remains `docs/designs/html/`; see
 [../README.md](../README.md) for the design list.
