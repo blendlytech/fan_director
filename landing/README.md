@@ -31,6 +31,10 @@ Name the account explicitly. Without it, Wrangler can pick up the demo's cached 
 (`frontend/node_modules/.cache`, the scmillsc0809 account) and fail with an authentication
 error. The page belongs on the Blendly account, next to staging and the studiolens.me zone.
 
+Its two "Explore the demo" links go to the public demo at
+https://fan-director-studio.blendly.workers.dev (moved to the Blendly account on 2026-10-01;
+see `frontend/README.md` on the app branches for how it's built and deployed).
+
 It's live at https://studiolens-landing.blendly.workers.dev (redesign deployed 2026-10-01).
 
 It's live at https://studiolens.me (custom domain attached 2026-10-01); `www.studiolens.me`
