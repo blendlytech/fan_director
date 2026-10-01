@@ -99,10 +99,14 @@
         // Phase 3: the owner OK'd the AI Director on staging (2026-09-18). Adult stays off.
         "AI_ENABLED": "true",
         "ADULT_CATALOG_ENABLED": "false",
-        // Pilot exemption (doc 11 §5.6 item 27, owner 2026-09-20): Clerk MFA is a
-        // Pro feature, and Pro waits on revenue from the first creators. Until
-        // then a creator signs in with their email alone. Set back to "true" the
-        // day the plan is upgraded; the enforcement code is still there.
+        // Owner's waiver (doc 11 §5.6 item 27, 2026-09-20; widened 2026-09-21).
+        // It began while Clerk MFA waited on revenue; the owner has extended it
+        // to cover the first few PAYING creators, to get the business moving,
+        // with MFA required retroactively later. A creator signs in with their
+        // email alone, so whoever can read that mailbox can approve commissions.
+        // The enforcement code is untouched: flipping this to "true" turns the
+        // queue into "set up an authenticator, then reload" for anyone who has
+        // not enrolled. Tell creators before flipping it, not after.
         "CREATOR_SECOND_FACTOR_REQUIRED": "false",
         // Phase 3 (doc 11 §5.6 item 24): $3 of the owner's $8 test budget; the rest is for local live runs.
         "AI_BUDGET_CEILING_MICROUSD": "3000000",

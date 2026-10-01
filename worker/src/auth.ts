@@ -108,12 +108,22 @@ export function creatorSecondFactorRequired(env: Env): boolean {
  * session. Clerk's "require MFA" would also force fans, so it's enforced here
  * (doc 11 §5.6 item 17).
  *
- * The pilot exemption (§5.6 item 27, owner 2026-09-20): Clerk MFA needs the Pro
- * plan, which waits on revenue from the first creators, so an environment may
- * set CREATOR_SECOND_FACTOR_REQUIRED="false" and let those creators in on their
- * email sign-in alone. Everything else still applies — the account must be an
- * invited, active creator, and it must not be banned or locked. The check below
- * is left intact for the day the plan is upgraded.
+ * The waiver (§5.6 item 27, owner 2026-09-20, widened 2026-09-21): an environment
+ * may set CREATOR_SECOND_FACTOR_REQUIRED="false" and let creators in on their
+ * email sign-in alone. It began as a pilot exemption while Clerk MFA waited on
+ * revenue; the owner has since extended it to cover the first few *paying*
+ * creators, deliberately, to get the business moving, with MFA to be required
+ * retroactively later.
+ *
+ * That is a real reduction in protection and it now applies to people paying for
+ * the service: whoever can read a creator's mailbox can open the queue and
+ * approve commissions. Only the owner sets it.
+ *
+ * Everything else still applies — the account must be an invited, active creator,
+ * and it must not be banned or locked. The check below is left intact, and the
+ * `enrol` flag it returns is what makes the retroactive switch survivable: the
+ * frontend turns it into "set up an authenticator, then reload" rather than a
+ * dead end (frontend/src/copy/creatorRequests.ts).
  */
 export async function requireCreator(request: Request, env: Env, deps: Deps): Promise<CreatorIdentity> {
   const claims = await verifySession(request, env)

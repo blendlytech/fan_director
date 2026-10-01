@@ -23,9 +23,10 @@ export interface Env {
   /**
    * Whether a creator session must carry a verified second factor (doc 11 §5.6
    * item 17). Anything other than the exact string "false" means required, so a
-   * missing or misspelt value fails safe. "false" is the pilot exemption while
-   * Clerk MFA is out of reach on the free plan (§5.6 item 27): it is a real
-   * reduction in protection, and only the owner sets it.
+   * missing or misspelt value fails safe. "false" is the owner's waiver (§5.6
+   * item 27), widened on 2026-09-21 to cover the first few paying creators and
+   * to be required retroactively later: it is a real reduction in protection,
+   * and only the owner sets it.
    */
   CREATOR_SECOND_FACTOR_REQUIRED?: string
   /** AI spending ceiling for this environment, integer micro-dollars ($8 = "8000000"). No value = no AI calls. */
