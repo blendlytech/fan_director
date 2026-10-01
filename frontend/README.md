@@ -103,19 +103,26 @@ showing the exact address that was requested and links back into the demo.
 
 ## Hosted demo
 
-<https://fan-director-studio.scmillsc0809.workers.dev> — a static build on
-Cloudflare Workers Static Assets. There is no Worker script and no backend; every
-demo disclaimer ships unchanged. `wrangler.jsonc` sets
+<https://fan-director-studio.blendly.workers.dev> — a static build on
+Cloudflare Workers Static Assets, on the Blendly account next to staging (moved
+there on 2026-10-01; the older copy at `fan-director-studio.scmillsc0809.workers.dev`
+is on an account this machine can't deploy to, and no longer gets updates). There
+is no Worker script and no backend; every demo disclaimer ships unchanged. `wrangler.jsonc` sets
 `not_found_handling: "single-page-application"`, so deep links such as
 `/creator/requests/:id/ask` load directly, and a genuinely unknown path renders the
 app's own Page not found screen rather than Cloudflare's. The fan draft lives in
 memory, so a direct load of `/review` or `/saved` shows the default draft.
 
 ```bash
-npx wrangler login      # once, interactive
-npm run build
-npx wrangler deploy     # uploads dist/ as the fan-director-studio Worker
+# The empty key is what makes this the demo build: no Clerk, no API calls.
+# Plain `npm run build` reads .env.local and would ship the staging build instead.
+VITE_CLERK_PUBLISHABLE_KEY= npm run build
+CLOUDFLARE_ACCOUNT_ID=ecb1b97c68e18a562472e8808f6e5879 npx wrangler deploy   # the Blendly account
+npm run build           # put the staging build back in dist/, which deploy:staging serves
 ```
+
+Name the account: Wrangler otherwise picks up the old scmillsc0809 account cached in
+`node_modules/.cache` and fails with an authentication error.
 
 ## Production & Marketing Domain
 

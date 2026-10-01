@@ -16,12 +16,15 @@ test.skip(E2E_MODE === 'staging', 'The demo lookbook only exists in the demo bui
 /** A 1×1 PNG, enough for the editor's resize-and-add path. */
 const PNG = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', 'base64')
 
+/** The site under test: the local dev server, or a deployed demo via E2E_BASE_URL. */
+const OWN_HOST = new URL(process.env.E2E_BASE_URL ?? 'http://localhost:5173').hostname
+
 /** Every request the page makes that would reach a server or an AI provider. */
 function watchServerCalls(page: Page): string[] {
   const calls: string[] = []
   page.on('request', (request) => {
     const url = new URL(request.url())
-    if (url.pathname.startsWith('/api') || !['localhost', '127.0.0.1', 'fonts.googleapis.com', 'fonts.gstatic.com', 'api.iconify.design', 'api.simplesvg.com', 'api.unisvg.com'].includes(url.hostname)) {
+    if (url.pathname.startsWith('/api') || ![OWN_HOST, 'localhost', '127.0.0.1', 'fonts.googleapis.com', 'fonts.gstatic.com', 'api.iconify.design', 'api.simplesvg.com', 'api.unisvg.com'].includes(url.hostname)) {
       calls.push(request.url())
     }
   })
