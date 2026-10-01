@@ -27,7 +27,8 @@ The Phase 3 Director names catalog items, and the server writes every sentence t
 2. **A short interview: 3–5 questions** before the brief is ready. The fan can keep talking after that.
 3. **Language mirrors the fan:** as explicit as the fan is, never more, and always within the creator's limits.
 4. **Explicit is the baseline** where adult content is on. Solo play to orgasm is included in the base video. What a creator won't do (for example pee, degradation, violence, specific acts) is set in her limits.
-5. **Every video is exclusive,** and the fan's name is on by default with an opt-out, used at least twice (this updates doc 14).
+5. **Every video is exclusive,** and the fan's name is on by default with an opt-out, used at least twice (this updates doc 14). Maya's default base price stays $90, name included.
+6. **Every brief has the six story fields, and any of them can be left to Maya's choice** (§4).
 
 Unchanged from doc 11: prices, delivery and approval come only from the server and the creator. The platform hard list applies to every word. Adult content is gated by doc 11 §5.4's switches.
 
@@ -62,7 +63,9 @@ What the fan confirms. It goes into the Scene Card, the creator reads it, and th
 | `wordsToSay` | The fan's own phrases, used **word for word** in the script (like doc 11 §5.7's fan script) | 5 lines of 150 |
 | `avoid` | Anything the fan doesn't want | 300 |
 
-- **The required fields are `setting`, `buildUp`, `peak` and `ending`.** The brief is "ready" once they're filled, and the interview stops asking. Usually that takes 3–5 questions.
+- **The six story fields are part of every brief:** `setting`, `role`, `backstory`, `buildUp`, `peak` and `ending` (owner, 2026-10-01). `wordsToSay` and `avoid` are optional and empty by default.
+- **Any field can be left to the creator** (owner, 2026-10-01). Each story field holds either the fan's answer or **"Maya's choice"**. The fan is told this at the start ("Anything you'd rather leave to Maya, just say so"), and every field in the brief panel has a "Leave it to Maya" control. When the fan says something like "up to her", the model sets that field to Maya's choice instead of asking again.
+- **The brief is ready** once every story field is either answered or left to Maya, and the interview stops asking. Usually that takes 3–5 questions, because one answer often fills several fields. A fan can leave everything to Maya in one tap.
 - **Brief fields are written by the model, but they describe the fan's wishes.** The fan can edit any field before confirming. Each field is checked like fan text (§6), and confirming saves it through the normal draft save.
 - **The fan's name** comes from the name option (doc 14, on by default), not from the brief.
 
@@ -71,8 +74,9 @@ What the fan confirms. It goes into the Scene Card, the creator reads it, and th
 ```ts
 interface DirectorReplyV2 {
   message: string                 // shown to the fan, at most 600 characters
-  brief: Partial<FantasyBrief>    // fields to set or replace; omitted fields stay as they were
-  briefReady: boolean             // true when the required fields are filled
+  brief: Partial<FantasyBrief>    // fields to set or replace; omitted fields stay as they were.
+                                  // A story field is { kind: 'fan', text } or { kind: 'creator_choice' }
+  briefReady: boolean             // the server recomputes this: every story field answered or left to the creator
   options: Option[]               // 0-2, catalog item ids from the per-request enum, exactly as today
   notOffered: string[]            // short names of anything on the creator's hard-no list
   customRequest: string | null    // something not in the catalog that the creator would have to price
@@ -157,8 +161,8 @@ The two recorded cases (anniversary and summer) are recorded again on v2 with th
 
 | # | Question | Needed by |
 | --- | --- | --- |
-| 1 | Approve the brief fields (§4), especially whether `role` and `backstory` are optional | Before build |
+| 1 | ~~Brief fields?~~ **Decided (owner, 2026-10-01):** role and backstory are included; any field can be left to Maya's choice, and the fan is told so | Done |
 | 2 | Maya's adult items and prices, and the new checklist limits (§7) | Before the catalog change |
 | 3 | The fallback sentence (§6) and the "Maya's assistant (AI)" label | Before build |
 | 4 | Whether the assistant's first message may mention the lookbook picks by name (proposed: yes) | Before build |
-| 5 | ~~Design first?~~ **Decided (owner, 2026-10-01): drawn first.** Design 26 (`docs/designs/html/26-fantasy-interview.html`, Superdesign draft `b4fdaa38`) awaits the owner's review | Before build |
+| 5 | ~~Design first?~~ **Decided (owner, 2026-10-01): drawn first.** Design 26 (`docs/designs/html/26-fantasy-interview.html`, Superdesign draft `b4fdaa38`) is being redesigned by GPT to match the studiolens.me landing page's visual quality, with "Leave it to Maya" added | Before build |

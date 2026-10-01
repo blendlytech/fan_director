@@ -27,7 +27,7 @@ An earlier draft the same day had the name as a priced opt-in, and resale of nam
 ## 2. Exclusive videos (replaces doc 11 §5.7's rights options)
 
 - **The `rights` group is removed:** no "Maya may resell it later", and no "Just for you (exclusive) +50%". Every video is made for one fan.
-- **Creators set their base prices knowing that.** There is no resale income from customs on this platform. Maya's pilot prices need the owner's review (§6, question 1).
+- **Creators set their base prices knowing that.** There is no resale income from customs on this platform. **Maya's default base price stays $90** and includes the fan's name (owner, 2026-10-01).
 - **The promise is the creator's.** By offering custom videos here, she agrees in her creator terms never to sell or share a custom video, except for the promotional clips in §3. Breaking that is grounds for removal from the platform. The platform can't stop a copy from existing; what it guarantees is the agreement and its enforcement.
 - **What the fan sees (draft wording for counsel):**
 
@@ -93,7 +93,7 @@ An earlier draft the same day had the name as a priced opt-in, and resale of nam
 
 | # | Question | Needed by |
 | --- | --- | --- |
-| 1 | Maya's pilot base prices now that every video is exclusive (today: 3-minute base $90, and exclusive was +50%) | Before the catalog change |
+| 1 | ~~Maya's pilot base price?~~ **Decided (owner, 2026-10-01): the default stays $90 and includes the fan's name** (and exclusivity, which every video now has) | Done |
 | 2 | ~~Is the name included in the price?~~ **Decided (owner, 2026-10-01): included in the price.** | Done |
 | 3 | Can a fan opt out of promotional clips? (Proposed: no; disclosed as a platform rule) | Before build |
 | 4 | Counsel: "Made only for you" wording and "Maya owns the video; you're buying it for your own viewing" | Before launch |
