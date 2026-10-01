@@ -24,8 +24,14 @@ The page follows the product's no-false-claims rule:
 From this folder:
 
 ```bash
-npx --prefix ../worker wrangler deploy
+CLOUDFLARE_ACCOUNT_ID=ecb1b97c68e18a562472e8808f6e5879 npx --prefix ../worker wrangler deploy
 ```
+
+Name the account explicitly. Without it, Wrangler can pick up the demo's cached account
+(`frontend/node_modules/.cache`, the scmillsc0809 account) and fail with an authentication
+error. The page belongs on the Blendly account, next to staging and the studiolens.me zone.
+
+It's live at https://studiolens-landing.blendly.workers.dev (first deployed 2026-10-01).
 
 That serves the page on its `workers.dev` address. To put it on the domain:
 
