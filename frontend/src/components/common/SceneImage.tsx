@@ -8,8 +8,7 @@ type SceneImageProps = {
   className?: string
 }
 
-// Several reference photos in the original design drafts now 404, so images
-// degrade to an on-brand placeholder instead of a blank box.
+// Keep a readable fallback if an image cannot be loaded.
 export function SceneImage({ src, alt, className }: SceneImageProps) {
   const [failed, setFailed] = useState(false)
 

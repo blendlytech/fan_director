@@ -31,6 +31,13 @@
       "migrations_dir": "migrations"
     }
   ],
+  // Creator uploads (migration 0005). Locally Wrangler simulates this bucket.
+  // Bindings aren't inherited, so env.staging names its own (R2 enabled on the
+  // Blendly account 2026-10-01). An environment with no binding answers uploads
+  // with 503 media_storage_unavailable and still saves the rest of the lookbook.
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "fan-director-media-development" }
+  ],
   "vars": {
     "ENVIRONMENT": "development",
     "APP_ORIGIN": "http://localhost:8787",
@@ -82,6 +89,12 @@
           "database_id": "5411bfbd-0b73-49f4-b866-30d26076fe9b",
           "migrations_dir": "migrations"
         }
+      ],
+      // Creator uploads (migration 0005). Private bucket: its public development
+      // URL stays off, and images are only served through GET /api/media/:id,
+      // which checks the uploading creator is still active.
+      "r2_buckets": [
+        { "binding": "MEDIA", "bucket_name": "fan-director-media-staging" }
       ],
       "vars": {
         "ENVIRONMENT": "staging",

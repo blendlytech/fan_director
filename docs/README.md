@@ -58,6 +58,7 @@ for the backend build (doc 11 and doc 12), not screens in the demo.
 | [reports/phase-0-report.md](reports/phase-0-report.md) | Astra's Gate 0 report plus addendum. The `phase-0-eval/` files it lists were never pushed. |
 | [reports/phase-1-report.md](reports/phase-1-report.md) | Gate 1: backend foundation, rebuilt after Astra's workspace was lost, with the Gate 1 review's changes. Awaiting owner review. |
 | [reports/phase-0-live/RESULTS.md](reports/phase-0-live/RESULTS.md) | Live model and classifier tests, rounds 1–4. The folder holds the runner scripts and test cases. Raw outputs in `results/` are gitignored. |
+| [reports/gpt-6-prompting-guide.md](reports/gpt-6-prompting-guide.md) | Which GPT-6 model and effort level to use for each kind of job, how to prompt it, and how to keep it away from explicit text (2026-10-01). |
 | [reports/custom-video-market-research.md](reports/custom-video-market-research.md) | Unsourced. Use it for seed defaults only, never for claims shown to users. |
 
 New phase reports go in `reports/phase-N-report.md` (doc 11 §9).

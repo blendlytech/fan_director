@@ -39,8 +39,7 @@ export type FocusId = 'richer' | 'longer'
 type SettingPresentation = {
   /** Thumbnail used in the Director's choice cards. */
   image: string
-  /** Wider crop used for the Review hero. Several of these 404: always render
-   *  them through <SceneImage>, which falls back to an on-brand placeholder. */
+  /** Wider crop used for the Review hero. */
   imageLarge: string
   alt: string
   sceneTitle: string
@@ -52,10 +51,8 @@ type SettingPresentation = {
 /** Imagery and scene copy for the designed settings, keyed by catalog item key. */
 const SETTING_PRESENTATION: Record<string, SettingPresentation> = {
   vintage: {
-    image:
-      'https://images.unsplash.com/photo-1551028150-64b9e398f678?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    imageLarge:
-      'https://images.unsplash.com/photo-1551028150-64b9e398f678?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/scenes/vintage-lounge.webp',
+    imageLarge: '/scenes/vintage-lounge.webp',
     alt: 'Warmly lit vintage lounge with velvet seating and soft lamps',
     sceneTitle: 'Vintage Lounge Greeting',
     sceneDescription:
@@ -63,21 +60,17 @@ const SETTING_PRESENTATION: Record<string, SettingPresentation> = {
     lineLabel: 'Vintage Lounge Setup',
   },
   floral: {
-    image:
-      'https://images.unsplash.com/photo-1563241527-2004cb630db0?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    imageLarge:
-      'https://images.unsplash.com/photo-1563241527-2004cb630db0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    alt: 'Bright studio table arranged with fresh cut flowers',
+    image: '/scenes/floral-studio.webp',
+    imageLarge: '/scenes/floral-studio.webp',
+    alt: 'Moody floral studio table with red roses and blush peonies',
     sceneTitle: 'Floral Studio Greeting',
     sceneDescription:
       'A bright, airy greeting surrounded by seasonal blooms. Ideal for cheerful celebrations and uplifting messages.',
     lineLabel: 'Floral Studio Setup',
   },
   backstage: {
-    image:
-      'https://images.unsplash.com/photo-1517457224219-c60317e3df1c?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-    imageLarge:
-      'https://images.unsplash.com/photo-1517457224219-c60317e3df1c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/scenes/backstage.webp',
+    imageLarge: '/scenes/backstage.webp',
     alt: 'Backstage dressing area with mirror lights and hanging garments',
     sceneTitle: 'Backstage Greeting',
     sceneDescription:

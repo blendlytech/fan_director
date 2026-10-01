@@ -10,6 +10,9 @@
   body {
     @apply bg-cream text-espresso font-sans;
     line-height: 1.5;
+    background-image: var(--studio-background-image, none);
+    background-size: cover;
+    background-attachment: fixed;
   }
 
   h1,

@@ -22,8 +22,7 @@ type ThemeCard = {
 
 const themeCards: ThemeCard[] = [
   {
-    image:
-      'https://images.unsplash.com/photo-1551028150-64b9e398f678?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/scenes/vintage-lounge.webp',
     setting: 'vintage',
     alt: 'Vintage Lounge',
     title: 'Vintage Lounge Greeting',
@@ -31,8 +30,7 @@ const themeCards: ThemeCard[] = [
       "A cozy, cinematic atmosphere with warm lighting. Perfect for personalized messages and intimate announcements.",
   },
   {
-    image:
-      'https://images.unsplash.com/photo-1563241527-2004cb630db0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/scenes/floral-studio.webp',
     setting: 'floral',
     alt: 'Floral Studio',
     title: 'Floral Studio Scene',
@@ -40,8 +38,7 @@ const themeCards: ThemeCard[] = [
       'Bright, airy, and surrounded by seasonal blooms. Ideal for cheerful celebrations and uplifting messages.',
   },
   {
-    image:
-      'https://images.unsplash.com/photo-1517457224219-c60317e3df1c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    image: '/scenes/backstage.webp',
     setting: 'backstage',
     alt: 'Backstage Moment',
     title: 'Intimate Backstage',
@@ -101,7 +98,7 @@ export function BoutiqueEntrance() {
           <div className="md:col-span-7">
             <div className="relative h-64 w-full overflow-hidden rounded-xl shadow-subtle sm:h-80">
               <SceneImage
-                src="https://images.unsplash.com/photo-1616486029423-aaa4789e8c9a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80"
+                src="/scenes/collection-hero.webp"
                 alt="Vintage lounge still life"
               />
               <div className="absolute inset-0 bg-black/5" />
@@ -214,6 +211,12 @@ export function BoutiqueEntrance() {
           </div>
         </section>
 
+        {!capabilities.serverCatalog && (
+          <p className="mb-12 text-center text-sm text-muted">
+            Previewing the creator side? <Link to="/creator/lookbook" className="font-medium text-espresso underline underline-offset-4 focus-ring">Manage demo outfits, props, and categories</Link>
+          </p>
+        )}
+
         {/* Creator Boundaries Explainer */}
         <section className="border-t border-divider pt-12">
           <h2 className="mb-8 text-3xl tracking-tight text-espresso">How this works</h2>
@@ -268,7 +271,7 @@ export function BoutiqueEntrance() {
                   <div>
                     <h4 className="mb-1 font-medium text-espresso">Content Guidelines</h4>
                     <p className="text-sm text-muted">
-                      Wardrobe is strictly creator-curated. No explicit content, political
+                      Wardrobe choices are creator-curated and subject to Maya&rsquo;s approval. No explicit content, political
                       endorsements, or commercial promotions are permitted in these personal
                       commissions.
                     </p>

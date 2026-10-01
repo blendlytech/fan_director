@@ -14,6 +14,7 @@ Read them in this order:
 | 04 | [The Phase 4 round trip](04-round-trip-staging.md) | Fan sends → creator reviews → approval → payment, by hand on staging | ~30 min |
 | 05 | [Browser checks](05-browser-checks.md) | The Phase 4 screens at 375, 768 and 1280 px | ~20 min |
 | 06 | [The custom domain](06-custom-domain.md) | **Not runnable yet.** Staging on `www.studiolens.me` once the domain is live | ~15 min |
+| 08 | [The creator lookbook](08-creator-lookbook.md) | Demo picker and editor; the creator's saved lookbook on staging; image uploads to R2 | ~20 min |
 
 Read 03 before 04: it holds the creator's sign-in details, which the round trip needs.
 

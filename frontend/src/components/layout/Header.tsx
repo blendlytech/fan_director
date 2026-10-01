@@ -6,6 +6,7 @@ import { requestsCopy } from '../../copy/requests'
 import { cn } from '../../lib/cn'
 import { Icon } from '../common/Icon'
 import { AuthControls } from './AuthControls'
+import { useOptionalLookbook } from '../../state/lookbook'
 
 // `to` is omitted for sections the prototype does not implement; those render inert.
 export type HeaderLink = { label: string; to?: string }
@@ -22,6 +23,8 @@ const fanLinks: HeaderLink[] = [
 const DESKTOP_QUERY = '(min-width: 768px)'
 
 export function Header({ links = fanLinks }: { links?: HeaderLink[] }) {
+  // The brand name follows a mounted lookbook (the demo's, or the creator's editor).
+  const brandName = useOptionalLookbook()?.profile.brand.name.trim()
   const { pathname } = useLocation()
   // The menu remembers the path it was opened on, so any route change closes it
   // without a state-syncing effect.
@@ -80,7 +83,7 @@ export function Header({ links = fanLinks }: { links?: HeaderLink[] }) {
             to="/"
             className="inline-flex min-h-[44px] items-center font-serif text-2xl font-medium tracking-tight sm:text-3xl focus-ring"
           >
-            Maya Atelier
+            {brandName || 'Maya Atelier'}
           </Link>
           <span className="inline-flex items-center rounded border border-divider bg-secondary px-2 py-0.5 text-[10px] font-medium text-muted sm:text-xs">
             {authEnabled ? 'Staging' : 'Demo'}

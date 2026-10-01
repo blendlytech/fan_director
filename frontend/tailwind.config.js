@@ -9,16 +9,19 @@ export default {
         mono: ['JetBrains Mono', 'monospace'],
       },
       colors: {
-        cream: '#FDF8F3',
-        panel: '#FFFFFF',
+        // The creator's brand colours (shared/domain/creatorProfile.ts) arrive
+        // as RGB channels, so opacity modifiers like bg-espresso/40 still work.
+        // The fallbacks are the design system's own values.
+        cream: 'rgb(var(--studio-cream, 253 248 243) / <alpha-value>)',
+        panel: 'rgb(var(--studio-panel, 255 255 255) / <alpha-value>)',
         secondary: '#F5F0EB',
-        espresso: '#302720',
+        espresso: 'rgb(var(--studio-espresso, 48 39 32) / <alpha-value>)',
         muted: '#70625C',
         divider: '#DED3CB',
         rose: {
           DEFAULT: '#E4A4BD',
           hover: '#D595AE',
-          deep: '#84485D',
+          deep: 'rgb(var(--studio-accent, 132 72 93) / <alpha-value>)',
         },
         alert: {
           DEFAULT: '#E37A6A',

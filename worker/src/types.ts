@@ -3,6 +3,12 @@ import type { AiProviders } from './ai/provider'
 export interface Env {
   DB: D1Database
   ASSETS: Fetcher
+  /**
+   * Creator uploads (migration 0005). Optional: an environment without a bucket
+   * answers uploads with 503 media_storage_unavailable, while the rest of the
+   * lookbook still saves.
+   */
+  MEDIA?: R2Bucket
 
   ENVIRONMENT: 'development' | 'staging' | 'test'
   /**
