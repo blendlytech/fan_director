@@ -7,8 +7,7 @@ The lookbook editor exists in both builds:
 - **Staging:** `/creator/lookbook` loads and saves the **signed-in creator's own** profile
   (`GET`/`PUT /api/creator/profile`, migration 0005). Fans don't see it yet.
 
-Part A runs today. Part B needs two owner steps first, listed at its top. Part C is blocked
-on R2.
+All three parts can run on staging: migration 0005 and the R2 bucket are in place (2026-10-01).
 
 ---
 
@@ -37,12 +36,6 @@ Open <http://localhost:5173>. Steps 1–9 are also automated in `frontend/e2e/lo
 
 ## Part B — Staging, signed in as the creator (~10 min)
 
-**Before this part, two owner steps:**
-
-1. Apply migration 0005 to staging's D1:
-   `npx wrangler d1 migrations apply DB --env staging --remote` (from `worker/`).
-2. Deploy: `npm run build --prefix frontend`, then `npm run deploy:staging` (from `worker/`).
-
 Sign in with the creator account in doc 03.
 
 | # | Do this | Expected |
@@ -51,7 +44,7 @@ Sign in with the creator account in doc 03.
 | 2 | Sign in as a **fan**, open `/creator/lookbook` | "This account isn't a creator account on this site." No editor |
 | 3 | Sign in as the **creator**, open `/creator/lookbook` | The editor, with the studio name set to the creator's display name, empty categories, and "Not saved yet. This is your starting point." |
 | 4 | Header links | **Requests** and **Lookbook**; the queue at `/creator/requests` shows the same two |
-| 5 | Every "Add your own item" area, and Background image | "Image uploads aren't available on this site yet…" in place of the file pickers (Part C) |
+| 5 | Every "Add your own item" area, and Background image | File pickers are there (uploads are Part C) |
 | 6 | Change Style, add a limit "No feet" under **Things I will not do**, create category **Shoes** with limit 3 | The bar at the top says "You have unsaved changes." |
 | 7 | Try to close the tab | The browser asks whether to leave |
 | 8 | Click **Save changes** | "All changes saved to your account." |
@@ -61,22 +54,18 @@ Sign in with the creator account in doc 03.
 | 12 | Scroll to **How fans will see your choices** | The picker with your categories, marked as a preview that fans don't see yet |
 | 13 | As a fan on `/ai-director` | Unchanged from Phase 4: no lookbook. That is expected for now |
 
-## Part C — Image uploads on staging (blocked)
+## Part C — Image uploads on staging
 
-R2 is not enabled on the Blendly Cloudflare account. `wrangler r2 bucket list` answers
-*"Please enable R2 through the Cloudflare Dashboard. [code: 10042]"* (checked 2026-10-01).
-To unblock:
+Uploads go to the private R2 bucket `fan-director-media-staging` and are served only
+through `/api/media/<id>`.
 
-1. Enable R2 in the Cloudflare dashboard (owner; it may ask for a payment method).
-2. `npx wrangler r2 bucket create fan-director-media-staging` (from `worker/`).
-3. Under `env.staging` in `worker/wrangler.jsonc`, add
-   `"r2_buckets": [{ "binding": "MEDIA", "bucket_name": "fan-director-media-staging" }]`, then deploy.
-
-Then, signed in as the creator:
+Signed in as the creator:
 
 | # | Do this | Expected |
 | --- | --- | --- |
-| 1 | Open `/creator/lookbook` | File pickers are back |
+| 1 | Open `/creator/lookbook` | Every category has an "Add your own item" form with a file picker |
 | 2 | Add an item to Shoes with a JPG | "Image uploaded. Press Save changes to keep it in your lookbook." |
 | 3 | Save, reload | The image is still there, served from `/api/media/<id>` |
-| 4 | Upload a `.gif` renamed to `.png` | "That file isn't a JPG, PNG or WebP image this site can use." |
+| 4 | Rename a text file to `notes.png` and try to add it | "That file isn't a JPG, PNG or WebP image this site can use." Nothing is uploaded |
+| 5 | Try a photo over 8 MB | "Choose a JPG, PNG, or WebP image under 8 MB." |
+| 6 | Open an uploaded image's address (`/api/media/<id>`) in a private window | The image loads without signing in, as it will for fans |

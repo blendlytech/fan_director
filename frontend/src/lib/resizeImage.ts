@@ -12,7 +12,13 @@ export async function resizeImage(file: File, maxSide = 720): Promise<Blob> {
   if (!(IMAGE_INPUT.types as readonly string[]).includes(file.type) || file.size > IMAGE_INPUT.maxBytes) {
     throw new ImageInputError('Choose a JPG, PNG, or WebP image under 8 MB.')
   }
-  const bitmap = await createImageBitmap(file)
+  let bitmap: ImageBitmap
+  try {
+    bitmap = await createImageBitmap(file)
+  } catch {
+    // A renamed or damaged file: say it in our words, not the browser's.
+    throw new ImageInputError('That file isn’t a JPG, PNG or WebP image this site can use.')
+  }
   try {
     const scale = Math.min(1, maxSide / Math.max(bitmap.width, bitmap.height))
     const canvas = document.createElement('canvas')

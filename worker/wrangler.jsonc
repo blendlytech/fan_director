@@ -31,14 +31,10 @@
       "migrations_dir": "migrations"
     }
   ],
-  // Creator uploads (migration 0005). Local development and tests only: Wrangler
-  // simulates the bucket. Staging has no "r2_buckets" entry, deliberately — R2 is
-  // not enabled on the Blendly account (Cloudflare error 10042, checked
-  // 2026-10-01), and a binding to a bucket that doesn't exist fails the deploy.
-  // Without it, uploads answer 503 media_storage_unavailable. To turn them on:
-  //   1. enable R2 in the Cloudflare dashboard (owner),
-  //   2. wrangler r2 bucket create fan-director-media-staging,
-  //   3. add the same "r2_buckets" entry under env.staging with that bucket_name.
+  // Creator uploads (migration 0005). Locally Wrangler simulates this bucket.
+  // Bindings aren't inherited, so env.staging names its own (R2 enabled on the
+  // Blendly account 2026-10-01). An environment with no binding answers uploads
+  // with 503 media_storage_unavailable and still saves the rest of the lookbook.
   "r2_buckets": [
     { "binding": "MEDIA", "bucket_name": "fan-director-media-development" }
   ],
@@ -93,6 +89,12 @@
           "database_id": "5411bfbd-0b73-49f4-b866-30d26076fe9b",
           "migrations_dir": "migrations"
         }
+      ],
+      // Creator uploads (migration 0005). Private bucket: its public development
+      // URL stays off, and images are only served through GET /api/media/:id,
+      // which checks the uploading creator is still active.
+      "r2_buckets": [
+        { "binding": "MEDIA", "bucket_name": "fan-director-media-staging" }
       ],
       "vars": {
         "ENVIRONMENT": "staging",
