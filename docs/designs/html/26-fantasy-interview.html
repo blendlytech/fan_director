@@ -123,6 +123,7 @@ iconify-icon { flex-shrink: 0; vertical-align: middle; }
 .intro-avatar { width: 52px; height: 52px; border-radius: 50%; object-fit: cover; border: 2px solid var(--creator-accent); }
 .intro-profile > span { flex: 1; display: grid; gap: 2px; }
 .intro-name { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; line-height: 1; }
+.intro-ai-note { font-size: 10px; color: color-mix(in srgb, var(--creator-text) 70%, var(--creator-surface)); }
 .intro-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; color: var(--creator-accent); }
 .intro-replay { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 50%; border: 1px solid color-mix(in srgb, var(--creator-text) 15%, transparent); background: transparent; }
 @media (prefers-reduced-motion: reduce) { .intro-video img, .intro-dot, .intro-progress span { animation: none; } }
@@ -363,17 +364,17 @@ dd { font-size: 13px; line-height: 1.8; margin-top: 6px; }
             </div>
           </div>
 
-          <!-- Maya greets the fan on arrival: her intro video (doc 17 §3) plays muted
+          <!-- Maya hands the fan to her assistant (doc 17 §3, the hand-off clip). Plays muted
                with captions; sound on tap. Reduced motion: poster + play, no autoplay. -->
           <figure class="intro-card" aria-labelledby="intro-name">
             <div class="intro-video">
-              <img src="https://raw.githubusercontent.com/blendlytech/fan_director/landing/landing/public/assets/creator-portrait.webp" alt="Maya, in a still from her intro video" width="480" height="600">
+              <img src="https://raw.githubusercontent.com/blendlytech/fan_director/landing/landing/public/assets/creator-portrait.webp" alt="Maya introducing her assistant, in a still from her video" width="480" height="600">
               <div class="intro-shade" aria-hidden="true"></div>
               <span class="intro-live"><span class="intro-dot" aria-hidden="true"></span>Playing · muted</span>
               <button type="button" class="intro-sound" data-note="the video unmutes; captions stay on." aria-label="Turn on sound for Maya's intro">
                 <iconify-icon icon="lucide:volume-2" width="18" aria-hidden="true"></iconify-icon>Tap for sound
               </button>
-              <p class="intro-caption" aria-live="polite">&ldquo;Hi, I&rsquo;m Maya. I collect old perfume bottles, I&rsquo;m terrible at sleeping early, and I love a slow evening that turns into something more&hellip;&rdquo;</p>
+              <p class="intro-caption" aria-live="polite">&ldquo;Hi, I&rsquo;m Maya. Meet my assistant. Think of it as the one who gets to hear your secrets first&hellip; Don&rsquo;t hold back. Seeing what you come up with is my favourite part.&rdquo;</p>
               <div class="intro-progress" aria-hidden="true"><span></span></div>
             </div>
             <figcaption class="intro-profile">
@@ -381,6 +382,7 @@ dd { font-size: 13px; line-height: 1.8; margin-top: 6px; }
               <span>
                 <span id="intro-name" class="intro-name">Maya</span>
                 <span class="intro-badge"><iconify-icon icon="lucide:badge-check" width="14" aria-hidden="true"></iconify-icon>Verified 18+</span>
+                <span class="intro-ai-note">Demo creator · AI-generated video</span>
               </span>
               <button type="button" class="intro-replay" data-note="the intro plays again from the start, with sound." aria-label="Replay Maya's intro with sound">
                 <iconify-icon icon="lucide:rotate-ccw" width="16" aria-hidden="true"></iconify-icon>

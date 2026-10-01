@@ -45,6 +45,11 @@ A sticky "Start your fantasy" button follows the fan down the page, so the next 
   - Then a person approves it: the owner, in the pilot.
   - Nothing is public until it's approved.
 - Hosting a **non-explicit** clip avoids the record-keeping that explicit video would require. Explicit video stays out of scope.
+- **A second, optional clip: handing the fan to her assistant** (owner, 2026-10-01). At the top of the fantasy interview (design 26), she introduces her assistant in a flirty way, invites the fan to get creative, and says how much she looks forward to what her fans come up with. The same rules and review apply.
+- **The demo creator's clips are AI avatar videos** (owner, 2026-10-01: Maya's avatar is made with Higgsfield). Maya is fictional, so her clips carry the label "Demo creator · AI-generated video" (the no-false-claims rule, doc 01).
+  - Higgsfield's terms forbid sexually explicit or suggestive content, and its filters block swimwear, boudoir and implied nudity. Her clips stay flirty in the words and tasteful in the picture.
+  - The avatar must look clearly adult.
+  - Real creators record themselves (§10, question 6).
 
 ## 4. Naming her assistant
 
@@ -104,3 +109,4 @@ The story is labelled **"Written with Velvet (AI), from Maya's own fantasy."** W
 | 3 | Intro video length (proposed: up to 45 seconds) | Before build |
 | 4 | Who reviews intro videos after the pilot | Before launch |
 | 5 | Counsel: the AI-help label on the story | Before launch |
+| 6 | May a real creator use an AI avatar of herself for her clips? (Proposed: only of herself, with her written consent, always labelled AI-generated) | Before launch |
