@@ -98,7 +98,7 @@ Every check runs on `message` **and** every brief field, before anything reaches
 5. **Mirroring:** the server rates each fan message (not explicit, suggestive, explicit) with the existing explicit-terms rule. If the fan has written nothing explicit and the model's text is explicit, the reply is rejected and retried. The rule never lowers explicit content between consenting adults the fan asked for.
 6. **No upsell without a reason:** an option must relate to something in the fan's message or the brief. The model is told this, and the server records unrequested options for the gate measure (§9).
 
-**Retry and failure:** one retry with the reasons, as today, then the fallback model once. If those fail, the fan sees a template ("I couldn't put that one together. Could you say it another way?") instead of "unavailable". The draft and manual selection keep working.
+**Retry and failure:** one retry with the reasons, as today, then the fallback model once. If those fail, the fan sees a template ("I didn't quite get that one. Could you say it another way?") instead of "unavailable". The draft and manual selection keep working.
 
 ## 7. Adult as the baseline (amends doc 11 §5.2 and §5.4 for the demo and tests)
 
@@ -108,7 +108,10 @@ Every check runs on `message` **and** every brief field, before anything reaches
   - **Positions (solo):** riding a suction-cup dildo, and on all fours facing away.
   - **Kink outfits:** a latex or PVC set, and fishnet stockings with a garter belt. These match the domination and tease niches in `docs/reports/custom-video-market-research.md`.
   - **Never as examples:** schoolgirl or cheerleader costumes, or anything else that reads as a minor (the platform hard list, doc 11 §5.3.2).
-  - The owner sets the example prices.
+  - **Example prices** (owner delegated the choice, 2026-10-01). They're grounded in the market research: specialty acts add $25–100, and wardrobe is the item's cost plus $20–40 of prep. Each creator sets her own.
+    - Toys: wand vibrator $20, dildo $30.
+    - Positions: on all fours $15; riding a suction-cup dildo $25, since it needs a toy.
+    - Outfits she owns: fishnets with a garter belt $20, a latex or PVC set $40. An outfit she doesn't own is a gift for her (doc 16), priced at its cost plus her prep fee.
 - **New checklist limits a creator can set to "Hard no" or "Ask me":** watersports and bodily fluids, degradation and humiliation, rough play and choking, plus a short list of specific acts. Creators can still write custom limits.
 - **Where adult content is on:** the gated demo and the test processes. **Deployed staging stays adult-off** until a creator has the compliance records (doc 11 §5.4). Providers confirm adult use in writing before launch (doc 11 §10).
 
@@ -162,7 +165,7 @@ The two recorded cases (anniversary and summer) are recorded again on v2 with th
 | # | Question | Needed by |
 | --- | --- | --- |
 | 1 | ~~Brief fields?~~ **Decided (owner, 2026-10-01):** role and backstory are included; any field can be left to Maya's choice, and the fan is told so | Done |
-| 2 | Maya's adult items and prices, and the new checklist limits (§7) | Before the catalog change |
-| 3 | The fallback sentence (§6) and the "Maya's assistant (AI)" label | Before build |
-| 4 | Whether the assistant's first message may mention the lookbook picks by name (proposed: yes) | Before build |
+| 2 | ~~Adult items and prices?~~ **Decided (owner delegated, 2026-10-01):** the examples and prices in §7 | Done |
+| 3 | ~~Fallback sentence and label?~~ **Decided (owner delegated, 2026-10-01):** "I didn't quite get that one. Could you say it another way?" The label is "Maya's assistant (AI)", or "Velvet (AI) · Maya's assistant" once she names it (doc 17) | Done |
+| 4 | ~~First message names the lookbook picks?~~ **Decided (owner, 2026-10-01): yes** | Done |
 | 5 | ~~Design first?~~ **Decided (owner, 2026-10-01): drawn first.** Design 26 (`docs/designs/html/26-fantasy-interview.html`, Superdesign draft `b4fdaa38`) is being redesigned by GPT to match the studiolens.me landing page's visual quality, with "Leave it to Maya" added | Before build |

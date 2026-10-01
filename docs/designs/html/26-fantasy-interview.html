@@ -3,360 +3,1273 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fantasy interview - Maya Atelier</title>
+<meta name="theme-color" content="#FDF8F3">
+<title>Your fantasy — Maya Atelier</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script>
-tailwind.config = {
-  theme: {
-    extend: {
-      fontFamily: { serif: ['Cormorant Garamond', 'serif'], sans: ['Inter', 'sans-serif'], mono: ['JetBrains Mono', 'monospace'] },
+if (window.tailwind) {
+  tailwind.config = {
+    theme: { extend: {
       colors: {
-        cream: '#FDF8F3', panel: '#FFFFFF', secondary: '#F5F0EB', espresso: '#302720', muted: '#70625C',
-        rose: '#E4A4BD', rosehover: '#D595AE', deeprose: '#84485D', divider: '#DED3CB',
-        okbg: '#EEF4EC', okborder: '#C4D9BF', okink: '#4F7A48',
-        pendbg: '#F8EFE4', pendborder: '#E3C8A6', pendink: '#7A5530'
+        cream: 'var(--creator-background)',
+        panel: 'var(--creator-surface)',
+        espresso: 'var(--creator-text)',
+        accent: 'var(--creator-accent)',
+        divider: 'color-mix(in srgb, var(--creator-text) 18%, var(--creator-background))'
       },
-      transitionDuration: { '160': '160ms' }
-    }
-  }
+      fontFamily: {
+        serif: ['Cormorant Garamond', 'Georgia', 'serif'],
+        sans: ['Inter', 'Arial', 'sans-serif']
+      }
+    } }
+  };
 }
 </script>
 <style>
-  body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; margin: 0; }
-  html { background-color: #FDF8F3; }
-  h1, h2, h3 { font-family: 'Cormorant Garamond', serif; }
-  .focus-ring:focus-visible { outline: 2px solid #302720; outline-offset: 2px; }
-  @keyframes dot { 0%, 80%, 100% { opacity: .25 } 40% { opacity: 1 } }
-  .dot { animation: dot 1.2s infinite; }
-  .dot:nth-child(2) { animation-delay: .15s } .dot:nth-child(3) { animation-delay: .3s }
-  @keyframes fill { from { background-color: #EEF4EC } to { background-color: transparent } }
-  .just-filled { animation: fill 1.6s ease-out; }
-  @media (prefers-reduced-motion: reduce) { .dot { animation: none; opacity: .6 } .just-filled { animation: none } }
-  details > summary { list-style: none; } details > summary::-webkit-details-marker { display: none; }
+/* Creator colour contract. These are Maya's defaults.
+   Change only these four values to theme another boutique.
+   Recheck contrast when supplying a different creator's palette. */
+:root {
+  --creator-background: #FDF8F3;
+  --creator-surface: #FFFFFF;
+  --creator-text: #302720;
+  --creator-accent: #84485D;
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { background: var(--creator-background); scroll-behavior: smooth; }
+body { margin: 0; color: var(--creator-text); font: 400 15px/1.65 Inter, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
+h1, h2, h3, p, figure, dl, dd { margin: 0; }
+h1, h2, h3 { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; line-height: 1.06; letter-spacing: -.035em; }
+h1 { font-size: clamp(52px, 7.5vw, 94px); }
+h2 { font-size: clamp(34px, 4vw, 52px); }
+h3 { font-size: 30px; }
+h1 em, h2 em { color: var(--creator-accent); font-weight: 400; }
+a { color: inherit; text-decoration: none; }
+button, input, textarea, summary { font: inherit; }
+button, a, summary, label { touch-action: manipulation; }
+button, summary { cursor: pointer; }
+button { color: inherit; }
+button, a, summary { min-height: 44px; }
+button { min-width: 44px; }
+button, input, textarea { border-radius: 12px; }
+button { border: 0; }
+textarea, input[type="text"] { background: var(--creator-surface); color: var(--creator-text); }
+textarea { display: block; width: 100%; min-width: 0; resize: vertical; }
+textarea::placeholder { color: color-mix(in srgb, var(--creator-text) 78%, var(--creator-surface)); opacity: 1; }
+img { display: block; max-width: 100%; object-fit: cover; }
+iconify-icon { flex-shrink: 0; vertical-align: middle; }
+::selection { background: var(--creator-accent); color: var(--creator-surface); }
+:focus-visible, .focus-ring:focus-visible { outline: 3px solid var(--creator-accent); outline-offset: 4px; }
+.inverse :focus-visible, .primary:focus-visible { outline: 3px solid var(--creator-background); box-shadow: 0 0 0 6px var(--creator-accent); }
+[hidden] { display: none !important; }
+[id] { scroll-margin-top: 106px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+.skip { position: fixed; left: 16px; top: -100px; z-index: 100; padding: 12px 20px; background: var(--creator-surface); border-radius: 10px; }
+.skip:focus { top: 12px; }
+.wrap { width: min(100% - 80px, 1180px); margin-inline: auto; }
+.muted, .caption { color: color-mix(in srgb, var(--creator-text) 78%, var(--creator-background)); }
+.caption { font-size: 12px; line-height: 1.7; }
+.kicker, .study-label, dt, .micro { font-family: 'JetBrains Mono', monospace; font-size: 11px; line-height: 1.6; letter-spacing: .1em; text-transform: uppercase; }
+.kicker { color: var(--creator-accent); }
+.row { display: flex; align-items: center; gap: 12px; }
+.between { justify-content: space-between; }
+.stack > * + * { margin-top: 20px; }
+.site-header { position: sticky; top: 0; z-index: 40; background: var(--creator-background); border-bottom: 1px solid color-mix(in srgb, var(--creator-text) 16%, var(--creator-background)); }
+.header-inner { min-height: 80px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.brand { display: inline-flex; align-items: center; gap: 11px; font: 500 28px/1 'Cormorant Garamond', Georgia, serif; letter-spacing: -.04em; }
+.brand-mark { width: 34px; height: 34px; display: grid; place-items: center; border: 1px solid var(--creator-accent); border-radius: 50%; color: var(--creator-accent); font-size: 22px; }
+.desktop-nav { display: flex; align-items: center; gap: 30px; font-size: 13px; }
+.desktop-nav a { display: inline-flex; align-items: center; border-bottom: 2px solid transparent; }
+.desktop-nav a[aria-current="page"] { border-color: var(--creator-accent); }
+.desktop-nav a:hover { color: var(--creator-accent); }
+.header-status { font-size: 11px; padding: 6px 10px; border: 1px solid color-mix(in srgb, var(--creator-text) 18%, var(--creator-background)); border-radius: 6px; }
+.menu-button { display: none; background: transparent; padding: 0 10px; }
+#walk-menu { padding: 12px 24px; border-top: 1px solid color-mix(in srgb, var(--creator-text) 18%, var(--creator-background)); }
+#walk-menu a { display: flex; align-items: center; padding: 0 12px; }
+.hero { position: relative; padding: 46px 0 42px; isolation: isolate; }
+.hero::before { content: ''; position: absolute; z-index: -1; inset: 0; background: radial-gradient(ellipse at 90% 15%, color-mix(in srgb, var(--creator-accent) 10%, transparent), transparent 60%); pointer-events: none; }
+.journey { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 38px; font-size: 12px; }
+.journey a { display: inline-flex; align-items: center; gap: 8px; }
+.journey .current { color: var(--creator-accent); font-weight: 600; }
+.journey .line { width: 36px; height: 1px; background: color-mix(in srgb, var(--creator-text) 24%, var(--creator-background)); }
+.hero-grid { display: grid; grid-template-columns: minmax(0,1.4fr) minmax(0,1fr); gap: 50px; align-items: end; }
+.hero h1 { margin-top: 14px; }
+.hero-description { max-width: 365px; padding-bottom: 8px; }
+.hero-description p { font-size: 16px; }
+.hero-description .caption { display: block; margin-top: 16px; font-size: 12px; }
+.study-nav { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 20px 0; border-block: 1px solid color-mix(in srgb, var(--creator-text) 18%, var(--creator-background)); }
+.study-nav > span { font-size: 11px; margin-right: 10px; }
+.study-nav a { display: flex; align-items: center; justify-content: center; min-width: 44px; padding: 0 12px; font-size: 12px; border-radius: 8px; }
+.study-nav a:hover { background: color-mix(in srgb, var(--creator-accent) 9%, var(--creator-background)); }
+.study { padding: 54px 0 64px; border-bottom: 1px solid color-mix(in srgb, var(--creator-text) 18%, var(--creator-background)); }
+.study-label { display: flex; align-items: center; gap: 14px; margin-bottom: 28px; color: var(--creator-accent); }
+.study-label span { width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid color-mix(in srgb, var(--creator-accent) 40%, var(--creator-background)); border-radius: 50%; flex-shrink: 0; }
+.study-heading { margin-bottom: 30px; }
+.study-heading p { max-width: 570px; margin-top: 10px; }
+.workspace { display: grid; grid-template-columns: minmax(0,1fr) 360px; grid-template-areas: 'chat brief' 'composer brief'; gap: 28px 44px; align-items: start; }
+.workspace > * { min-width: 0; }
+.conversation { grid-area: chat; }
+.composer-area { grid-area: composer; }
+.brief { grid-area: brief; }
+.moodboard { display: grid; grid-template-columns: 1.45fr 1fr 1fr; gap: 10px; margin-bottom: 30px; }
+.mood-tile { min-width: 0; }
+.mood-image { height: 136px; border-radius: 60px 60px 12px 12px; overflow: hidden; position: relative; background: linear-gradient(135deg, var(--creator-accent), var(--creator-text)); }
+.mood-image img { width: 100%; height: 100%; }
+.mood-image.lace { background: repeating-linear-gradient(35deg, transparent 0 16px, #ffffff16 16px 17px), radial-gradient(ellipse at 20% 20%, var(--creator-accent), var(--creator-text)); }
+.mood-image.feather { background: repeating-conic-gradient(from 220deg at 50% 110%, var(--creator-accent) 0deg 9deg, var(--creator-text) 9deg 11deg); }
+.mood-tile figcaption { font-size: 11px; line-height: 1.5; padding-top: 10px; }
+.mood-tile figcaption small { display: block; font-size: 10px; color: color-mix(in srgb, var(--creator-text) 78%, var(--creator-background)); }
+.message { display: flex; gap: 14px; align-items: flex-start; }
+.message + .message { margin-top: 28px; }
+.avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--creator-accent); color: var(--creator-surface); display: grid; place-items: center; flex-shrink: 0; }
+.message-content { min-width: 0; flex: 1; }
+.speaker { margin-bottom: 8px; color: var(--creator-accent); font-size: 12px; font-weight: 600; }
+.message-copy { font-size: 17px; line-height: 1.8; }
+.user-message { margin-left: 50px; padding: 18px 22px; border-radius: 16px 16px 3px 16px; background: color-mix(in srgb, var(--creator-accent) 7%, var(--creator-background)); border: 1px solid color-mix(in srgb, var(--creator-accent) 16%, var(--creator-background)); }
+.user-message .speaker { color: var(--creator-text); }
+.composer { background: var(--creator-surface); border: 1px solid color-mix(in srgb, var(--creator-text) 35%, var(--creator-surface)); border-radius: 16px; padding: 18px; box-shadow: 0 12px 35px color-mix(in srgb, var(--creator-text) 5%, transparent); }
+.composer:focus-within { border-color: var(--creator-accent); }
+.composer label { display: block; font-size: 12px; margin-bottom: 8px; font-weight: 600; }
+.composer textarea { border: 0; padding: 6px; font-size: 16px; line-height: 1.65; min-height: 96px; }
+.composer-footer { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+.button { display: inline-flex; align-items: center; justify-content: center; gap: 12px; min-height: 48px; padding: 11px 20px; border-radius: 10px; font-size: 13px; font-weight: 600; text-align: center; line-height: 1.5; transition: transform .18s, box-shadow .18s; }
+.button:disabled { opacity: .65; cursor: not-allowed; transform: none; box-shadow: none; }
+.button:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 18px color-mix(in srgb, var(--creator-text) 12%, transparent); }
+.primary { background: var(--creator-accent); color: var(--creator-surface); }
+.secondary { background: var(--creator-surface); color: var(--creator-text); border: 1px solid color-mix(in srgb, var(--creator-text) 35%, var(--creator-surface)); }
+.full { width: 100%; }
+.text-link { display: inline-flex; align-items: center; gap: 8px; text-decoration: underline; text-underline-offset: 4px; font-size: 13px; }
+.disclosure { margin-top: 13px; font-size: 12px; line-height: 1.8; }
+.brief { background: var(--creator-surface); border: 1px solid color-mix(in srgb, var(--creator-text) 20%, var(--creator-surface)); border-radius: 18px; box-shadow: 0 14px 40px color-mix(in srgb, var(--creator-text) 6%, transparent); }
+.brief > summary { list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 21px 24px; border-radius: 18px; }
+.brief > summary::-webkit-details-marker { display: none; }
+.brief > summary .brief-title { font: 500 30px/1.1 'Cormorant Garamond', Georgia, serif; letter-spacing: -.025em; }
+.brief-count { display: flex; align-items: center; gap: 10px; font-size: 11px; }
+.brief-chevron { transition: transform .2s; }
+.brief[open] .brief-chevron { transform: rotate(180deg); }
+.brief-body { padding: 0 24px 22px; }
+.brief-progress { display: flex; gap: 6px; padding: 0 0 20px; }
+.brief-progress i { height: 3px; flex: 1; background: color-mix(in srgb, var(--creator-text) 16%, var(--creator-surface)); border-radius: 2px; }
+.brief-progress i.filled { background: var(--creator-accent); }
+.brief dl > div { padding: 15px 0; border-top: 1px solid color-mix(in srgb, var(--creator-text) 15%, var(--creator-surface)); }
+dt { color: color-mix(in srgb, var(--creator-text) 78%, var(--creator-surface)); font-size: 10px; }
+dd { font-size: 13px; line-height: 1.8; margin-top: 6px; }
+.empty { color: color-mix(in srgb, var(--creator-text) 78%, var(--creator-surface)); font-style: italic; }
+.field-actions, .optional-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.optional-row > span { min-width: 0; flex: 1; }
+.delegate { display: inline-flex; align-items: center; justify-content: flex-start; gap: 8px; min-height: 44px; margin-top: 3px; padding: 8px 0; background: transparent; color: var(--creator-accent); font-size: 12px; text-align: left; }
+.delegate[aria-pressed="true"] { font-weight: 600; }
+.story-field[data-status="choice"] [data-answer] { color: var(--creator-accent); font-weight: 600; }
+.delegation { margin-bottom: 18px; }
+.delegation .button { font-size: 12px; padding-inline: 10px; }
+.delegation .caption { margin-top: 7px; }
+.brief-feedback { margin-top: 12px; }
+.personalise { border-top: 1px solid color-mix(in srgb, var(--creator-text) 15%, var(--creator-surface)); padding-top: 14px; }
+.check-label { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 12px; cursor: pointer; }
+.check-label input { width: 18px; height: 18px; accent-color: var(--creator-accent); }
+.name-input { width: 100%; min-height: 44px; border: 1px solid color-mix(in srgb, var(--creator-text) 40%, var(--creator-surface)); padding: 10px 12px; font-size: 16px; margin: 4px 0 6px; }
+.estimate { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 20px; padding-top: 18px; border-top: 1px solid color-mix(in srgb, var(--creator-text) 18%, var(--creator-surface)); }
+.estimate strong { font: 500 36px/1 'Cormorant Garamond', Georgia, serif; }
+.estimate small { display: block; font-size: 10px; }
+.offer { margin: 22px 0 12px; max-width: 370px; padding: 22px; border: 1px solid color-mix(in srgb, var(--creator-accent) 30%, var(--creator-surface)); border-radius: 14px; background: var(--creator-surface); }
+.offer h3 { margin: 8px 0 18px; }
+.price-lines { padding-block: 12px; margin-bottom: 16px; border-block: 1px solid color-mix(in srgb, var(--creator-text) 16%, var(--creator-surface)); font-size: 13px; }
+.price-lines > div { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0; }
+.actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.actions .button { flex: 1; }
+.note { padding: 18px 20px; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--creator-accent) 25%, var(--creator-background)); background: color-mix(in srgb, var(--creator-accent) 6%, var(--creator-background)); font-size: 13px; }
+.notice { display: flex; align-items: flex-start; gap: 12px; }
+.notice iconify-icon { margin-top: 3px; }
+.narrow { max-width: 760px; }
+.ready { border-color: var(--creator-accent); }
+.ready .brief-body > .button { margin-top: 20px; }
+.badge { display: inline-flex; align-items: center; gap: 5px; padding: 5px 9px; border-radius: 6px; background: color-mix(in srgb, var(--creator-accent) 9%, var(--creator-surface)); color: var(--creator-accent); font-size: 11px; font-weight: 600; }
+.edit-row { display: flex; align-items: start; gap: 12px; }
+.edit-row > div { flex: 1; min-width: 0; }
+.edit-button { width: 44px; height: 44px; flex-shrink: 0; background: transparent; color: var(--creator-accent); display: grid; place-items: center; }
+.edit-button:hover { background: color-mix(in srgb, var(--creator-accent) 8%, var(--creator-surface)); }
+.quote-card { margin-top: 34px; padding: 30px; border-radius: 4px 36px 4px 4px; background: color-mix(in srgb, var(--creator-accent) 8%, var(--creator-background)); border-left: 2px solid var(--creator-accent); }
+.quote-card p { font: italic 400 32px/1.3 'Cormorant Garamond', Georgia, serif; }
+.quote-card .caption { display: block; margin-top: 15px; }
+.editor-grid { display: grid; grid-template-columns: minmax(0,1fr) minmax(0,1fr); gap: 30px; align-items: start; }
+.editor { padding: 28px; background: var(--creator-surface); border: 1px solid var(--creator-accent); border-radius: 16px; }
+.editor label { display: block; font-size: 12px; font-weight: 600; margin: 20px 0 10px; }
+.editor textarea { padding: 14px; border: 1px solid color-mix(in srgb, var(--creator-text) 45%, var(--creator-surface)); font-size: 16px; line-height: 1.7; }
+.editor .actions { margin-top: 20px; }
+.success { padding: 38px; border: 1px solid var(--creator-accent); border-radius: 20px; background: var(--creator-surface); }
+.success-mark { display: grid; place-items: center; width: 48px; height: 48px; border: 1px solid var(--creator-accent); border-radius: 50%; color: var(--creator-accent); margin-bottom: 22px; }
+.success p { margin-top: 16px; }
+.success .actions { margin-top: 24px; }
+.mobile-study { width: min(100%,375px); margin-inline: auto; border: 1px solid color-mix(in srgb, var(--creator-text) 24%, var(--creator-background)); border-radius: 24px; background: var(--creator-background); box-shadow: 0 20px 60px color-mix(in srgb, var(--creator-text) 8%, transparent); }
+.mobile-top { padding: 20px; border-bottom: 1px solid color-mix(in srgb, var(--creator-text) 18%, var(--creator-background)); }
+.mobile-top .brand { font-size: 24px; }
+.mobile-chat { padding: 26px 20px; }
+.mobile-chat h3 { margin-bottom: 24px; font-size: 38px; }
+.mobile-chat .message-copy { font-size: 15px; }
+.mobile-chat .message { gap: 10px; }
+.mobile-chat .avatar { width: 30px; height: 30px; }
+.mobile-bottom { padding: 0 12px 16px; }
+.mobile-bottom .brief { border-radius: 12px; box-shadow: none; margin-bottom: 10px; }
+.mobile-bottom .brief > summary { padding: 16px 12px; }
+.mobile-bottom .brief-title { font-size: 24px; }
+.mobile-bottom .brief-body { padding-inline: 14px; }
+.mobile-bottom .composer { padding: 12px; }
+.mobile-bottom .composer textarea { min-height: 68px; }
+.mobile-bottom .caption { margin-top: 10px; }
+.footer { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; padding: 32px 0 48px; font-size: 12px; }
+.arrive { animation: arrive .65s ease-out both; }
+@keyframes arrive { from { opacity: .25; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes field-fill { from { background: color-mix(in srgb, var(--creator-accent) 14%, var(--creator-surface)); } to { background: var(--creator-surface); } }
+.just-filled { animation: field-fill 1.4s ease-out; }
+@media (min-width: 1024px) {
+  .workspace > .brief { position: sticky; top: 106px; max-height: calc(100dvh - 130px); overflow-y: auto; scrollbar-gutter: stable; }
+}
+@media (max-width: 1023px) {
+  .wrap { width: min(100% - 48px, 760px); }
+  .hero-grid { gap: 30px; }
+  .workspace { grid-template-columns: minmax(0,1fr); grid-template-areas: 'chat' 'brief' 'composer'; gap: 20px; }
+  .workspace > .brief > summary { padding: 17px 20px; }
+  .workspace > .brief > summary .brief-title { font-size: 26px; }
+  .mood-image { height: 170px; }
+  .quote-card { margin-top: 24px; }
+}
+@media (max-width: 767px) {
+  .wrap { width: calc(100% - 40px); }
+  .header-inner { min-height: 72px; gap: 10px; }
+  .brand { font-size: 25px; }
+  .brand-mark { width: 29px; height: 29px; }
+  .desktop-nav, .header-status { display: none; }
+  .menu-button { display: inline-flex; align-items: center; gap: 8px; }
+  .hero { padding-top: 22px; }
+  .journey { gap: 10px; margin-bottom: 26px; font-size: 11px; }
+  .journey .line { width: 16px; }
+  .hero-grid, .editor-grid { grid-template-columns: minmax(0,1fr); gap: 24px; }
+  .hero-description { max-width: none; padding: 0; }
+  .hero-description p { font-size: 14px; }
+  .study-nav > span { width: 100%; }
+  .study-nav a { padding-inline: 9px; }
+  .study { padding: 36px 0 44px; }
+  .study-label { font-size: 10px; letter-spacing: .06em; gap: 10px; margin-bottom: 22px; }
+  .moodboard { gap: 8px; }
+  .mood-image { height: 112px; }
+  .mood-tile figcaption { font-size: 10px; }
+  .message { gap: 11px; }
+  .message-copy { font-size: 15px; }
+  .avatar { width: 30px; height: 30px; }
+  .user-message { margin-left: 30px; padding: 16px; }
+  .composer { padding: 14px; }
+  .offer { padding: 18px; }
+  .offer .actions { flex-direction: column; }
+  .editor, .success { padding: 24px; }
+  .success .actions { flex-direction: column; }
+  .quote-card { padding: 24px; }
+  .quote-card p { font-size: 28px; }
+  .mobile-study { border-radius: 18px; }
+}
+@media (min-width: 768px) {
+  #walk-menu { display: none !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  .button:hover { transform: none; }
+}
 </style>
 </head>
 <body>
-<div class="bg-cream font-sans text-espresso min-h-screen">
+<div id="design-26">
 
-  <!--
-    DESIGN 26: the fantasy interview (doc 15, Director v2). Staging design.
-    Replaces design 17's conversation column. Desktop: chat left, the fantasy brief
-    right (sticky). Below 1024 px the brief becomes a collapsible bar above the
-    message box ("Your fantasy · 2 of 4").
+  <!-- Design studies. No AI calls, storage or purchases.
+       A–H preserve the original interview states. All prices are placeholders.
+       Decorative swatches represent the selected wardrobe and prop.
+       The assistant is always labelled AI. Maya reviews the brief and final price. -->
 
-    Rules this design encodes (doc 15 §2, §6):
-    - Every assistant message is labelled "Maya's assistant (AI)". It never speaks as
-      Maya and never says what she feels or will agree to.
-    - Prices appear only in server-built cards and the estimate, never in the
-      assistant's words. Prices here are PLACEHOLDERS until Maya's v2 prices are set
-      (doc 14, question 1).
-    - "Not offered" notices are server templates; the assistant only offers an
-      alternative.
-    - The brief is the fan's: every field can be edited before confirming.
-    - Sample copy is kept suggestive because this file is in a public repo. Real
-      replies mirror the fan's own language, within Maya's limits.
-  -->
+  <a id="skip-content" class="skip" href="#main">Skip to interview</a>
 
-  <header class="sticky top-0 z-40 bg-cream/95 backdrop-blur-sm border-b border-divider">
-    <div class="max-w-[1320px] mx-auto px-4 sm:px-6 lg:px-8 h-[80px] flex items-center justify-between">
-      <div class="flex items-center gap-4 sm:gap-6">
-        <a id="nav-logo" href="#collection" class="inline-flex min-h-[44px] items-center font-serif text-2xl sm:text-3xl font-medium tracking-tight focus-ring">Maya Atelier</a>
-        <span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] sm:text-xs font-medium bg-secondary text-muted border border-divider">Staging design</span>
-      </div>
-      <nav class="hidden md:flex items-center gap-8">
-        <a id="nav-collection" href="#collection" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Collection</a>
-        <a id="nav-studio" href="#studio" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Your studio</a>
-        <a id="nav-saved" href="#saved" class="inline-flex min-h-[44px] items-center text-sm font-medium hover:text-muted transition-colors duration-160 focus-ring">Saved ideas</a>
+  <header class="site-header">
+    <div class="wrap header-inner">
+      <a id="nav-logo" class="brand" href="#collection">
+        <span class="brand-mark" aria-hidden="true">m</span>Maya Atelier
+      </a>
+      <nav class="desktop-nav" aria-label="Boutique">
+        <a id="nav-collection" href="#collection">Collection</a>
+        <a id="nav-studio" href="#a-label" aria-current="page">Your studio</a>
+        <a id="nav-saved" href="#saved">Saved ideas</a>
       </nav>
-      <button type="button" aria-expanded="false" class="md:hidden inline-flex min-h-[44px] min-w-[44px] items-center justify-center gap-1.5 rounded-[12px] px-3 text-sm font-medium hover:bg-secondary transition-colors duration-160 focus-ring">
-        <iconify-icon icon="lucide:menu" width="18"></iconify-icon>
-        Menu
+      <span class="header-status">Design preview</span>
+      <button class="menu-button" type="button" aria-expanded="false" aria-controls="walk-menu">
+        <iconify-icon icon="lucide:menu" width="18" aria-hidden="true"></iconify-icon>Menu
       </button>
+    </div>
+    <div id="walk-menu" hidden>
+      <a id="mobile-collection" href="#collection">Collection</a>
+      <a id="mobile-studio" href="#a-label">Your studio</a>
+      <a id="mobile-saved" href="#saved">Saved ideas</a>
     </div>
   </header>
 
-  <main class="max-w-[1180px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16 space-y-24">
-
-    <!-- ============================================================
-         A. THE OPENING: the whole workspace, brief still empty
-         ============================================================ -->
-    <section aria-labelledby="a-label">
-      <p id="a-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">A · The opening (from the fan's lookbook picks; brief empty)</p>
-
-      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_380px] gap-8 items-start">
-        <!-- chat column -->
-        <div>
-          <h1 class="mb-1 font-serif text-4xl font-semibold leading-tight">Your fantasy</h1>
-          <p class="mb-8 text-sm text-muted">Tell Maya&rsquo;s assistant what you&rsquo;re imagining. It turns it into a brief Maya reads before she films.</p>
-
-          <div class="space-y-6">
-            <div class="flex gap-4">
-              <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-espresso text-cream"><iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon></div>
-              <div class="pt-0.5">
-                <p class="mb-1 text-xs font-semibold text-muted">Maya&rsquo;s assistant <span class="font-normal">(AI)</span></p>
-                <p class="text-base leading-relaxed">Burgundy lace in the vintage lounge, with the feather fan. Good taste. What&rsquo;s the occasion? And when you walk in, is she already waiting for you, or does she slip into the lace while you watch?</p>
-              </div>
-            </div>
+  <main id="main">
+    <div class="hero">
+      <div class="wrap">
+        <nav class="journey" aria-label="Your commission">
+          <a id="journey-lookbook" href="#collection">
+            <iconify-icon icon="lucide:check" width="14" aria-hidden="true"></iconify-icon>Your inspiration
+          </a>
+          <span class="line" aria-hidden="true"></span>
+          <span class="current" aria-current="step">Your fantasy</span>
+          <span class="line" aria-hidden="true"></span>
+          <a id="journey-review" href="#review">Your Scene Card</a>
+        </nav>
+        <div class="hero-grid arrive">
+          <div>
+            <p class="kicker">The imagination is yours.</p>
+            <h1>Let’s make it<br><em>personal.</em></h1>
           </div>
-
-          <!-- picks the opening came from -->
-          <div class="mt-6 flex flex-wrap items-center gap-2 text-xs text-muted">
-            <span>From your picks:</span>
-            <span class="rounded-full border border-divider bg-panel px-3 py-1">Burgundy lace lingerie</span>
-            <span class="rounded-full border border-divider bg-panel px-3 py-1">Vintage lounge</span>
-            <span class="rounded-full border border-divider bg-panel px-3 py-1">Feather fan</span>
+          <div class="hero-description">
+            <p>A setting. A little anticipation. A moment that stays with you.</p>
+            <span class="caption">Tell Maya’s assistant what you’re imagining. Together, you’ll shape the brief Maya reads before she films.</span>
           </div>
-
-          <!-- composer -->
-          <div class="mt-6 overflow-hidden rounded-[12px] border border-divider bg-panel">
-            <label for="a-composer" class="sr-only">Message to Maya&rsquo;s assistant</label>
-            <textarea id="a-composer" rows="3" class="w-full resize-none bg-panel p-4 text-base focus:outline-none" placeholder="Describe it the way you picture it&hellip;"></textarea>
-            <div class="flex items-center justify-between border-t border-divider bg-secondary px-4 py-3">
-              <span class="text-xs text-muted">20 replies left</span>
-              <button data-go="#b-label" type="button" class="inline-flex min-h-[44px] items-center gap-2 rounded-[12px] bg-espresso text-cream px-6 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Send <iconify-icon icon="lucide:send" width="14" aria-hidden="true"></iconify-icon></button>
-            </div>
-          </div>
-          <p class="mt-2 text-xs text-muted">This assistant is an AI working for Maya. Maya reads your brief, not this chat, and she sets the final price.</p>
         </div>
-
-        <!-- brief panel, empty -->
-        <aside aria-labelledby="a-brief" class="lg:sticky lg:top-[104px] rounded-[16px] border border-divider bg-panel">
-          <div class="flex items-center justify-between border-b border-divider px-5 py-4">
-            <h2 id="a-brief" class="font-serif text-2xl font-semibold">The brief</h2>
-            <span class="rounded-full bg-secondary px-3 py-1 text-xs font-medium text-muted">0 of 4</span>
-          </div>
-          <dl class="divide-y divide-divider">
-            <div class="px-5 py-3"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">Setting</dt><dd class="mt-1 text-sm italic text-muted">Waiting for your answer</dd></div>
-            <div class="px-5 py-3"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">Build-up</dt><dd class="mt-1 text-sm italic text-muted">Waiting for your answer</dd></div>
-            <div class="px-5 py-3"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">The peak</dt><dd class="mt-1 text-sm italic text-muted">Waiting for your answer</dd></div>
-            <div class="px-5 py-3"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">Ending</dt><dd class="mt-1 text-sm italic text-muted">Waiting for your answer</dd></div>
-            <div class="px-5 py-3"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">Optional</dt><dd class="mt-1 text-sm text-muted">Who she is to you &middot; backstory &middot; words to say &middot; anything to avoid</dd></div>
-          </dl>
-          <div class="border-t border-divider px-5 py-4">
-            <label class="flex min-h-[44px] items-center gap-3 text-sm">
-              <input type="checkbox" checked class="h-4 w-4 accent-espresso">
-              <span class="flex-1"><span class="font-medium">Use my name</span> <span class="text-muted">&middot; included</span></span>
-            </label>
-            <label for="a-name" class="sr-only">Your name</label>
-            <input id="a-name" type="text" value="Jamie" class="mt-1 w-full min-h-[44px] rounded-[10px] border border-divider px-3 text-sm focus-ring">
-            <p class="mt-1 text-xs text-muted">Maya says your name at least twice.</p>
-          </div>
-          <div class="flex items-center justify-between rounded-b-[16px] bg-secondary px-5 py-3 text-sm">
-            <span class="text-muted">Estimate <span class="text-[11px]">(placeholder)</span></span><span class="font-semibold">$125</span>
-          </div>
-        </aside>
       </div>
-    </section>
+    </div>
 
-    <!-- ============================================================
-         B. MID-INTERVIEW: fields filling, a priced card the story called for
-         ============================================================ -->
-    <section aria-labelledby="b-label">
-      <p id="b-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">B · Mid-interview (fields fill as the fan answers; a priced card only when the story calls for it)</p>
+    <div class="wrap">
+      <nav class="study-nav" aria-label="Design states">
+        <span class="micro">26 / Interview studies</span>
+        <a id="study-a" href="#a-label">A · Opening</a>
+        <a id="study-b" href="#b-label">B · In progress</a>
+        <a id="study-c" href="#c-label">C · Limits</a>
+        <a id="study-d" href="#d-label">D · Ready</a>
+        <a id="study-e" href="#e-label">E · Edit</a>
+        <a id="study-f" href="#f-label">F · Confirmed</a>
+        <a id="study-g" href="#g-label">G · Retry</a>
+        <a id="study-h" href="#h-label">H · Mobile</a>
+      </nav>
 
-      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_380px] gap-8 items-start">
-        <div class="space-y-6">
-          <div class="flex gap-4">
-            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-divider bg-secondary"><iconify-icon icon="lucide:user" class="text-muted" aria-hidden="true"></iconify-icon></div>
-            <p class="pt-1 text-base leading-relaxed">It&rsquo;s our anniversary. She&rsquo;s already waiting on the chaise when I come in, candles lit. I want her to take her time with me.</p>
-          </div>
-          <div class="flex gap-4">
-            <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-espresso text-cream"><iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon></div>
-            <div class="w-full space-y-4 pt-0.5">
-              <div>
-                <p class="mb-1 text-xs font-semibold text-muted">Maya&rsquo;s assistant <span class="font-normal">(AI)</span></p>
-                <p class="text-base leading-relaxed">Candles, the chaise, your anniversary. That&rsquo;s the scene. How should it build: slow and teasing, talking to you the whole time? And what&rsquo;s the moment that gets you every time?</p>
-              </div>
+      <!-- A. Opening -->
+      <section class="study" aria-labelledby="a-label">
+        <p id="a-label" class="study-label"><span>A</span>The opening · your picks, a blank brief</p>
 
-              <!-- server-built card: the story asked for time -->
-              <div class="max-w-[340px] rounded-[12px] border border-divider bg-panel p-4">
-                <p class="mb-1 text-xs font-semibold uppercase tracking-wider text-muted">Fits &ldquo;take her time&rdquo;</p>
-                <h3 class="mb-2 font-serif text-2xl font-semibold leading-tight">One more minute</h3>
-                <div class="mb-4 rounded-[10px] bg-secondary px-3 py-2 text-sm">
-                  <div class="flex justify-between"><span class="text-muted">Adds</span><span class="font-medium">$40</span></div>
-                  <div class="flex justify-between"><span class="text-muted">New estimate</span><span class="font-semibold">$165</span></div>
+        <div class="workspace">
+          <div class="conversation">
+            <div class="study-heading">
+              <h2>Your fantasy,<br><em>starting here.</em></h2>
+              <p class="caption">A few details from your lookbook to set the mood.</p>
+            </div>
+
+            <div class="moodboard" aria-label="Your lookbook picks">
+              <figure class="mood-tile">
+                <div class="mood-image">
+                  <img src="https://raw.githubusercontent.com/blendlytech/fan_director/demo-lookbook/frontend/public/scenes/vintage-lounge.webp" alt="Warmly lit vintage lounge" width="420" height="280">
                 </div>
-                <div class="flex gap-2">
-                  <button data-note="the minute is added and the server sends a new estimate." type="button" class="flex-1 min-h-[44px] rounded-[12px] bg-rose hover:bg-rosehover px-3 text-sm font-medium shadow-sm transition-colors duration-160 focus-ring">Add</button>
-                  <button data-note="the card collapses to “not added”, as in design 17 C." type="button" class="min-h-[44px] rounded-[12px] border border-divider hover:bg-secondary px-3 text-sm font-medium transition-colors duration-160 focus-ring">No thanks</button>
-                </div>
+                <figcaption>Vintage lounge<small>The setting</small></figcaption>
+              </figure>
+              <figure class="mood-tile">
+                <div class="mood-image lace" role="img" aria-label="Burgundy gradient wardrobe placeholder"></div>
+                <figcaption>Burgundy lace<small>The wardrobe</small></figcaption>
+              </figure>
+              <figure class="mood-tile">
+                <div class="mood-image feather" role="img" aria-label="Fan-shaped gradient prop placeholder"></div>
+                <figcaption>Feather fan<small>The finishing touch</small></figcaption>
+              </figure>
+            </div>
+
+            <div class="message">
+              <span class="avatar" aria-hidden="true">
+                <iconify-icon icon="lucide:sparkles" width="17"></iconify-icon>
+              </span>
+              <div class="message-content">
+                <p class="speaker">Maya’s assistant (AI)</p>
+                <p class="message-copy">Burgundy lace, the vintage lounge, the feather fan. Anything you’d rather leave to Maya, just say so. You can leave any field, or the whole brief, to her. What’s the occasion? And when you walk in, is she already waiting, or does she arrive just after you?</p>
               </div>
-              <p class="flex items-start gap-2 text-xs text-muted"><iconify-icon icon="lucide:calculator" width="14" class="mt-0.5 shrink-0" aria-hidden="true"></iconify-icon>Prices come from Maya&rsquo;s catalog, not from the assistant.</p>
             </div>
           </div>
-          <p class="text-xs text-muted">The card&rsquo;s small heading names what in the story it fits. A card never appears unless the fan&rsquo;s words or the brief call for it (doc 15 §6, rule 6).</p>
-        </div>
 
-        <aside aria-labelledby="b-brief" class="rounded-[16px] border border-divider bg-panel">
-          <div class="flex items-center justify-between border-b border-divider px-5 py-4">
-            <h2 id="b-brief" class="font-serif text-2xl font-semibold">The brief</h2>
-            <span class="rounded-full bg-secondary px-3 py-1 text-xs font-medium">1 of 4</span>
-          </div>
-          <dl class="divide-y divide-divider">
-            <div class="just-filled px-5 py-3"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">Setting</dt><dd class="mt-1 text-sm">The vintage lounge by candlelight. She&rsquo;s already waiting on the chaise in the burgundy lace when you come in.</dd></div>
-            <div class="just-filled px-5 py-3"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">Backstory</dt><dd class="mt-1 text-sm">Your anniversary.</dd></div>
-            <div class="px-5 py-3"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">Build-up</dt><dd class="mt-1 text-sm italic text-muted">Slow, she takes her time&hellip; (asking)</dd></div>
-            <div class="px-5 py-3"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">The peak</dt><dd class="mt-1 text-sm italic text-muted">Waiting for your answer</dd></div>
-            <div class="px-5 py-3"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">Ending</dt><dd class="mt-1 text-sm italic text-muted">Waiting for your answer</dd></div>
-          </dl>
-          <p class="border-t border-divider px-5 py-3 text-xs text-muted" aria-live="polite">Setting and backstory added from your message.</p>
-        </aside>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         C. OFF LIMITS: server notice + the assistant's alternative
-         ============================================================ -->
-    <section aria-labelledby="c-label" class="max-w-[720px]">
-      <p id="c-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">C · Something Maya doesn't do (the notice is a server template)</p>
-
-      <div class="space-y-6">
-        <div class="flex gap-4">
-          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-divider bg-secondary"><iconify-icon icon="lucide:user" class="text-muted" aria-hidden="true"></iconify-icon></div>
-          <p class="pt-1 text-base leading-relaxed">Could she be really mean to me and put me down a bit?</p>
-        </div>
-        <div class="flex gap-4">
-          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-espresso text-cream"><iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon></div>
-          <div class="w-full space-y-3 pt-0.5">
-            <div role="note" class="flex items-start gap-3 rounded-[12px] border border-divider bg-secondary px-4 py-3 text-sm">
-              <iconify-icon icon="lucide:shield" width="18" class="mt-0.5 shrink-0 text-muted" aria-hidden="true"></iconify-icon>
-              <span><span class="font-medium">Maya doesn&rsquo;t offer this.</span> Degradation or humiliation is one of Maya&rsquo;s limits.</span>
-            </div>
-            <p class="mb-1 text-xs font-semibold text-muted">Maya&rsquo;s assistant <span class="font-normal">(AI)</span></p>
-            <p class="text-base leading-relaxed">How about teasing instead: she keeps you waiting, makes you earn every inch of that lace coming off. Want that in the build-up?</p>
-          </div>
-        </div>
-      </div>
-      <p class="mt-4 text-xs text-muted">The grey notice comes from Maya&rsquo;s limits, word for word, never from the model. The assistant never repeats or describes the limit; it only offers something she does.</p>
-    </section>
-
-    <!-- ============================================================
-         D. BRIEF READY: confirm or edit
-         ============================================================ -->
-    <section aria-labelledby="d-label">
-      <p id="d-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">D · The brief is ready (4 of 4): confirm or change anything</p>
-
-      <div class="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_380px] gap-8 items-start">
-        <div class="flex gap-4">
-          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-espresso text-cream"><iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon></div>
-          <div class="pt-0.5">
-            <p class="mb-1 text-xs font-semibold text-muted">Maya&rsquo;s assistant <span class="font-normal">(AI)</span></p>
-            <p class="text-base leading-relaxed">Here&rsquo;s your fantasy. Read it through on the right. Anything to change? You can edit any part yourself, or just tell me.</p>
-          </div>
-        </div>
-
-        <aside aria-labelledby="d-brief" class="rounded-[16px] border-2 border-espresso bg-panel">
-          <div class="flex items-center justify-between border-b border-divider px-5 py-4">
-            <h2 id="d-brief" class="font-serif text-2xl font-semibold">The brief</h2>
-            <span class="inline-flex items-center gap-1 rounded-full bg-okbg px-3 py-1 text-xs font-medium text-okink"><iconify-icon icon="lucide:check" width="12" aria-hidden="true"></iconify-icon>Ready</span>
-          </div>
-          <dl class="divide-y divide-divider">
-            <div class="flex gap-3 px-5 py-3"><div class="flex-1"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">Setting</dt><dd class="mt-1 text-sm">The vintage lounge by candlelight. She&rsquo;s already waiting on the chaise in the burgundy lace when you come in.</dd></div><button data-go="#e-label" type="button" aria-label="Edit setting" class="h-11 w-11 shrink-0 rounded-[10px] hover:bg-secondary focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon></button></div>
-            <div class="flex gap-3 px-5 py-3"><div class="flex-1"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">Who she is to you</dt><dd class="mt-1 text-sm">Your partner of three years.</dd></div><button data-go="#e-label" type="button" aria-label="Edit who she is to you" class="h-11 w-11 shrink-0 rounded-[10px] hover:bg-secondary focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon></button></div>
-            <div class="flex gap-3 px-5 py-3"><div class="flex-1"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">Build-up</dt><dd class="mt-1 text-sm">Slow and teasing. She talks to you the whole time, uses the feather fan, and makes you wait for the lace to come off.</dd></div><button data-go="#e-label" type="button" aria-label="Edit build-up" class="h-11 w-11 shrink-0 rounded-[10px] hover:bg-secondary focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon></button></div>
-            <div class="flex gap-3 px-5 py-3"><div class="flex-1"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">The peak</dt><dd class="mt-1 text-sm">Eyes on the lens, saying your name as she gets there.</dd></div><button data-go="#e-label" type="button" aria-label="Edit the peak" class="h-11 w-11 shrink-0 rounded-[10px] hover:bg-secondary focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon></button></div>
-            <div class="flex gap-3 px-5 py-3"><div class="flex-1"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">Ending</dt><dd class="mt-1 text-sm">She catches her breath and wishes you a happy anniversary.</dd></div><button data-go="#e-label" type="button" aria-label="Edit ending" class="h-11 w-11 shrink-0 rounded-[10px] hover:bg-secondary focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon></button></div>
-            <div class="flex gap-3 px-5 py-3"><div class="flex-1"><dt class="text-xs font-semibold uppercase tracking-wider text-muted">Words to say <span class="font-normal normal-case tracking-normal">&middot; word for word</span></dt><dd class="mt-1 text-sm">&ldquo;Happy anniversary, Jamie.&rdquo;</dd></div><button data-go="#e-label" type="button" aria-label="Edit words to say" class="h-11 w-11 shrink-0 rounded-[10px] hover:bg-secondary focus-ring"><iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon></button></div>
-          </dl>
-          <div class="border-t border-divider px-5 py-3 text-sm"><span class="font-medium">Your name:</span> Jamie <span class="text-muted">&middot; at least twice</span></div>
-          <div class="space-y-1 bg-secondary px-5 py-3 text-sm">
-            <div class="flex justify-between"><span class="text-muted">Estimate <span class="text-[11px]">(placeholder)</span></span><span class="font-semibold">$165</span></div>
-            <p class="text-xs text-muted">Maya confirms the price when she reviews your request.</p>
-          </div>
-          <div class="space-y-2 rounded-b-[16px] px-5 py-4">
-            <button data-go="#f-label" type="button" class="w-full min-h-[48px] rounded-[12px] bg-rose hover:bg-rosehover px-4 text-sm font-semibold shadow-sm transition-colors duration-160 focus-ring">This is my fantasy</button>
-            <p class="text-center text-xs text-muted">You can still change it until you send.</p>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <!-- ============================================================
-         E. EDITING ONE FIELD
-         ============================================================ -->
-    <section aria-labelledby="e-label" class="max-w-[420px]">
-      <p id="e-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">E · Editing a field (checked like anything the fan writes)</p>
-
-      <div class="rounded-[16px] border border-divider bg-panel p-5">
-        <label for="e-field" class="text-xs font-semibold uppercase tracking-wider text-muted">The peak</label>
-        <textarea id="e-field" rows="4" maxlength="600" class="mt-2 w-full resize-none rounded-[10px] border-2 border-espresso p-3 text-sm focus:outline-none">Eyes on the lens, saying your name as she gets there.</textarea>
-        <div class="mt-1 flex justify-between text-xs text-muted"><span>Your words, as you want them</span><span>53 / 600</span></div>
-        <div class="mt-3 flex gap-2">
-          <button data-go="#d-label" data-note="the field saves through the normal draft save and its checks." type="button" class="flex-1 min-h-[44px] rounded-[12px] bg-espresso text-cream px-4 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Save</button>
-          <button data-go="#d-label" type="button" class="min-h-[44px] rounded-[12px] border border-divider hover:bg-secondary px-4 text-sm font-medium transition-colors duration-160 focus-ring">Cancel</button>
-        </div>
-      </div>
-
-      <div role="alert" class="mt-4 flex items-start gap-3 rounded-[12px] border border-pendborder bg-pendbg px-4 py-3 text-sm">
-        <iconify-icon icon="lucide:circle-alert" width="18" class="mt-0.5 shrink-0 text-pendink" aria-hidden="true"></iconify-icon>
-        <span>This can&rsquo;t be saved: it touches one of Maya&rsquo;s limits. Change it and try again.</span>
-      </div>
-      <p class="mt-2 text-xs text-muted">Shown instead of saving when the edit hits a hard no. A platform hard-list hit uses the existing blocked state (design 13).</p>
-    </section>
-
-    <!-- ============================================================
-         F. CONFIRMED: the brief goes on the Scene Card
-         ============================================================ -->
-    <section aria-labelledby="f-label" class="max-w-[720px]">
-      <p id="f-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">F · Confirmed (the brief is now on the Scene Card)</p>
-
-      <div role="status" class="flex items-center gap-3 rounded-[12px] border border-okborder bg-okbg px-4 py-1 text-sm">
-        <iconify-icon icon="lucide:circle-check" width="18" class="shrink-0 text-okink" aria-hidden="true"></iconify-icon>
-        <span class="flex-1 py-2"><span class="font-medium">Your fantasy is on the Scene Card.</span> Maya reads it before she films.</span>
-        <button data-go="#e-label" type="button" class="shrink-0 inline-flex min-h-[44px] items-center gap-1.5 px-2 font-medium underline underline-offset-4 focus-ring"><iconify-icon icon="lucide:pencil" width="14" aria-hidden="true"></iconify-icon>Change</button>
-      </div>
-      <div class="mt-4 flex flex-col sm:flex-row gap-3">
-        <a id="f-review-send" href="#review" data-go="07-linked-review-scene-card-page.html" class="inline-flex min-h-[48px] items-center justify-center rounded-[12px] bg-espresso text-cream px-6 text-sm font-medium hover:bg-black transition-colors duration-160 focus-ring">Review and send</a>
-        <button data-go="#a-label" data-note="the chat stays open; any change updates the brief." type="button" class="inline-flex min-h-[48px] items-center justify-center rounded-[12px] border border-divider hover:bg-secondary px-6 text-sm font-medium transition-colors duration-160 focus-ring">Keep talking</button>
-      </div>
-      <p class="mt-3 text-xs text-muted">On Review (design 07), the brief appears under the line items as &ldquo;Your fantasy&rdquo;, with the &ldquo;Made only for you&rdquo; wording from doc 14 above the Send button.</p>
-    </section>
-
-    <!-- ============================================================
-         G. A REPLY THAT DIDN'T COME TOGETHER / H. MOBILE BRIEF BAR
-         ============================================================ -->
-    <section aria-labelledby="g-label" class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-      <div>
-        <p id="g-label" class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">G · A reply that didn't pass the checks (server template)</p>
-        <div class="flex gap-4">
-          <div class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-espresso text-cream"><iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon></div>
-          <div class="pt-0.5">
-            <p class="mb-1 text-xs font-semibold text-muted">Maya&rsquo;s assistant <span class="font-normal">(AI)</span></p>
-            <p class="text-base leading-relaxed">I couldn&rsquo;t put that one together. Could you say it another way?</p>
-            <a id="g-catalog-link" href="#catalog" class="mt-2 inline-flex min-h-[44px] items-center gap-1.5 text-sm font-medium underline underline-offset-4 focus-ring">Or choose from Maya&rsquo;s catalog</a>
-          </div>
-        </div>
-        <p class="mt-3 text-xs text-muted">Replaces design 17 D for a reply that failed the checks twice. It doesn&rsquo;t use a reply. If the provider itself is down, design 17 D still applies.</p>
-      </div>
-
-      <div>
-        <p class="mb-4 font-mono text-xs uppercase tracking-wider text-muted">H · Below 1024 px: the brief as a bar above the message box</p>
-        <div class="mx-auto max-w-[375px] overflow-hidden rounded-[20px] border border-divider bg-cream">
-          <div class="p-4 text-sm text-muted">&hellip; chat &hellip;</div>
-          <details class="border-t border-divider bg-panel">
-            <summary class="flex min-h-[52px] cursor-pointer items-center justify-between px-4 focus-ring">
-              <span class="font-serif text-xl font-semibold">Your fantasy</span>
-              <span class="flex items-center gap-2 text-xs text-muted">2 of 4 &middot; $165 <iconify-icon icon="lucide:chevron-up" width="16" aria-hidden="true"></iconify-icon></span>
+          <details class="brief" data-responsive-brief open>
+            <summary>
+              <span id="a-brief" class="brief-title">Your fantasy</span>
+              <span class="brief-count">
+                <span data-count>0 of 6</span>
+                <iconify-icon class="brief-chevron" icon="lucide:chevron-down" width="16" aria-hidden="true"></iconify-icon>
+              </span>
             </summary>
-            <p class="px-4 pb-4 text-sm text-muted">Opens as a sheet with the same fields, edit buttons and confirm button as D.</p>
+
+            <div class="brief-body">
+              <div class="brief-progress" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></div>
+
+              <div class="delegation">
+                <button class="button secondary full" type="button" data-leave-rest>
+                  Leave the rest to Maya
+                  <iconify-icon icon="lucide:sparkles" width="16" aria-hidden="true"></iconify-icon>
+                </button>
+                <p class="caption">Leaves unanswered story fields to Maya.</p>
+              </div>
+
+              <dl>
+                <div class="story-field" data-key="setting" data-status="empty">
+                  <dt>Setting</dt>
+                  <dd>
+                    <span id="a-detail-setting" data-answer class="empty">Where it all begins</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave setting to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+                <div class="story-field" data-key="role" data-status="empty">
+                  <dt>Who she is to you</dt>
+                  <dd>
+                    <span id="a-detail-role" data-answer class="empty">The role you’re imagining</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave who she is to you to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+                <div class="story-field" data-key="backstory" data-status="empty">
+                  <dt>Backstory</dt>
+                  <dd>
+                    <span id="a-detail-backstory" data-answer class="empty">Why this moment matters</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave backstory to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+                <div class="story-field" data-key="build" data-status="empty">
+                  <dt>Build-up</dt>
+                  <dd>
+                    <span id="a-detail-build" data-answer class="empty">How the anticipation grows</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave build-up to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+                <div class="story-field" data-key="peak" data-status="empty">
+                  <dt>The peak</dt>
+                  <dd>
+                    <span id="a-detail-peak" data-answer class="empty">The moment you’re imagining</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave the peak to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+                <div class="story-field" data-key="ending" data-status="empty">
+                  <dt>Ending</dt>
+                  <dd>
+                    <span id="a-detail-ending" data-answer class="empty">How you want to leave it</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave ending to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+              </dl>
+
+              <p class="caption brief-feedback" aria-live="polite">Answer a field or leave it to Maya.</p>
+
+              <div class="personalise">
+                <label class="check-label" for="a-use-name">
+                  <input id="a-use-name" type="checkbox" checked>Use my name · included
+                </label>
+                <label class="sr-only" for="a-name">Your name</label>
+                <input id="a-name" class="name-input" type="text" value="Jamie" autocomplete="given-name">
+                <p class="caption">Maya says your name at least twice.</p>
+              </div>
+
+              <div class="estimate">
+                <span>Estimate<small>Placeholder price</small></span>
+                <strong>$125</strong>
+              </div>
+            </div>
           </details>
-          <div class="border-t border-divider bg-panel p-3">
-            <div class="flex items-end gap-2">
-              <label for="h-composer" class="sr-only">Message to Maya&rsquo;s assistant</label>
-              <textarea id="h-composer" rows="1" class="flex-1 resize-none rounded-[10px] border border-divider p-3 text-base" placeholder="Describe it&hellip;"></textarea>
-              <button type="button" aria-label="Send" data-note="sends the message." class="flex h-11 w-11 items-center justify-center rounded-[12px] bg-espresso text-cream focus-ring"><iconify-icon icon="lucide:send" width="16" aria-hidden="true"></iconify-icon></button>
+
+          <div class="composer-area">
+            <div class="composer">
+              <label for="a-composer">What are you imagining?</label>
+              <textarea id="a-composer" rows="3" placeholder="Describe it the way you picture it…"></textarea>
+              <div class="composer-footer">
+                <span class="caption">20 replies left</span>
+                <button class="button primary" type="button" data-go="#b-label">
+                  Send<iconify-icon icon="lucide:arrow-up-right" width="18" aria-hidden="true"></iconify-icon>
+                </button>
+              </div>
+            </div>
+            <p class="disclosure muted">This assistant is an AI working for Maya. Maya reads your brief and sets the final price. Your chat stays separate.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- B. In progress -->
+      <section class="study" aria-labelledby="b-label">
+        <p id="b-label" class="study-label"><span>B</span>In progress · one detail becomes a scene</p>
+
+        <div class="workspace">
+          <div class="conversation stack">
+            <div class="user-message">
+              <p class="speaker">You</p>
+              <p>It’s our anniversary. She’s waiting on the chaise when I come in, candles lit. I want her to take her time. Who she is to me? Leave that to Maya.</p>
+            </div>
+
+            <div class="message">
+              <span class="avatar" aria-hidden="true"><iconify-icon icon="lucide:sparkles" width="17"></iconify-icon></span>
+              <div class="message-content">
+                <p class="speaker">Maya’s assistant (AI)</p>
+                <p class="message-copy">Candles, the chaise, your anniversary. That’s the scene. How should the anticipation build? And what’s the one moment you want her to linger on?</p>
+
+                <div class="offer">
+                  <p class="kicker">Fits “take her time”</p>
+                  <h3>One more minute.</h3>
+                  <div class="price-lines">
+                    <div><span>Adds</span><strong>$40</strong></div>
+                    <div><span>New estimate</span><strong>$165</strong></div>
+                  </div>
+                  <div class="actions">
+                    <button class="button primary" type="button" data-note="the minute is added and the server sends a new estimate. These are placeholder prices.">Add a minute</button>
+                    <button class="button secondary" type="button" data-note="the card collapses to “not added”, as in design 17 C.">No thanks</button>
+                  </div>
+                  <p class="caption" style="margin-top:12px">Placeholder prices · from Maya’s catalog</p>
+                </div>
+                <p class="caption">An optional detail for the scene you’re describing.</p>
+              </div>
+            </div>
+          </div>
+
+          <details class="brief" data-responsive-brief open>
+            <summary>
+              <span id="b-brief" class="brief-title">Your fantasy</span>
+              <span class="brief-count">
+                <span data-count>3 of 6</span>
+                <iconify-icon class="brief-chevron" icon="lucide:chevron-down" width="16" aria-hidden="true"></iconify-icon>
+              </span>
+            </summary>
+
+            <div class="brief-body">
+              <div class="brief-progress" aria-hidden="true"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i></i><i></i><i></i></div>
+
+              <div class="delegation">
+                <button class="button secondary full" type="button" data-leave-rest>
+                  Leave the rest to Maya
+                  <iconify-icon icon="lucide:sparkles" width="16" aria-hidden="true"></iconify-icon>
+                </button>
+                <p class="caption">Leaves unanswered story fields to Maya.</p>
+              </div>
+
+              <dl>
+                <div class="story-field" data-key="setting" data-status="answered">
+                  <dt>Setting</dt>
+                  <dd>
+                    <span id="b-detail-setting" data-answer>The vintage lounge by candlelight. She’s waiting on the chaise in burgundy lace when you arrive.</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave setting to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+                <div class="story-field" data-key="role" data-status="choice">
+                  <dt>Who she is to you</dt>
+                  <dd>
+                    <span id="b-detail-role" data-answer>Maya's choice</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="true" aria-label="Leave who she is to you to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:check" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+                <div class="story-field" data-key="backstory" data-status="answered">
+                  <dt>Backstory</dt>
+                  <dd>
+                    <span id="b-detail-backstory" data-answer>Your anniversary.</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave backstory to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+                <div class="story-field" data-key="build" data-status="empty">
+                  <dt>Build-up</dt>
+                  <dd>
+                    <span id="b-detail-build" data-answer class="empty">How the anticipation grows</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave build-up to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+                <div class="story-field" data-key="peak" data-status="empty">
+                  <dt>The peak</dt>
+                  <dd>
+                    <span id="b-detail-peak" data-answer class="empty">The moment you’re imagining</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave the peak to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+                <div class="story-field" data-key="ending" data-status="empty">
+                  <dt>Ending</dt>
+                  <dd>
+                    <span id="b-detail-ending" data-answer class="empty">How you want to leave it</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave ending to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+              </dl>
+
+              <p class="caption brief-feedback" aria-live="polite">Setting and backstory added. Who she is to you: Maya's choice.</p>
+            </div>
+          </details>
+
+          <div class="composer-area">
+            <div class="composer">
+              <label for="b-composer">Tell her assistant a little more</label>
+              <textarea id="b-composer" rows="2" placeholder="The moment I keep picturing is…"></textarea>
+              <div class="composer-footer">
+                <span class="caption">19 replies left</span>
+                <button class="button primary" type="button" data-go="#d-label" data-note="this walk-through jumps ahead to the completed brief.">
+                  Send<iconify-icon icon="lucide:arrow-up-right" width="18" aria-hidden="true"></iconify-icon>
+                </button>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </section>
 
+        <!-- The offer is a server-built catalog card. It appears only when
+             the fan's words or brief call for it; prices never come from AI prose. -->
+      </section>
+
+      <!-- C. Limit -->
+      <section class="study" aria-labelledby="c-label">
+        <p id="c-label" class="study-label"><span>C</span>A limit · a clear answer, a way forward</p>
+
+        <div class="narrow stack">
+          <div class="user-message">
+            <p class="speaker">You</p>
+            <p>Could she be really mean to me and put me down a bit?</p>
+          </div>
+
+          <div class="note notice" role="note">
+            <iconify-icon icon="lucide:shield-check" width="20" aria-hidden="true"></iconify-icon>
+            <p><strong>Maya doesn’t offer this.</strong> Degradation or humiliation is one of Maya’s limits.</p>
+          </div>
+
+          <div class="message">
+            <span class="avatar" aria-hidden="true"><iconify-icon icon="lucide:sparkles" width="17"></iconify-icon></span>
+            <div class="message-content">
+              <p class="speaker">Maya’s assistant (AI)</p>
+              <p class="message-copy">How about playful teasing and a little suspense instead? Want that in the build-up?</p>
+            </div>
+          </div>
+
+          <button class="button secondary" type="button" data-go="#b-label">
+            Keep shaping the scene<iconify-icon icon="lucide:arrow-right" width="16" aria-hidden="true"></iconify-icon>
+          </button>
+        </div>
+
+        <!-- The limit notice is a server template using Maya's actual limits.
+             The assistant offers an allowed alternative without repeating the limit. -->
+      </section>
+
+      <!-- D. Ready -->
+      <section class="study" aria-labelledby="d-label">
+        <p id="d-label" class="study-label"><span>D</span>The brief is ready · every detail is yours to change</p>
+
+        <div class="workspace">
+          <div class="conversation">
+            <div class="study-heading">
+              <p class="kicker">Six details. One idea.</p>
+              <h2 style="margin-top:12px">There it is.<br><em>Your fantasy.</em></h2>
+            </div>
+
+            <div class="message">
+              <span class="avatar" aria-hidden="true"><iconify-icon icon="lucide:sparkles" width="17"></iconify-icon></span>
+              <div class="message-content">
+                <p class="speaker">Maya’s assistant (AI)</p>
+                <p class="message-copy">Here’s your fantasy. Read through the brief. Anything to change? You can edit any part yourself, or tell me.</p>
+              </div>
+            </div>
+
+            <div class="quote-card">
+              <p>A little candlelight.<br>A familiar voice.<br>A moment just for you.</p>
+              <span class="caption">Your anniversary scene · illustrative summary</span>
+            </div>
+          </div>
+
+          <details class="brief ready" data-responsive-brief open>
+            <summary>
+              <span id="d-brief" class="brief-title">Your fantasy</span>
+              <span class="badge">
+                <iconify-icon icon="lucide:check" width="14" aria-hidden="true"></iconify-icon>
+                <span data-count>6 of 6</span>
+              </span>
+            </summary>
+
+            <div class="brief-body">
+              <div class="brief-progress" aria-hidden="true"><i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i><i class="filled"></i></div>
+
+              <div class="delegation">
+                <button class="button secondary full" type="button" data-leave-rest>
+                  Leave the rest to Maya
+                  <iconify-icon icon="lucide:sparkles" width="16" aria-hidden="true"></iconify-icon>
+                </button>
+                <p class="caption">Leaves unanswered story fields to Maya.</p>
+              </div>
+
+              <dl>
+                <div class="story-field" data-key="setting" data-status="answered">
+                  <dt>Setting</dt>
+                  <dd>
+                    <span id="detail-setting" data-answer>The vintage lounge by candlelight. She’s waiting on the chaise in burgundy lace when you arrive.</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave setting to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                      <button class="edit-button" type="button" aria-label="Edit setting" data-field="Setting" data-limit="300" data-target="detail-setting" data-go="#e-label">
+                        <iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+
+                <div class="story-field" data-key="role" data-status="choice">
+                  <dt>Who she is to you</dt>
+                  <dd>
+                    <span id="detail-role" data-answer>Maya's choice</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="true" aria-label="Leave who she is to you to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:check" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                      <button class="edit-button" type="button" aria-label="Edit who she is to you" data-field="Who she is to you" data-limit="200" data-target="detail-role" data-go="#e-label">
+                        <iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+
+                <div class="story-field" data-key="backstory" data-status="answered">
+                  <dt>Backstory</dt>
+                  <dd>
+                    <span id="detail-backstory" data-answer>Your anniversary.</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave backstory to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                      <button class="edit-button" type="button" aria-label="Edit backstory" data-field="Backstory" data-limit="400" data-target="detail-backstory" data-go="#e-label">
+                        <iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+
+                <div class="story-field" data-key="build" data-status="answered">
+                  <dt>Build-up</dt>
+                  <dd>
+                    <span id="detail-build" data-answer>Slow and playful. She talks to you, opens the feather fan and lets the anticipation grow.</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave build-up to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                      <button class="edit-button" type="button" aria-label="Edit build-up" data-field="Build-up" data-limit="600" data-target="detail-build" data-go="#e-label">
+                        <iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+
+                <div class="story-field" data-key="peak" data-status="answered">
+                  <dt>The peak</dt>
+                  <dd>
+                    <span id="detail-peak" data-answer>A lingering look into the lens, saying your name.</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave the peak to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                      <button class="edit-button" type="button" aria-label="Edit the peak" data-field="The peak" data-limit="600" data-target="detail-peak" data-go="#e-label">
+                        <iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+
+                <div class="story-field" data-key="ending" data-status="answered">
+                  <dt>Ending</dt>
+                  <dd>
+                    <span id="detail-ending" data-answer>She smiles and wishes you a happy anniversary.</span>
+                    <div class="field-actions">
+                      <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave ending to Maya">
+                        Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                      </button>
+                      <button class="edit-button" type="button" aria-label="Edit ending" data-field="Ending" data-limit="300" data-target="detail-ending" data-go="#e-label">
+                        <iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon>
+                      </button>
+                    </div>
+                  </dd>
+                </div>
+
+                <div>
+                  <dt>Words to say · optional, exact</dt>
+                  <dd class="optional-row">
+                    <span id="detail-words">“Happy anniversary, Jamie.”</span>
+                    <button class="edit-button" type="button" aria-label="Edit words to say" data-field="Words to say" data-limit="750" data-target="detail-words" data-go="#e-label">
+                      <iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon>
+                    </button>
+                  </dd>
+                </div>
+
+                <div>
+                  <dt>Anything to avoid · optional</dt>
+                  <dd class="optional-row">
+                    <span id="detail-avoid" class="empty">Nothing added</span>
+                    <button class="edit-button" type="button" aria-label="Edit anything to avoid" data-field="Anything to avoid" data-limit="300" data-target="detail-avoid" data-go="#e-label">
+                      <iconify-icon icon="lucide:pencil" width="16" aria-hidden="true"></iconify-icon>
+                    </button>
+                  </dd>
+                </div>
+              </dl>
+
+              <p class="caption brief-feedback" aria-live="polite">All six story fields are set.</p>
+              <p class="caption">Your name: Jamie · at least twice</p>
+
+              <div class="estimate">
+                <span>Estimate<small>Placeholder price</small></span>
+                <strong>$165</strong>
+              </div>
+
+              <p class="caption" style="margin-top:10px">Maya confirms the price when she reviews your request.</p>
+              <button id="d-confirm" class="button primary full" type="button" data-go="#f-label">
+                This is my fantasy<iconify-icon icon="lucide:arrow-right" width="16" aria-hidden="true"></iconify-icon>
+              </button>
+              <p class="caption" style="text-align:center;margin-top:10px">You can still change it until you send.</p>
+            </div>
+          </details>
+
+          <div class="composer-area">
+            <div class="composer">
+              <label for="d-composer">Want to change something?</label>
+              <textarea id="d-composer" rows="2" placeholder="Keep the setting, but change…"></textarea>
+              <div class="composer-footer">
+                <span class="caption">Your brief, your words.</span>
+                <button class="button secondary" type="button" data-note="the assistant updates the brief from your message. This preview does not call an AI.">Send change</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- E. Editing -->
+      <section class="study" aria-labelledby="e-label">
+        <p id="e-label" class="study-label"><span>E</span>Edit one detail · keep the rest</p>
+
+        <div class="editor-grid">
+          <div class="editor">
+            <p class="kicker">Your words</p>
+            <h3 style="margin-top:8px">Make it feel right.</h3>
+            <label id="e-field-label" for="e-field">The peak</label>
+            <textarea id="e-field" rows="4" maxlength="600" aria-describedby="e-help">A lingering look into the lens, saying your name.</textarea>
+            <p id="e-help" class="caption" style="margin-top:8px">Up to 600 characters. Preview edits last until you reload.</p>
+            <div class="actions">
+              <button id="save-preview-edit" class="button primary" type="button" data-go="#d-label" data-note="your edit changed this preview only. Production saves run through the normal draft checks.">Save change</button>
+              <button class="button secondary" type="button" data-go="#d-label">Cancel</button>
+            </div>
+          </div>
+
+          <div class="stack">
+            <p class="kicker">Validation state</p>
+            <div class="note notice" role="note">
+              <iconify-icon icon="lucide:circle-alert" width="20" aria-hidden="true"></iconify-icon>
+              <p><strong>This can’t be saved:</strong> it touches one of Maya’s limits. Change it and try again.</p>
+            </div>
+            <p class="caption">Separate error study. In the application, this replaces a successful save when an edit hits a hard no. This static preview does not run those checks.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- F. Confirmed -->
+      <section class="study" aria-labelledby="f-label">
+        <p id="f-label" class="study-label"><span>F</span>Confirmed · ready for your Scene Card</p>
+
+        <div class="success narrow">
+          <span class="success-mark" aria-hidden="true"><iconify-icon icon="lucide:check" width="24"></iconify-icon></span>
+          <p class="kicker">All together now.</p>
+          <h2 style="margin-top:12px">Your fantasy is<br><em>on the Scene Card.</em></h2>
+          <p>Maya reads it before she films. Review the details, then send your request when you’re ready.</p>
+          <div class="actions">
+            <a id="f-review-send" class="button primary" href="#review">
+              Review and send<iconify-icon icon="lucide:arrow-up-right" width="18" aria-hidden="true"></iconify-icon>
+            </a>
+            <button class="button secondary" type="button" data-go="#d-label">Change the brief</button>
+            <button class="button secondary" type="button" data-go="#a-label">Keep talking</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- G. Retry -->
+      <section class="study" aria-labelledby="g-label">
+        <p id="g-label" class="study-label"><span>G</span>A reply didn’t come together · try another way</p>
+
+        <div class="narrow">
+          <div class="message">
+            <span class="avatar" aria-hidden="true"><iconify-icon icon="lucide:sparkles" width="17"></iconify-icon></span>
+            <div class="message-content">
+              <p class="speaker">Maya’s assistant (AI)</p>
+              <p class="message-copy">I couldn’t put that one together. Could you say it another way?</p>
+              <a id="g-catalog-link" class="text-link" href="#catalog" style="margin-top:12px">
+                Or choose from Maya’s catalog<iconify-icon icon="lucide:arrow-right" width="16" aria-hidden="true"></iconify-icon>
+              </a>
+            </div>
+          </div>
+          <p class="caption" style="margin:22px 0 0 50px">This reply does not use one of your remaining replies.</p>
+        </div>
+
+        <!-- Server fallback after two output-check failures. Provider outages
+             continue to use design 17's provider-unavailable state. -->
+      </section>
+
+      <!-- H. Mobile -->
+      <section class="study" aria-labelledby="h-label">
+        <p id="h-label" class="study-label"><span>H</span>Mobile · a 375 px study</p>
+
+        <div class="editor-grid">
+          <div class="study-heading">
+            <h2>The conversation<br><em>comes first.</em></h2>
+            <p class="muted">Below 1024 px, the brief sits directly above the message box. Open it to read the details; close it to keep talking.</p>
+            <p class="caption">The main interview studies use this same responsive layout. This specimen shows a brief with two of six story fields filled.</p>
+          </div>
+
+          <div class="mobile-study">
+            <div class="mobile-top row between">
+              <span class="brand">Maya Atelier</span>
+              <span class="badge">Your studio</span>
+            </div>
+
+            <div class="mobile-chat">
+              <p class="kicker">Your fantasy</p>
+              <h3>A little more<br><em>anticipation.</em></h3>
+              <div class="message">
+                <span class="avatar" aria-hidden="true"><iconify-icon icon="lucide:sparkles" width="15"></iconify-icon></span>
+                <div class="message-content">
+                  <p class="speaker">Maya’s assistant (AI)</p>
+                  <p class="message-copy">The setting and build-up are there. What’s the moment you want her to linger on? You can leave that to Maya, too.</p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mobile-bottom">
+              <details class="brief">
+                <summary>
+                  <span class="brief-title">Your fantasy</span>
+                  <span class="brief-count">
+                    <span data-count>2 of 6</span>
+                    <iconify-icon class="brief-chevron" icon="lucide:chevron-down" width="16" aria-hidden="true"></iconify-icon>
+                  </span>
+                </summary>
+
+                <div class="brief-body">
+                  <div class="brief-progress" aria-hidden="true"><i class="filled"></i><i class="filled"></i><i></i><i></i><i></i><i></i></div>
+
+                  <div class="delegation">
+                    <button class="button secondary full" type="button" data-leave-rest>
+                      Leave the rest to Maya
+                      <iconify-icon icon="lucide:sparkles" width="16" aria-hidden="true"></iconify-icon>
+                    </button>
+                    <p class="caption">Leaves unanswered story fields to Maya.</p>
+                  </div>
+
+                  <dl>
+                    <div class="story-field" data-key="setting" data-status="answered">
+                      <dt>Setting</dt>
+                      <dd>
+                        <span id="h-detail-setting" data-answer>The vintage lounge, candles lit.</span>
+                        <div class="field-actions">
+                          <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave setting to Maya">
+                            Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                          </button>
+                        </div>
+                      </dd>
+                    </div>
+
+                    <div class="story-field" data-key="role" data-status="empty">
+                      <dt>Who she is to you</dt>
+                      <dd>
+                        <span id="h-detail-role" data-answer class="empty">The role you’re imagining</span>
+                        <div class="field-actions">
+                          <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave who she is to you to Maya">
+                            Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                          </button>
+                        </div>
+                      </dd>
+                    </div>
+
+                    <div class="story-field" data-key="backstory" data-status="empty">
+                      <dt>Backstory</dt>
+                      <dd>
+                        <span id="h-detail-backstory" data-answer class="empty">Why this moment matters</span>
+                        <div class="field-actions">
+                          <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave backstory to Maya">
+                            Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                          </button>
+                        </div>
+                      </dd>
+                    </div>
+
+                    <div class="story-field" data-key="build" data-status="answered">
+                      <dt>Build-up</dt>
+                      <dd>
+                        <span id="h-detail-build" data-answer>Playful conversation and a little suspense.</span>
+                        <div class="field-actions">
+                          <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave build-up to Maya">
+                            Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                          </button>
+                        </div>
+                      </dd>
+                    </div>
+
+                    <div class="story-field" data-key="peak" data-status="empty">
+                      <dt>The peak</dt>
+                      <dd>
+                        <span id="h-detail-peak" data-answer class="empty">The moment you’re imagining</span>
+                        <div class="field-actions">
+                          <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave the peak to Maya">
+                            Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                          </button>
+                        </div>
+                      </dd>
+                    </div>
+
+                    <div class="story-field" data-key="ending" data-status="empty">
+                      <dt>Ending</dt>
+                      <dd>
+                        <span id="h-detail-ending" data-answer class="empty">How you want to leave it</span>
+                        <div class="field-actions">
+                          <button class="delegate" type="button" data-choice aria-pressed="false" aria-label="Leave ending to Maya">
+                            Leave it to Maya<iconify-icon icon="lucide:sparkles" width="14" aria-hidden="true"></iconify-icon>
+                          </button>
+                        </div>
+                      </dd>
+                    </div>
+                  </dl>
+
+                  <p class="caption brief-feedback" aria-live="polite">Answer a field or leave it to Maya.</p>
+
+                  <div class="estimate">
+                    <span>Estimate<small>Placeholder price</small></span>
+                    <strong>$165</strong>
+                  </div>
+                  <button class="button secondary full" type="button" data-go="#d-label" style="margin-top:16px">See completed brief</button>
+                </div>
+              </details>
+
+              <div class="composer">
+                <label for="h-composer">Your next detail</label>
+                <textarea id="h-composer" rows="2" placeholder="Describe it…"></textarea>
+                <div class="composer-footer">
+                  <span class="caption">18 replies left</span>
+                  <button class="button primary" type="button" data-go="#d-label">
+                    Send<iconify-icon icon="lucide:arrow-up-right" width="16" aria-hidden="true"></iconify-icon>
+                  </button>
+                </div>
+              </div>
+              <p class="caption">Maya’s assistant is an AI. Maya reviews your brief.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span>Maya Atelier · Design 26</span>
+        <span>Interactive studies. Nothing is sent or charged.</span>
+        <a id="footer-top" class="text-link" href="#main">Back to top ↑</a>
+      </footer>
+    </div>
   </main>
-</div>
+
+  <script>
+  (function () {
+    var desktop = matchMedia('(min-width: 1024px)');
+    var briefs = document.querySelectorAll('[data-responsive-brief]');
+
+    function sizeBriefs() {
+      briefs.forEach(function (brief) {
+        brief.open = desktop.matches;
+      });
+    }
+
+    sizeBriefs();
+    desktop.addEventListener('change', sizeBriefs);
+
+    function updateBrief(brief, message) {
+      var fields = Array.from(brief.querySelectorAll('.story-field'));
+      var count = fields.filter(function (field) {
+        return field.dataset.status !== 'empty';
+      }).length;
+
+      var counter = brief.querySelector('[data-count]');
+      if (counter) counter.textContent = count + ' of 6';
+
+      brief.querySelectorAll('.brief-progress i').forEach(function (bar, index) {
+        bar.classList.toggle('filled', index < count);
+      });
+
+      var confirm = brief.querySelector('#d-confirm');
+      if (confirm) confirm.disabled = count !== 6;
+
+      brief.querySelector('.brief-feedback').textContent = message +
+        (count === 6
+          ? ' All six story fields are set.'
+          : ' ' + count + ' of 6 story fields are set.');
+    }
+
+    function choose(field) {
+      field.dataset.status = 'choice';
+
+      var value = field.querySelector('[data-answer]');
+      value.textContent = "Maya's choice";
+      value.classList.remove('empty');
+
+      var button = field.querySelector('[data-choice]');
+      button.setAttribute('aria-pressed', 'true');
+      button.querySelector('iconify-icon').setAttribute('icon', 'lucide:check');
+    }
+
+    document.querySelectorAll('[data-choice]').forEach(function (button) {
+      button.addEventListener('click', function (event) {
+        event.stopPropagation();
+
+        var field = button.closest('.story-field');
+        choose(field);
+
+        updateBrief(
+          button.closest('.brief'),
+          field.querySelector('dt').textContent + ": Maya's choice."
+        );
+      });
+    });
+
+    document.querySelectorAll('[data-leave-rest]').forEach(function (button) {
+      button.addEventListener('click', function (event) {
+        event.stopPropagation();
+
+        var brief = button.closest('.brief');
+        var pending = brief.querySelectorAll('.story-field[data-status="empty"]');
+        pending.forEach(choose);
+
+        updateBrief(
+          brief,
+          pending.length
+            ? 'Unanswered story fields left to Maya.'
+            : 'Every story field already has an answer or is left to Maya.'
+        );
+      });
+    });
+
+    var targetId = 'detail-peak';
+    var editor = document.getElementById('e-field');
+
+    document.querySelectorAll('[data-field]').forEach(function (button) {
+      button.addEventListener('click', function () {
+        targetId = button.dataset.target;
+        document.getElementById('e-field-label').textContent = button.dataset.field;
+        editor.maxLength = Number(button.dataset.limit);
+
+        var value = document.getElementById(targetId);
+        editor.value = value.classList.contains('empty') ? '' : value.textContent;
+
+        document.getElementById('e-help').textContent =
+          targetId === 'detail-words'
+            ? 'Up to 5 lines, 150 characters per line. Preview edits last until you reload.'
+            : 'Up to ' + button.dataset.limit + ' characters. Preview edits last until you reload.';
+
+        editor.setCustomValidity('');
+      });
+    });
+
+    editor.addEventListener('input', function () {
+      editor.setCustomValidity('');
+    });
+
+    document.getElementById('save-preview-edit').addEventListener('click', function (event) {
+      if (targetId === 'detail-words') {
+        var lines = editor.value.split('\n');
+
+        if (lines.length > 5 || lines.some(function (line) {
+          return line.length > 150;
+        })) {
+          editor.setCustomValidity(
+            'Use up to 5 lines, with at most 150 characters on each line.'
+          );
+          editor.reportValidity();
+          event.stopPropagation();
+          return;
+        }
+      }
+
+      var value = document.getElementById(targetId);
+      var text = editor.value.trim();
+      var field = value.closest('.story-field');
+
+      value.textContent = text || (
+        field ? 'Waiting for your answer' : 'Nothing added'
+      );
+      value.classList.toggle('empty', !text);
+
+      if (field) {
+        field.dataset.status =
+          text === "Maya's choice"
+            ? 'choice'
+            : text ? 'answered' : 'empty';
+
+        var button = field.querySelector('[data-choice]');
+        button.setAttribute(
+          'aria-pressed',
+          String(field.dataset.status === 'choice')
+        );
+        button.querySelector('iconify-icon').setAttribute(
+          'icon',
+          field.dataset.status === 'choice' ? 'lucide:check' : 'lucide:sparkles'
+        );
+      }
+
+      var brief = document.getElementById('d-brief').closest('details');
+      brief.open = true;
+      updateBrief(brief, 'Your preview edit is in the brief.');
+    });
+
+    var useName = document.getElementById('a-use-name');
+    useName.addEventListener('change', function () {
+      document.getElementById('a-name').disabled = !useName.checked;
+    });
+
+    // Preserve the original walk-through script and its single-root host.
+    var root = document.getElementById('design-26');
+
+    new MutationObserver(function () {
+      var note = document.getElementById('walk-note');
+      if (note && note.parentNode === document.body) root.appendChild(note);
+    }).observe(document.body, { childList: true });
+  })();
+  </script>
+
 <!-- DESIGN WALK-THROUGH (same block in every design). Buttons and links jump to the
      state they lead to, here or in another design. Nothing is saved, sent or charged.
      data-go="#id" or "NN-file.html#id" sets the destination; data-note explains an
@@ -492,5 +1405,7 @@ tailwind.config = {
   }
 })();
 </script>
+
+</div>
 </body>
 </html>
