@@ -1,8 +1,8 @@
 # Creator landing page
 
-The public page for `www.studiolens.me`, aimed at creators. It's one static file,
-`public/index.html`, styled from `docs/specs/02-design-system.md`. There's no build
-step and no backend: every "Apply" button opens an email to `info@studiolens.me`.
+The public page for `www.studiolens.me`, aimed at creators. It's plain
+HTML, CSS and JS in `public/` (the October 2026 redesign: parallax hero, interactive request
+estimate). There's no build step and no backend: every "Apply" button opens an email to `info@studiolens.me`.
 
 ## What the page promises
 
@@ -31,7 +31,7 @@ Name the account explicitly. Without it, Wrangler can pick up the demo's cached 
 (`frontend/node_modules/.cache`, the scmillsc0809 account) and fail with an authentication
 error. The page belongs on the Blendly account, next to staging and the studiolens.me zone.
 
-It's live at https://studiolens-landing.blendly.workers.dev (first deployed 2026-10-01).
+It's live at https://studiolens-landing.blendly.workers.dev (redesign deployed 2026-10-01).
 
 That serves the page on its `workers.dev` address. To put it on the domain:
 

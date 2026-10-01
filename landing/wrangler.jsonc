@@ -10,12 +10,13 @@
 {
   "$schema": "../worker/node_modules/wrangler/config-schema.json",
   "name": "studiolens-landing",
-  "compatibility_date": "2026-09-16",
+  "compatibility_date": "2026-10-01",
   "workers_dev": true,
   "preview_urls": false,
   "assets": {
-    "directory": "./public"
-  }
+    "directory": "./public",
+    "not_found_handling": "404-page"
+  },
   // "routes": [
   //   { "pattern": "www.studiolens.me", "custom_domain": true },
   //   { "pattern": "studiolens.me", "custom_domain": true }
