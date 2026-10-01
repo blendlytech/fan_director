@@ -3,9 +3,6 @@
 // script, no bindings, no backend. The "Apply" buttons are mailto links, so the
 // page collects no personal data and needs no database.
 //
-// Until studiolens.me is a zone on this Cloudflare account, deploy without the
-// routes below and the page is served at its workers.dev address only. Once the
-// zone exists and its nameservers resolve, uncomment "routes" and deploy again.
 // When the production app is ready (Phase 6), it takes these routes over and
 // serves this page at "/" instead; remove them here first.
 {
@@ -18,8 +15,8 @@
     "directory": "./public",
     "not_found_handling": "404-page"
   },
-  // "routes": [
-  //   { "pattern": "studiolens.me", "custom_domain": true },
-  //   { "pattern": "www.studiolens.me", "custom_domain": true }
-  // ]
+  "routes": [
+    { "pattern": "studiolens.me", "custom_domain": true },
+    { "pattern": "www.studiolens.me", "custom_domain": true }
+  ]
 }
