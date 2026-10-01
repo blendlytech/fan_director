@@ -1,6 +1,6 @@
 # Creator landing page
 
-The public page for `www.studiolens.me`, aimed at creators. It's plain
+The public page for `studiolens.me`, aimed at creators. It's plain
 HTML, CSS and JS in `public/` (the October 2026 redesign: parallax hero, interactive request
 estimate). There's no build step and no backend: every "Apply" button opens an email to `info@studiolens.me`.
 
@@ -35,10 +35,14 @@ It's live at https://studiolens-landing.blendly.workers.dev (redesign deployed 2
 
 That serves the page on its `workers.dev` address. To put it on the domain:
 
-1. Add `studiolens.me` to the Cloudflare account and switch its nameservers at IONOS.
-2. Uncomment `routes` in `wrangler.jsonc`.
-3. Deploy again. The apex and `www` both serve the page.
+1. The `studiolens.me` zone was added to the Blendly account on 2026-10-01, with the IONOS
+   Mail Basic records (MX `mx00`/`mx01.ionos.com`, SPF) copied in. Switch the nameservers
+   at IONOS to `gabe.ns.cloudflare.com` and `haley.ns.cloudflare.com`.
+2. Once the zone shows Active, uncomment `routes` in `wrangler.jsonc` and deploy again.
 
-When the production app is ready, it takes over `www.studiolens.me` and serves this
+The apex `studiolens.me` is canonical. A Single Redirect rule on the zone already sends
+`www.studiolens.me` to it with a 301.
+
+When the production app is ready, it takes over `studiolens.me` and serves this
 content at `/`. Remove the routes here before that deploy, or the two Workers
 will both claim the domain.

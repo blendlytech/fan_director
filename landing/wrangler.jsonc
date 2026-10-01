@@ -1,4 +1,5 @@
-// The creator landing page for www.studiolens.me: static assets only, no Worker
+// The creator landing page for studiolens.me (the apex is canonical; www 301s to it
+// through a Single Redirect rule on the zone): static assets only, no Worker
 // script, no bindings, no backend. The "Apply" buttons are mailto links, so the
 // page collects no personal data and needs no database.
 //
@@ -18,7 +19,7 @@
     "not_found_handling": "404-page"
   },
   // "routes": [
-  //   { "pattern": "www.studiolens.me", "custom_domain": true },
-  //   { "pattern": "studiolens.me", "custom_domain": true }
+  //   { "pattern": "studiolens.me", "custom_domain": true },
+  //   { "pattern": "www.studiolens.me", "custom_domain": true }
   // ]
 }
