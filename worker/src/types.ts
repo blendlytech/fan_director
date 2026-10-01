@@ -5,7 +5,13 @@ export interface Env {
   ASSETS: Fetcher
 
   ENVIRONMENT: 'development' | 'staging' | 'test'
-  /** The site's own origin, e.g. https://fan-director-studio-staging.example.workers.dev */
+  /**
+   * The site's one canonical origin, e.g. https://www.studiolens.me. Two things
+   * derive from it and must not drift apart: `assertSameOrigin` rejects a
+   * mutating request whose `Origin` is anything else, and `canonicalRedirect`
+   * sends every request arriving on another hostname here first, so no browser
+   * is ever handed a page it would post from a second origin.
+   */
   APP_ORIGIN: string
   /** Clerk Frontend API URL, the session token's `iss`. */
   CLERK_ISSUER: string
@@ -17,9 +23,10 @@ export interface Env {
   /**
    * Whether a creator session must carry a verified second factor (doc 11 §5.6
    * item 17). Anything other than the exact string "false" means required, so a
-   * missing or misspelt value fails safe. "false" is the pilot exemption while
-   * Clerk MFA is out of reach on the free plan (§5.6 item 27): it is a real
-   * reduction in protection, and only the owner sets it.
+   * missing or misspelt value fails safe. "false" is the owner's waiver (§5.6
+   * item 27), widened on 2026-09-21 to cover the first few paying creators and
+   * to be required retroactively later: it is a real reduction in protection,
+   * and only the owner sets it.
    */
   CREATOR_SECOND_FACTOR_REQUIRED?: string
   /** AI spending ceiling for this environment, integer micro-dollars ($8 = "8000000"). No value = no AI calls. */
