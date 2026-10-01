@@ -8,6 +8,7 @@ import { LimitsPanel } from '../components/boundaries/CreatorLimits'
 import { Button } from '../components/common/Button'
 import { Icon } from '../components/common/Icon'
 import { SceneImage } from '../components/common/SceneImage'
+import { LookbookSummary } from '../components/lookbook/LookbookPicker'
 import { capabilities } from '../config'
 import { sendBlockers } from '../domain/options'
 import { BUDGET, briefOf, currency, includedComponents, settingOf } from '../domain/sceneCard'
@@ -112,6 +113,8 @@ export function ReviewScene() {
               ))}
             </div>
           </div>
+
+          <LookbookSummary />
 
           {/* Financials & Timeline */}
           <div className="flex flex-col gap-10 bg-secondary p-6 sm:p-10 md:flex-row">

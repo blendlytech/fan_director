@@ -31,6 +31,17 @@
       "migrations_dir": "migrations"
     }
   ],
+  // Creator uploads (migration 0005). Local development and tests only: Wrangler
+  // simulates the bucket. Staging has no "r2_buckets" entry, deliberately — R2 is
+  // not enabled on the Blendly account (Cloudflare error 10042, checked
+  // 2026-10-01), and a binding to a bucket that doesn't exist fails the deploy.
+  // Without it, uploads answer 503 media_storage_unavailable. To turn them on:
+  //   1. enable R2 in the Cloudflare dashboard (owner),
+  //   2. wrangler r2 bucket create fan-director-media-staging,
+  //   3. add the same "r2_buckets" entry under env.staging with that bucket_name.
+  "r2_buckets": [
+    { "binding": "MEDIA", "bucket_name": "fan-director-media-development" }
+  ],
   "vars": {
     "ENVIRONMENT": "development",
     "APP_ORIGIN": "http://localhost:8787",

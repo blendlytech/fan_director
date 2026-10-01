@@ -2,6 +2,7 @@ import { requireCreator, requireFan } from './auth'
 import { httpClerk } from './clerk'
 import { getConsent, postConsent, postOnboarding } from './consent'
 import { getCatalog, postQuote } from './catalog'
+import { getCreatorProfile, getMedia, postCreatorMedia, putCreatorProfile } from './creatorProfile'
 import {
   acceptProposal,
   approveCommission,
@@ -72,6 +73,23 @@ const routes: { method: string; pattern: RegExp; handler: Handler }[] = [
       return json(200, { creatorId: creator.creatorId, displayName: creator.displayName })
     },
   },
+  // The creator's lookbook (migration 0005). Creator-only; the creator comes from the session.
+  {
+    method: 'GET',
+    pattern: /^\/api\/creator\/profile$/,
+    handler: async (request, env, deps) => getCreatorProfile(env, await requireCreator(request, env, deps)),
+  },
+  {
+    method: 'PUT',
+    pattern: /^\/api\/creator\/profile$/,
+    handler: async (request, env, deps) => putCreatorProfile(request, env, deps, await requireCreator(request, env, deps)),
+  },
+  {
+    method: 'POST',
+    pattern: /^\/api\/creator\/media$/,
+    handler: async (request, env, deps) => postCreatorMedia(request, env, deps, await requireCreator(request, env, deps)),
+  },
+  { method: 'GET', pattern: /^\/api\/media\/([^/]+)$/, handler: async (_r, env, _d, [id]) => getMedia(env, id) },
   {
     method: 'GET',
     pattern: /^\/api\/creators\/([^/]+)\/catalog$/,

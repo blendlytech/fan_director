@@ -96,6 +96,7 @@ Creator side (separate data, no shared draft):
 | `/creator/requests/:id` | Request detail (modal) |
 | `/creator/requests/:id/ask` | Ask a question (modal over detail) |
 | `/creator/requests/:id/decline` | Decline confirmation (modal over detail) |
+| `/creator/lookbook` | Lookbook editor: brand, voice, limits, named categories and images. In memory in the demo (a refresh resets it); saved to the signed-in creator's account in staging |
 
 Any other path (`*`) renders **Page not found** (design `12-page-not-found.html`),
 showing the exact address that was requested and links back into the demo.

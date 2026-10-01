@@ -106,7 +106,7 @@ test.describe('mobile menu', () => {
     await page.goto('/creator/requests')
     await openMenu(page)
 
-    await expect(panel(page).getByRole('link')).toHaveText(['Requests'])
+    await expect(panel(page).getByRole('link')).toHaveText(['Requests', 'Lookbook'])
     await expect(panel(page).getByRole('link', { name: 'Requests' })).toHaveAttribute(
       'aria-current',
       'page',

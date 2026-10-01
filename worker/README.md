@@ -73,6 +73,10 @@ Signed-in routes need `Authorization: Bearer <Clerk session token>`; cookies are
 | POST | `/api/browse-session` | anyone | Sets an opaque `fds_browse` cookie for signed-out browsing. It authenticates nothing |
 | GET | `/api/session` | fan | `{ signedIn: true, fanId }` |
 | GET | `/api/creator/me` | creator | `{ creatorId, displayName }` |
+| GET | `/api/creator/profile` | creator | The creator's own lookbook (migration 0005): `{ profile, revision, mediaUploads, adultAllowed }`. Revision `0` and a starter profile before the first save |
+| PUT | `/api/creator/profile` | creator | `{ expectedRevision, profile }`. Strict: unknown keys, over-long text or more than 10 limit lines → `400 invalid_profile`; an image that isn't this creator's upload → `422 unknown_media`; items in an adult category while adult is off → `422 adult_content_disabled`; stale revision → `409 revision_conflict` with `revision` |
+| POST | `/api/creator/media` | creator | One JPG, PNG or WebP as the raw body (≤ 1 MB, type checked against the file's first bytes) → `201 { id, url }`. `503 media_storage_unavailable` where no R2 bucket is bound — staging today |
+| GET | `/api/media/:id` | anyone | An uploaded image, long-cached. `<img>` can't send a token; the id is a random UUID, and a suspended creator's images stop being served |
 | GET | `/api/creators/:creatorId/catalog` | anyone | The published catalog as a fan may see it: adult and hidden content removed on the server, valid templates, starting defaults, derived price ranges per setting, rendered boundaries |
 | POST | `/api/creators/:creatorId/quote` | anyone | `{ catalogVersionId, selections, budget }` → `{ quote, stale, current? }`. Saves nothing |
 | GET | `/api/creators/:creatorId/drafts/:draftId` | fan | The fan's own draft with its quote, or `404 not_found` |

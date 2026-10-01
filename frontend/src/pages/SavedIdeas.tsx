@@ -5,6 +5,7 @@ import { useSignedIn } from '../auth/session'
 import { Button } from '../components/common/Button'
 import { Icon } from '../components/common/Icon'
 import { SceneImage } from '../components/common/SceneImage'
+import { LookbookSummary } from '../components/lookbook/LookbookPicker'
 import { useCommission } from '../state/commission'
 import { currency, includedComponents, settingOf } from '../domain/sceneCard'
 
@@ -74,7 +75,8 @@ export function SavedIdeas() {
             {!capabilities.persistence ? (
               <>
                 This demo saves nothing. There&rsquo;s no profile or storage behind it, so ideas aren&rsquo;t
-                kept — and refreshing the page clears the draft you&rsquo;re working on.
+                kept — and refreshing the page clears the draft you&rsquo;re working on, your visual choices,
+                and any demo lookbook edits.
               </>
             ) : signedIn === true ? (
               requestsCopy.savedStagingSignedIn
@@ -130,6 +132,11 @@ export function SavedIdeas() {
               </Button>
             </div>
           </div>
+        </div>
+
+        {/* The demo's visual choices, in memory with the draft above. Nothing in staging. */}
+        <div className="mb-14 overflow-hidden rounded-card border border-divider bg-panel empty:hidden">
+          <LookbookSummary />
         </div>
 
         {/* What the real product would do instead — none of it happening now.

@@ -8,6 +8,7 @@ import { requests } from '../data/requests'
 
 const dashboardLinks: HeaderLink[] = [
   { label: 'Requests', to: '/creator/requests' },
+  { label: 'Lookbook', to: '/creator/lookbook' },
   { label: 'Completed' },
   { label: 'Settings' },
 ]

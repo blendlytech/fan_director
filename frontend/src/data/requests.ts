@@ -82,8 +82,7 @@ export const requests: Request[] = [
     submittedAt: '2025-12-06',
     detail: {
       fanFullName: 'Sarah Smiles',
-      referenceImageUrl:
-        'https://images.unsplash.com/photo-1551028150-64b9e398f678?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      referenceImageUrl: '/scenes/vintage-lounge.webp',
       referenceImageAlt: 'Vintage lounge reference',
       sceneComponents: [
         { icon: 'lucide:video', label: 'Duration', value: '3-Minute Video' },

@@ -1,3 +1,4 @@
+import type { CreatorProfile } from '../../../shared/domain/creatorProfile.ts'
 import { sessionToken } from '../auth/session'
 import { CREATOR_ID } from '../state/catalog'
 import type {
@@ -24,11 +25,16 @@ async function call<T>(method: string, path: string, body?: unknown, signal?: Ab
   const token = await sessionToken()
   if (!token) return { ok: false, status: 401, error: 'signed_out', body: {} }
   let res: Response
+  // A Blob (an image upload) goes as the raw body with its own type; anything else is JSON.
+  const raw = body instanceof Blob
   try {
     res = await fetch(path, {
       method,
-      headers: { Authorization: `Bearer ${token}`, ...(body === undefined ? {} : { 'Content-Type': 'application/json' }) },
-      body: body === undefined ? undefined : JSON.stringify(body),
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ...(body === undefined ? {} : { 'Content-Type': raw ? body.type : 'application/json' }),
+      },
+      body: body === undefined ? undefined : raw ? body : JSON.stringify(body),
       credentials: 'omit',
       signal,
     })
@@ -90,4 +96,19 @@ export const creatorApi = {
   decline: (id: string, reason: string | null, internalNote: string | null) =>
     call<CommissionView>('POST', `${creatorBase}/${encodeURIComponent(id)}/decline`, { reason, internalNote }),
   reportPayment: (id: string) => call<CommissionView>('POST', `${creatorBase}/${encodeURIComponent(id)}/payment-reported`, {}),
+
+  // The creator's own lookbook (migration 0005). The server takes the creator from the session.
+  profile: () => call<CreatorProfileResponse>('GET', '/api/creator/profile'),
+  saveProfile: (expectedRevision: number, profile: CreatorProfile) =>
+    call<{ profile: CreatorProfile; revision: number }>('PUT', '/api/creator/profile', { expectedRevision, profile }),
+  uploadImage: (image: Blob) => call<{ id: string; url: string }>('POST', '/api/creator/media', image),
+}
+
+export type CreatorProfileResponse = {
+  profile: CreatorProfile
+  /** 0 before the first save. */
+  revision: number
+  /** False where the site has no image storage: uploads would answer 503. */
+  mediaUploads: boolean
+  adultAllowed: boolean
 }

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { Header } from '../components/layout/Header'
 import { ProgressTrail } from '../components/layout/ProgressTrail'
 import { Button } from '../components/common/Button'
+import { LookbookSummary } from '../components/lookbook/LookbookPicker'
 import { Icon } from '../components/common/Icon'
 import { useCommission } from '../state/commission'
 import { BUDGET, currency, settingOf } from '../domain/sceneCard'
@@ -113,6 +114,9 @@ export function SendConfirmation() {
                 </div>
               ))}
             </div>
+          </div>
+          <div className="border-t border-divider empty:hidden">
+            <LookbookSummary />
           </div>
         </div>
 

@@ -12,6 +12,10 @@ import { Button } from '../components/common/Button'
 import { capabilities } from '../config'
 import { Icon } from '../components/common/Icon'
 import { SceneImage } from '../components/common/SceneImage'
+import { LookbookPicker } from '../components/lookbook/LookbookPicker'
+import { useOptionalLookbook } from '../state/lookbook'
+import type { RenderedBoundaries } from '../../../shared/domain/boundaries.ts'
+import { withProfileLimits } from '../../../shared/domain/creatorProfile.ts'
 import { Header } from '../components/layout/Header'
 import { ProgressTrail } from '../components/layout/ProgressTrail'
 import { cn } from '../lib/cn'
@@ -46,6 +50,8 @@ export function AIDirector() {
   // the Review and Confirmation screens read the same numbers this page shows.
   const { view, draft, lineItems, total, difference, overBudget, deliveryDays, canUndo, commit, addNote, undo } =
     useCommission()
+  // The demo's lookbook (App.tsx). Staging's fan journey has none yet.
+  const lookbook = useOptionalLookbook()
 
   const [message, setMessage] = useState('')
   const [starterIndex, setStarterIndex] = useState(0)
@@ -119,8 +125,14 @@ export function AIDirector() {
                 A little inspiration. Entirely yours.
               </h1>
               <p className="text-sm leading-relaxed text-muted sm:text-base">
-                The AI Director is helping plan your commission. All suggestions are from Maya's
-                approved catalog.
+                {live ? (
+                  <>The AI Director is helping plan your commission. All suggestions are from Maya's approved catalog.</>
+                ) : (
+                  <>
+                    Choose your look first, then explore a prewritten commission example. You can add
+                    notes, but this public demo makes no AI calls or submissions.
+                  </>
+                )}
               </p>
             </div>
             <ProgressTrail currentStep={1} />
@@ -145,6 +157,20 @@ export function AIDirector() {
               {/* Design 13, state B on phones: the first item in the conversation, so it scrolls with the chat. */}
               {capabilities.serverCatalog && (
                 <LimitsCard boundaries={view.boundaries} creatorName={view.creatorName} className="lg:hidden" />
+              )}
+
+              {lookbook && (
+                <>
+                  <LookChoices boundaries={withProfileLimits(view.boundaries, lookbook.profile.boundaries)} creatorName={view.creatorName} />
+                  <LookbookPicker
+                    onChoose={(categoryId, itemId, nowSelected) => {
+                      // The Scene category and the priced setting below are one choice in the demo.
+                      if (categoryId !== 'scene') return
+                      const setting = itemId && nowSelected && view.settings.some((option) => option.id === itemId) ? itemId : view.settings[0]?.id
+                      if (setting) commit({ setting })
+                    }}
+                  />
+                </>
               )}
 
               {/* Turn 1 — fan brief */}
@@ -176,7 +202,10 @@ export function AIDirector() {
                         type="button"
                         role="radio"
                         aria-checked={selected}
-                        onClick={() => commit({ setting: option.id })}
+                        onClick={() => {
+                          commit({ setting: option.id })
+                          if (lookbook && !(lookbook.choices.scene ?? []).includes(option.id)) lookbook.choose('scene', option.id)
+                        }}
                         className={cn(
                           'group relative flex flex-col overflow-hidden rounded-card p-3 text-left transition-all duration-160 focus-ring sm:block',
                           selected
@@ -394,14 +423,14 @@ export function AIDirector() {
                 className="overflow-hidden rounded-card border border-divider bg-panel shadow-subtle transition-shadow focus-within:border-espresso"
               >
                 <label htmlFor="director-composer" className="sr-only">
-                  Tell the Director what you have in mind
+                  Add a note to your demo request
                 </label>
                 <textarea
                   id="director-composer"
                   ref={composerRef}
                   value={message}
                   onChange={(event) => setMessage(event.target.value)}
-                  placeholder="Tell the Director what you have in mind or ask for suggestions..."
+                  placeholder="Add a fantasy or detail to your demo request. No AI reply is generated here."
                   className="min-h-[100px] w-full resize-none border-0 bg-transparent p-4 text-sm text-espresso placeholder:text-muted focus:outline-none sm:p-5 sm:text-base"
                 />
                 <div className="flex items-center justify-between gap-2 border-t border-divider bg-secondary px-3 py-3 sm:px-4">
@@ -429,7 +458,7 @@ export function AIDirector() {
                     </button>
                   </div>
                   <Button type="submit" variant="primary" size="sm" icon="lucide:send" disabled={message.trim() === ''}>
-                    Send
+                    Add note
                   </Button>
                 </div>
               </form>
@@ -777,6 +806,37 @@ export function AIDirector() {
 /* -------------------------------------------------------------------------- */
 /*  Small presentational pieces                                               */
 /* -------------------------------------------------------------------------- */
+
+/**
+ * The demo's lookbook intro: how to choose, and the creator's limits, read
+ * from the one boundaries renderer plus the lookbook's own additions.
+ */
+function LookChoices({ boundaries, creatorName }: { boundaries: RenderedBoundaries; creatorName: string }) {
+  return (
+    <section className="rounded-card border border-divider bg-panel p-5" aria-labelledby="request-steps">
+      <h2 id="request-steps" className="font-serif text-2xl text-espresso">Make it yours</h2>
+      <p className="mt-2 text-sm leading-relaxed text-muted">
+        Start with an outfit, then explore the other categories. Choose an item or leave each category to the
+        model. Your choices appear on the Scene Card when you review it.
+      </p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        {([
+          [`${creatorName} won’t do`, boundaries.hardNo],
+          [`Ask ${creatorName} first`, boundaries.askFirst],
+        ] as const).map(([heading, lines]) => (
+          lines.length > 0 && (
+            <div key={heading} className="rounded-lg bg-secondary p-3">
+              <h3 className="text-xs font-semibold uppercase tracking-wide text-espresso">{heading}</h3>
+              <ul className="mt-2 list-inside list-disc text-xs leading-relaxed text-muted">
+                {lines.map((line) => <li key={`${line.source}-${line.id}`}>{line.text}</li>)}
+              </ul>
+            </div>
+          )
+        ))}
+      </div>
+    </section>
+  )
+}
 
 function SelectionChip({ label }: { label: string }) {
   return (
